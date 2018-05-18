@@ -1,0 +1,54 @@
+<div class=" row ">
+	<div class="col-md-12 col-sm-12 ">
+		<div class="form-xs form-group row">
+			<div class="col-xs-2 "></div>
+			<label for="" class="col-xs-1 control-label"><strong>录入区</strong>：</label>
+			<div class="col-xs-2 ">
+				<select id="quOrgDisPatch" class="input-xs form-control">
+					<option value="${quCode}"  selected="true">${quCodeName}</option> 
+				</select>
+			</div>
+			<label for="" class="col-xs-1 control-label"><strong>录入组：</strong></label>
+			<div class="col-xs-2 ">
+				<select id="zuOrgDisPatch" class="input-xs form-control">
+					<option value="${zuCode}"  selected="true">${zuCodeName}</option> 
+				</select>
+			</div>
+			<label for="" class="col-xs-1 control-label"><strong>录入人：</strong></label>
+			<div class="col-xs-2 ">
+				<select id="jingjirenDisPatch" class="input-xs form-control">
+					<#if renCode ??> 
+					<#list renCode as item>
+					<option value="${item.userId}" >${item.name}</option> 
+					
+					</#list>
+					</#if>
+				</select>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+aihome.saveDispatchCustSource = function(rowIds){
+	
+	var jingjirenId = $("#jingjirenDisPatch").val();
+	var jingjirenName = $("#jingjirenDisPatch").find("[value='" + jingjirenId + "']").text();
+
+	$.ajax({
+		url : "${CTX}/customerSource/saveDispatchCustSource.do",
+		dataType : "json",
+		type : 'post',
+		data : {
+			rowIds : rowIds,
+			jingjirenId : jingjirenId,
+			jingjirenName : jingjirenName
+		},
+		success : function(data) {
+			alert("成功调配该客源！");
+			$("#jqGrid").trigger("reloadGrid");
+			}
+	});
+}
+	
+</script>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd"
+>
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/pages/"/>
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="perview" value-ref="perviewTag"/>
+				<!-- 配置文件中的值 -->
+				<entry key="CTX" value="${CTX}"></entry>
+				<entry key="ADDR_CTX" value="${ADDR_CTX}"></entry>
+				<entry key="UPLOAD_URL" value="${UPLOAD_URL}"></entry>
+				<entry key="IMAGE_URL" value="${IMAGE_URL}"></entry>
+				<entry key="IMAGE_RULE" value="${IMAGE_RULE}"></entry>
+			</map>
+		</property>
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="template_update_delay">0</prop>
+				<prop key="defaultEncoding">UTF-8</prop>
+				<prop key="url_escaping_charset">UTF-8</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="boolean_format">true,false</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+				<prop key="time_format">HH:mm:ss</prop>
+				<prop key="number_format">0.######</prop>
+				<prop key="whitespace_stripping">true</prop>
+				<!-- <prop key="auto_import">/ftl/jeecms/index.ftl as p,/ftl/spring.ftl as s</prop> -->
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="FreemarkerViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
+		<property name="contentType" value="text/html; charset=utf-8"/>
+        <property name="cache" value="false" />
+		<property name="prefix" value="" />
+		<property name="suffix" value=".html" />
+		<property name="exposeSessionAttributes" value="true" />
+		<property name="order" value="0"/>
+	</bean> 
+</beans>

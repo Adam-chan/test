@@ -1,0 +1,177 @@
+<div class="col-md-10 col-sm-10">
+	<div class="form-xs form-group row">
+				<label class="col-xs-2 control-label">责任人：</label>
+					<div class="col-xs-10">
+						<div class="row" style="margin-left: -3px;">
+				<div class="col-xs-3">
+					<select id="dutyAreaId" class="input-xs form-control" name="busiAreaId">
+						<option value="">请选择责任大区</option>
+						<#if dutyAreaList ??>
+							<#list dutyAreaList as item>
+								<option value="${item.orgCode}">${item.name!}</option>
+							</#list>
+						</#if>
+					</select>
+				</div>
+				<div class="col-xs-3">
+					<select id="dutyZoneId" class="input-xs form-control" name="busiAreaId">
+						<option value="">请选择责任区</option>
+					</select>
+				</div>
+				<div class="col-xs-3">
+					<select id="dutyGroupId" class="input-xs form-control" name="busiAreaId">
+						<option value="">请选择责任组</option>
+					</select>
+				</div>
+				<div class="col-xs-3">
+					<select id="dutyPersonId" class="input-xs form-control" name="busiAreaId">
+						<option value="">请选择责任人</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col-md-10 col-sm-10">
+	<div class="form-xs form-group row">
+		<label class="col-xs-2 control-label">修改原因:</label>
+		<div class="col-xs-10">
+			<input class="col-xs-12" id="reason" value=""></input>
+		</div>
+	</div>
+</div>
+<div class="col-md-10 col-sm-10">
+	<div class=" form-xs form-group row" id="cloneTarget">
+		<label for="userName" class="col-xs-2 control-label" value="">备注：</label>
+		<div class="col-xs-10">
+			<textarea class="col-xs-12" id=remark cols="50" rows="4" name="textareaName" type="textarea" value=""></textarea>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+/* 清空下拉框内容 */
+aihome.cleanOption = function(objId) {
+	$("#" + objId).children().first().siblings().remove();
+};
+/* 级联改变下拉框内容 */
+aihome.changeOption = function (data, objId) {
+	aihome.cleanOption(objId);
+	var str = "";
+	for(var i=0; i < data.length; i++) {
+		var id = "";
+		var name = "";
+		if(objId == "dutyAreaId" || objId == "dutyZoneId" || objId == "dutyGroupId") {
+			id = data[i].orgCode;
+			name = data[i].name;
+		} else if(objId == "dutyPersonId") {
+			id = data[i].userId;
+			name = data[i].name;
+		}
+		var optionShow = $("[id$='" + objId + "']");
+		str = "<option value=\"" + id + "\">" + name + "</option>";
+		optionShow.append(str);
+	}
+};
+/* 大区 -> 区(级联) */
+aihome.getDutyZone = function(dutyAreaId, objId) {
+	$.ajax({
+		type : "post",
+		url : "${CTX}/org/orgList.do",
+		async : false,
+		dataType : "json",
+		data : {"orgCode" : dutyAreaId},
+		success : function(data) {
+			aihome.changeOption(data, objId);
+		},
+	});
+};
+/* 区 -> 组(级联) */
+aihome.getDutyGroup = function(dutyZoneId, objId) {
+	$.ajax({
+		type : "post",
+		url : "${CTX}/org/orgList.do",
+		async : false,
+		dataType : "json",
+		data : {"orgCode" : dutyZoneId},
+		success : function(data) {
+			aihome.changeOption(data, objId);
+		},
+	});
+};
+/* 组 -> 人(级联) */
+aihome.getUser = function(dutyGroupId, objId) {
+	$.ajax({
+		type : "post",
+		url : "${CTX}/org/userList.do",
+		async : false,
+		dataType : "json",
+		data : {"orgCode" : dutyGroupId},
+		success : function(data) {
+			aihome.changeOption(data, objId);
+		},
+	});
+}
+//确定按钮
+aihome.editOwerButton = function(id,type,affiliationOld){
+	if($("#dutyPersonId  option:selected").val()==""){
+		alert("请填写归属人!");
+	}
+	if($("#reason").val()==""){
+		alert("请输入调整原因!");
+	}
+	$.ajax({
+		type : "post",
+		url : "${CTX}/commonSearch/editOwnerButton.do",
+		async : false,
+		dataType : "json",
+		data : {"id" : id,"houseInfoId":$("#houseInfoId").val(),"affiliationOld":affiliationOld,"affiliationType" :type,"divideDaQu":$("#dutyAreaId  option:selected").text(),
+			"divideQu":$("#dutyZoneId  option:selected").text(),"divideOrgCode":$("#dutyGroupId  option:selected").val()    
+			,"divideOrg":$("#dutyGroupId  option:selected").text(),"divideId":$("#dutyPersonId  option:selected").val(),"divideUser":$("#dutyPersonId  option:selected").text()
+			,"reason":$("#reason").val(),"remark":$("#remark").val()},
+		success : function(data){
+			if(data==1){
+				alert("更改成功!");
+			}
+		},
+	});
+	 return true;
+};
+$(function () {
+	// 大区
+	$("#dutyAreaId").change(function() {
+		if($(this).val() == "") {
+			aihome.cleanOption("dutyZoneId");
+			aihome.cleanOption("dutyGroupId");
+			aihome.cleanOption("dutyPersonId");
+			return;
+		}
+		// 大区 -> 区(级联) Start
+		aihome.getDutyZone($(this).val(), "dutyZoneId");
+		// 大区 -> 区(级联) End
+		aihome.cleanOption("dutyGroupId");
+		aihome.cleanOption("dutyPersonId");
+	});
+	// 区
+	$("#dutyZoneId").change(function() {
+		if($(this).val() == "") {
+			aihome.cleanOption("dutyGroupId");
+			aihome.cleanOption("dutyPersonId");
+			return;
+		}
+		// 区 -> 组(级联) Start
+		aihome.getDutyGroup($(this).val(), "dutyGroupId");
+		// 区 -> 组(级联) End
+		aihome.cleanOption("dutyPersonId");
+	});
+	// 组
+	$("#dutyGroupId").change(function(){
+		if($(this).val() == "") {
+			aihome.cleanOption("dutyPersonId");
+			return;
+		}
+		// 组 -> 人(级联) Start
+		aihome.getUser($(this).val(), "dutyPersonId");
+		// 组 -> 人(级联) End
+	});
+})
+</script>

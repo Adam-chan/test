@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="carPortRecord">
+
+	<!-- 新增车位跟进记录 -->
+	<insert id="insertCarPortRecord" parameterType="map">  
+	    INSERT INTO CAR_PORT_RECORD (
+			ID,
+			RECORD,
+			CAR_PORT_ID,
+			CREATE_TIME, 
+			OPERATER
+		)VALUES(
+		    CAR_PORT_RECORD_SEQ.NEXTVAL, 
+			#{record,jdbcType=VARCHAR}, 
+			#{carPortId,jdbcType=DECIMAL},
+			SYSDATE, 
+			#{operater,jdbcType=VARCHAR}
+		)
+    </insert>
+    
+	<!-- 根据车位id查询车位跟进记录-->
+   	<select id="getCarPortRecordListById" parameterType="map" resultType="carPortRecordModel">
+		SELECT
+			ID,
+			RECORD,
+			operater,
+			to_char (CREATE_TIME, 'yyyy-MM-dd') AS createTimeFormat
+		FROM
+			CAR_PORT_RECORD 
+		WHERE
+			1=1
+			<if test="carPortId != null  and carPortId !=''"> 
+				AND car_port_id = #{carPortId}
+			</if>
+		ORDER BY
+			CREATE_TIME,
+			ID
+   	</select>
+   	
+</mapper>

@@ -1,0 +1,28 @@
+<div id="top_tools" class=" btn-group">
+	<button id="assignment" class="btn btn-sm btn-white" onclick="aihome.assignment();">
+		<span>分配</span>
+	</button>
+	<button id="premises_query" class="btn btn-sm btn-white" onclick="aihome.queryAddrDist();">
+		<i class="iconfont">&#xe6e4;</i>
+		<span>查询</span>
+	</button>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<br/>
+		<div class="tabbable tabbable-lightBlue">
+			<ul class="nav nav-tabs" >
+				<li id="info_tab" class="active">
+					<a data-toggle="tab" tabUrl="${CTX}/addrDist/addrSaleDist.do" tabView="#addrDist">买卖分配</a>
+				</li>
+				<li>
+					<a data-toggle="tab" tabUrl="${CTX}/addrDist/addrLeaseDist.do" tabView="#addrDist">租赁分配</a>
+				</li>
+			</ul>
+			<div class="tab-content" id="addrDist"></div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$('.page-content-area').ace_ajax('loadScripts', [null,null], function () {});
+</script>

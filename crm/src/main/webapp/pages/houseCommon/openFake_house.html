@@ -1,0 +1,177 @@
+<div class="row" style="margin-top: 5px;">
+	<label class="col-xs-2 control-label" style="text-align: right;">房源地址(原):</label>
+	<a id="houseAddrDetail" href="javaScript:void(0);"seeType='2' demandType='${transType!""}' houseId='' onclick='aihome.userCheckInfoFun(this)' style="margin-left:10px;text-decoration:underline;color:blue">查看</a>
+	<#if transType=='1'>
+	<div id="addr" class="col-xs-6" style="padding-left: 0px;" hidden>
+	   	${(result.houseSaleInfo.addressDetail)!''}
+	</div>
+	<#else>
+	<div id="addr"  class="col-xs-6" style="padding-left: 0px;" hidden>
+	   	${(result.houseLeaseInfo.addressDetail)!''}
+	</div>
+	</#if>
+</div>
+<div class="row" style="margin-top: 5px;">
+	<label class="col-xs-2 control-label" style="text-align: right;">房源地址(改):</label>
+	<div class="col-xs-6" style="padding-left: 0px;">
+		<input id="roomId" hidden  type="text">
+	   	<input id="addrDetail" class="form-control input-xs" vRequired="true"  type="text">
+	</div>
+</div>
+<div class="row" style="margin-top: 5px;">
+	<div class="col-md-4 col-sm-4 col-xs-4" >
+		<label class="col-xs-6 control-label" style="text-align: right;">业主(原):</label>
+		<#if transType=='1'>
+		<div id="ower" class="col-xs-6" style="padding-left: 0px;" >
+		   	${(result.houseSaleInfo.ownerName)!''}
+		</div>
+		<#else>
+		<div id="ower" class="col-xs-6" style="padding-left: 0px;" >
+		   	${(result.houseLeaseInfo.ownerName)!''}
+		</div>
+		</#if>
+	</div>
+</div>
+<div class="row" style="margin-top: 5px;">
+	<div class="col-md-4 col-sm-4 col-xs-4" >
+		<label class="col-xs-6 control-label" style="text-align: right;">业主(改):</label>
+		<div class="col-xs-6" style="padding-left: 0px;">
+		   <input id="owerName" class="form-control input-xs" vRequired="true"  type="text">
+		</div>
+	</div>
+</div>
+<div class="row" style="margin-top: 5px;">
+	<div class="col-md-4 col-sm-4 col-xs-4" >
+		<label class="col-xs-6 control-label" style="text-align: right;">业主电话(原):</label>
+		<a id="houseContentTell" href="javaScript:void(0);"seeType='1' demandType='${transType!""}' houseId='' onclick='aihome.userCheckInfoFun(this)' style="margin-left:10px;text-decoration:underline;color:blue">查看</a>
+		<#if transType=='1'>
+		<div id="tell" class="col-xs-6" style="padding-left: 0px;" hidden>
+		   	${(result.houseSaleInfo.ownerTel)!''}
+		</div>
+		<#else>
+		<div id="tell" class="col-xs-6" style="padding-left: 0px;" hidden >
+		   	${(result.houseLeaseInfo.ownerTel)!''}
+		</div>
+		</#if>
+	</div>
+</div>
+<div class="row" style="margin-top: 5px;">
+	<div class="col-md-4 col-sm-4 col-xs-4" >
+		<label class="col-xs-6 control-label" style="text-align: right;">业主电话(改):</label>
+		<div class="col-xs-6" style="padding-left: 0px;">
+			<input id="owerTell" class="form-control input-xs" vRequired="true"  type="text">
+		</div>
+	</div>
+</div>
+<div class="row" style="margin-top: 5px;">
+	<div class="col-md-4 col-sm-4 col-xs-4" >
+		<label class="col-xs-6 control-label" style="text-align: right;">打假备注:</label>
+		<div class="col-xs-6" style="padding-left: 0px;">
+		   	<textarea id="houseRemark"  cols="50" rows="4" name="textareaName" type="textarea" value=""></textarea>
+		</div>
+	</div>
+</div>
+<button class="btn btn-xs btn-blue" style=" margin-left: 522px;margin-top: 43px;"onclick="aihome.houseFake();">提交</button>
+<script type="text/javascript">
+$("#houseAddrDetail").attr("houseId",$("#houseInfoId").val());
+$("#houseContentTell").attr("houseId",$("#houseInfoId").val());
+aihome.houseFake = function(){
+	if($("#addrDetail").val()==""){
+		alert("房源打假地址不能为空,请输入有效房源地址!");
+		return;
+	}
+	if($("#owerTell").val()==""){
+		alert("业主电话不能为空,请输入有效的业主电话!");
+		return;
+	}else{
+		if(!/^0\d{2,3}-\d{7,8}(-\d{1,6})?$|(^1[3|4|5|7|8][0-9]{9}$)/.test($("#owerTell").val())){
+			alert("请输入正确的手机号码或电话号码\n\n例如:13916752109或0411-3614072");
+			return false ; 
+		}
+	}
+	if($("#houseRemark").val()==""){
+		alert("打假备注不能为空,请输入有效打假备注!");
+		return;
+	}
+	$.ajax({
+		url : "${CTX}/commonSearch/saveHouseFake.do",
+		async : false,
+		dataType : "json",
+		data : {
+			houseInfoId : $("#houseInfoId").val(),
+			houseCode : $("#detailHouseCode").val(),
+			reason : $("#houseRemark").val(),
+			transType : ${transType},
+			passiveUser : $("#operator").val(),//被打假人
+			passiveUserId : $("#operatorId").val(),
+			passiveOrgName : $("#operateOrgName").val(),
+			passiveOrgCode : $("#operateOrgCode").val(),
+			passiveAreaName : $("#operateQuName").val(),
+			useType : $("#propertyTypeLayout").val(),
+			type :aihome.fakeType,
+			houseAddress : $("#addrDetail").val(),
+			houseOwner : $("#owerName").val(),
+			contact : $("#owerTell").val()
+		},
+		success : function(data) {
+			if(data==1){
+				alert("提交房源打假成功!");
+				$("#openAntiCounterfeiting").dialog("close");
+				$("#myFake_jqGrid").trigger("reloadGrid");
+			}else if(data==2){
+				alert("该房源已被其他经纪人提交打假,审核正在进行中请稍后再试!");
+			}else{
+				alert("提交房源打假失败!");
+			}
+		}
+	});
+}
+//详细地址模糊查询
+$("#addrDetail").autocomplete({
+	source : function(request, response){
+		$.ajax({
+			url : "${CTX}/houseLease/getAddrDetail.do",
+			dataType : "json",
+			type : 'post',
+			data : {
+				matchStr : request.term,
+				useType : $("#propertyTypeLayout").val()
+			},
+			success : function(data){
+				var array = [];
+				for (var i = 0; i < data.length; i++){
+					var temp = {
+						key : data[i].roomId,//房间id
+						value : data[i].addrDetail,//详细地址
+					};
+					array.push(temp);
+				}
+				response(array);
+			}
+		});
+	},
+	select : function(event, ui) {
+		//校验房源是否存在
+		$.ajax({
+			url : "${CTX}/houseLease/isExistWithHouseLease.do",
+			dataType : "json",
+			type : "post",
+			data : {
+				demandType : ${transType},
+				roomId : ui.item.key
+			},
+			success : function(data) {
+				if(data>0){
+					alert("该房源已存在！");
+					$("#addrDetail").val("");
+				}else{
+					$("#roomId").val(ui.item.key);
+					$("#addrDetail").val(ui.item.value);
+					event.preventDefault();
+				}
+			}
+		});
+	}
+});
+<#include "../users/users_check.html">
+</script>

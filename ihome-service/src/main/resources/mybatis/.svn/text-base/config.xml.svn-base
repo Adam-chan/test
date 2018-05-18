@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD SQL Map Config 3.0//EN"  
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.golden.ihome.addr.model.RoadModel" alias="roadModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.BusiAreaModel" alias="busiAreaModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.BaseAreaModel" alias="baseAreaModel"/> 
+		<typeAlias type="com.golden.ihome.addr.model.SubdistrictModel" alias="subdistrictModel"/> 
+		<typeAlias type="com.golden.ihome.addr.model.AdminAreaModel" alias="adminAreaModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.CommunityModel" alias="communityModel"/> 
+		<typeAlias type="com.golden.ihome.addr.model.AroundSiteModel" alias="aroundSiteModel"/> 
+		<typeAlias type="com.golden.ihome.addr.model.AroundLineModel" alias="aroundLineModel"/> 
+		<typeAlias type="com.golden.ihome.addr.model.AroundSiteLineModel" alias="aroundSiteLineModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.RoadNumModel" alias="roadNumModel"/> 
+		<typeAlias type="com.golden.ihome.addr.model.BaseBuildingModel" alias="baseBuildingModel"/> 
+		<typeAlias type="com.golden.ihome.addr.model.BaseHouseModel" alias="baseHouseModel"/> 
+		<typeAlias type="com.golden.ihome.addr.model.BuildingUnitsModel" alias="buildingUnitsModel"/> 
+		<typeAlias type="com.golden.ihome.addr.model.BasePremisesModel" alias="basePremisesModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.RoadLogModel" alias="roadLogModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.LayoutModel" alias="layoutModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.CarPortModel" alias="carPortModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.CarPortRecordModel" alias="carPortRecordModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.EduFacilityModel" alias="eduFacilityModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.BuildingGroupModel" alias="buildingGroupModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.ParkContactRoomModel" alias="parkContactRoomModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.AroundEduImgModel" alias="aroundEduImgModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.PremisesArrangeLookModel" alias="premisesArrangeLookModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.PremisesDetailModel" alias="PremisesDetailModel"/>		
+		<typeAlias type="com.golden.ihome.addr.model.FileDownloadModel" alias="FileDownloadModel"/> 		
+		<typeAlias type="com.golden.ihome.addr.model.PremisesPicturesModel" alias="PremisesPicturesModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.AddressBaseManageModel" alias="addressBaseManageModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.TemporaryAddrBaseModel" alias="temporaryAddrBaseModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.DistModel" alias="distModel"/>
+		<typeAlias type="com.golden.ihome.addr.model.PremisesMenuModel" alias="premisesMenuModel"/>
+		<!-- 地址库房间获取全地址 -->
+		<typeAlias type="com.golden.ihome.addr.model.HouseAllAddressModel" alias="houseAllAddressModel"/>
+		<!--CRM 联系人、客源 -->
+		<typeAlias type="com.golden.ihome.crm.model.CustomerManageModel" alias="CustomerManageModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.CustomerPromiseModel" alias="CustomerPromiseModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.CustomerRecommendModel" alias="customerRecommendModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.CustomerCallBackModel" alias="CustomerCallBackModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.CustomerSourceModel" alias="CustomerSourceModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.CustomerSourceFollowModel" alias="customerSourceFollowModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.DispatchLogModel" alias="dispatchLogModel"/>
+		<!--赛事  -->
+		<typeAlias type="com.golden.ihome.crm.model.MatchCategoryModel" alias="matchCategoryModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.MatchZoneModel" alias="matchZoneModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.CodeModel" alias="codeModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.BlackListModel" alias="BlackListModel"/>
+		<!-- 赛事 -->
+		<typeAlias type="com.golden.ihome.crm.model.MatchModel" alias="matchModel"/>
+		<!-- 房源评论 -->
+		<typeAlias type="com.golden.ihome.crm.model.CommentModel" alias="CommentModel"/>
+		<!-- 房源管理 -->
+		<typeAlias type="com.golden.ihome.crm.model.OwnerSourceModel" alias="ownerSourceModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.HouseLeaseModel" alias="houseLeaseModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.AddrDetailModel" alias="addrDetailModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.HouseSaleModel" alias="houseSaleModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.HouseLinkManModel" alias="houseLinkManModel"/>
+		<!-- 房源跟进 -->
+		<typeAlias type="com.golden.ihome.crm.model.HouseFollowModel" alias="houseFollowModel"/>
+		<!-- 房源实勘 -->
+		<typeAlias type="com.golden.ihome.crm.model.ManageProspectInfoModel" alias="manageProspectInfoModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.ManageProspectImageModel" alias="manageProspectImageModel"/>
+		<!-- 房源空看 -->
+		<typeAlias type="com.golden.ihome.crm.model.HouseSpaceSeeModel" alias="houseSpaceSeeModel"/>
+		<!-- 房源收藏 -->
+		<typeAlias type="com.golden.ihome.crm.model.HouseCollectModel" alias="houseCollectModel"/>
+		<!-- 房源纸 -->
+		<typeAlias type="com.golden.ihome.crm.model.PaperModel" alias="paperModel"/>
+		<!-- 系统参数 -->
+		<typeAlias type="com.golden.ihome.crm.model.SysParameterModel" alias="sysParameterModel"/>
+		<!-- 限时速递 -->
+		<typeAlias type="com.golden.ihome.crm.model.ManageTimeLimitExpressModel" alias="manageTimeLimitExpressModel"/>
+		<typeAlias type="com.golden.ihome.crm.model.BuildingPapersModel" alias="buildingPapersModel"/>
+		<!-- 普租签约 -->
+		<typeAlias type="com.golden.ihome.crm.model.ManageRentContractModel" alias="manageRentContractModel"/>
+		<!-- 房源保护管理列表实体类 -->
+		<typeAlias type="com.golden.ihome.crm.model.HouseProtectModel" alias="houseProtectModel"/>
+		<!-- 打假管理 -->
+		<typeAlias type="com.golden.ihome.crm.model.FakeManageModel" alias="fakeManageModel"/>
+		<!-- 钥匙管理 -->
+		<typeAlias type="com.golden.ihome.crm.model.ManageKeyModel" alias="manageKeyModel"/>
+		<!-- 钥匙管理 -->
+		<typeAlias type="com.golden.ihome.crm.model.HouseKeyModel" alias="houseKeyModel"/>
+		<!--委托书管理 -->
+		<typeAlias type="com.golden.ihome.crm.model.HousePorxyModel" alias="housePorxyModel"/>
+		<!--房源房产证管理 -->
+		<typeAlias type="com.golden.ihome.crm.model.HouseDeedModel" alias="houseDeedModel"/>
+		<!-- 经纪人查看电话地址实体 -->
+		<typeAlias type="com.golden.ihome.crm.model.UserCheckModel" alias="userCheckModel"/>
+		<!-- 我的实勘管理 -->
+		<typeAlias type="com.golden.ihome.crm.model.ManageProspectModel" alias="manageProspectModel"/>
+		<!-- 房源归属记录 -->
+		<typeAlias type="com.golden.ihome.crm.model.HouseAffiliationLogModel" alias="houseAffiliationLogModel"/>
+		<!-- 运营分配 -->
+		<typeAlias type="com.golden.ihome.addr.model.OperateModel" alias="operateModel"/>
+	</typeAliases>
+	<plugins>
+		<plugin interceptor="com.golden.port.framework.pages.PageInterceptor">
+			<property name="dialect" value="oracle"/>
+			<property name="pageSqlId" value=".*Page.*"/>
+		</plugin>
+	</plugins>
+	<mappers>
+		<mapper resource="mybatis/addr/base/Road.xml"/>
+		<mapper resource="mybatis/addr/base/BusiArea.xml"/>
+		<mapper resource="mybatis/addr/base/BaseArea.xml"/>
+		<mapper resource="mybatis/addr/around/AroundSite.xml"/>
+		<mapper resource="mybatis/addr/around/AroundLine.xml"/>
+		<mapper resource="mybatis/addr/around/AroundEdu.xml"/>
+		<mapper resource="mybatis/addr/base/BaseBuilding.xml"/>
+		<mapper resource="mybatis/addr/base/BuildingUnits.xml"/>
+		<mapper resource="mybatis/addr/base/BuildingGroup.xml"/>
+		<mapper resource="mybatis/addr/base/BasePremises.xml"/>
+		<mapper resource="mybatis/addr/base/Layout.xml"/>
+		<mapper resource="mybatis/addr/base/PremisesDetail.xml"/>
+		<mapper resource="mybatis/addr/base/PremisesPictures.xml"/>
+		<mapper resource="mybatis/addr/base/AddressBaseManage.xml"/>
+		<mapper resource="mybatis/addr/base/TemporaryAddrBase.xml"/>
+		<mapper resource="mybatis/addr/car/CarPort.xml"/>
+		<mapper resource="mybatis/addr/car/CarPortRecord.xml"/>
+		<mapper resource="mybatis/addr/base/BaseBuilding.xml"/>
+		<mapper resource="mybatis/addr/base/BaseHouse.xml"/>
+		<mapper resource="mybatis/addr/base/PremisesArrangeLook.xml"/>
+		<mapper resource="mybatis/addr/examine/PremisesExamine.xml"/>
+		<mapper resource="mybatis/addr/dist/AddrDist.xml"/>
+		<!-- 房源管理 -->
+		<mapper resource="mybatis/crm/house/OwnerSource.xml"/>
+		<mapper resource="mybatis/crm/house/HouseLease.xml"/>
+		<mapper resource="mybatis/crm/house/HouseSale.xml"/>
+		<!-- 房源实勘 -->
+		<mapper resource="mybatis/crm/house/ManageProspectImage.xml"/>
+		<mapper resource="mybatis/crm/house/ManageProspectInfo.xml"/>
+		<!-- 普租签约 -->
+		<mapper resource="mybatis/crm/house/ManageRentContract.xml"/>
+		<!-- 限时速递 -->
+		<mapper resource="mybatis/crm/house/BuildingPapers.xml"/>
+		<mapper resource="mybatis/crm/house/ManageTimeLimitExpress.xml"/>
+		<!-- 联系人、客源-->
+		<mapper resource="mybatis/crm/customers/Customers.xml"/>
+		<!--赛事  -->
+		<mapper resource="mybatis/crm/customerSource/CustomerSource.xml"/>
+		<!-- 房源纸 -->
+		<mapper resource="mybatis/crm/paper/paper.xml"/>
+		<!-- 赛事 -->
+		<mapper resource="mybatis/crm/match/Match.xml"/>
+		<mapper resource="mybatis/crm/match/MatchCategory.xml"/>
+		<mapper resource="mybatis/crm/match/MatchZone.xml"/>
+		<!-- 编码表 -->
+		<mapper resource="mybatis/crm/code/code.xml"/>
+		<!-- 系统参数 -->
+		<mapper resource="mybatis/crm/sysParam/sysParam.xml"/>
+		<!-- 房源公共查询 -->
+		<mapper resource="mybatis/crm/house/CommonSearch.xml"/>
+		<!-- 房源保护实体类 -->
+		<mapper resource="mybatis/crm/houseManage/HouseProtect.xml"/>
+		<!-- 打假管理 -->
+		<mapper resource="mybatis/crm/fake/fakeManage.xml"/>
+		<!-- 打假管理 -->
+		<mapper resource="mybatis/crm/key/manageKey.xml"/>
+		<!-- 经纪人查看电话地址 -->
+		<mapper resource="mybatis/crm/users/users.xml"/>
+		<!-- 同步索引 -->
+		<mapper resource="mybatis/syncindex/sync.xml"/>
+		<!-- 房源跟进 -->
+		<mapper resource="mybatis/crm/house/HouseFollow.xml"/>
+		<!-- 房源空看 -->
+		<mapper resource="mybatis/crm/house/HouseSpaceSee.xml"/>
+		<!-- 我的实勘管理 -->
+		<mapper resource="mybatis/crm/manageProspect/ManageProspect.xml"/>
+		<!-- 房源收藏 -->
+		<mapper resource="mybatis/crm/house/HouseCollect.xml"/>
+		<!-- 客户池 -->
+		<mapper resource="mybatis/crm/customerSource/CustomerPool.xml"/>
+		<!-- 运营分配 -->
+		<mapper resource="mybatis/addr/operate/Operate.xml"/>
+	</mappers>
+</configuration>

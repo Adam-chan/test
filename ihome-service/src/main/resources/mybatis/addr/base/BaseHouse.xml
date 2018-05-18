@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="baseHouse" >
+ <!-- 房间表字段 -->
+  <sql id="Base_Column_List" >
+  	  ID as id, HOUSE_NAME as houseName,  to_char(CREATE_TIME,'YYYY-MM-DD HH-mi-SS') as createTime, 
+      UNIT_ID as unitId,to_char(UPDATE_TIME,'YYYY-MM-DD HH-mi-SS') as updateTime, NUM as num, 
+      STATUS as status, ORIENTATION as orientation, COVERED_AREA as coveredArea, 
+      HOUSE_TYPE as houseType, DECORATION as decoration, USE_LAND as useLand, 
+      UNIT_CODE as unitCode,BUILDING_ID as buildingId, GROUP_ID as  groupId,
+      PREMISES_ID as premisesId,PURPOSE as purpose, HOUSE_NATURE as houseNature,
+      LAND_LIMIT as landLimit ,CONTACT_PHONE as  contactPhone,PROPRIETOR as proprietor,PROPERTY_STATUS as propertyStatus
+  </sql>
+   <!-- 根据id查询房间信息 -->
+  <select id="getBaseHouse" resultType="baseHouseModel" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from BASE_HOUSE
+     <where>
+			<if test="unitId != null  ">
+				 UNIT_ID = #{unitId}
+			</if>
+			<if test="baseHouseId != null ">
+				 ID = #{baseHouseId}
+			</if>
+	 </where>
+  </select>
+  <!-- 删除单元的房间校验 -->
+   <select id="getbyUnitDelNum" resultType="java.lang.Integer" parameterType="map" >
+    select 
+    count(0)
+    from BASE_HOUSE
+    where STATUS = 1
+			<if test="unitId != null  ">
+				and UNIT_ID = #{unitId}
+			</if>
+  </select>
+  
+  <!-- 房间校验  -->
+  <select id="getByNum" resultType="java.lang.Integer" parameterType="map" >
+    select 
+   	count(0)
+    from BASE_HOUSE
+     <where>
+			<if test="updateHouse != null and baseHouseIds!='' and basebuildingId !='' and basebuildingId !=null and purpose != null and purpose != ''">
+				 HOUSE_NAME = #{updateHouse} and ID &lt;&gt; #{baseHouseIds} and BUILDING_ID =#{basebuildingId} and purpose = #{purpose}
+			</if>
+			<if test="houseName != null and basebuildingId !='' and basebuildingId !=null and purpose != null and purpose != ''">
+				 HOUSE_NAME = #{houseName} and BUILDING_ID =#{basebuildingId} and purpose = #{purpose}
+			</if>
+			<if test="unitId != null  ">
+				 UNIT_ID = #{unitId}
+			</if>
+			<if test="baseHouseId">
+				 ID = #{baseHouseId}
+			</if>
+			<if test="buildingId">
+				 BUILDING_ID = #{buildingId}
+			</if>
+	 </where>
+  </select>
+    <!-- 条件查询获取List数据 （可以删除）-->
+  <select id="getBaseHouseList" resultType="baseHouseModel" parameterType="map" >
+  	 select 
+            <include refid="Base_Column_List" />
+     from BASE_HOUSE
+ 	 <where>
+			<if test="status != null and status !='' ">
+				a.status = #{status}
+			</if>
+	 </where>
+  </select>
+  <!-- 根据id删除房间信息（可以删除多个房间） -->
+  <delete id="delete" parameterType="map" >
+    delete from BASE_HOUSE
+    <where>
+			<if test="baseHouseIds != null and baseHouseIds !='' ">
+				ID IN (${baseHouseIds})
+			</if>
+			<if test="unitId != null and unitId !='' ">
+				and UNIT_ID = #{unitId}
+			</if>
+	 </where>
+  </delete>
+  
+   <!-- 根据id插入数据 -->
+  <insert id="insert" parameterType="map" >
+    insert into BASE_HOUSE (ID, HOUSE_NAME, CREATE_TIME, 
+      UNIT_ID, UPDATE_TIME, NUM, 
+      STATUS, ORIENTATION, COVERED_AREA, 
+      HOUSE_TYPE, DECORATION, USE_LAND, 
+      UNIT_CODE,PURPOSE,HOUSE_NATURE,
+      LAND_LIMIT,CONTACT_PHONE,
+      PROPRIETOR,PROPERTY_STATUS)
+    values (#{id,jdbcType=DECIMAL}, #{houseName,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, 
+      #{unitId,jdbcType=DECIMAL}, #{updateTime,jdbcType=DATE}, #{num,jdbcType=DECIMAL}, 
+      #{status,jdbcType=DECIMAL}, #{orientation,jdbcType=VARCHAR}, #{coveredArea,jdbcType=DECIMAL}, 
+      #{houseType,jdbcType=VARCHAR}, #{decoration,jdbcType=DECIMAL}, #{useLand,jdbcType=DECIMAL}, 
+      #{unitCode,jdbcType=VARCHAR}, #{buildingId}, #{groupId}, #{premisesId},#{purpose},#{houseNature},
+      #{landLimit}, #{contactPhone}, #{proprietor},#{propertyStatus})
+  </insert>
+   <!-- 根据id有选择的插入数据 -->
+  <insert id="insertSelective" parameterType="map" >
+ 	 <selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="houseId">
+		SELECT  BASE_HOUSE_SEQ.NEXTVAL FROM DUAL
+	</selectKey>
+    insert into BASE_HOUSE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        ID,
+      <if test="houseName != null and houseName !=''" >
+        HOUSE_NAME,
+      </if>
+        CREATE_TIME,
+      <if test="unitId != null and unitId !=''" >
+        UNIT_ID,
+      </if>
+        UPDATE_TIME,
+      <if test="num != null and num !=''" >
+        NUM,
+      </if>
+      <if test="status != null and status !=''" >
+        STATUS,
+      </if>
+      <if test="orientation != null and orientation !=''" >
+        ORIENTATION,
+      </if>
+      <if test="coveredArea != null and coveredArea !=''" >
+        COVERED_AREA,
+      </if>
+      <if test="houseType != null and houseType !=''" >
+        HOUSE_TYPE,
+      </if>
+      <if test="decoration != null and decoration !=''" >
+        DECORATION,
+      </if>
+      <if test="useLand != null and useLand !=''" >
+        USE_LAND,
+      </if>
+      <if test="unitCode != null and unitCode !=''" >
+        UNIT_CODE,
+      </if>
+      <if test="premisesId != null and premisesId !=''" >
+        PREMISES_ID,
+      </if>
+      <if test="groupId != null and groupId != ''" >
+        GROUP_ID,
+      </if>
+      <if test="buildingId != null and buildingId !=''" >
+        BUILDING_ID,
+      </if>
+       <if test="purpose != null and purpose !=''" >
+        PURPOSE,
+      </if>
+       <if test="houseNature != null and houseNature !=''" >
+        HOUSE_NATURE,
+      </if>
+      <if test="landLimit != null and landLimit !=''" >
+        LAND_LIMIT,
+      </if>
+       <if test="contactPhone != null and contactPhone !=''" >
+        CONTACT_PHONE,
+      </if>
+       <if test="proprietor != null and proprietor !=''" >
+        PROPRIETOR,
+      </if>
+        <if test="propertyStatus != null and propertyStatus !=''" >
+        PROPERTY_STATUS
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+       	#{houseId},
+      <if test="houseName != null and houseName !=''" >
+        #{houseName},
+      </if>
+        SYSDATE,
+      <if test="unitId != null and unitId !=''" >
+        #{unitId},
+      </if>
+        SYSDATE,
+      <if test="num != null and num !=''" >
+        #{num},
+      </if>
+      <if test="status != null and status !=''" >
+        #{status},
+      </if>
+      <if test="orientation != null and orientation !=''" >
+        #{orientation},
+      </if>
+      <if test="coveredArea != null and coveredArea !=''" >
+        #{coveredArea},
+      </if>
+      <if test="houseType != null and houseType !=''" >
+        #{houseType},
+      </if>
+      <if test="decoration != null and decoration !=''" >
+        #{decoration},
+      </if>
+      <if test="useLand != null and useLand !=''" >
+        #{useLand},
+      </if>
+      <if test="unitCode != null and unitCode !=''" >
+        #{unitCode},
+      </if>
+      <if test="premisesId != null and premisesId !=''" >
+        #{premisesId},
+      </if>
+      <if test="groupId != null and groupId != ''" >
+        #{groupId},
+      </if>
+      <if test="buildingId != null and buildingId !=''" >
+        #{buildingId},
+      </if>
+      <if test="purpose != null and purpose !=''" >
+        #{purpose},
+      </if>
+      <if test="houseNature != null and houseNature !=''" >
+        #{houseNature},
+      </if>
+      <if test="landLimit != null and landLimit !=''" >
+        #{landLimit},
+      </if>
+       <if test="contactPhone != null and contactPhone !=''" >
+        #{contactPhone},
+      </if>
+      <if test="proprietor != null and proprietor !=''" >
+        #{proprietor },
+      </if>
+      <if test="propertyStatus != null and propertyStatus !=''" >
+        #{propertyStatus },
+      </if>
+    </trim>
+  </insert>
+ 
+  <!-- 房间有选择更新 -->
+  <update id="updateSelective" parameterType="map" >
+    update BASE_HOUSE
+    <set >
+      <if test="houseName != null and houseName != '' " >
+        HOUSE_NAME = #{houseName},
+      </if>
+      <if test="unitId != null and unitId != ''" >
+        UNIT_ID = #{unitId},
+      </if>
+        UPDATE_TIME = SYSDATE,
+      <if test="num != null and num != ''" >
+        NUM = #{num},
+      </if>
+      <if test="status != null and status != ''" >
+        STATUS = #{status},
+      </if>
+      <if test="orientation != null and orientation != ''" >
+        ORIENTATION = #{orientation},
+      </if>
+      <if test="coveredArea != null and coveredArea != ''" >
+        COVERED_AREA = #{coveredArea,jdbcType=DECIMAL},
+      </if>
+      <if test="houseType != null and houseType != ''" >
+        HOUSE_TYPE = #{houseType},
+      </if>
+      <if test="decoration != null and decoration != ''" >
+        DECORATION = #{decoration,jdbcType=DECIMAL},
+      </if>
+      <if test="useLand != null and useLand != ''" >
+        USE_LAND = #{useLand,jdbcType=DECIMAL},
+      </if>
+      <if test="unitCode != null and unitCode != ''" >
+        UNIT_CODE  = #{unitCode},
+      </if>
+       <if test="premisesId != null and premisesId != ''" >
+        PREMISES_ID = #{premisesId},
+      </if>
+      <if test="groupId != null and groupId != ''" >
+        GROUP_ID = #{groupId},
+      </if>
+      <if test="buildingId != null and buildingId != ''" >
+        BUILDING_ID = #{buildingId},
+      </if>
+       <if test="purpose != null and purpose != ''" >
+        PURPOSE = #{purpose,jdbcType=DECIMAL},
+      </if>
+       <if test="houseNature != null and houseNature != ''" >
+        HOUSE_NATURE = #{houseNature,jdbcType=DECIMAL},
+      </if>
+      <if test="landLimit != null and landLimit != ''" >
+        LAND_LIMIT = #{landLimit,jdbcType=DECIMAL},
+      </if>
+       <if test="contactPhone != null and contactPhone != ''" >
+        CONTACT_PHONE = #{contactPhone,jdbcType=DECIMAL},
+      </if>
+       <if test="proprietor != null and proprietor != ''" >
+        PROPRIETOR = #{proprietor},
+      </if>
+       <if test="propertyStatus != null and propertyStatus != ''" >
+        PROPERTY_STATUS = #{propertyStatus},
+      </if>
+    </set>
+    <where>
+		<if test="baseHouseIds != null and baseHouseIds !='' ">
+			ID IN (${baseHouseIds})
+		</if>
+		<if test="unitId != null and unitId !=''">
+			and UNIT_ID IN (${unitId})
+		</if>
+	 </where>
+  </update>
+  <!-- 根据楼栋id修改分组id -->
+  <update id="updateGroupid" parameterType="map" >
+    update BUILDING_UNITS
+    <set >
+        <if test="groupIdIsNull != null " >
+        BUILDING_GROUP_ID = ${groupIdIsNull}
+      </if>
+    </set>
+    <where>
+    	<if test="buildingId != null and buildingId !=''">
+    		BUILDING_ID = #{buildingId}
+    	</if>
+    	<if test="groupId != null and groupId !=''">
+    		BUILDING_GROUP_ID IN (${groupId})
+    	</if>
+    </where>
+  </update>
+	<!-- 批量添加房间 -->
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">  
+		insert into BASE_HOUSE (id,HOUSE_NAME,UNIT_ID,NUM,STATUS,UNIT_CODE,BUILDING_ID,GROUP_ID,
+		PREMISES_ID,PURPOSE,HOUSE_NATURE,LAND_LIMIT) 
+	 	select BASE_HOUSE_SEQ.NEXTVAL,a.* from (
+	 <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+	 	SELECT 
+	      #{item.unitId} as A,
+	      #{item.houseName} as B,
+	      #{item.num} as C,
+	      #{item.status} as D,
+	      #{item.unitCode} as E,
+	      #{item.buildingId} as F,
+	      #{item.groupId} as G,
+	      #{item.premisesId} as H,
+	      #{item.purpose} as I,
+	      #{item.houseNature} as J,
+	      #{item.landLimit} as K
+	     FROM DUAL
+	 </foreach>)a
+	</insert>
+   <!-- 获取商铺分页数据-->
+  <select id="getStorePage" resultType="baseHouseModel" parameterType="map" >
+    select 
+     <include refid="Base_Column_List" />
+    from BASE_HOUSE
+     <where>
+		<if test="buildingId != null and purpose!=null ">
+			and	BUILDING_ID = #{buildingId} and PURPOSE = #{purpose}
+		</if>
+		<if test="decoration != null and decoration != ''">
+			and	DECORATION = #{decoration} 
+		</if>
+		<if test="landlimit != null and landlimit != ''">
+			and	LAND_LIMIT = #{landlimit} 
+		</if>
+		<if test="useLandMax != null and useLandMax != ''">
+			and	USE_LAND &lt;= #{useLandMax} 
+		</if>
+		<if test="useLandMin != null and useLandMin != ''">
+			and	USE_LAND &gt;= #{useLandMin} 
+		</if>
+		<if test="coveredAreaMax != null and coveredAreaMax != ''">
+			and	COVERED_AREA &lt; = #{coveredAreaMax} 
+		</if>
+		<if test="coveredAreaMin != null and coveredAreaMin != ''">
+			and	COVERED_AREA &gt;= #{coveredAreaMin} 
+		</if>
+	 </where>
+  </select>
+    
+    <!-- 根据buildingId获取房间信息 -->
+    <select id="selectRoomsInfo" parameterType="map" resultType="baseHouseModel">
+    	select house_name as houseName,status as status,id as id,unit_code as unitCode from base_house where building_id = #{buildingId} and purpose != 2
+    </select>
+    
+     <!-- 根据unitId 楼层获取房间信息 -->
+    <select id="getRoomsMatchFloor" parameterType="map" resultType="baseHouseModel">
+    	select house_name as houseName,status as status,id as id from base_house where unit_id = #{unitId} and num = #{floorNum}
+    </select>
+    
+    <!-- 1级 -->
+	<resultMap id="houseAllAddressModelMap" type="houseAllAddressModel">
+		<result property="premisesId" column="premisesId" />
+		<result property="premisesName" column="premisesName" />
+		<result property="groupId" column="groupId" />
+		<result property="groupName" column="groupName" />
+		<result property="buildingName" column="buildingName" />
+		<result property="buildingId" column="buildingId" />
+		<result property="province" column="province" />
+		<result property="city" column="city" />
+		<result property="area" column="area" />
+		<result property="road" column="road" />
+		<result property="roadNum" column="roadNum" />
+		<result property="addrdetail" column="addrdetail" />
+		<result property="areaId" column="areaId" />
+		<result property="roadId" column="roadId" />
+		<collection property="list" resultMap="unitMap" />
+	</resultMap>
+	<!-- 2级 -->
+	<resultMap id="unitMap" type="houseAllAddressModel">
+		<result property="unitId" column="unitId" />
+		<result property="unitName" column="unitName" />
+		<result property="houseId" column="houseId" />
+		<result property="houseName" column="houseName" />
+	</resultMap>
+    <!-- 获取房间到省事区的全地址 -->
+  	<select id="getHouseAllAddress" parameterType="map" resultMap="houseAllAddressModelMap">
+	SELECT a.id as premisesId,
+	       a.name as premisesName,
+	       d.group_name as groupName,
+	       d.id as groupId,
+	       b.building_name as buildingName,
+	       b.id as buildingId,
+	       b.unit_pre || c.code || b.unit_suf as unitName,
+	       b.id as unitId,
+	       e.id as houseId,
+	       e.house_name as houseName,
+	       f.province as province,
+	       f.city as city,
+	       f.area as area,
+	       f.Road as road,
+	       f.road_num as roadNum,
+	       b.area_id as areaId,
+	       f.ADDR_DETAIL || ' ' || a.name || ' ' || d.group_name || ' ' ||
+	       b.building_name || ' ' || b.unit_pre || c.code || b.unit_suf || ' ' ||
+	       e.house_name as addrdetail,
+	       f.road_id as roadId
+	  FROM base_house e
+	  LEFT JOIN base_premises a
+	    ON e.premises_id = a.id
+	  LEFT JOIN building_group d
+	    ON e.group_id = d.id
+	  LEFT JOIN base_building b
+	    ON e.building_id = b.id
+	  left join building_units c
+	    on e.unit_id = c.id
+	  LEFT JOIN AREA_ROAD_NUM_ADDR f
+	    on f.unite_id = a.road_id
+	  where e.id in (${houseIds})
+    </select>
+     <!-- 获取房间到省事区的全地址 -->
+  	<select id="getOneHouseAllAddress" parameterType="map" resultType="houseAllAddressModel">
+	  SELECT a.id as premisesId,
+	         a.name as premisesName,
+	         d.group_name as groupName,
+	         d.id as groupId,
+	         b.building_name as buildingName,
+	         b.id as buildingId,
+	         e.id as houseId,
+	         e.house_name as houseName,
+	         f.province as province,
+	         f.city as city,
+	         f.area as area,
+	         f.Road as road,
+	         f.road_num as roadNum,
+	         b.area_id as areaId,
+	         f.ADDR_DETAIL || ' ' || a.name || ' ' || d.group_name || ' ' ||
+	         b.building_name || ' ' || 
+	         e.house_name as addrdetail,
+	         f.road_id as roadId
+	    FROM base_house e
+	    LEFT JOIN base_premises a
+	      ON e.premises_id = a.id
+	    LEFT JOIN building_group d
+	      ON e.group_id = d.id
+	    LEFT JOIN base_building b
+	      ON e.building_id = b.id
+	    LEFT JOIN AREA_ROAD_NUM_ADDR f
+	      on f.unite_id = a.road_id
+      where e.id = ${houseId}
+      </select>
+      <!-- 判断房间是否被引用 -->
+      <select id="houseSource" parameterType="map" resultType="java.lang.Integer">
+		select count(*) from house_info hi where hi.room_id = #{roomId}
+      </select>
+</mapper>

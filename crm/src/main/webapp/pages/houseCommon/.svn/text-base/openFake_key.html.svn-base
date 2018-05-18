@@ -1,0 +1,228 @@
+<div class="row" style="margin-top: 5px;">
+	<label class="col-xs-2 control-label" style="text-align: right;">钥匙类型:</label>
+	<div class="col-xs-6" style="padding-left: 0px;">
+   		<input name="keyType"  type="radio" value="1" checked  />钥匙
+		<input name="keyType"  type="radio" value="2"/>门禁卡
+		<input name="keyType"  type="radio" value="3"/>密码
+	</div>
+</div>
+<div id="hiddenKey" class="row">
+	<div class="row" style="margin-top: 5px;">
+		<label class="col-xs-2 control-label" style="text-align: right;">钥匙编号:</label>
+		 <#if transType=='1'>
+		<div id="keyCode" class="col-xs-6" style="padding-left: 0px;" value="${(result.houseSaleInfo.keyCode)!''}">
+		   	${(result.houseSaleInfo.keyCode)!''}
+		</div>
+			<input id="colelectUserId" hidden value="${(result.houseSaleInfo.colelectUserId)!''}"></input>
+		   	<input id="colelectOrgCode" hidden value="${(result.houseSaleInfo.colelectOrgCode)!''}"></input>
+		   	<input id="keyType" hidden value="${(result.houseSaleInfo.keyType)!''}"></input>
+		<#else>
+		<div id="keyCode"  class="col-xs-6" style="padding-left: 0px;" value="${(result.houseLeaseInfo.keyCode)!''}">
+		   	${(result.houseLeaseInfo.keyCode)!''}
+		</div>
+			<input id="colelectUserId" hidden value="${(result.houseSaleInfo.colelectUserId)!''}"></input>
+		   	<input id="colelectOrgCode" hidden value="${(result.houseSaleInfo.colelectOrgCode)!''}"></input>
+		   	<input id="keyType" hidden value="${(result.houseSaleInfo.keyType)!''}"></input>
+		</#if>
+	</div>
+	<div class="row" style="margin-top: 5px;">
+		<div class="col-md-4 col-sm-4 col-xs-4" >
+			<label class="col-xs-6 control-label" style="text-align: right;">收取人:</label>
+			 <#if transType=='1'>
+			<div id="colelectUser" class="col-xs-6" style="padding-left: 0px;">
+			 	${(result.houseSaleInfo.colelectUser)!''}
+			</div>
+			<#else>
+			<div id="colelectUser"  class="col-xs-6" style="padding-left: 0px;">
+			   	${(result.houseLeaseInfo.colelectUser)!''}
+			</div>
+			</#if>
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-4" >
+			<label class="col-xs-6 control-label" style="text-align: right;">联系电话:</label>
+			 <#if transType=='1'>
+			<div id="colelectContact" class="col-xs-6" style="padding-left: 0px;">
+			 	${(result.houseSaleInfo.colelectUser)!''}
+			</div>
+			<#else>
+			<div id="colelectContact"  class="col-xs-6" style="padding-left: 0px;">
+			   	${(result.houseLeaseInfo.colelectUser)!''}
+			</div>
+			</#if>
+		</div>
+	</div>
+	<div class="row" style="margin-top: 5px;">
+		<div class="col-md-4 col-sm-4 col-xs-4" >
+			<label class="col-xs-6 control-label" style="text-align: right;">收取区:</label>
+			 <#if transType=='1'>
+			<div id="colelectZone" class="col-xs-6" style="padding-left: 0px;">
+			 	${(result.houseSaleInfo.colelectZone)!''}
+			</div>
+			<#else>
+			<div id="colelectZone"  class="col-xs-6" style="padding-left: 0px;">
+			   	${(result.houseLeaseInfo.colelectZone)!''}
+			</div>
+			</#if>
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-4" >
+			<label class="col-xs-6 control-label" style="text-align: right;">收取组:</label>
+			 <#if transType=='1'>
+			<div id="colelectOrg" class="col-xs-6" style="padding-left: 0px;">
+			 	${(result.houseSaleInfo.colelectOrg)!''}
+			</div>
+			<#else>
+			<div id="colelectOrg"  class="col-xs-6" style="padding-left: 0px;">
+			   	${(result.houseLeaseInfo.colelectOrg)!''}
+			</div>
+			</#if>
+		</div>
+	</div>
+	<div class="row" style="margin-top: 5px;">
+		<div class="col-md-4 col-sm-4 col-xs-4" >
+			<label class="col-xs-6 control-label" style="text-align: right;">存放人:</label>
+			 <#if transType=='1'>
+			<div id="deposit" class="col-xs-6" style="padding-left: 0px;">
+			 	${(result.houseSaleInfo.deposit)!''}
+			</div>
+			<#else>
+			<div id="deposit"  class="col-xs-6" style="padding-left: 0px;">
+			   	${(result.houseLeaseInfo.deposit)!''}
+			</div>
+			</#if>
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-4" >
+			<label class="col-xs-6 control-label" style="text-align: right;">联系方式:</label>
+			 <#if transType=='1'>
+			<div id="depositContact" class="col-xs-6" style="padding-left: 0px;">
+			 	${(result.houseSaleInfo.depositContact)!''}
+			</div>
+			<#else>
+			<div id="depositContact"  class="col-xs-6" style="padding-left: 0px;">
+			   	${(result.houseLeaseInfo.depositContact)!''}
+			</div>
+			</#if>
+		</div>
+	</div>
+	<div class="row" style="margin-top: 5px;">
+		<div class="col-md-4 col-sm-4 col-xs-4" >
+			<label class="col-xs-6 control-label" style="text-align: right;">钥匙存放实体店:</label>
+			 <#if transType=='1'>
+			<div id="depositStoreId" class="col-xs-6" style="padding-left: 0px;">
+			 	${(result.houseSaleInfo.depositStoreId)!''}
+			</div>
+			<#else>
+			<div id="depositStoreId"  class="col-xs-6" style="padding-left: 0px;">
+			   	${(result.houseLeaseInfo.depositStoreId)!''}
+			</div>
+			</#if>
+		</div>
+	</div>
+</div>
+<div class="row" id = "keyTypePw" hidden>
+	<div class="row" style="margin-top: 5px;">
+		<div class="col-md-4 col-sm-4 col-xs-4" >
+			<label class="col-xs-6 control-label" style="text-align: right;">密码(原):</label>
+			 <#if transType=='1'>
+			<div id="passWord" class="col-xs-6" style="padding-left: 0px;" value="${(result.houseSaleInfo.password)!''}">
+			 	${(result.houseSaleInfo.password)!''}
+			</div>
+			<#else>
+			<div id="passWord"  class="col-xs-6" style="padding-left: 0px;" value="${(result.houseLeaseInfo.password)!''}">
+			   	${(result.houseLeaseInfo.password)!''}
+			</div>
+			</#if>
+		</div>
+	</div>
+	<div class="row" style="margin-top: 5px;">
+		<div class="col-md-4 col-sm-4 col-xs-4" >
+			<label class="col-xs-6 control-label" style="text-align: right;">密码(改):</label>
+			<div  class="col-xs-6" style="padding-left: 0px;">
+				<input id="passWord" maxlength="10" class="form-control input-xs" vRequired="true"  type="text">
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row" style="margin-top: 5px;">
+	<div class="col-md-4 col-sm-4 col-xs-4" >
+		<label class="col-xs-6 control-label" style="text-align: right;">打假备注:</label>
+		<div class="col-xs-6" style="padding-left: 0px;">
+		   	<textarea id="keyRemark"  cols="50" rows="4" name="textareaName" type="textarea" value=""></textarea>
+		</div>
+	</div>
+</div>
+<button class="btn btn-xs btn-blue" style=" margin-left: 522px;margin-top: 43px;"onclick="aihome.keyFake();">确定</button>
+<script type="text/javascript">
+aihome.keyFake = function(){
+	var keyType = $(":input[name='keyType']").val();
+	if(keyType==3){
+		if($("#passWord").val()==""){
+			alert("该钥匙暂未收取,无法进行有效打假!");
+			return;
+		}
+		if($("#passWord").val()==""){
+			alert("请输入需要打假密码!");
+			return;
+		}
+	}
+	if($("#keyCode").attr("value")==""){
+		alert("该钥匙暂未收取,无法进行有效打假!");
+		return;
+	}
+	if($("#keyRemark").val()==""){
+		alert("打假备注不能为空,请输入有效打假备注!");
+		return;
+	}
+	$.ajax({
+		url : "${CTX}/commonSearch/saveHouseFake.do",
+		async : false,
+		dataType : "json",
+		data : {
+			houseInfoId : $("#houseInfoId").val(),
+			houseCode : $("#detailHouseCode").val(),
+			reason : $("#remark").val(),
+			transType : ${transType},
+			passiveUser : $("#operator").val(),
+			passiveUserId : $("#operatorId").val(),
+			passiveOrgName : $("#operateOrgName").val(),
+			passiveOrgCode : $("#operateOrgCode").val(),
+			passiveAreaName : $("#operateQuName").val(),
+			useType : $("#propertyTypeLayout").val(),
+			type :aihome.fakeType,
+			keyType :$(":input[name='keyType']").val(),
+			keyCode : $("#keyCode").text(),
+			colelectUser : $("#colelectUser").text(),
+			colelectUserId : $("#colelectUserId").val(),
+			colelectOrgCode : $("#colelectOrgCode").val(),
+			colelectContact : $("#colelectContact").text(),
+			colelectZone : $("#colelectZone").text(),
+			colelectOrg : $("#colelectOrg").text(),
+			deposit : $("#deposit").text(),
+			depositContact : $("#depositContact").text(),
+			depositStoreId : $("#depositStoreId").text(),
+			passWord :$("#passWord").text(),
+			reason : $("#keyRemark").val()
+		},
+		success : function(data) {
+			if(data==1){
+				alert("提交钥匙打假成功!");
+				$("#openAntiCounterfeiting").dialog("close");
+				$("#myFake_jqGrid").trigger("reloadGrid");
+			}else if(data==2){
+				alert("该钥匙已被其他经纪人提交打假,审核正在进行中请稍后再试!");
+			}else{
+				alert("提交钥匙打假失败!");
+			}
+		}
+	});
+}
+$(":input[name='keyType']").change(function (){
+	if($(this).val()==3){
+		$("#hiddenKey").hide();
+		$("#keyTypePw").show();
+	}else{
+		$("#keyTypePw").hide();
+		$("#hiddenKey").show();
+	}
+});
+$(":radio[name='keyType'][value='" + $("#keyType").val() + "']").prop("checked", "checked");
+</script>

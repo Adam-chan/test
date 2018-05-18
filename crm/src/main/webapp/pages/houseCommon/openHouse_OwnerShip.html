@@ -1,0 +1,159 @@
+<div class="row" style="margin-top: 5px;">
+	<label class="col-xs-2 control-label" style="text-align: right;">历史记录:</label>
+	<div class="col-md-10 col-sm-10 col-xs-10" >
+		<#list (result.houseGsLogList)! as item>
+		<div class="row" style="margin-top: 5px;">
+			<div class="col-md-12 col-sm-12 col-xs-12" >
+				<div  class="col-xs-12" style="padding-left: 0px;" >
+					${item_index?if_exists+1}:<span>&nbsp;&nbsp;</span><span style="color:blue;">${(item.operator)!''}</span>于<span style="color:blue;">${(item.operatorTimeStr)!''}</span> ${(item.typeStr)!''} 从<span style="color:#87CEFA;">${(item.affiliationOld)!''}</span>  调整为<span style="color:#EE30A7;"> ${(item.affiliationNow)!''}</span>原因:<span style="color:#EE30A7;">${(item.reason)!''}</span>备注:<#if (item.remark)??> ${(item.remark)!''} <#else> ---- </#if>
+				</div>
+			</div>
+		</div>
+		</#list>
+	</div>
+</div>
+<div class="row" style="margin-top: 5px;">
+	<label class="col-xs-2 control-label" style="text-align: right;">录入时间:</label>
+	 <#if transType=='1'>
+		<div  class="col-xs-6" style="padding-left: 0px;">
+		 	${(result.houseSaleInfo.createTime)!''}
+		</div>
+		<#else>
+		<div  class="col-xs-6" style="padding-left: 0px;">
+		   	${(result.houseLeaseInfo.createTime)!''}
+		</div>
+	</#if>
+</div>
+<div class="row" style="margin-top: 5px;">
+	<div class="col-xs-12">
+		<table class="col-xs-12 table-input table table-striped table-bordered table-hover" >
+         <thead>
+         <tr>
+             <th style="width:20%">归属类型</th>
+             <th style="width:20%">归属组</th>
+             <th style="width:20%">归属人</th>
+             <th style="width:20%">调整</th>
+             <th style="width:20%">修改时间</th>
+         </tr>
+         </thead>
+         <tbody id="OwnerShip">
+            <tr class="active">
+                <td style="width: 20%">维护归属</td>
+               	<#if transType=='1'>
+               	<td style="width: 20%">${(result.houseSaleInfo.divideOrg)!''}</td>
+                <td style="width: 20%">${(result.houseSaleInfo.divideUser)!''}</td>
+                <td style="width: 20%"><a href="javaScript:void(0);" operId='${(result.houseSaleInfo.houseInfoId)!""}' onclick="aihome.editOwner(this,1)" style="margin-left:10px;text-decoration:underline;color:blue">调整</a></td>
+                <td style="width: 20%" >${(result.houseSaleInfo.infoOperateTime)!''}</td>
+				<#else>
+				<td style="width: 20%">${(result.houseLeaseInfo.divideOrg)!''}</td>
+                <td style="width: 20%">${(result.houseLeaseInfo.divideUser)!''}</td>
+                <td style="width: 20%"><a href="javaScript:void(0);" operId='${(result.houseLeaseInfo.houseInfoId)!""}' onclick="aihome.editOwner($(this),1)" style="margin-left:10px;text-decoration:underline;color:blue">调整</a></td>
+                <td style="width: 20%" >${(result.houseLeaseInfo.infoOperateTime)!''}</td>
+				</#if>
+            </tr>
+             <tr class="active">
+                <td style="width: 20%">登记归属</td>
+                <#if transType=='1'>
+               	<td style="width: 20%">${(result.houseSaleInfo.operateOrg)!''}</td>
+                <td style="width: 20%">${(result.houseSaleInfo.operator)!''}</td>
+                <td style="width: 20%"><a href="javaScript:void(0);"style="margin-left:10px;color:blue">无法调整</a></td>
+                <td style="width: 20%" >${(result.houseSaleInfo.createTime)!''}</td>
+				<#else>
+				<td style="width: 20%">${(result.houseLeaseInfo.operateOrg)!''}</td>
+                <td style="width: 20%">${(result.houseLeaseInfo.operator)!''}</td>
+                <td style="width: 20%"><a href="javaScript:void(0);"style="margin-left:10px;color:blue">无法调整</a></td>
+                <td style="width: 20%" >${(result.houseLeaseInfo.createTime)!''}</td>
+				</#if>
+            </tr>
+             <tr class="active">
+                <td style="width: 20%">委托归属</td>
+               	<td style="width: 20%">${(result.houseProxyInfo.operateOrg)!''}</td>
+                <td style="width: 20%">${(result.houseProxyInfo.operateUser)!''}</td>
+                <td style="width: 20%"><a href="javaScript:void(0);" operId='${(result.houseProxyInfo.id)!""}' onclick='aihome.editOwner($(this),2)' style="margin-left:10px;text-decoration:underline;color:blue">调整</a></td>
+                <td style="width: 20%">${(result.houseProxyInfo.operateTime)!''}</td>
+            </tr>
+             <tr class="active">
+                <td style="width: 20%">实勘归属</td>
+               	<td style="width: 20%">${(result.houseSKInfo.prospectOrg)!''}</td>
+                <td style="width: 20%">${(result.houseSKInfo.prospectUser)!''}</td>
+                <td style="width: 20%"><a href="javaScript:void(0);" operId='${(result.houseSKInfo.id)!""}' onclick='aihome.editOwner($(this),3)' style="margin-left:10px;text-decoration:underline;color:blue">调整</a></td>
+                <td style="width: 20%">${(result.houseSKInfo.operateTimeStr)!''}</td>
+            </tr>
+             <tr class="active">
+                <td style="width: 20%">独家归属</td>
+               	<td style="width: 20%">${(result.houseDJInfo.limitUserOrg)!''}</td>
+                <td style="width: 20%">${(result.houseDJInfo.limitUser)!''}</td>
+                <td style="width: 20%"><a href="javaScript:void(0);" operId='${(result.houseDJInfo.id)!""}' onclick='aihome.editOwner($(this),4)' style="margin-left:10px;text-decoration:underline;color:blue">调整</a></td>
+                <td style="width: 20%">${(result.houseDJInfo.operateTime)!''}</td>
+            </tr>
+             <tr class="active">
+                <td style="width: 20%">钥匙归属</td>
+                <#if transType=='1'>
+               	<td style="width: 20%">${(result.houseSaleInfo.colelectOrg)!''}</td>
+                <td style="width: 20%">${(result.houseSaleInfo.colelectUser)!''}</td>
+                <td style="width: 20%"><a href="javaScript:void(0);" operId='${(result.houseSaleInfo.keyId)!""}' onclick='aihome.editOwner($(this),5)' style="margin-left:10px;text-decoration:underline;color:blue">调整</a></td>
+                <td style="width: 20%">${(result.houseSaleInfo.keyOperatetime)!''}</td>
+				<#else>
+				<td style="width: 20%">${(result.houseLeaseInfo.colelectOrg)!''}</td>
+                <td style="width: 20%">${(result.houseLeaseInfo.colelectUser)!''}</td>
+                <td style="width: 20%"><a href="javaScript:void(0);" operId='${(result.houseLeaseInfo.keyId)!""}' onclick='aihome.editOwner($(this),5)' style="margin-left:10px;text-decoration:underline;color:blue">调整</a></td>
+                <td style="width: 20%">${(result.houseLeaseInfo.keyOperatetime)!''}</td>
+				</#if>
+            </tr>
+             <tr class="active">
+                <td style="width: 20%">成交归属</td>
+                <#if transType=='1'>
+               	<td style="width: 20%">${(houseSaleInfo.divideOrg)!''}</td>
+                <td style="width: 20%">${(houseSaleInfo.divideUser)!''}</td>
+                <td style="width: 20%"><a href="javaScript:void(0);" operId='${(houseSaleInfo.divideUserId)!""}' onclick='aihome.editOwner($(this),6)' style="margin-left:10px;text-decoration:underline;color:blue">调整</a></td>
+                <td style="width: 20%">${(houseSaleInfo.divideUser)!''}</td>
+				<#else>
+				<td style="width: 20%">${(houseLeaseInfo.divideOrg)!''}</td>
+                <td style="width: 20%">${(houseLeaseInfo.divideUser)!''}</td>
+                <td style="width: 20%"><a href="javaScript:void(0);" operId='${(houseLeaseInfo.divideUserId)!""}' onclick='aihome.editOwner($(this),6)' style="margin-left:10px;text-decoration:underline;color:blue">调整</a></td>
+                <td style="width: 20%">${(houseLeaseInfo.divideUser)!''}</td>
+				</#if>
+            </tr>
+      	</tbody>
+     </table>
+	</div>
+</div>
+<script type="text/javascript">
+/* 组织结构 */
+aihome.editOwner = function(obj,type){
+	var id = $(obj).attr("operId");
+	if(id==""){
+		alert("暂无归属，无法重新更改归属人!");
+		return;
+	}
+	var affiliationOld = $(obj).parent().prev().prev().text()+$(obj).parent().prev().text();
+	oaDialogOpen(
+		"editOwner",//对话框ID，必填，且不能与当前页面的ID重复
+		{
+			url: "${CTX}/commonSearch/editOwner.do",//调用页面的url
+			title: "编辑责任人",//弹框的title
+			closeOnEscpe: true,//是否通过esc关闭弹框
+			closeBtn: true,//是否显示关闭按钮
+			width: $(window).width()*0.4,//弹框的宽度
+			height: $(window).height()*0.4,//弹框的高度
+			buttons: {
+				"确认" : function(){
+					if(aihome.editOwerButton(id,type,affiliationOld)){
+						$(this).dialog("close");
+					}
+				}
+			},
+			openCall: function(){
+				//弹框打开后的回调函数
+				$("#editOwner").parent().css("cssText", "position: absolute; width: "+$(window).width()*0.4+"px; height: "+$(window).height()*0.4+"px; left: "+$(window).width()*0.3+"px; top: "+$(window).height()*0.3+"px; display: block; z-index: 1043 !important;");
+				$("#editOwner").parent().next().css("cssText", "z-index: 1042 !important;");
+			},
+			closeCall: function() {
+				$("#openOwner").dialog("close");
+				//关闭父级弹框--因需刷新父级窗口数据
+				aihome.openHousingOwnership();
+			}
+		}
+	)
+}
+</script>

@@ -1,0 +1,39 @@
+<div id="top_tools" class=" btn-group">
+	<button id="paper_save" class="btn btn-sm btn-white" >
+		<i class="iconfont">&#xe63c;</i>
+		<span>保存</span>
+	</button>
+	<button id="paper_save" class="btn btn-sm btn-white" onclick="javascript:location.href='#crm/paper/index.do'">
+		<i class="iconfont">&#xe71b;</i>
+		<span>返回</span>
+	</button>
+</div>
+<div class="content-gray">
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12" >
+			
+		</div>
+		<div class="col-md-10 col-sm-10 col-xs-10">
+			<div id="paperEditor" style="width:100%"></div>
+		</div>
+		<div class="col-md-2 col-sm-2 col-xs-2">
+			<div>aaaa</div>
+		</div>
+    </div>
+</div>
+<script type="text/javascript">
+
+$("#paperEditor").height($(window).height()-200);
+if(ue){
+	ue.destroy();
+}
+UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+UE.Editor.prototype.getActionUrl = function(action) {
+    if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage'||action == 'uploadvideo') {
+        return '${UPLOAD_URL}/save.do';
+    } else {
+        return this._bkGetActionUrl.call(this, action);
+    }
+}
+var ue = UE.getEditor('paperEditor');
+</script>

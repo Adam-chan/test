@@ -1,0 +1,330 @@
+<div id="top_tools" class=" btn-group">
+  <button id="busi_query" class="btn btn-sm btn-white  confirmBtn store_query" id="confirm">
+    <i class="iconfont">&#xe6e4;</i>
+    <span>查询</span>
+  </button>
+
+  <button id="busi_add" class="btn btn-sm btn-white ladda-button btn_add" >
+    <i class="iconfont">&#xe6e0;</i>
+    <span>新增</span>
+  </button>
+
+ <button id="busi_edit" class="btn btn-sm btn-white btn-default busi_edit">
+    <i class="iconfont">&#xe6dd;</i>
+    <span>修改</span>
+  </button>
+  
+  <button id="busi_del" class="btn btn-sm btn-white btn-info btn_del">
+    <i class="iconfont">&#xe6e3;</i>
+    <span>删除</span>
+  </button>
+
+</div>
+<div class="tableContent" >
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="col-xs-3">
+				<div class=" form-xs form-group row">
+					<label for="addClass" class="col-xs-4 control-label">装修情况:</label>
+					<div class="col-xs-8">
+						<select id="decoration" class="city input-xs form-control searchKey isFlag" data-value="">
+							<option selected="selected" value="">请选择</option>
+							<option   value="1">毛坯</option>
+							<option   value="2">简装</option>
+							<option   value="3">精装</option>	
+							<option   value="4">豪装</option>
+							<option   value="5">中等</option>
+						</select>
+					</div>
+				</div>
+			</div>   
+			<div class="col-xs-3">
+				<div class=" form-xs form-group row">
+					<label for="addClass" class="col-xs-4 control-label">建筑面积:</label>
+					<div class="col-xs-8">
+						<div class="col-xs-6">
+							<div class="input-group">
+	             				<input type="text" name="coveredAreaMin" id=coveredAreaMin value ="" class="form-control input-xs searchKey" style="width: 50px" />
+	                 			 <span class="input-group-addon addon-xs" style="width: 15px !important;">-</span>
+	           				 	<input type="text" name="coveredAreaMax" id=coveredAreaMax value ="" class="form-control input-xs searchKey "  style="width:50px" />
+	            			</div>
+            			</div>
+						
+					</div>
+				</div>
+			</div>   
+			<div class="col-xs-3">
+				<div class=" form-xs form-group row">
+					<label for="addClass" class="col-xs-4 control-label">使用面积:</label>
+					<div class="col-xs-8">
+					<div class="col-xs-6">
+							<div class="input-group">
+	             				<input type="text" name="useLand" id=useLandMin value ="" class="form-control input-xs searchKey "  style="width: 50px"/>
+	                 			 <span class="input-group-addon addon-xs" style="width: 15px !important;">-</span>
+								<input type="text" name="useLand" id=useLandMax value ="" class="form-control input-xs searchKey "  style="width: 50px"/>
+	            			</div>
+            			</div>
+					</div>
+				</div>
+			</div> 
+			<div class="col-xs-3 " >
+				<div class=" form-xs form-group row">
+					<label for="addClass" class="col-xs-4 control-label">房屋性质:</label>
+					<div class="col-xs-8">
+						<select id="houseNature" class="city input-xs form-control searchKey isFlag" data-value="">
+							<option selected="selected" value="">请选择</option>
+							<option   value="1">已购公房</option>
+							<option   value="2">商品房</option>
+							<option   value="3">空置房</option>
+							<option   value="4">使用权房</option>
+							<option   value="5">经济使用房</option>
+						</select>
+					</div>
+				</div>
+			</div>     
+		</div>
+		<div class="col-xs-12"> 
+			<div class="col-xs-3">
+				<div class=" form-xs form-group row">
+					<label for="addClass" class="col-xs-4 control-label">土地使用年限:</label>
+					<div class="col-xs-8">
+						<select id="landlimit" class="city input-xs form-control searchKey isFlag" data-value="">
+							<option selected="selected" value="">请选择</option>
+							<option   value="1">70年</option>
+							<option   value="2">60年</option>
+							<option   value="3">50年</option>
+							<option   value="4">40年</option>
+						</select>
+					</div>
+				</div>
+			</div>   
+			<div class="col-xs-3">
+			</div>
+			<div class="col-xs-5" 	style="display: none;">
+				<div class=" form-xs form-group row">
+					<label for="addClass" class="col-xs-3 control-label">
+						<button class="btn btn-xs btn-icon btn-white btn-blue btn_group wd store_query" >
+		   							<i class="iconfont">&#xe6e0;</i><span>查询</span>
+		         		</button>
+	         		</label>
+					<label for="addClass" class="col-xs-3 control-label">
+						<button class="btn btn-xs btn-icon btn-white btn-blue btn_group wd btn_add" >
+		   							<i class="iconfont">&#xe6e0;</i><span>新增</span>
+		         		</button>
+					</label>
+					<label for="addClass" class="col-xs-3 control-label">
+						<button class="btn btn-xs btn-icon btn-white btn-blue btn_group wd busi_edit" >
+		   							<i class="iconfont">&#xe6e0;</i><span>修改</span>
+		         		</button>
+					</label>
+					<label for="addClass" class="col-xs-3 control-label">
+						<button class="btn btn-xs btn-icon btn-white btn-blue btn_group wd btn_del" >
+		   							<i class="iconfont">&#xe6e0;</i><span>删除</span>
+		         		</button>
+					</label>
+				</div>
+			</div>   
+		</div>
+		<div class="col-xs-12">
+		    <table id="jqGrid">
+				
+			</table>
+		    <div id="jqGridPager"></div>
+		    <input type="hidden" id="premisesId" value="${id!''}" />
+	    </div> 
+	</div>  
+</div>
+<!-- 楼盘id、区域id -->
+<style type="text/css">
+.isFlag{width: 120px;}
+.wd{width: 100px;}
+</style>
+<script type="text/javascript">
+/* 分页初始化 */
+aihome.initHouse=function(){
+	$("#jqGrid").jqGrid({
+		autowidth:true,
+		autoheight:true,
+		multiselect:true,
+		multiboxonly:true,
+		viewrecords:true,
+		autowidth:true,
+		rownumbers:true,
+		url: '${CTX}/baseBuilding/getStorePage.do',
+		datatype: "json", //,'楼盘数','操作'
+		colNames : ['id','楼层','房间名称', '房屋用途','装修情况','朝向','土地使用年限','建筑面积','使用面积','房屋性质','业主姓名','业主电话'],
+		postData:{
+		 buildingId:"${buildingId}",purpose:"2"
+		},
+		colModel: [
+	   	    { label: 'id', name: 'id',index:'id',hidden:true},
+	   		{  name: 'num',index:'num',sortable : false, width: 40},
+	      	{  name: 'houseName',index:'houseName',sortable : false, width: 40},
+	     	{  name: 'purposeName',index:'purpose',sortable : false, width: 40},
+	    	{  name: 'decorationName',index:'decoration',sortable : false, width: 40},
+	   	 	{  name: 'orientation',index:'orientation',sortable : false, width: 40},
+	   	 	{  name: 'landLimitName',index:'landLimitName',sortable : false, width: 40},
+	   	 	{  name: 'coveredArea',index:'coveredArea',sortable : false, width: 40},
+	   	 	{  name: 'useLand',index:'useLand',sortable : false, width: 40},
+	   	 	{  name: 'houseNatureName',index:'houseNature',sortable : false, width: 40},
+	   		{  name: 'proprietor',index:'proprietor',sortable : false, width: 40},
+	   		{  name: 'contactPhone',index:'contactPhone',sortable : false, width: 40}
+	   ],
+		autowidth:true,
+		height:$(window).height()-550,
+		rowNum:30, 
+		rowList:[10,20,30,50,100],
+		pager: "#jqGridPager",
+    	jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+	});
+}
+//弹出窗口
+aihome.openStore=function(title,url,height,width){
+	var but;
+	if( title == "新增商铺"){
+		but = {
+			"确定" : function() {//按钮和执行函数
+			 var type = aihome.addStore();
+				if(type<0 || type== false){
+					return false;
+				}else{
+					$("#jqGrid").trigger('reloadGrid');
+					$(this).dialog("close");
+				}
+			}, 
+			"取消" : function() {
+				$(this).dialog("close");
+			}
+		}
+	}else if(title =="修改商铺"){
+		but ={
+				"确定" : function() {//按钮和执行函数
+				 var type = aihome.updateStore();
+				 if(type<0  || type== false){
+						return false;
+					}else{
+						$("#jqGrid").trigger('reloadGrid');
+						$(this).dialog("close");
+					}
+				}, 
+				"取消" : function() {
+					$(this).dialog("close");
+				}
+		};
+	}
+	oaDialogOpen("c",//对话框ID，必填，且不能与当前页面的ID重复
+		{url:url,//目标地址
+		title:title,//弹框的title
+		closeOnEscpe:true,//是否通过escpe关闭弹框
+		closeBtn:true,//是否显示关闭按钮
+		width:width,//弹框的宽度
+		height:height,
+		buttons:but
+ 	})
+}
+
+$(function(){
+	//初始化分页
+	 aihome.initHouse();	
+	//条件查询
+	
+	 $(".store_query").click(function(){
+		 debugger
+		 var param = getSearchParam();
+		 var str = param.substring(param.indexOf("coveredAreaMax")+14,param.length);
+		 var a = str.substring("coveredAreaMax",str.indexOf("&"));
+		 if(a != null && a != ""){
+			 if(!isNaN(a)){
+				 alert("建筑面积请填写数字！");
+				 return false;
+			 }
+		 }
+		 var str = param.substring(param.indexOf("coveredAreaMin")+14,param.length);
+		 var a = str.substring("coveredAreaMin",str.indexOf("&"));
+		 if(a != null && a != ""){
+			 if(!isNaN(a)){
+				 alert("建筑面积请填写数字！");
+				 return false;
+			 }
+		 }
+ 		 var str = param.substring(param.indexOf("useLandMin")+10,param.length);
+		 var a = str.substring("useLandMin",str.indexOf("&"));
+		 if(a != null && a != ""){
+			 if(!isNaN(a)){
+				 alert("建筑面积请填写数字！");
+				 return false;
+			 }
+		 }
+ 		 var str = param.substring(param.indexOf("useLandMax")+10,param.length);
+		 var a = str.substring("useLandMax",str.indexOf("&"));
+		 if(a != null && a != ""){
+			 if(!isNaN(a)){
+				 alert("建筑面积请填写数字！");
+				 return false;
+			 }
+		 }
+		 var url = "${CTX}/baseBuilding/getStorePage.do?"+param;
+		 jQuery("#jqGrid").setGridParam({datatype:'json',url:url,page:1}).trigger("reloadGrid");
+	});
+	//新增商铺
+	$(".btn_add").click(function(){
+		var height = $(window).height()*0.8;
+		var width = $(window).width()*0.6;
+		var title = "新增商铺";
+		var url="${CTX}/baseBuilding/addOrUpdateStoreIndex.do?buildingId=${buildingId!}&premisesName=${premisesName}"+
+		"&groupName=${groupName!}&groupId=${groupId!}&premisesId=${premisesId!}&buildingName=${buildingName!}";
+		aihome.openStore(title,url,height,width);
+	})
+	//修改商铺
+	$(".busi_edit").click(function(){
+		  var rowId=jQuery("#jqGrid").jqGrid('getGridParam', 'selarrrow');
+		  var baseHouseId = rowId[0];
+	 	  if(rowId==''){
+	 		 alert("没有选中的记录！");
+	 		 return false;
+	 	  }
+	 	  if(rowId.length>1){
+	 		 alert("请选择一条数据！");  
+	 		return false;
+	 	  }
+	 	 if(rowId.length=0){
+	 		 alert("请选择修改的数据！");
+	 		return false;
+	 	  }
+		var height = $(window).height()*0.65;
+		var width = $(window).width()*0.45;
+		var title = "修改商铺";
+		var url="${CTX}/baseBuilding/addOrUpdateStoreIndex.do?buildingId=${buildingId!}&premisesName=${premisesName}"+
+		"&groupName=${groupName!}&groupId=${groupId!}&premisesId=${premisesId!}&buildingName=${buildingName!}"+"&baseHouseId="+baseHouseId;
+		aihome.openStore(title,url,height,width);
+	})
+	//删除商铺
+	$(".btn_del").click(function(){
+		  var rowId=jQuery("#jqGrid").jqGrid('getGridParam', 'selarrrow');
+		  var baseHouseIds = rowId.join(",")
+	 	  if(rowId==''){
+	 		 alert("没有选中的记录！");
+	 		 return false;
+	 	  }
+		 if(confirm("确认删除楼栋？")){
+			  $.ajax({
+					type: "POST",
+					url: '${CTX}/baseBuilding/delStore.do',
+					data: {
+						"baseHouseIds": baseHouseIds
+					},
+					dataType: "json",
+					success: function(data) {
+						var url = "${CTX}/baseBuilding/getStorePage.do?buildingId=${buildingId}&purpose=2";
+						if(data!=0){
+							 jQuery("#jqGrid").setGridParam({datatype:'json',url:url,page:1}).trigger("reloadGrid");
+						}
+					}
+				});
+		  }
+		
+	
+	})
+});
+
+</script>

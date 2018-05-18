@@ -1,0 +1,127 @@
+<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+	<div id="element_id">
+		<div class="row" >
+			<div class="col-md-9 col-sm-9" >
+				<div class="col-md-1 col-sm-1"></div>
+				<div class="col-md-2 col-sm-2">
+					<label for="userName"  style="font-size:20px; font-weight: bold;" value="">小区周边：</label>
+				</div>
+				<div class="col-md-1 col-sm-1">
+					<button id="updateSalesGuide"  class="btn btn-xs btn-blue ladda-button" onclick="getAroundType(this);">
+						<i class="iconfont"></i><span  class="col-md-1 col-sm-1">学校</span>
+					</button>
+				</div>
+				<div class="col-md-1 col-sm-1">
+					<button id="updateSalesGuide" class="btn btn-xs btn-blue ladda-button" onclick="getAroundType(this);">
+						<i class="iconfont"></i><span  class="col-md-1 col-sm-1">银行</span>
+					</button>
+				</div>
+				<div class="col-md-1 col-sm-1">
+					<button id="updateSalesGuide" class="btn btn-xs btn-blue ladda-button" onclick="getAroundType(this);">
+						<i class="iconfont"></i><span  class="col-md-1 col-sm-1">超市</span>
+					</button>
+				</div>
+				<div class="col-md-1 col-sm-1">
+					<button id="updateSalesGuide" class="btn btn-xs btn-blue ladda-button" onclick="getAroundType(this);">
+						<i class="iconfont"></i><span  class="col-md-1 col-sm-1">医院</span>
+					</button>
+				</div>
+				<div class="col-md-1 col-sm-1">
+					<button id="updateSalesGuide" class="btn btn-xs btn-blue ladda-button" onclick="getAroundType(this);">
+						<i class="iconfont"></i><span  class="col-md-1 col-sm-1">周边店</span>
+					</button>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-3" id="editButton">
+				<button id="updateSalesGuide" class="btn btn-xs btn-blue ladda-button" onclick="editMap();">
+					<i class="iconfont"></i><span class="col-md-4 col-sm-4" >地图标注</span>
+				</button>
+			</div>
+		
+		</div>
+		<div class="row">
+			<div id="mapDivs" class="col-md-1 col-sm-1"></div>
+			<div id="mapDiv" class="col-md-10 col-sm-10" style="width:1750px; height: 700px;">
+				<div id="allmap" class="col-xs-12 " style="margin:0 auto;height:100%;width:100%;">
+				</div>
+			</div>
+			<div id="mapDive" class="col-md-1 col-sm-1" ></div>
+		</div>
+		<input type="hidden" id="lng" value="${(basePremisesModel.lng)!''}" />
+		<input type="hidden" id="lat" value="${(basePremisesModel.lat)!''}" />
+		<input type="hidden" id="premisesName" value="${(basePremisesModel.name)!''}" />
+		<input type="hidden" id="type" value="${type!''}" />
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	getMapInfo();
+	if($("#type").val()==1){
+		$("#editButton").hide();
+	}else{
+		$("#editButton").show();
+	}
+});
+var mapPoint ;
+var map;
+var circle;
+var local;
+function getMapInfo(z,x){
+	map = new BMap.Map("allmap",{minZoom:11,maxZoom:15});// 创建Map实例
+	var lng = $("#lng").val() == "" ? 120.153576 : $("#lng").val();
+	var lat = $("#lat").val() == "" ? 30.287459 : $("#lat").val();
+	var premisesName = $("#premisesName").val() == null ? "" : $("#premisesName").val();
+	if(z!= null&& x!= null){
+		lng=z;
+		lat=x;
+	}
+	mapPoint = new BMap.Point(lng, lat);
+	map.centerAndZoom(mapPoint, 15);
+	map.enableScrollWheelZoom();
+	var marker = new BMap.Marker(mapPoint);  // 创建标注
+	map.addOverlay(marker);// 将标注添加到地图中
+	var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+	var top_left_navigation = new BMap.NavigationControl();//左上角，添加默认缩放平移控件
+	var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
+	map.addControl(top_left_control);        
+	map.addControl(top_left_navigation);     
+	map.addControl(top_right_navigation); 
+	local = new BMap.LocalSearch(map, {
+	  	renderOptions:{map: map, autoViewport:true}
+	});
+	local.search(premisesName);
+}
+function getAroundType(obj) {
+	map.removeOverlay(circle);
+	circle = new BMap.Circle(mapPoint, 1500, {fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+    map.addOverlay(circle);
+	if($(obj).find("span").text() == "周边店") {
+		local.searchNearby("我爱我家", mapPoint, 1500);
+	} else {
+		local.searchNearby($(obj).find("span").text(), mapPoint, 1500);
+	}
+}
+	function editMap(){
+		oaDialogOpen("editEdu",//对话框ID，必填，且不能与当前页面的ID重复
+			      {url:"${CTX}/infoDisplay/eidtMap.do?premisesId="+${id!},
+			      title:"地图标注",//弹框的title
+			      closeOnEscpe:true,//是否通过escpe关闭弹框
+			      closeBtn:true,//是否显示关闭按钮
+			      width:650,//弹框的宽度
+			      height:650,
+			      buttons:{
+			    	  "保存" : function() {
+			    		  if(addMapLabel()){
+			    			  $(this).dialog("close");
+			    			  
+			    		  }
+			    	  },
+			          "取消" : function() {
+			             	$(this).dialog("close");
+			          }
+			      }
+			  })
+	}; 
+</script>
+
+

@@ -1,0 +1,444 @@
+<div id="top_tools" class=" btn-group">
+
+	<input id="userName" value="${(Session.userName)!''}"
+			type="hidden" />
+	<input id="userId" value="${(Session.userId)!''}"
+			type="hidden" />
+	<button id="premises_query" class="btn btn-sm btn-white" onclick="queryPremises();">
+		<i class="iconfont">&#xe6e4;</i>
+		<span>查询</span>
+	</button>
+	<button id="complete_examine" class="btn btn-sm btn-white"
+		onclick=""><!-- toExamine(1); -->
+		<i class="iconfont">&#xe66c;</i> <span>完整度审核</span>
+	</button>
+	<button id="data_examine" class="btn btn-sm btn-white"
+		onclick=""><!-- toExamine(2); -->
+		<i class="iconfont">&#xe66c;</i> <span>准确度审核</span>
+	</button>
+	<button id="examine" class="btn btn-sm btn-white"
+		onclick=""><!-- toExamine(3); -->
+		<i class="iconfont">&#xe66c;</i> <span>审核</span>
+	</button>
+</div>
+<div class="row">
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+		<div class="row">
+			<div class="form-horizontal row my-inputs">
+				<div class="col-md-9 col-sm-9">
+					<div class="col-md-3 col-sm-3">
+						<div class="form-xs form-group row">
+							<label for="areaIdLayout" class="col-xs-4 control-label">区域：</label>
+							<div class="col-xs-7">
+								<input id="areaName" class="form-control input-xs searchKey"
+									placeholder="输入区域名称" /> <input id="areaIdLayout"
+									name="areaIdLayout" type="hidden" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2 col-sm-2">
+						<div class="form-xs form-group row">
+							<label for="busiAreaIdLayout" class="col-xs-4 control-label">商圈：</label>
+							<div class="col-xs-7">
+								<select id="busiAreaIdLayout"
+									class="province input-xs form-control" name="busiAreaIdLayout">
+									<option value="">请选择商圈</option> <#list busiAreaList as item>
+									<option value="${(item.id)!''}">${(item.busiAreaName)!''}</option>
+									</#list>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-3">
+						<div class="form-xs form-group row">
+							<label for="premisesName" class="col-xs-4 control-label">楼盘名称：</label>
+							<div class="col-xs-6">
+								<input id="premisesName" class="form-control input-xs searchKey"
+									placeholder="输入楼盘名称" /> <input id="premisesId"
+									name="premisesId" type="hidden" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2 col-sm-2">
+						<div class="form-xs form-group row">
+							<label for="operateUserId" class="col-xs-5 control-label">申请人：</label>
+							<div class="col-xs-7">
+								<select id="operateUser"
+									class="input-xs form-control" name="operateUserId">
+									<option value="">请选择申请人</option> <#list operateUserList as item>
+									<option value="${(item.operateUserId)!''}">${(item.operateUser)!''}</option>
+									</#list>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2 col-sm-2">
+						<div class="form-xs form-group row">
+							<label for="examineUserId" class="col-xs-5 control-label">审核人：</label>
+							<div class="col-xs-7">
+								<select id="examineUser"
+									class="input-xs form-control" name="examineUserId"">
+									<option value="">请选择审核人</option> <#list examineUserList as item>
+									<option value="${(item.examineUserId)!''}">${(item.examineUser)!''}</option>
+									</#list>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-3">
+					<div class="col-md-6 col-sm-6">
+						<div class="form-xs form-group row">
+							<label for="completeStatus" class="col-xs-5 control-label">完整度：</label>
+							<div class="col-xs-7">
+								<select id="completeStatus"
+									class="input-xs form-control" name="completeStatus">
+									<option value="">全部</option>
+									<option value="1">完整</option>
+									<option value="2">待审核</option>
+									<option value="3">不完整</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-6">
+						<div class="form-xs form-group row">
+							<label for="dataStatus" class="col-xs-5 control-label">准确度：</label>
+							<div class="col-xs-7">
+								<select id="dataStatus"
+									class="input-xs form-control" name="dataStatus">
+									<option value="">全部</option>
+									<option value="1">审核通过</option>
+									<option value="2">待审核</option>
+									<option value="3">不通过</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<div class="col-xs-12 my-grid">
+			<!-- PAGE CONTENT BEGINS -->
+			<table id="jqGrid">
+			</table>
+			<div id="jqGridPager"></div>
+			<!-- PAGE CONTENT ENDS -->
+		</div>
+		<input type="hidden" id="premisesId" value="" />
+	</div>
+</div>
+<script type="text/javascript">
+	$('.page-content-area').ace_ajax('loadScripts',  [null,"../assets/js/bootbox.js"], function() {
+	});
+	$(function() {
+		premisesListInit();
+	});
+
+	/* 区域模糊搜索*/
+	$("#areaName").autocomplete({
+		source : function(request, response) {
+			$.ajax({
+				url : "${CTX}/area/getAreaByMatchOfLevel3.do",
+				dataType : "json",
+				type : 'post',
+				data : {
+					matchStr : request.term
+				},
+				success : function(data) {
+					var array = new Array(data.length);
+					for (var i = 0; i < data.length; i++) {
+						var temp = {
+							key : data[i].id,
+							value : data[i].name
+						};
+						array[i] = temp;
+					}
+					response(array);
+				}
+			});
+		},
+		select : function(event, ui) {
+			$("#areaIdLayout").val(ui.item.key);
+			$("#areaName").val(ui.item.value);
+			event.preventDefault();
+		}
+	});
+	function premisesListInit() {
+		$("#jqGrid").jqGrid(
+				{
+					height : $(window).height() - 219,
+					multiselect : true,
+					multiboxonly : true,
+					viewrecords : true,
+					autowidth : true,
+					async : false,
+					url : "${CTX}/premisesExamine/getPremisesExamineList.do",
+					postData : {
+						areaId : $("#areaIdLayout").val(),
+						busiAreaId : $("#busiAreaIdLayout").val(),
+						premisesName : $("#premisesName").val(),
+						operateUser : $("#operateUser").val(),
+						examineUser : $("#examineUser").val(),
+						completeStatus : $("#completeStatus").val(),
+						dataStatus : $("#dataStatus").val()
+					},
+					datatype : "json",
+					colNames : [ 'id', '楼盘名称', '申请人', '登记时间', '审核人', '完整度状态',
+							'准确度状态', '审核状态' ],
+					colModel : [ {
+						name : 'id',
+						index : 'id',
+						hidden : true
+					}, {
+						name : 'name',
+						index : 'name',
+						width : 24,
+						align : 'center'
+					}, {
+						name : 'operateUser',
+						width : 36,
+						align : 'center'
+					}, {
+						name : 'operateTimeStr',
+						width : 15,
+						align : 'center'
+					}, {
+						name : 'examineUser',
+						width : 15,
+						align : 'center'
+					}, {
+						name : 'completeStatusStr',
+						width : 15,
+						align : 'center'
+					}, {
+						name : 'dataStatusStr',
+						width : 15,
+						align : 'center'
+					}, {
+						name : 'auditingStatusStr',
+						width : 15,
+						align : 'center'
+					} ],
+					rowNum : 30,
+					rowList : [ 10, 20, 30, 50, 100 ],
+					pager : "#jqGridPager",
+					jsonReader : {
+						root : 'pagerResults',
+						page : 'currentPage',
+						rows : 'rowCount',
+						total : 'pageCount',
+						records : 'totalCount',
+						repeatitems : false
+					}
+				});
+	}
+
+	/* 楼盘模糊搜索*/
+	$("#premisesName").autocomplete({
+		source : function(request, response) {
+			$.ajax({
+				url : "${CTX}/premisesExamine/getPremisesListByMatch.do",
+				dataType : "json",
+				type : 'post',
+				data : {
+					matchStr : request.term
+				},
+				success : function(data) {
+					var array = new Array(data.length);
+					for (var i = 0; i < data.length; i++) {
+						var temp = {
+							key : data[i].id,
+							value : data[i].name
+						};
+						array[i] = temp;
+					}
+					response(array);
+				}
+			});
+		},
+		select : function(event, ui) {
+			$("#premisesId").val(ui.item.key);
+			$("#premisesName").val(ui.item.value);
+			event.preventDefault();
+		}
+	});
+	
+	/* 查询 */
+	function queryPremises() {
+		if ($("#areaName").val() == "") {
+			$("#areaIdLayout").val("");
+		}
+		$("#jqGrid").setGridParam({
+			postData : {
+				areaId : $("#areaIdLayout").val(),
+				busiAreaId : $("#busiAreaIdLayout").val(),
+				premisesName : $("#premisesName").val(),
+				operateUserId : $("#operateUser").val(),
+				examineUserId : $("#examineUser").val(),
+				completeStatus : $("#completeStatus").val(),
+				dataStatus : $("#dataStatus").val()
+			}
+		}).trigger("reloadGrid");
+	}
+	
+/* 	// 审核确认页
+	function toExamine(examineType) {//1完整度, 2准确度, 3普通审核
+		var rowIds = $("#jqGrid").jqGrid('getGridParam', 'selarrrow').join(",");
+		var selCount = rowIds.length;
+		if (selCount == 0) {
+			alert("请至少选择一个楼盘");
+			return;
+		}
+		oaDialogOpen("premisesExamine",
+		{
+			url : "${CTX}/premisesExamine/toExamine.do?examineType="+examineType,
+			title : "审核",
+			closeOnEscpe : true,
+			closeBtn : true,
+			width : 300,
+			height : 200,
+			buttons : {
+				"通过" : function() { 
+					examine(1);
+			        $(this).dialog("close");
+				},
+				"拒绝" : function() {
+					examine(3);
+			        $(this).dialog("close");
+				},
+				"取消" : function() {
+			        $(this).dialog("close");
+				}
+			}
+		});
+		
+	}; */
+	
+	//审核
+	function examine(examineType, examineResult){//1通过, 3拒绝
+		var rowIds = $("#jqGrid").jqGrid('getGridParam', 'selarrrow').join(",");
+		$.ajax({
+	 	       type: "POST",
+	 	       url: "${CTX}/premisesExamine/examine.do",
+	 	       async:false,
+	 	       dataType:"JSON",
+	 	       data: {
+					"rowIds":rowIds,
+					"examineType":examineType,
+					"examineResult":examineResult,
+					"examineUser":$("#userName").val(),
+					"examineUserId":$("#userId").val()
+	 	    		   },
+	 	       success: function(data){
+	 	    	  alert("审核成功");
+	              $("#jqGrid").trigger('reloadGrid');
+	 	       }
+		});
+	}
+	
+	$("#complete_examine").on(ace.click_event, function () {
+		var rowIds = $("#jqGrid").jqGrid('getGridParam', 'selarrrow').join(",");
+		var selCount = rowIds.length;
+		if (selCount == 0) {
+			alert("请至少选择一个楼盘");
+			return;
+		}
+	    bootbox.dialog({
+	        message: "<span class='bigger-110'>楼盘信息是否完整，给予审核通过</span>",
+	        buttons: {
+	            "通过": {
+	                "label": "通过",
+	                "className": "btn-sm btn-success",
+	                "callback": function () {
+						examine(1,1);
+	                }
+	            },
+	            "拒绝": {
+	                "label": "拒绝",
+	                "className": "btn-sm btn-danger",
+	                "callback": function () {
+						examine(1,3);
+	                }
+	            },
+	            "取消": {
+	                "label": "取消",
+	                "className": "btn-sm btn-primary",
+	                "callback": function () {
+	                }
+	            }
+	        }
+	    });
+	});
+	
+	$("#data_examine").on(ace.click_event, function () {
+		var rowIds = $("#jqGrid").jqGrid('getGridParam', 'selarrrow').join(",");
+		var selCount = rowIds.length;
+		if (selCount == 0) {
+			alert("请至少选择一个楼盘");
+			return;
+		}
+	    bootbox.dialog({
+	        message: "<span class='bigger-110'>楼盘信息是否准确，给予审核通过</span>",
+	        buttons: {
+	            "通过": {
+	                "label": "通过",
+	                "className": "btn-sm btn-success",
+	                "callback": function () {
+						examine(2,1);
+	                }
+	            },
+	            "拒绝": {
+	                "label": "拒绝",
+	                "className": "btn-sm btn-danger",
+	                "callback": function () {
+						examine(2,3);
+	                }
+	            },
+	            "取消": {
+	                "label": "取消",
+	                "className": "btn-sm btn-primary",
+	                "callback": function () {
+	                }
+	            }
+	        }
+	    });
+	});
+
+	$("#examine").on(ace.click_event, function () {
+		var rowIds = $("#jqGrid").jqGrid('getGridParam', 'selarrrow').join(",");
+		var selCount = rowIds.length;
+		if (selCount == 0) {
+			alert("请至少选择一个楼盘");
+			return;
+		}
+	    bootbox.dialog({
+	        message: "<span class='bigger-110'>楼盘信息是否给予审核通过</span>",
+	        buttons: {
+	            "通过": {
+	                "label": "通过",
+	                "className": "btn-sm btn-success",
+	                "callback": function () {
+						examine(3,1);
+	                }
+	            },
+	            "拒绝": {
+	                "label": "拒绝",
+	                "className": "btn-sm btn-danger",
+	                "callback": function () {
+						examine(3,3);
+	                }
+	            },
+	            "取消": {
+	                "label": "取消",
+	                "className": "btn-sm btn-primary",
+	                "callback": function () {
+	                }
+	            }
+	        }
+	    });
+	});
+
+</script>

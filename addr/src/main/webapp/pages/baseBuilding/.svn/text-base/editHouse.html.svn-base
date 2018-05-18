@@ -1,0 +1,257 @@
+<form action="" id="editHouseForm">
+	<div class="row" id="addHouse">
+		<div class="col-sm-12 my-group" enterforbtn="confirm-role">
+			<div id="element_id">
+				<div class="col-sm-12" id="unitHead">
+					<div class="form-sm form-group row">
+						<label class="col-sm-1 control-label">房间号：</label>
+						<div class="col-sm-1"><span>${headInfoObj.houseName!}</span></div>
+						<input name="houseId" value="${headInfoObj.houseId!}" hidden="hidden">
+						<label class="col-sm-1 control-label">楼盘名称：</label>
+						<div class="col-sm-2"><span>${headInfoObj.premisesName!}</span></div>
+						<label class="col-sm-1 control-label">栋座分组：</label>
+						<div class="col-sm-2"><span>${headInfoObj.groupName!}</span></div>
+						<label class="col-sm-1 control-label">栋座：</label>
+						<div class="col-sm-1"><span>${headInfoObj.buildingName!}</span></div>
+						<label class="col-sm-1 control-label">单元：</label>
+						<div class="col-sm-1"><span>${roomInfoObj.unitCode!}</span></div>
+						<input id="buildingId" hidden="hidden" value="">
+						<input id="groupId" hidden="hidden" value="">
+						<input id="premisesId" hidden="hidden" value="">
+					</div>
+				</div>
+				
+				<div class="col-sm-12">
+					<div class="form-sm form-group row">
+						<label class="col-sm-2 control-label">户型：</label>
+						<div class="col-sm-4">
+							<input id="Bedroom" style="width: 40px" name="BedroomNm" class="input-xs" type="text" <#if typeObj.bedRoom ??>value="${typeObj.bedRoom!}"<#else>value=""</#if>>室 
+							<input id="LivingRoom" style="width: 40px" name="LivingRoomNm" class="input-xs" type="text" <#if typeObj.livingRoom ??>value="${typeObj.livingRoom!}"<#else>value=""</#if>>厅
+							<input id="Toilet" style="width: 40px" name="ToiletNm" class="input-xs" type="text" <#if typeObj.toilet ??>value="${typeObj.toilet!}"<#else>value=""</#if>>卫
+							<input id="Kitchen" style="width: 40px" name="KitchenNm" class="input-xs" type="text" <#if typeObj.kitchen ??>value="${typeObj.kitchen!}"<#else>value=""</#if>>厨
+						</div>
+						
+						<label class="col-sm-2 control-label">朝向：</label>
+						<div class="col-sm-4">
+							<select id="Orientations" name="OrientationsNm" class=" input-xs form-control">
+									<#if !roomInfoObj.orientation??>
+											<option value="东">东</option>
+											<option value="南">南</option>
+											<option value="西">西</option>
+											<option value="北">北</option>
+									<#else>
+											<option <#if roomInfoObj.orientation=="东">selected="selected"</#if>  value="东">东</option>
+											<option <#if roomInfoObj.orientation=="南">selected="selected"</#if>  value="南">南</option>
+											<option <#if roomInfoObj.orientation=="西">selected="selected"</#if>  value="西">西</option>
+											<option <#if roomInfoObj.orientation=="北">selected="selected"</#if>  value="北">北</option>
+									</#if>
+							</select>
+							
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-sm-12">
+					<div class="form-sm form-group row">
+						<label class="col-sm-2 control-label">建筑面积（㎡）：</label>
+						<div class="col-sm-4">
+							<input id="BuildingArea" name="BuildingAreaNm" class="form-control input-xs" type="text" <#if roomInfoObj.coveredArea ??>value="${roomInfoObj.coveredArea!}"<#else>value=""</#if>>
+						</div>
+						<label class="col-sm-2 control-label">使用面积（㎡）：</label>
+						<div class="col-sm-4">
+							<input id="UseArea" name="UseAreaNm" class="form-control input-xs" type="text" <#if roomInfoObj.useLand ??>value="${roomInfoObj.useLand!}"<#else>value=""</#if>>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-sm-12">
+					<div class="form-sm form-group row">
+						
+						<label class="col-sm-2 control-label">装修情况：</label>
+						<div class="col-sm-4">
+							<select id="Decoration" name="DecorationNm" class=" input-xs form-control">
+								<option value="">请选择装修状态</option>
+									<#if !roomInfoObj.decoration??>
+									<option value="1">精装</option>
+									<option value="2">已装修</option>
+									<option value="3">未装修</option>
+									<#else>
+									<option <#if roomInfoObj.decoration==1 > selected="selected" </#if>  value="1">精装</option>
+									<option <#if roomInfoObj.decoration==2 > selected="selected" </#if>  value="2">已装修</option>
+									<option <#if roomInfoObj.decoration==3 > selected="selected" </#if>  value="3">未装修</option>
+										
+									</#if>
+							</select>
+						</div>
+						<label class="col-sm-2 control-label">房屋用途：</label>
+						<div class="col-sm-4">
+							<select id="Purpose" name="PurposeNm" class=" input-xs form-control">
+									<#if !roomInfoObj.purpose??>
+									<option value="1">住宅</option>
+									<option value="3">写字楼</option>
+									<#else>
+									<option <#if roomInfoObj.purpose==1 > selected="selected" </#if>  value="1">住宅</option>
+									<option <#if roomInfoObj.purpose==3 > selected="selected" </#if>  value="3">写字楼</option>
+										
+									</#if>
+							</select>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="col-sm-12">
+					<div class="form-sm form-group row">
+						<label class="col-sm-2 control-label">房屋性质：</label>
+						<div class="col-sm-4">
+							<select id="Nature" name="NatureNm"  class=" input-xs form-control" onchange="aihome.Nature(this)" style="width: 50%;float:left;">
+								<option id="layerOption" value="">请选择</option>
+									<#if !roomInfoObj.houseNature??>
+											<option   value="1">已购公房</option>
+											<option   value="2">商品房</option>
+											<option   value="3">空置房</option>
+											<option   value="4">使用权房</option>
+											<option   value="5">经济使用房</option>
+										<#else>
+											<option <#if roomInfoObj.houseNature==1 > selected="selected" </#if>  value="1">已购公房</option>
+											<option <#if roomInfoObj.houseNature==2 > selected="selected" </#if>  value="2">商品房</option>
+											<option <#if roomInfoObj.houseNature==3 > selected="selected" </#if>  value="3">空置房</option>
+											<option <#if roomInfoObj.houseNature==4 > selected="selected" </#if>  value="4">使用权房</option>
+											<option <#if roomInfoObj.houseNature==5 > selected="selected" </#if>  value="5">经济使用房</option>
+										
+									</#if>
+							</select>
+							<select id="propertyStatus" name="propertyStatus" class=" input-xs form-control" style="width: 50%;float:left;display: none;">
+											<option value="" selected="selected">请选择</option>
+									<#if !roomInfoObj.propertyStatus??>
+											<option value="1">已变更产权</option>
+											<option value="2">未变更产权</option>
+										<#else>
+											<option <#if roomInfoObj.propertyStatus==1 > selected="selected" </#if> value="1">已变更产权</option>
+											<option <#if roomInfoObj.propertyStatus==2 > selected="selected" </#if> value="2">未变更产权</option>
+									</#if>
+							</select>
+						</div>
+						<label class="col-sm-2 control-label">土地使用年限：</label>
+						<div class="col-sm-4">
+							<select id="Years" name="YearsNm" class=" input-xs form-control">
+								<#if !roomInfoObj.landLimit??>
+									<option   value="1">70年</option>
+									<option   value="2">60年</option>
+									<option   value="3">50年</option>
+								<#else>
+									<option <#if roomInfoObj.landLimit == 1 > selected="selected" </#if> value="1" >70年</option>
+									<option <#if roomInfoObj.landLimit == 2 > selected="selected" </#if> value="2" >60年</option>
+									<option <#if roomInfoObj.landLimit == 3 > selected="selected" </#if> value="3" >50年</option>
+			
+								</#if>
+							</select>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-sm-12">
+					<div class="form-sm form-group row">
+						<label class="col-sm-2 control-label">业主姓名：</label>
+						<div class="col-sm-4">
+							<input id="OwnersName" name="OwnersNameNm" class="form-control input-xs" type="text" <#if roomInfoObj.proprietor ??>value="${roomInfoObj.proprietor!}"<#else>value=""</#if>>
+						</div>
+						<label class="col-sm-2 control-label">业主电话：</label>
+						<div class="col-sm-4">
+							<div class="input-group">   
+								<input id="OwnerPhone" name="OwnerPhoneNm" class="form-control input-xs"  type="text" <#if roomInfoObj.contactPhone ??>value="${roomInfoObj.contactPhone!}"<#else>value=""</#if>>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<script type="text/javascript">
+
+//校验
+aihome.validateEditRoom=function(){
+	var isMobile = /^0\d{2,3}-\d{7,8}(-\d{1,6})?$|(^(13[0-9]|15[0|3|6|7|8|9]|18[8|9])\d{8}$)/;  
+	 $.validator.addMethod("phoneNumValidate",function(value,element,params){
+			return this.optional(element) || isMobile.test(value);
+		},"电话号码格式不正确");
+	 return $("#editHouseForm").validate({
+			onfocusout: function(element) { $(element).valid(); },  
+			rules:{
+			},
+			messages:{
+				BedroomNm:{
+					required:"室不能为空",
+					number:"室必须为数字",
+				},LivingRoomNm:{
+					number:"厅必须为数字",
+				},ToiletNm:{
+					number:"卫必须为数字",
+				},KitchenNm:{
+					number:"厨必须为数字",
+				},BuildingAreaNm:{
+					number:"建筑面积必须为数字",
+				},UseAreaNm:{
+					number:"使用面积必须为数字",
+				},DecorationNm:{
+					required:"装修情况为必选项",
+				},NatureNm:{
+					required:"房屋性质为必选项",
+				}
+			},
+	        errorPlacement: function(error, element){
+	            error.appendTo(element.parent());
+	        }
+		}); 
+}
+
+aihome.updateHouseEdit=function(){
+	if(!aihome.validateEditRoom().form()) {
+		alert("添加失败！");
+		return type;
+	}
+	var oForm = $("#editHouseForm");
+	var editHouseForm = oForm.serialize();
+	$.ajax({
+		type : "POST",
+		url : "${CTX}/baseHouse/updateEditHouse.do",
+		dataType : "json",
+		data : editHouseForm,
+		success:function(data){
+			if(data>0){
+				alert("添加成功");
+			}else{
+				alert("添加失败");
+			}
+		}
+	})
+}
+aihome.Nature = function(obj){
+ var natureVal =$(obj).val();
+	if(natureVal=="5"){
+		$(obj).next().css("display","block");
+	}else{
+		$(obj).next().css("display","none");
+	}
+}
+$(function(){
+	<#if roomInfoObj.propertyStatus ??> 
+		<#if roomInfoObj.propertyStatus ??>
+			$("#propertyStatus").css("display","block");
+		</#if>
+	</#if>
+	$("#element_id input[id='Bedroom']").attr("required","true");//室 
+	$("#element_id input[id='Bedroom']").attr("number","true");//室 
+	$("#element_id input[id='Toilet']").attr("number","true");//卫
+	$("#element_id input[id='LivingRoom']").attr("number","true");//厅 
+	$("#element_id input[id='Kitchen']").attr("number","true");//厨 
+	$("#element_id input[id='OwnerPhone']").attr("phoneNumValidate","true");//业主电话
+	$("#element_id input[id='BuildingArea']").attr("number","true");//建筑面积
+	$("#element_id input[id='UseArea']").attr("number","true");//使用面积
+	$("#element_id select[id='Decoration']").attr("required","true");
+	$("#element_id select[id='Nature']").attr("required","true");
+})
+
+</script>

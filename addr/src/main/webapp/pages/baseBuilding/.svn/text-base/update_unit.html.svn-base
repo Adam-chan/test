@@ -1,0 +1,264 @@
+<form action="" id="saveForm">
+<div class="row" style="margin:0">
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+ 		<div id="element_id" style="border-bottom:1px solid #333333 ">
+			<div class="form-horizontal row my-inputs">
+	           <div class="col-md-4 col-sm-4 col-xs-4" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">楼盘名称：</label>
+						<div class="col-md-7 col-sm-7 col-xs-7">
+							${premisesName!}
+						</div>
+					</div>
+           		</div>
+   				<div class="col-md-4 col-sm-4 col-xs-4" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">楼栋分组：</label>
+						<div class="col-md-7 col-sm-7 col-xs-7">
+							${groupName!}
+						</div>
+					</div>
+           		</div>
+           		<div class="col-md-4 col-sm-4 col-xs-4" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">栋座：</label>
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							${buildingName!}
+						</div>
+					</div>
+           		</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+ 	 		<div id="element_id" >
+			<div class="form-horizontal row my-inputs">
+	           <div class="col-md-6 col-sm-6 col-xs-6" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">单元编号：</label>
+						<input class="isFlag" type="text" value="${unit.code!}" disabled="disabled"   maxlength="10">
+					</div>
+           		</div>
+   				<div class="col-md-6 col-sm-6 col-xs-6" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">房屋用途：</label>
+						<select name="purpose" id="purpose2" class=" input-xs  isFlag" >
+							<option selected="selected" value="">请选择</option>
+							<#if unit.purpose??>
+									<option value="1" <#if unit.purpose == 1>selected="selected"</#if> >住宅</option>
+									<option value="2" <#if unit.purpose == 2>selected="selected"</#if> >商业</option>
+									<option value="3" <#if unit.purpose == 3>selected="selected"</#if> >写字楼</option>
+								<#else>
+									<option value="1" >住宅</option>
+									<option value="2">商业</option>
+									<option value="3">写字楼</option>
+							</#if> 
+						</select>
+					</div>
+           		</div>
+           		
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+ 		<div id="element_id" >
+			<div class="form-horizontal row my-inputs">
+	           <div class="col-md-6 col-sm-6 col-xs-6" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">建筑年代：</label>
+						<select name="buildingYear" id="buildingYear2" class=" input-xs  isFlag" >
+							<option selected="selected" value="">请选择</option>
+						</select>
+					</div>
+           		</div>
+   				<div class="col-md-6 col-sm-6 col-xs-6" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">建筑结构：</label>
+						<select name="buildingConst" id="buildingConst2" class=" input-xs  isFlag">
+							<option selected="selected" value="">请选择</option>
+							<#if unit.buildingConst??>
+									<option   value="1"  <#if unit.buildingConst==1> selected="selected"</#if>>框架结构</option>
+									<option   value="2"  <#if unit.buildingConst==2> selected="selected"</#if>>剪力结构</option>
+									<option   value="3"  <#if unit.buildingConst==3> selected="selected"</#if>>框架剪力结构</option>
+									<option   value="4"  <#if unit.buildingConst==4> selected="selected"</#if>>筒体结构</option>
+									<option   value="5"  <#if unit.buildingConst==5> selected="selected"</#if>>筒中筒结构</option>
+									<option   value="6"  <#if unit.buildingConst==6> selected="selected"</#if>>砖混结构</option>
+									<option   value="7"  <#if unit.buildingConst==7> selected="selected"</#if>>板柱结构</option>
+									<option   value="8"  <#if unit.buildingConst==8> selected="selected"</#if>>砌体结构</option>
+									<option   value="9"  <#if unit.buildingConst==9> selected="selected"</#if>>钢筋混凝土结构</option>
+									<option   value="10" <#if unit.buildingConst==10> selected="selected"</#if>>钢结构</option>
+									<option   value="11" <#if unit.buildingConst==11> selected="selected"</#if>>木结构</option>
+								<#else>
+									<option   value="1">框架结构</option>
+									<option   value="2">剪力结构</option>
+									<option   value="3">框架剪力结构</option>
+									<option   value="4">筒体结构</option>
+									<option   value="5">筒中筒结构</option>
+									<option   value="6">砖混结构</option>
+									<option   value="7">板柱结构</option>
+									<option   value="8">砌体结构</option>
+									<option   value="9">钢筋混凝土结构</option>
+									<option   value="10">钢结构</option>
+									<option   value="11">木结构</option>
+							</#if>
+						</select>
+					</div>
+           		</div>
+           		
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+		<div id="element_id" >
+			<div class="form-horizontal row my-inputs">
+	           <div class="col-md-6 col-sm-6 col-xs-6" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">建筑类型：</label>
+						<select name="buildingType" id="buildingType2" class=" input-xs  isFlag">
+							<option selected="selected" value="">请选择</option>
+							<#if unit.buildingType??>
+								<option <#if unit.buildingType ==1>selected="selected"</#if>  value="1">超高层（40层以上）</option>
+								<option <#if unit.buildingType ==2>selected="selected"</#if>  value="2">高层（10层以上）</option>
+								<option <#if unit.buildingType ==3>selected="selected"</#if>  value="3">小高层（8-11层）</option>
+								<option <#if unit.buildingType ==4>selected="selected"</#if>  value="4">中高层（7-9层）</option>
+								<option <#if unit.buildingType ==5>selected="selected"</#if>  value="5">底层（1-3层）</option>
+								<option <#if unit.buildingType ==6>selected="selected"</#if>  value="6">多层复式</option>
+								<option <#if unit.buildingType ==7>selected="selected"</#if>  value="7">高层复式</option>
+								<option <#if unit.buildingType ==8>selected="selected"</#if>  value="8">多层跃式</option>
+								<option <#if unit.buildingType ==9>selected="selected"</#if>  value="9">高层跃式</option>
+								<option <#if unit.buildingType ==10>selected="selected"</#if>  value="10">空中别墅</option>
+								<option <#if unit.buildingType ==11>selected="selected"</#if>  value="11">独栋别墅</option>
+								<option <#if unit.buildingType ==12>selected="selected"</#if>  value="12">联排别墅</option>
+								<option <#if unit.buildingType ==13>selected="selected"</#if>  value="13">双拼别墅</option>
+								<option <#if unit.buildingType ==14>selected="selected"</#if>  value="14">叠拼别墅</option>
+								<option <#if unit.buildingType ==15>selected="selected"</#if>  value="15">花园洋房</option>
+								<option <#if unit.buildingType ==16>selected="selected"</#if>  value="16">其他</option>
+								<#else>
+								<option selected="selected" value="">请选择</option>
+								<option   value="1">超高层（40层以上）</option>
+								<option   value="2">高层（10层以上）</option>
+								<option   value="3">小高层（8-11层）</option>
+								<option   value="4">中高层（7-9层）</option>
+								<option   value="5">底层（1-3层）</option>
+								<option   value="6">多层复式</option>
+								<option   value="7">高层复式</option>
+								<option   value="8">多层跃式</option>
+								<option   value="9">高层跃式</option>
+								<option   value="10">空中别墅</option>
+								<option   value="11">独栋别墅</option>
+								<option   value="12">联排别墅</option>
+								<option   value="13">双拼别墅</option>
+								<option   value="14">叠拼别墅</option>
+								<option   value="15">花园洋房</option>
+								<option   value="16">其他</option>
+							</#if>
+						</select>
+					</div>
+           		</div>
+   				<div class="col-md-6 col-sm-6 col-xs-6" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">土地使用年限：</label>
+						<select name="landLimit" id="landLimit" class=" input-xs  isFlag" >
+								<option   selected="selected" value="">请选择</option>
+								<!-- landLimit -->
+							<#if unit.landLimit??>
+								<option value="1" <#if unit.landLimit==1> selected="selected"</#if>>70年代</option>
+								<option value="2" <#if unit.landLimit==2> selected="selected"</#if>>60年代</option>
+								<option value="3" <#if unit.landLimit==3> selected="selected"</#if>>50年代</option>
+								<option value="4" <#if unit.landLimit==4> selected="selected"</#if>>40年代</option>
+								<#else>
+								<option   value="1">70年代</option>
+								<option   value="2">60年代</option>
+								<option   value="3">50年代</option>
+								<option   value="4">40年代</option>
+							</#if>
+						</select>
+					</div>
+           		</div>
+           		
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+		<div id="element_id" >
+			<div class="form-horizontal row my-inputs">
+	           <div class="col-md-6 col-sm-6 col-xs-6" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">房屋性质：</label>
+						<select name="houseNature" id="houseNature" class=" input-xs  isFlag" >
+							<option   selected="selected" value="">请选择</option>
+									<#if !unit.houseNature??>
+											<option   value="1">已购公房</option>
+											<option   value="2">商品房</option>
+											<option   value="3">空置房</option>
+											<option   value="4">使用权房</option>
+											<option   value="5">经济使用房</option>
+										<#else>
+											<option <#if unit.houseNature==1 > selected="selected" </#if>  value="1">已购公房</option>
+											<option <#if unit.houseNature==2 > selected="selected" </#if>  value="2">商品房</option>
+											<option <#if unit.houseNature==3 > selected="selected" </#if>  value="3">空置房</option>
+											<option <#if unit.houseNature==4 > selected="selected" </#if>  value="4">使用权房</option>
+											<option <#if unit.houseNature==5 > selected="selected" </#if>  value="5">经济使用房</option>
+									</#if>
+						</select>
+					</div>
+           		</div>
+   				<div class="col-md-6 col-sm-6 col-xs-6" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">梯户数：</label>
+						<input class="isFlag" type="text" value="${unit.ladders!}梯${unit.flats!}户" disabled="disabled" style="background-color:#FFFFFF!important; border: 0px;   maxlength="10">
+					</div>
+           		</div>
+           		
+			</div>
+		</div>
+	</div>
+</div>
+<input hidden="hidden" name="id" value="${unit.id}">
+</form>
+<style type="text/css">
+.isFlag{width: 120px;}
+</style>
+<script type="text/javascript">
+$(function(){
+	//建筑年代下拉赋值
+	var myDate= new Date(); 
+	var startYear=myDate.getFullYear()-65;//起始年份 
+	var endYear=myDate.getFullYear()+65;//结束年份 
+	var obj=document.getElementById('buildingYear2');
+	<#if unit.buildingAge??> 
+		var age = ${unit.buildingAge};
+	<#else>
+		var age = "";
+	</#if>
+	
+	for (var i=startYear;i<=endYear;i++) 
+	{ 
+		obj.options.add(new Option(i,i)); 
+	}
+	if(age!=""){
+		$("#buildingYear2").val(age);
+	}else{
+		obj.options[obj.options.length-66].selected=1;
+	}
+});
+//添加
+aihome.updateUnit=function(){
+	var type = 0;
+	// 获取表单
+	var oForm = $('#saveForm');
+	var saveForm = oForm.serialize();
+	$.ajax({
+	       type : "POST",
+	       url : '${CTX}/baseBuilding/updateUnits.do',
+	       dataType : 'json',
+	       data : saveForm,
+	       async:false,
+	       success : function(data) {
+	    	   	type= data;
+	      }
+	   });
+	return type;
+}
+
+</script>

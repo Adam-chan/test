@@ -1,0 +1,20 @@
+#for zookeeper
+#remote.url=//192.168.1.218\:2181
+#for dubbo
+dubbo.version=test
+#for socket
+
+remote.url=//192.168.1.218\:2181
+
+#Whether to open the permissions tag
+perviewShow=false
+#base of this project url
+CTX=http\://sso.hz5i5j.com\:8082/addr
+
+CRM_CTX=http\://sso.hz5i5j.com\:8081/crm
+#for upload 
+UPLOAD_URL=http\://192.168.1.232\:9090/file-web
+#oss image view url
+IMAGE_URL=http\://aihome.img-cn-hangzhou.aliyuncs.com
+
+IMAGE_RULE=!aihome

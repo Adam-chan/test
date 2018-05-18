@@ -1,0 +1,251 @@
+<div id="top_tools" class=" btn-group">
+  <button id="collect_del" class="btn btn-sm btn-white btn-info">
+	 <span>取消收藏</span>
+  </button>
+  <button id="collect_query" class="btn btn-sm btn-white confirmBtn">
+      <i class="iconfont">&#xe6e4;</i>
+      <span>查询</span>
+  </button>
+</div>
+
+<div class="row">
+	<div class="col-xs-12 my-group">
+		<div enterfor=".confirmBtn" class="form-horizontal row my-inputs">
+			<div class="col-md-3 col-sm-6">
+				<div class=" form-xs form-group row">
+					<label class="col-xs-4 control-label"></label>
+					<div class="col-xs-8">
+						<select id="" class="input-xs form-control searchKey">
+							<option value="1">责任房源</option>
+							<option value="2">经营房源</option>
+							<option value="3">租店房源</option>
+					    </select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-6">
+				<div class=" form-xs form-group row">
+					<label class="col-xs-4 control-label"></label>
+					<div class="col-xs-8">
+						<select id="" class="input-xs form-control searchKey">
+							<option value="1">新增时间</option>
+							<option value="2">跟进时间</option>
+					    </select>
+					</div>
+				</div>
+			</div>
+		    <div class="col-md-3 col-sm-6">
+				<div class=" form-xs form-group row">
+					<label class="col-xs-4 control-label">房源编号:</label>
+					<div class="col-xs-8">
+						<input type="text" id="houseCode" class="form-control input-xs searchKey" name="houseCode" value=""/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-grid">
+    	<table id="collect_jqGrid">
+    	
+    	</table>
+    	<div id="jqGridPager"></div>
+  	</div>
+</div>
+
+<script type="text/javascript">
+	$('.page-content-area').ace_ajax('loadScripts', [null, null], function () {});
+	
+	var aihome={
+			
+		init_jqGrid : function(){
+			$("#collect_jqGrid").jqGrid({
+				 url: "${CTX}/houseCollect/getHouseCollectListForPage.do", 
+		         datatype: "json",
+		         colModel: [
+					 { label: 'id', name: 'id',index:'id',hidden:true},
+					 { label: 'houseInfoId', name: 'houseInfoId',index:'houseInfoId',hidden:true},
+					 { label: '房源编号', name: 'houseCode',index:'houseCode',width: 120,
+						 formatter:function(rowName, options, rowObject){
+		            	    return "<a href=\"javascript:aihome.houseDetail('"+rowObject.houseInfoId+"',"+rowObject.demmandType+","+rowObject.useType+");\"  style='text-decoration:none;color:blue'>"+rowName+"</a>";
+		             	 }
+		             },
+					 { label: '独', name: 'timeLimitCount',index:'timeLimitCount',width: 30,
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe721;</i>"
+		            	     }
+		            	     return html;
+			             }	 
+						},
+					 { label: '级', name: 'houseLevel',index:'houseLevel',width: 30 ,
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName>0 && rowObject.houseLevel =="3"){
+		            	    	 html+="<i class='iconfont' style='color:red'>&#xe726;</i>"
+		            	     }
+		            	     if(rowName>0 && rowObject.houseLevel =="2"){
+		            	    	 html+="<i class='iconfont' style='color:green'>&#xe726;</i>"
+		            	     }
+		            	     if(rowName>0 && rowObject.houseLevel =="1"){
+		            	    	 html+="<i class='iconfont' style='color:blue'>&#xe726;</i>"
+		            	     }
+		            	     return html;
+			             }	
+					 },
+					 { label: '图', name: 'prospectCount',index:'prospectCount',width: 30,
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe723;</i>"
+		            	     }
+		            	     return html;
+			             }	 
+					 },
+					 { label: '钥', name: 'keyCount',index:'keyCount',width: 30,
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe71f;</i>"
+		            	     }
+		            	     return html;
+			             } 
+					 },
+		             { label: '业务类型', name: 'demandType',index:'demandType',width: 60,
+		            	 formatter:function(rowName, options, rowObject){
+		            		 var html = "";
+		            		 if(rowName){
+		            			 if(rowName=="1"){
+		            				 html = "买卖";
+		            			 }else if(rowName=="2"){
+		            				 html = "租赁";
+		            			 }
+		            		 }
+		            	    return html;
+		             	 }	 
+		             },
+		             { label: '使用类型', name: 'useType',index:'useType',width: 60 ,
+		            	 formatter:function(rowName, options, rowObject){
+		            		 var html = "";
+		            		 if(rowName){
+		            			 if(rowName=="1"){
+		            				 html = "住宅";
+		            			 }else if(rowName=="2"){
+		            				 html = "商铺";
+		            			 }else if(rowName=="3"){
+		            				 html = "写字楼";
+		            			 }else if(rowName=="4"){
+		            				 html = "车位";
+		            			 }
+		            		 }
+		            	    return html;
+		             	 }	 	 
+		             },
+		             { label: '楼盘名称', name: 'premisesName',index:'premisesName',width: 120 },
+		             { label: '户型', name: 'buildingFloor',index:'buildingFloor',width: 120,
+						 formatter:function(rowName, options, rowObject){
+							 var html = "";
+							 if(rowObject.rooms){
+								 html += rowObject.rooms+"室";
+							 }
+							 if(rowObject.office){
+								 html += rowObject.office+"厅";
+							 }
+							 if(rowObject.kitchen){
+								 html += rowObject.kitchen+"厨";
+							 }
+							 if(rowObject.wc){
+								 html += rowObject.wc+"卫";
+							 }
+		            	     return html;
+			             }
+					 },
+		             { label: '楼层', name: 'floor',index:'floor',width: 60},
+		             { label: '建面/m2', name: 'coveredArea',index:'coveredArea',width:60},
+		             { label: '朝向', name: 'chaoXiang',index:'chaoXiang',width:60,
+		            	 formatter:function(rowName, options, rowObject){
+		            		 var html = "";
+		            		 if(rowName){
+		            			 if(rowName=="1"){
+		            				 html = "东";
+		            			 }else if(rowName=="2"){
+		            				 html = "南";
+		            			 }else if(rowName=="3"){
+		            				 html = "西";
+		            			 }else if(rowName=="4"){
+		            				 html = "北";
+		            			 }
+		            		 }
+		            	    return html;
+		             	 }	 	 
+		             },
+		             { label: '售价/万元', name: 'sellPrice',index:'sellPrice',width:60,sortable:true},
+		             { label: '售单价/元', name: 'unitPrice',index:'unitPrice',width:60,sortable:true},
+		             { label: '租价/元', name: 'leasePrice',index:'leasePrice',width:60,sortable:true},
+		             { label: '带看', name: 'watchHouseCount',index:'watchHouseCount',width:60},
+		        	 { label: '所属区', name: 'divideQu',index:'divideQu',width:80},
+					 { label: '所属店', name: 'divideOrg',index:'divideOrg',width:80},
+					 { label: '经济人', name: 'operator',index:'operator',width:80},
+		             { label: '登记时间', name: 'createTime',index:'createTime',width:90},
+					 { label: '最后沟通日期', name: 'lastFollowTime',index:'lastFollowTime',width:90},
+		         ],
+		         multiselect: true,
+		         multiboxonly: true,
+		         viewrecords: true, 
+		         autowidth:true,
+		         height: $(window).height()-300,
+		         rowNum:30, 
+			     rowList:[10,20,30,50,100],
+		         pager: "#jqGridPager",
+		     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+		    });
+		},
+		//查看租赁房源详情页
+		houseDetail : function(houseId,type,num){
+			oaDialogOpen("lookUpHouse",//对话框ID，必填，且不能与当前页面的ID重复
+				 {url:"${CTX}/houseManage/lookUpDetail.do?houseInfoId="+houseId+"&type="+type+"&num="+num,
+				      title:"查看详细信息",//弹框的title
+				      closeOnEscpe:true,//是否通过escpe关闭弹框
+				      closeBtn:true,//是否显示关闭按钮
+				      width: $(window).width()*0.8,//弹框的宽度
+					  height: $(window).height()*0.9,
+				  })
+		},
+	
+	}
+	
+	$(function (){
+		aihome.init_jqGrid();
+		/**查询*/
+		$("#collect_query").click(function(){
+			var param = getSearchParam();
+	 		$("#collect_jqGrid").setGridParam({url:"${CTX}/houseCollect/getHouseCollectListForPage.do?"+param,page:1}).trigger('reloadGrid');
+		});
+		/**删除*/
+		$("#collect_del").click(function(){
+			var rowIds=$("#collect_jqGrid").jqGrid('getGridParam', 'selarrrow');
+			var selCount=rowIds.length;
+			if (selCount==0){
+				alert("没有选中的记录！");
+				return;
+			}
+			var str = rowIds.join(",");
+			if (confirm("确认取消收藏？")) { 
+				$.ajax({
+					url : "${CTX}/houseCollect/deleteCollectByIds.do",
+					dataType : "json",
+					data : {
+						collectIds:str
+					},
+					success : function(data) {
+						$("#collect_jqGrid").trigger('reloadGrid');
+						alert("取消收藏成功！");
+					}
+				});
+			}
+		});
+			
+		
+	});
+	
+</script>

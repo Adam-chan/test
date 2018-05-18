@@ -1,0 +1,288 @@
+<div id="top_tools" class=" btn-group">
+	<button id="category_query" class="btn btn-sm btn-white  confirmBtn">
+		<i class="iconfont">&#xe6e4;</i> <span>查询</span>
+	</button>
+
+	<button id="category_insert" class="btn btn-sm btn-white ladda-button">
+		<i class="iconfont">&#xe6e0;</i> <span>新增</span>
+	</button>
+
+	<button id="category_update" class="btn btn-sm btn-white btn-default">
+		<i class="iconfont">&#xe6dd;</i> <span>修改</span>
+	</button>
+
+	<button id="category_del" class="btn btn-sm btn-white btn-info">
+		<i class="iconfont">&#xe6e3;</i> <span>删除</span>
+	</button>
+
+</div>
+
+<div class="row">
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+		<div id="element_id">
+			<div class="form-horizontal row my-inputs">
+				<div class="col-md-2 col-sm-2">
+					<div class="form-xs form-group row">
+						<label class="col-xs-4 control-label">名称：</label>
+						<div class="col-xs-8">
+							<input id="categoryName" class="form-control input-xs searchKey"
+								placeholder="输入类别名称" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2 col-sm-2">
+					<div class=" form-xs form-group row">
+						<label for="layers" class="col-xs-4 control-label">参赛层级：</label>
+						<div class="col-xs-8">
+							<select id="layers" class=" input-xs form-control">
+								<option id="layerOption">全部</option>
+								<option id="layerOption">大区</option>
+								<option id="layerOption">区</option>
+								<option id="layerOption">组</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2 col-sm-2">
+					<div class=" form-xs form-group row">
+						<label for="status" class="col-xs-4 control-label">状态：</label>
+						<div class="col-xs-8">
+							<select id="status" class=" input-xs form-control">
+								<option id="statusOption">全部</option>
+								<option id="statusOption">启用</option>
+								<option id="statusOption">禁用</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="col-md-12">
+		<div class="col-xs-12 my-grid ">
+			<table id="category_jqGrid">
+
+			</table>
+			<div id="category_jqGridPager"></div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$('.page-content-area').ace_ajax('loadScripts', [null,null], function () {});
+	$(function() {
+		categoryListInit();
+	});
+	
+	//初始化jqGrid
+	function categoryListInit(){
+		$("#category_jqGrid").jqGrid({
+			height: $(window).height() - 219,
+			autowidth:true,
+			autoheight:true,
+		    multiselect: true,
+		    multiboxonly: true,
+		    viewrecords: true,
+		    autowidth:true,
+		    rownumbers:true,
+	       	url: "${CTX}/matchCategory/getMatchCategoryList.do",
+	       	datatype: "json", //,'楼盘数','操作'
+	       	colNames : ['序号','名称','参赛层级', '状态','登记人','登记时间','备注'],
+	       	postData:{
+	       	},
+	       	colModel: [
+	       	    {  name: 'id',index:'id',sortable : false, width: 20,hidden:true},
+	       		{  name: 'name',index:'name',sortable : false, width: 30,formatter:function(rowName, options, rowObject){
+	        	    return "<a onclick=\"updateCategory('"+rowObject.id+"')\" style=\"text-decoration:underline;color:blue\">"+rowName+"</a>";}},
+	          	{  name: 'layer',index:'layer',sortable : false, width: 20},
+	         	{  name: 'status',index:'status',sortable : false, width: 20},
+	          	{  name: 'createUser',index:'createUser',sortable : false, width: 30},
+	         	{  name: 'createTimeFormat',index:'createTimeFormat',sortable : false, width: 30},
+	        	{  name: 'remark',index:'remark',sortable : false, width: 80}
+	         
+	       	],
+	       	onSelectRow: function (rowId, status, e){},
+	       rowNum:30, 
+		   rowList:[10,20,30,50,100],
+	       pager: "#category_jqGridPager",
+	       /* 在数据初始化前进行数据编辑 */
+	   	   jsonReader: { root:'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false}
+	   	});
+	}
+	//点击名称
+	function updateCategory(rowId){
+		openCategoryEdit(rowId,3);
+	}
+	//条件查询
+	$("#category_query").click(function(){
+		var layer;
+		var status;
+		if($("#layers").val() == "大区"){
+			layer = 1;
+		}else if($("#layers").val() == "区"){
+			layer = 2;
+		}else if($("#layers").val() == "组"){
+			layer = 3;
+		}else{
+			layer = "";
+		}
+		
+		if($("#status").val() == "启用"){
+			status = 1;
+		}else if($("#status").val() == "禁用"){
+			status = 2;
+		}else{
+			status = "";
+		}
+		$("#category_jqGrid").setGridParam({
+			postData : {
+				name : $("#categoryName").val(),
+				layer : layer,
+				status : status
+			}
+		}).trigger("reloadGrid");
+		
+	})
+	
+	//新增类别
+	$("#category_insert").click(function(){
+		var categoryId = "";
+		openCategoryEdit(categoryId,1);
+	})
+	
+	//修改类别
+	$("#category_update").click(function(){
+		var categoryId = jQuery("#category_jqGrid").jqGrid('getGridParam', 'selarrrow');
+		if(categoryId.length == 0){
+			alert("请勾选一条数据");
+			return;
+		}
+		if(categoryId.length > 1){
+			alert("每次只能修改一条数据");
+			return;
+		}
+		openCategoryEdit(categoryId,2);
+	})
+	
+	//删除类别
+	$("#category_del").click(function(){
+		var categoryId = jQuery("#category_jqGrid").jqGrid('getGridParam', 'selarrrow');
+		var categoryIds = categoryId.join(",");
+		if(categoryId.length == 0){
+			alert("请勾选数据");
+			return;
+		}
+		if (confirm("是否删除该赛区类别")){
+			$.ajax({
+				  url : "${CTX}/matchCategory/deleteMatchCategory.do",
+				  type:"post",
+				  dataType:"json",
+				  data:{
+					  "id":categoryIds
+				  },
+				  success:function(data){
+					if(data==1){
+	      				alert("删除成功！");
+					  $("#category_jqGrid").trigger('reloadGrid');
+	      			}else{
+	      				alert("删除失败！");
+	      			}
+				  }
+			  });
+		}
+		$("#category_jqGrid").trigger('reloadGrid');
+	})
+	
+	
+	
+	//新增或修改类别页面
+	function openCategoryEdit(categoryId,type){
+		var title = "";
+		var buttonType;
+		var readType = "";
+		if(type == 3){
+			readType = "readOnly";
+			title = "查看详情";
+			buttonType={
+	      		  "取消" : function() {
+	      			$(this).dialog("close");
+	            	}
+	  		};
+		}else{
+			if(type == 1){
+				title = "新增类别";
+			}else if(type == 2){
+				title = "修改类别";
+			}
+			buttonType={
+			    	  "保存" : function() {
+			    		  var editName = $("#editName").val();
+			    		  var editSort = $("#editSort").val();
+			    		  var hierarchy = $("input[name='radio1']:checked").val();
+			    		  var enableState = $("input[name='radio2']:checked").val();
+			    		  var remarks = $("#remarks").val();
+			    		  if(editName == "" || editName == null){
+			    			  alert("类别名称为必填项！");
+			    			  return;
+			    		  }
+			    		  if(enableState == "" ||　enableState　==　null){
+			    			  alert("启用状态为必选项！");
+			    			  return;
+			    		  }
+			    		  if(isNaN(editSort)){
+			    			  alert("排序号只能输入数字！");
+			    			  return;
+			    		  }
+			    		  if(editSort.toString().length > 2){
+			    			  alert("排序号不能大于两位数");
+			    			  return;
+			    		  }
+			    		  $.ajax({
+			    			  url : "${CTX}/matchCategory/saveMatchCategory.do?id="+categoryId,
+			    			  type:"post",
+			    			  dataType:"json",
+			    			  data:{
+			    				  "name":editName,
+			    				  "sort":editSort,
+			    				  "layer":hierarchy,
+			    				  "status":enableState,
+			    				  "remark":remarks
+			    			  },
+			    			  success:function(data){
+			    				  $("#category_jqGrid").trigger('reloadGrid');
+			    				  if(data==1){
+				        				alert("保存成功！");
+				        			}else{
+				        				alert("保存失败！");
+				        			}
+			    			  }
+			    		  });
+			    		  $(this).dialog("close");
+			    	  },
+			          "取消" : function() {
+			        	  $(this).dialog("close");
+			          }
+			      	};
+		}
+		
+		oaDialogOpen("editCategory",//对话框ID，必填，且不能与当前页面的ID重复
+			      {url:"${CTX}/matchCategory/insertMatchCategory.do?id="+categoryId+"&read="+readType,//调用页面的url
+					title:title,//弹框的title
+			      	closeOnEscpe:true,//是否通过escpe关闭弹框
+			      	closeBtn:true,//是否显示关闭按钮
+			      	width:500,//弹框的宽度
+			      	height:400,
+			      	buttons:buttonType,
+			     	openCall:function(){
+			      	},//弹框打开后的回调函数
+			      	closeCall:function(){
+			    	  $("#category_jqGrid").trigger("reloadGrid");
+			      	}//弹框关闭后的回调函数
+			  	})
+			}
+
+
+
+</script>

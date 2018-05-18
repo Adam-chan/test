@@ -1,0 +1,340 @@
+<form action="" id="saveForm">
+<div class="row" style="margin:0">
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+ 		<div id="element_id" style="border-bottom:1px solid #333333 ">
+			<div class="form-horizontal row my-inputs">
+	           <div class="col-md-4 col-sm-4 col-xs-4" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">楼盘名称：</label>
+						<div class="col-md-7 col-sm-7 col-xs-7">
+							${premisesName!}
+						</div>
+					</div>
+           		</div>
+   				<div class="col-md-4 col-sm-4 col-xs-4" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">楼栋分组：</label>
+						<div class="col-md-7 col-sm-7 col-xs-7">
+							${groupName!}
+						</div>
+					</div>
+           		</div>
+           		<div class="col-md-4 col-sm-4 col-xs-4" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">栋座：</label>
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							${buildingName!}
+						</div>
+					</div>
+           		</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+	 	<div id="element_id" >
+			<div class="form-horizontal row my-inputs">
+		          <div class="col-md-6 col-sm-6 col-xs-6" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">楼层：</label>
+						<div class="col-md-5 col-sm-5 col-xs-5">
+								<input class="isFlag" type="text" name="num" number="true" required readonly=" " <#if baseHouse??>value="${baseHouse.num!}"<#else>value="0"</#if>  maxlength="3" >
+								<i class="glyphicon glyphicon-plus " onclick="aihome.add(this)"></i>
+								<i class="glyphicon glyphicon-minus "onclick="aihome.subtract(this)"></i>
+						</div>
+					</div>
+		         </div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+	 	<div id="element_id" >
+			<div class="form-horizontal row my-inputs">
+		        <div class="col-md-6 col-sm-6 col-xs-6" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">商铺名称：</label>
+						<input class="isFlag" type="text" name="houseName" required  <#if baseHouse??>value="${baseHouse.houseName!}"<#else>value=""</#if>  maxlength="10"><span style="color:red"> *</span>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-6 col-xs-6" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">房屋用途：</label>
+						<input class="isFlag" type="text" value="商铺" disabled="disabled" style="background-color:#FFFFFF!important; border: 0px;">
+						<input class="isFlag" type="hidden" name="purpose" value="2">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+		<div id="element_id" >
+			<div class="form-horizontal row my-inputs">
+	           <div class="col-md-6 col-sm-6 col-xs-6" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">装修情况：</label>
+						<select name="decoration" id="decoration" class=" input-xs  isFlag" >
+							<option   selected="selected" value="">请选择</option>
+							<#if baseHouse ??>
+										<#if !baseHouse.decoration ??>
+											<option   value="1">毛坯</option>
+											<option   value="2">简装</option>
+											<option   value="3">精装</option>	
+											<option   value="4">豪装</option>
+											<option   value="5">中等</option>		
+										   <#else>	
+											<option <#if baseHouse.decoration==1 > selected="selected" </#if>  value="1">毛坯</option>
+											<option <#if baseHouse.decoration==2 > selected="selected" </#if>  value="2">简装</option>
+											<option <#if baseHouse.decoration==3 > selected="selected" </#if>  value="3">精装</option>
+											<option <#if baseHouse.decoration==4 > selected="selected" </#if>  value="4">豪装</option>
+											<option <#if baseHouse.decoration==5 > selected="selected" </#if>  value="5">中等</option>
+										</#if>
+									<#else>
+											<option   value="1">毛坯</option>
+											<option   value="2">简装</option>
+											<option   value="3">精装</option>	
+											<option   value="4">豪装</option>
+											<option   value="5">中等</option>		
+							</#if>		
+						</select>
+					</div>
+	          	</div>
+	 			<div class="col-md-6 col-sm-6 col-xs-6" >
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">朝向：</label>
+						<select name="orientation" id="orientation" class=" input-xs  isFlag" >
+							<option   selected="selected" value="">请选择</option>
+							<#if baseHouse ??>
+									<#if !baseHouse.orientation??>
+											<option   value="东">东</option>
+											<option   value="南">南</option>
+											<option   value="西">西</option>
+											<option   value="北">北</option>
+										<#else>
+											<option <#if baseHouse.orientation=="东">selected="selected"</#if>  value="东">东</option>
+											<option <#if baseHouse.orientation=="南">selected="selected"</#if>  value="南">南</option>
+											<option <#if baseHouse.orientation=="西">selected="selected"</#if>  value="西">西</option>
+											<option <#if baseHouse.orientation=="北">selected="selected"</#if>  value="北">北</option>
+									</#if>
+								<#else>
+									<option   value="东">东</option>
+									<option   value="南">南</option>
+									<option   value="西">西</option>
+									<option   value="北">北</option>
+							</#if>		
+						</select>
+					</div>
+	         	</div>
+	          		
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+		<div id="element_id" >
+			<div class="form-horizontal row my-inputs">
+				 <div class="col-md-6 col-sm-6 col-xs-6" >
+				 	<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">建筑面积：</label>
+						<input class="isFlag" maxlength="10" type="text" name="coveredArea" number="true" <#if baseHouse ??> value="${baseHouse.coveredArea!}"<#else>value=""</#if>  maxlength="10">
+	          			</div>
+	          		</div>
+	          		<div class="col-md-6 col-sm-6 col-xs-6" >
+	          			<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">使用面积：</label>
+						<input class="isFlag" maxlength="10" type="text" name="useLand" number="true" <#if baseHouse ??>value="${baseHouse.useLand!}"<#else>value=""</#if>  maxlength="10">
+	          			</div>
+	          		</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+		<div id="element_id" >
+			<div class="form-horizontal row my-inputs">
+				<div class="col-md-6 col-sm-6 col-xs-6" >
+					 <div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">土地使用年限：</label>
+						<select name="landLimit" id="landLimit" class=" input-xs  isFlag" >
+								<option   selected="selected" value="">请选择</option>
+								<#if baseHouse ??>
+										<#if !baseHouse.landLimit??>
+												<option   value="1">70年</option>
+												<option   value="2">60年</option>
+												<option   value="3">50年</option>
+												<option   value="4">40年</option>
+											<#else>
+												<option <#if baseHouse.landLimit == 1 > selected="selected" </#if> value="1" >70年代</option>
+												<option <#if baseHouse.landLimit == 2 > selected="selected" </#if> value="2" >60年代</option>
+												<option <#if baseHouse.landLimit == 3 > selected="selected" </#if> value="3" >50年代</option>
+												<option <#if baseHouse.landLimit == 4 > selected="selected" </#if> value="4" >40年代</option>
+					
+										</#if>
+									<#else>
+										<option   value="1">70年</option>
+										<option   value="2">60年</option>
+										<option   value="3">50年</option>
+										<option   value="4">40年</option>
+								</#if>	
+						</select>
+					</div>		
+		         </div>
+			     <div class="col-md-6 col-sm-6 col-xs-6" >
+			     	 <div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">房屋性质：</label>
+						<select name="houseNature" id="houseNature" class=" input-xs  isFlag" >
+							<option   selected="selected" value="">请选择</option>
+							<#if baseHouse ??>
+									<#if !baseHouse.houseNature??>
+											<option   value="1">已购公房</option>
+											<option   value="2">商品房</option>
+											<option   value="3">空置房</option>
+											<option   value="4">使用权房</option>
+											<option   value="5">经济使用房</option>
+										<#else>
+											<option <#if baseHouse.houseNature==1 > selected="selected" </#if>  value="1">已购公房</option>
+											<option <#if baseHouse.houseNature==2 > selected="selected" </#if>  value="2">商品房</option>
+											<option <#if baseHouse.houseNature==3 > selected="selected" </#if>  value="3">空置房</option>
+											<option <#if baseHouse.houseNature==4 > selected="selected" </#if>  value="4">使用权房</option>
+											<option <#if baseHouse.houseNature==5 > selected="selected" </#if>  value="5">经济使用房</option>
+										
+									</#if>
+								<#else>
+									<option   value="1">已购公房</option>
+									<option   value="2">商品房</option>
+									<option   value="3">空置房</option>
+									<option   value="4">使用权房</option>
+									<option   value="5">经济使用房</option>
+							</#if>
+						</select>
+			     	</div>
+			    </div>
+		   </div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+		<div id="element_id" >
+			<div class="form-horizontal row my-inputs">
+				 <div class="col-md-6 col-sm-6 col-xs-6" >
+				 	<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">业主姓名：</label>
+						<input class="isFlag" maxlength="6" type="text" name="proprietor" required <#if baseHouse??>value="${baseHouse.proprietor!}"<#else>value=""</#if>  maxlength="10"><span style="color:red"> *</span>
+	          			</div>
+	          		</div>
+	          		<div class="col-md-6 col-sm-6 col-xs-6" >
+	          			<div class=" form-xs form-group row">
+						<label for="userName" class="col-md-5 col-sm-5 col-xs-5 control-label">业主电话：</label>
+						<input class="isFlag"  type="text" name="contactPhone" englishVerification="true"  required <#if baseHouse??>value="${baseHouse.contactPhone!}"<#else>value=""</#if>  maxlength="13"><span style="color:red"> *</span>
+	          			</div>
+	          		</div>
+			</div>
+		</div>
+	</div>
+</div>
+<input type="hidden" value="${premisesId!}" name="premisesId">
+<input type="hidden" value="${groupId!}" name="groupId">
+<input type="hidden" value="${buildingId!}" name="buildingId">
+<#if baseHouse?? ><input type="hidden" value="${baseHouse.id!}" name="baseHouseId"></#if>
+<#if baseHouse??><input type="hidden" value="${baseHouse.houseName!}" name="oldHouseName"></#if> 
+</form>
+<style type="text/css">
+.isFlag{width: 120px;}
+</style>
+<script type="text/javascript">
+aihome.validateFunction=function(){
+	 var isMobile = /^0\d{2,3}-\d{7,8}(-\d{1,6})?$|(^(13[0-9]|15[0|3|6|7|8|9]|18[8|9])\d{8}$)/;  
+	 $.validator.addMethod("englishVerification",function(value,element,params){
+			return this.optional(element) || isMobile.test(value);
+		},"电话号码格式不正确");
+	 return $("#saveForm").validate({
+			onfocusout: function(element) { $(element).valid(); },  
+			rules:{  
+			},
+			messages:{
+				houseName:{       
+					required:"不能为空",
+				},
+				num:{       
+					required:"不能为空",
+					number:"必须为数字",
+				},
+				proprietor:{
+					required:"不能为空",
+				},contactPhone:{
+					required:"不能为空",
+				},coveredArea:{
+					number:"必须为数字",
+				},useLand:{
+					number:"必须为数字",
+				}
+			},
+	        errorPlacement: function(error, element){
+	            error.appendTo(element.parent());
+	        }
+		}); 
+}
+
+aihome.add=function(obj){
+	var num = $(obj).prev().val();
+	$(obj).prev().val(parseInt(num)+1)
+}
+aihome.subtract=function(obj){
+	var num = $(obj).prev().prev().val();
+	if(parseInt(num)>0 ){
+		$(obj).prev().prev().val(parseInt(num)-1);
+	}
+}
+//修改
+aihome.updateStore=function(){
+	
+	if(!aihome.validateFunction().form()) {
+		return false;
+	}
+// 	获取表单
+	var type =0;
+	var oForm = $('#saveForm');
+	var saveForm = oForm.serialize();
+	$.ajax({
+	       type : "POST",
+	       url : '${CTX}/baseBuilding/updateStore.do',
+	       dataType : 'json',
+	       data : saveForm,
+	       async:false,
+	       success : function(data) {
+	    	   	type= data;
+	      }
+	});
+	if(type>0){
+		alert("修改成功")
+	}else if(type-1){
+		alert("商铺名称已存在")
+	}  
+	return type
+}
+//新增
+aihome.addStore=function(){
+	if(!aihome.validateFunction().form()) {
+		return false;
+	}
+// 	获取表单
+	var type =0;
+	var oForm = $('#saveForm');
+	var saveForm = oForm.serialize();
+	$.ajax({
+	       type : "POST",
+	       url : '${CTX}/baseBuilding/addStore.do',
+	       dataType : 'json',
+	       data : saveForm,
+	       async:false,
+	       success : function(data) {
+	    	   	type= data;
+	      }
+	});
+	if(type>0){
+		alert("添加成功")
+	}else if(type-1){
+		alert("商铺名称已存在")
+	}  
+	return type
+}
+$(function(){
+		aihome.validateFunction();
+});
+
+</script>

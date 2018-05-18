@@ -1,0 +1,416 @@
+<form  id="addManageRentContract">
+	<input type="hidden" name="userId"  value="${userId!}"/>
+	<table  class="table table-striped table-bordered " >
+			<tr >
+				<td class="text_center">客户所属经济人</td><td><input type="text" name="middleman" <#if manageRentContract ??> value="${manageRentContract.middleman!}" <#else> value="${middleman!}" </#if>  readonly="readonly" ></td><td class="text_center">区县</td><td> <input type="text" name="county" <#if manageRentContract ??> value="${manageRentContract.county!}" <#else> value="${mergerName!}" </#if> readonly="readonly"></td>
+			</tr>
+			<tr>
+				<td class="text_center">成交房屋详细地址</td><td colspan="3"><input type="text" name="dealHouseAddress" <#if manageRentContract ??> value="${manageRentContract.dealHouseAddress!}"</#if><#if Lease??> value="${Lease.zzdzDetail!}"</#if> readonly="readonly" ></td>
+			</tr>
+			<tr>
+				<td class="text_center">合同编号</td><td><input type="text" name="code"    <#if manageRentContract ??> value="${manageRentContract.code!}"</#if> <#if code??> value="${code!}"</#if> readonly="readonly"/> </td><td class="text_center">合同月租金</td><td><input type="text"  name="monthlyPrice" <#if manageRentContract ??> value ="${manageRentContract.monthlyPrice!}"</#if> <#if Lease??> value="${Lease.leasePrice!}"</#if> maxlength="11" number="true" required>元</td>
+			</tr>
+			<tr>
+				<td class="text_center">实收客户佣金</td>
+				<td>
+					<input type="text" class="clear" name="realizedIncomeCustomer"   <#if manageRentContract ??> value="${manageRentContract.realizedIncomeCustomer!}"</#if> number="true" required>元
+					备注：<input class="clear"  type="text" name="customerBrokerageRemark" <#if manageRentContract ??> value="${manageRentContract.customerBrokerageRemark!}"</#if> >
+				</td>
+				<td class="text_center">实收业主佣金</td>
+				<td>
+					<input class="clear"  type="text" name="realizedIncomeOwne" <#if manageRentContract ??> value="${manageRentContract.realizedIncomeOwne!}"</#if>  number="true" required>元
+					备注：<input  type="text" class="clear" name="proprietorBrokerageRemark" <#if manageRentContract ??> value="${manageRentContract.proprietorBrokerageRemark!}"</#if> >
+				</td>
+			</tr>
+			<tr>
+				<td class="text_center">业主姓名</td><td><input type="text"  name="proprietor" <#if manageRentContract ??> value="${manageRentContract.proprietor!}"</#if> <#if Lease??> value="${Lease.ownerName!}"</#if>  required></td><td class="text_center">业主身份证号</td><td><input type="text" class="clear" <#if manageRentContract ??> value="${manageRentContract.proprietorIdentityCard!}"</#if>  name="proprietorIdentityCard" isIdCardNo="true" required ></td>
+			</tr>
+			<tr>
+				<td class="text_center">客户编号</td><td colspan="3"> <input class="clear" type="text"  name="customerCode" zmsz="true" <#if manageRentContract ??> value="${manageRentContract.customerCode!}"</#if> required></td>
+			</tr>
+			<tr>
+				<td class="text_center">客户姓名</td><td> <input class="clear" type="text"  name="customerName" <#if manageRentContract ??> value="${manageRentContract.customerName!}"</#if> required></td><td class="text_center">客户身份证号</td><td><input class="clear" type="text"  name="customerIdentityCard" <#if manageRentContract ??> value="${manageRentContract.customerIdentityCard!}"</#if>  isIdCardNo="true" required></td>
+			</tr>
+			<tr>
+				<td class="text_center">业主电话</td><td><input class="clear"  type="text" name="proprietorFixationPhone" <#if manageRentContract ??> value="${manageRentContract.proprietorFixationPhone!}"</#if> englishVerification="true" required></td><td class="text_center">业主手机</td><td> <input  name="proprietorCall" type="text"<#if manageRentContract ??> value="${manageRentContract.proprietorCall!}"</#if>   <#if Lease??> value="${Lease.ownerTel!}"</#if> englishVerification="true" required/> </td>
+			</tr>
+			<tr>
+				<td class="text_center">客户电话</td><td><input class="clear" type="text" name="customerFixationPhone" <#if manageRentContract ??> value="${manageRentContract.customerFixationPhone!}"</#if> englishVerification="true" required></td><td class="text_center">客户手机</td><td><input class="clear" type="text" name="customerCall" <#if manageRentContract ??> value="${manageRentContract.customerCall!}"</#if>  englishVerification="true" englishVerification="ture" required></td>
+			</tr>
+			<tr>
+				<td class="text_center">承租期限</td>  <td><input class="5i5jdate clear" <#if manageRentContract ??> value="${manageRentContract.hireStartTime!}"</#if> name="hireStartTime"   type="text" placeholder="选择时间" />至<input class="5i5jdate clear" <#if manageRentContract ??> value="${manageRentContract.hireEndTime!}"</#if>  name="hireEndTime"   type="text" placeholder="选择时间" /></td><td>成交房屋电话</td><td><input class="clear" type="text" name="bargainHousePhone" <#if manageRentContract ??> value="${manageRentContract.bargainHousePhone!}"</#if> englishVerification="true" required></td>
+			</tr>
+			<tr>
+				<td class="text_center">客户折扣表准</td> <td><input  name="customerDiscount" <#if manageRentContract ??> <#if manageRentContract.customerDiscount == 2>checked="checked" </#if> </#if> type="radio" value="2">85折 <input name="customerDiscount" type="radio"  <#if manageRentContract ??> <#if manageRentContract.customerDiscount == 1>checked="checked" </#if> </#if> value="1">75折 <input name="customerDiscount" id="customerDiscount" type="radio"  <#if manageRentContract ??> <#if manageRentContract.customerDiscount == 3>checked="checked" </#if><#else> checked="checked"</#if>  value="3">无</td><td class="text_center">备注</td><td><input class="clear" type="text"  <#if manageRentContract ??>value ="${manageRentContract.customerDiscountRmk!}"</#if> name="customerDiscountRmk" required></td>
+			</tr>
+			<tr>
+				<td class="text_center">业主折扣表准</td> <td><input  name="proprietorDiscount" type="radio" <#if manageRentContract ??> <#if manageRentContract.proprietorDiscount == 2>checked="checked" </#if> </#if>  value="2">85折 <input name="proprietorDiscount" type="radio" <#if manageRentContract ??> <#if manageRentContract.proprietorDiscount == 1>checked="checked" </#if> </#if>  value="1">75折 <input name="proprietorDiscount" id="proprietorDiscount" type="radio"  <#if manageRentContract ??> <#if manageRentContract.proprietorDiscount == 3>checked="checked" </#if> <#else>checked="checked" </#if>  value="3"/>无</td><td class="text_center">备注</td><td> <input class="clear" type="text" <#if manageRentContract ??> value="${manageRentContract.proprietorDiscountRmk!}"</#if>  name="proprietorDiscountRmk" required/> </td>
+			</tr>
+			<tr>
+				<td class="text_center">产权证号 </td> <td><input class="clear" type="text" name="propertyRighCard" <#if manageRentContract ??> value="${manageRentContract.propertyRighCard!}"</#if>  required/></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td class="text_center">手续费</td> <td><input class="clear" type="text" name="factorage" number="true" <#if manageRentContract ??> value="${manageRentContract.factorage!}"</#if> required/></td><td class="text_center">税金</td><td><input class="clear" type="text" name="taxes" <#if manageRentContract ??> value="${manageRentContract.taxes!}"</#if> required number="true"/></td>
+			</tr>
+			<tr>
+				<td class="text_center">其他收入</td> <td><input class="clear"  type="text" name="otherFormalities" <#if manageRentContract ??> value="${manageRentContract.otherFormalities!}"</#if> number="true"/></td><td class="text_center">是否代收代付</td>
+				<td>
+				<select id="isCollection" name="isCollection"  class=" input-xs" onchange="aihome.changeCollection(this)">
+					<#if manageRentContract ??>
+						<option <#if manageRentContract.isCollection ==1> selected="selected" </#if>  value="1">客户自交公司不开发票</option>
+						<option <#if manageRentContract.isCollection ==2> selected="selected" </#if> value="2">客户自交公司开发票</option>
+						<option <#if manageRentContract.isCollection ==3> selected="selected" </#if> value="3">公司代收代付房租</option>
+						<#else>
+						<option selected="selected" value="1">客户自交公司不开发票</option>
+						<option value="2">客户自交公司开发票</option>
+						<option value="3">公司代收代付房租</option>
+					</#if>	
+				</select>
+				</td>
+			</tr>
+	</table>
+	<form>
+	<table id="table1" class="table table-striped table-bordered " style="width: 80%;margin: auto;text-align: center; display: none" > 
+			<tr >
+				<td colspan="4">代收代付信息：</td>
+			</tr>
+			<tr >
+				<td class="text_center" >代表抬头（公司名称）</td>
+				<td colspan="3">
+					<input class="clear1" type="text" name="invoiceTitle" required <#if manageRentContract ??> value="${manageRentContract.invoiceTitle!}"</#if>  style="width: 80%;margin: auto;" >
+				</td>
+			</tr>
+			<tr >
+				<td class="text_center">付款周期</td>
+				<td colspan="3">
+					<input  name="paymentCycle" id="paymentCycle" type="radio" <#if manageRentContract ??> <#if manageRentContract.paymentCycle == 1>checked="checked" </#if> <#else> checked="checked" </#if>  value="1">月份 
+					<input name="paymentCycle" type="radio" <#if manageRentContract ??> <#if manageRentContract.paymentCycle == 2>checked="checked" </#if>  </#if> value="2">季付 
+					<input name="paymentCycle" type="radio" <#if manageRentContract ??> <#if manageRentContract.paymentCycle == 3>checked="checked" </#if>  </#if> value="3">半年付
+					 <input name="paymentCycle" type="radio" <#if manageRentContract ??> <#if manageRentContract.paymentCycle == 4>checked="checked" </#if>  </#if>  value="4">年付
+				</td>
+			</tr>
+			<tr >
+				<td class="text_center">收款方式</td>
+				<td >
+					<input  name="gatheringMode" id=" gatheringMode" type="radio" checked="checked" <#if manageRentContract ??> <#if manageRentContract.gatheringMode == 1>checked="checked" </#if> <#else> checked="checked" </#if>  value="1">现金
+					<input name="gatheringMode" type="radio" <#if manageRentContract ??> <#if manageRentContract.gatheringMode == 2>checked="checked" </#if>  </#if> value="2">转账 
+					<input name="gatheringMode" type="radio" <#if manageRentContract ??> <#if manageRentContract.gatheringMode == 3>checked="checked" </#if>  </#if> value="3">支票
+				</td>
+				<td class="text_center">付款方式</td>
+				<td>
+					<input  name="paymentMode" id="paymentMode" type="radio"  <#if manageRentContract ??> <#if manageRentContract.paymentMode == 1>checked="checked" </#if> <#else> checked="checked" </#if> value="1">现金
+					<input name="paymentMode" type="radio" <#if manageRentContract ??> <#if manageRentContract.paymentMode == 2>checked="checked" </#if>  </#if> value="2">转账 
+					<input name="paymentMode" type="radio" <#if manageRentContract ??> <#if manageRentContract.paymentMode == 3>checked="checked" </#if>  </#if> value="3">支票
+				</td>
+			</tr>
+			<tr >
+				<td class="text_center">出租方指定账号</td>
+				<td >
+					<input class="clear1" type="text" name="lessorAccount" <#if manageRentContract ??> value="${manageRentContract.lessorAccount!}"</#if>   zmsz="true" required >
+				</td>
+				<td class="text_center">开户行</td>
+				<td>
+					<input class="clear1" type="text" name="openingBank" <#if manageRentContract ??> value="${manageRentContract.openingBank!}"</#if>   	required >
+				</td>
+			</tr>
+			<tr >
+				<td class="text_center">开户名</td>
+				<td >
+					<input class="clear1" type="text" name="accountName" <#if manageRentContract ??> value="${manageRentContract.accountName!}"</#if>  required  >
+				</td>
+				<td class="text_center">客户地址</td>
+				<td>
+					<input class="clear1" type="text" name="customerAddress" <#if manageRentContract ??> value="${manageRentContract.customerAddress!}"</#if>   >
+				</td>
+			</tr>
+			<tr >
+				<td class="text_center">是否欠款发票</td>
+				<td colspan="3">
+					<input class="clear1" name="isDebtInvoice" type="radio"  <#if manageRentContract ??> <#if manageRentContract.isDebtInvoice == 1>checked="checked" </#if>  </#if> value="1">是
+					<input id="isDebtInvoice" name="isDebtInvoice" <#if manageRentContract ??> <#if manageRentContract.isDebtInvoice == 2>checked="checked" </#if> <#else> checked="checked" </#if> type="radio" value="2" >否
+				</td>
+			</tr>
+			<tr >
+				<td class="text_center">代收代付备注</td>
+				<td colspan="3">
+					<textarea onclick="" class="clear1" name="agentBusiness"   rows="4" cols="90" maxlength="200" required><#if manageRentContract ??> ${manageRentContract.agentBusiness!}</#if></textarea>
+				</td>
+			</tr>
+			
+	</table>
+	<#if manageRentContract ??> <input type="hidden" name="id" value="${manageRentContract.id!}">  </#if>
+	<#if manageRentContract ??> <input type="hidden" name="houseInfoId" value="${manageRentContract.houseInfoId!}"> <#else> <input type="hidden" name="houseInfoId" value="${houseInfoId!}"> </#if>
+</form>
+
+<style type="text/css">
+.text_center{text-align: center};
+</style>
+<script type="text/javascript">
+//时间
+$('.5i5jdate').datepicker({
+    todayBtn: "linked",//今天按钮
+    clearBtn: true,//清空按钮
+    language: "zh-CN",//语言
+    autoclose: true,//自动关闭
+    todayHighlight: true,//今天高亮
+    format: "yyyy-mm-dd",//日期格式，可以不写，直接使用默认的
+})
+//显示影藏发票table
+aihome.changeCollection = function(obj){
+	var isCollection = $(obj).val();
+	if(isCollection == "2" || isCollection == "3"){
+		$("#table1").css("display","block");
+		aihome.table1();
+	}else if(isCollection == "1"){
+		$("#table1").css("display","none");
+		$(".clear1").val("");
+		$("input[name=isDebtInvoice]").removeAttr("checked");
+		$("input[name=paymentMode]").removeAttr("checked");
+		$("input[name=gatheringMode]").removeAttr("checked");
+		$("input[name=paymentCycle]").removeAttr("checked");
+		$("#table1").find("label[class='error']").remove()
+	}
+}
+//清空
+aihome.reset = function(){
+	
+	$(".clear").val("");
+	$(".clear1").val("");
+	$("#isCollection").val("1");
+	$("#table1").css("display","none");
+	$("label[class='error']").remove();
+	aihome.table1();
+	//客户折扣标准
+	$("input[name=customerDiscount]:eq(0)").prop("checked",false);
+	$("input[name=customerDiscount]:eq(1)").prop("checked",false);
+	$("input[name=customerDiscount]:eq(2)").prop("checked",true);
+	//业主折扣标准
+	$("input[name=proprietorDiscount]:eq(0)").prop("checked",false);
+	$("input[name=proprietorDiscount]:eq(1)").prop("checked",false);
+	$("input[name=proprietorDiscount]:eq(2)").prop("checked",true);
+	
+}
+
+aihome.table1 = function(){
+	//是否欠款发票
+	$("input[name=isDebtInvoice]:eq(0)").prop("checked",false);
+	$("input[name=isDebtInvoice]:eq(1)").prop("checked",true);
+	//付款周期
+	$("input[name=paymentCycle]:eq(0)").prop("checked",true);
+	$("input[name=paymentCycle]:eq(1)").prop("checked",false);
+	$("input[name=paymentCycle]:eq(2)").prop("checked",false);
+	$("input[name=paymentCycle]:eq(3)").prop("checked",false);
+	//收款方式
+	$("input[name=gatheringMode]:eq(0)").prop("checked",true);
+	$("input[name=gatheringMode]:eq(1)").prop("checked",false);
+	$("input[name=gatheringMode]:eq(2)").prop("checked",false);
+	$("input[name=gatheringMode]:eq(3)").prop("checked",false);
+	//付款方式
+	$("input[name=paymentMode]:eq(0)").prop("checked",true);
+	$("input[name=paymentMode]:eq(1)").prop("checked",false);
+	$("input[name=paymentMode]:eq(2)").prop("checked",false);
+	$("input[name=paymentMode]:eq(3)").prop("checked",false);
+}
+//验证
+aihome.validateManageRentContractFunction=function(){
+	var idCard = /^(\d{6})()?(\d{4})(\d{2})(\d{2})(\d{3})(\w)$/;   
+	 var zmsz = /^[0-9a-zA-Z]*$/g; 
+	 var isMobile = /^0\d{2,3}-\d{7,8}(-\d{1,6})?$|(^(13[0-9]|15[0|3|6|7|8|9]|18[8|9])\d{8}$)/; 
+	 $.validator.addMethod("zmsz", function(value, element) {
+		 return this.optional(element) || zmsz.test(value);
+		 }, "请输入正确证件号码");
+	   $.validator.addMethod("isIdCardNo", function(value, element) {
+		 return this.optional(element) || idCard.test(value);
+		 }, "请输入正确身份证号码");
+	 $.validator.addMethod("englishVerification",function(value,element,params){
+			return this.optional(element) || isMobile.test(value);
+		},"请输入正确电话号码！");
+	 return $("#addManageRentContract").validate({
+			onfocusout: function(element) { 
+				$(element).valid();
+			},  
+			rules:{  
+			},
+			messages:{
+				realizedIncomeCustomer:{       
+					required:"不能为空",
+					number:"必须为数字",
+				},customerBrokerageRemark:{
+					required:"不能为空",
+				},realizedIncomeOwne:{
+					number:"必须为数字",
+					required:"不能为空",
+				},proprietorBrokerageRemark:{
+					required:"不能为空",
+				},proprietor:{
+					required:"不能为空",
+				},customerName:{
+					required:"不能为空",
+				},proprietorFixationPhone:{
+					required:"不能为空",
+				},customerFixationPhone:{
+					required:"不能为空",
+				},hireStartTime:{
+					required:"不能为空",
+				},hireEndTime:{
+					required:"不能为空",
+				},customerDiscount:{
+					required:"不能为空",
+				},customerDiscountRmk:{
+					required:"不能为空",
+				},proprietorDiscountRmk:{
+					required:"不能为空",
+				},proprietorDiscount:{
+					required:"不能为空",
+				},propertyRighCard:{
+					required:"不能为空",
+				},factorage:{
+					required:"不能为空",
+					number:"必须为数字",
+				},taxes:{
+					required:"不能为空",
+					number:"必须为数字",
+				},otherFormalities:{
+					required:"不能为空",
+					number:"必须为数字",
+				},invoiceTitle:{
+					required:"不能为空",
+				},lessorAccount:{
+					required:"不能为空",
+				},openingBank:{
+					required:"不能为空",
+				},accountName:{
+					required:"不能为空",
+				},customerAddress:{
+					required:"不能为空",
+				},agentBusiness:{
+					required:"不能为空",
+				},proprietorIdentityCard:{
+					required:"不能为空",
+				},customerIdentityCard:{
+					required:"不能为空",
+				},customerCall:{
+					required:"不能为空",
+				},bargainHousePhone:{
+					required:"不能为空",
+				},monthlyPrice:{
+					required:"不能为空",
+					number:"必须为数字",
+				},invoiceTitle:{
+					required:"不能为空",
+				},proprietorCall:{
+					required:"不能为空",
+				},customerCode:{
+					required:"不能为空",
+				}
+			},
+	        errorPlacement: function(error, element){
+	            error.appendTo(element.parent());
+	        }
+		}); 
+	
+}
+//添加
+aihome.addManageRentContract=function(){
+	//表单验证
+	if(!aihome.validateManageRentContractFunction().form()) {
+		return false;
+	}
+	// 获取表单
+	var oForm = $('#addManageRentContract');
+	var saveForm = oForm.serialize();
+	$.ajax({
+	       type : "POST",
+	       url : '${CTX}/manageRentContract/addManageRentContract.do',
+	       dataType : 'json',
+	       data : saveForm,
+	       async:false,
+	       success : function(data) {
+	    	   	type= data;
+	    		if(type<1){
+	    			alert("添加失败！");
+	    		}
+	      }
+	   });
+	
+}
+//初始化
+$(function(){
+
+	<#if manageRentContract ??>
+	var isCollection = ${manageRentContract.isCollection!};
+	if(isCollection ==2 || isCollection == 3 || isCollection == 1){
+		$("#table1").css("display","block");
+	}
+  </#if>
+	//校验
+	aihome.validateManageRentContractFunction();
+	//查看校验
+	 <#if manageRentContract ??>                        
+		$("#manageRentContract").find("input[type='text']").attr("disabled","disabled");
+		$("#manageRentContract").find("input[type='radio']").attr("disabled","disabled");
+		$("#manageRentContract").find("select").attr("disabled","disabled");
+		$("#manageRentContract").parent().find("button").last().unbind("click");
+		$("#manageRentContract").parent().find("button").last().remove();
+		$("#manageRentContract").parent().find("button").last().parent().append("<button onclick=\"aihome.updateManageRentContract() \" type=\"button\" class=\" ladda-button\" data-style=\"zoom-out\"><span class=\"ladda-label\">修改</span><span class=\"ladda-spinner\"></span><div class=\"ladda-progress\" style=\"width: 0px;\"></div></button>"); 
+		$("#manageRentContract").parent().find("button").eq(1).remove();
+		$("#manageRentContract").parent().find("button").last().parent().append("<button onclick=\"aihome.saveUpdateManageRentContract() \" type=\"button\" class=\" ladda-button\" data-style=\"zoom-out\"><span class=\"ladda-label\">关闭</span><span class=\"ladda-spinner\"></span><div class=\"ladda-progress\" style=\"width: 0px;\"></div></button>"); 
+	</#if> 
+	//租赁期限初始化
+	<#if !manageRentContract ??> 
+	var now = new Date();  
+    var year = now.getFullYear();       //年  
+    var month = now.getMonth() + 1;     //月  
+    var day = now.getDate();            //日  
+    var date = year+"-"+month+"-"+day;
+    $("input[name = hireStartTime]").val(date);
+    $("input[name = hireEndTime]").val(date);
+    </#if>
+})
+aihome.isFalgManageRentContract = 0;
+aihome.updateManageRentContract =function(){
+
+	$("#manageRentContract").find("input[type='text']").removeAttr("disabled","disabled");
+	$("#manageRentContract").find("input[type='radio']").removeAttr("disabled","disabled");
+	$("#manageRentContract").find("select").removeAttr("disabled","disabled");
+	$("input[name=code]").removeAttr("disabled");
+	$("input[name=middleman]").attr("readonly","readonly");
+	$("input[name=county]").attr("readonly","readonly");
+	$("input[name=dealHouseAddress]").attr("readonly","readonly");
+	$("input[name=code]").attr("readonly","readonly");
+	aihome.isFalgManageRentContract = 1;
+	$("#manageRentContract").parent().find("button").last().find("span").first().html("保存");
+}
+aihome.addManageRentContractIsfalg = 1;
+//保存修改
+aihome.saveUpdateManageRentContract =function(){
+		
+	if(aihome.isFalgManageRentContract === 1 && aihome.addManageRentContractIsfalg === 1){
+		if(!aihome.validateManageRentContractFunction().form()) {
+			return false;
+		}
+		// 获取表单
+		var oForm = $('#addManageRentContract');
+		var saveForm = oForm.serialize();
+		$.ajax({
+		       type : "POST",
+		       url : '${CTX}/manageRentContract/updateManageRentContract.do',
+		       dataType : 'json',
+		       data : saveForm,
+		       async:false,
+		       success : function(data) {
+		    	   	type= data;
+		    		if(type<1){
+		    			alert("添加失败！");
+		    		}{
+		    			alert("添加成功！");
+		    			aihome.addManageRentContractIsfalg = 2;
+		    			$("#manageRentContract").dialog("close");
+		    		}
+		      }
+		   });
+	}else{
+		$("#manageRentContract").dialog("close");
+	}
+}
+</script>

@@ -1,0 +1,218 @@
+<div id="top_tools" class=" btn-group">
+  <button id="manageTimeLimitExpress_add" class="btn btn-sm btn-white ladda-button" >
+    <i class="iconfont">&#xe6e0;</i>
+    <span>新增</span>
+  </button>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+	    <table id="jqGrid3">
+			
+		</table>
+	    <div id="jqGridPager3"></div>
+    </div> 
+</div>  
+
+<!-- 房源：id  -->
+<input type="hidden" value="${houseInfoId!}" id="houseInfoId" style="margin-left: 10px">
+
+<script type="text/javascript">
+/* 分页初始化 */
+ 
+aihome.initManageTimeLimit = function(){
+	$("#jqGrid3").jqGrid({
+		autowidth:true,
+		autoheight:true,
+		multiselect:true,
+		multiboxonly:true,
+		viewrecords:true,
+		autowidth:true,
+		rownumbers:true,
+		url: '${CTX}/manageTimeLimitExpress/getManageTimeLimitExpressPage.do',
+		datatype: "json", //,'楼盘数','操作'
+		colNames : ['id','合同号','起始时间', '结束时间','签署时间','签署人','状态','操作'],
+	    postData:{
+	    	houseInfoId:"${houseInfoId!}"
+		}, 
+		colModel: [
+	   	    { label: 'id', name: 'id',index:'id',hidden:true},
+	   		{  name: 'limittimeContractNum',index:'limittimeContractNum',sortable : false, width: 40,formatter:function(rowName, options, rowObject){
+        	    return "<a onclick=\"aihome.operation('"+rowObject.id+"',"+null+",5)\" style='text-decoration:underline;color:blue'>"+rowName+"</a>";}},
+	      	{  name: 'entrustStartime',index:'entrustStartime',sortable : false, width: 40},
+	     	{  name: 'entrustEndtime',index:'entrustEndtime',sortable : false, width: 40},
+	    	{  name: 'contractDate',index:'contractDate',sortable : false, width: 40},
+	   	 	{  name: 'limitUser',index:'limitUser',sortable : false, width: 40},
+	   	 	{  name: 'statusName',index:'statusName',sortable : false, width: 40},
+	   	    {  name: 'test',index:'test',sortable : false, width: 40,formatter:function(rowName, options, rowObject){
+		   	 		var str ="";
+		   	 		if(rowObject.statusName =="新签" ){
+			   	 		str="<a onclick=\"aihome.operation('"+rowObject.id+"',"+null+",4)\" style='text-decoration:underline;color:blue;margin-left: 10px'>终止</a>"+
+			   	 		"<a onclick=\"aihome.operation('"+rowObject.id+"',"+null+",3)\" style='text-decoration:underline;color:blue;margin-left: 10px'>结束</a>";
+		   	 		}else if(rowObject.statusName == "续签"){
+		   	 			str="<a onclick=\"aihome.operation('"+rowObject.id+"',"+null+",4)\" style='text-decoration:underline;color:blue;margin-left: 10px'>终止</a>"+
+		   	 			"<a onclick=\"aihome.operation('"+rowObject.id+"',"+null+",3)\" style='text-decoration:underline;color:blue;margin-left: 10px'>结束</a>";
+		   	 		}else if(rowObject.statusName == "结束"){
+		   	 			str ="<a onclick=\"aihome.operation('"+rowObject.id+"','"+rowObject.limittimeContractNum+"','2')\" style='text-decoration:underline;color:blue;margin-left: 10px'>续签</a>";
+		   	 		}else if(rowObject.statusName == "终止"){
+		   	 			str ="<a onclick=\"aihome.operation('"+rowObject.id+"',"+null+",3)\" style='text-decoration:underline;color:blue;margin-left: 10px'>结束</a>";
+		   	 		}
+	        	    return str;
+	   	 		}
+        	} 
+	   ],
+		autowidth:true,
+		height:$(window).height()-200,
+		rowNum:30, 
+		rowList:[10,20,30,50,100],
+		pager: "#jqGridPager3",
+    	jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+	});
+}
+//操作
+aihome.operation=function(id,limittimeContractNum,status){
+	var height = $(window).height()*0.7;
+    var width = $(window).width()*0.45;
+    var url = "";
+    var title = "";
+    if(status== 2){
+    	var data = aihome.addVerify(${houseInfoId!},3);
+    	if(data>0){
+    		alert("请结束已存在的有效合同后,在续签!");
+    		return false;
+    	}
+    	title = "限时合同——续签";
+    	height = $(window).height()*0.7;
+        width = $(window).width()*0.45;
+    	url = "${CTX}/manageTimeLimitExpress/addManageTimeLimitIndex.do?houseInfoId=${houseInfoId!}&type=${type!}&status=2&limittimeContractNum="+limittimeContractNum;
+    	aihome.openWicket(title,url,height,width);
+    }else if(status== 4){
+    	height = $(window).height()*0.5;
+        width = $(window).width()*0.5;
+    	title = "限时合同——协议终止";
+    	url = "${CTX}/manageTimeLimitExpress/changeStutsIndex.do?status="+status+"&Id="+id;
+    	aihome.openWicket(title,url,height,width);
+    }else if(status== 3){
+    	height = $(window).height()*0.5;
+        width = $(window).width()*0.5;
+    	title = "限时合同——结束";
+    	url = "${CTX}/manageTimeLimitExpress/changeStutsIndex.do?status="+status+"&Id="+id;
+    	aihome.openWicket(title,url,height,width);
+    }else if(status== 5){
+    	var height = $(window).height()*0.7;
+	    var width = $(window).width()*0.45;
+    	title = "限时合同——查看";
+    	url = "${CTX}/manageTimeLimitExpress/getManageTimeLimitExpressDetail.do?id="+id;
+    	aihome.openWicket(title,url,height,width);
+    }
+}
+//弹出窗口
+aihome.openWicket=function(title,url,height,width){
+	var but;
+	if( title == "限时合同——续签"){
+		but = {
+			"保存" : function() {//按钮和执行函数
+				var type = aihome.manageTimeLimitExpress();
+				if(type<0 || type== false){
+					return false;
+				}else{
+					$("#jqGrid3").trigger('reloadGrid');
+					$(this).dialog("close");
+				}
+			}, 
+			"取消" : function() {
+				$(this).dialog("close");
+			}
+		}
+	}else if(title =="限时合同——结束"){
+		but ={
+				"保存" : function() {//按钮和执行函数
+				 var type = aihome.endOrtermination();
+				 if(type<0  || type== false){
+						return false;
+					}else{
+						$("#jqGrid3").trigger('reloadGrid');
+						$(this).dialog("close");
+					}
+				}, 
+				"取消" : function() {
+					$(this).dialog("close");
+				}
+		};
+	}else if(title =="限时合同——协议终止"){
+		but ={
+				"保存" : function() {//按钮和执行函数
+				 var type = aihome.endOrtermination();
+				 if(type<0  || type== false){
+						return false;
+					}else{
+						$("#jqGrid3").trigger('reloadGrid');
+						$(this).dialog("close");
+					}
+				}, 
+				"取消" : function() {
+					$(this).dialog("close");
+				}
+		};
+	}else if(title == "限时合同——新增"){
+		but ={
+				"保存" : function() {//按钮和执行函数
+				 var type = aihome.manageTimeLimitExpress();
+				 if(type<0  || type== false){
+						return false;
+					}else{
+						$("#jqGrid3").trigger('reloadGrid');
+						$(this).dialog("close");
+					}
+				}, 
+				"取消" : function() {
+					$(this).dialog("close");
+				}
+		};
+	}
+	oaDialogOpen("d",//对话框ID，必填，且不能与当前页面的ID重复
+		{url:url,//目标地址
+		title:title,//弹框的title
+		closeOnEscpe:true,//是否通过escpe关闭弹框
+		closeBtn:true,//是否显示关闭按钮
+		width:width,//弹框的宽度
+		height:height,
+		buttons:but
+ 	})
+}
+//校验
+ aihome.addVerify = function(houseInfoId,statuss){
+	var type = -1;
+	$.ajax({
+	       type : "POST",
+	       url : '${CTX}/manageTimeLimitExpress/getBycount.do',
+	       dataType : 'json',
+	       data : {"houseInfoId":houseInfoId,"status":statuss},
+	       async:false,
+	       success : function(data) {
+	    	    type = data;
+	      }
+	   })
+	 	return type;
+}
+
+$(function (){
+	//初始化分页
+	aihome.initManageTimeLimit();
+	//新增限时速递合同
+	$("#manageTimeLimitExpress_add").click(function(){
+		var data = aihome.addVerify(${houseInfoId!},3);
+		var type = parseInt(data);
+		if(type>0){
+			alert("限时合同已存在!");
+			return false;
+		}
+		var height = $(window).height()*0.7;
+	    var width = $(window).width()*0.45;
+	    var url = "${CTX}/manageTimeLimitExpress/addManageTimeLimitIndex.do?houseInfoId=${houseInfoId!}&type=${type!}&status=1";
+	    var title = "限时合同——新增";
+	    aihome.openWicket(title,url,height,width);
+	});
+	
+})
+
+</script>

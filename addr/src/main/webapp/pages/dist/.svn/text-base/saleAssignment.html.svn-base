@@ -1,0 +1,163 @@
+<div class="row">
+	<div class="col-xs-12 my-group">
+		<div class="form-horizontal row">
+			<div class="col-md-12 col-sm-12">
+				<div class="form-xs form-group row">
+					<label class="col-xs-2 control-label">楼盘类型：</label>
+					<div class="col-xs-10" style="padding: 2px 1px 1.5px 5px">${saleAddress!}</div>
+				</div>
+			</div>
+			<div class="col-md-12 col-sm-12">
+				<div class="form-xs form-group row">
+					<label class="col-xs-2 control-label">原责任人：</label>
+					<div id="oldAssignment" class="col-xs-10" style="padding: 2px 1px 1.5px 5px">${(assignmentMap.OLDASSIGNMENT)!}</div>
+				</div>
+			</div>
+			<div class="col-md-12 col-sm-12">
+				<div class="form-xs form-group row">
+					<label class="col-xs-2 control-label">分配给：</label>
+					<div class="col-xs-10" style="padding: 2px 1px 1.5px 5px">
+						<div class="row" style="margin-left: -3px;">
+							<div class="col-xs-3">
+								<select id="assignmentDutyAreaId" class="input-xs form-control" name="assignmentDutyAreaId">
+									<option value="">请选择责任大区</option>
+									<#if dutyAreaList ??>
+										<#list dutyAreaList as item>
+											<option value="${item.orgCode}">${item.name!}</option>
+										</#list>
+									</#if>
+								</select>
+							</div>
+							<div class="col-xs-3">
+								<select id="assignmentDutyZoneId" class="input-xs form-control" name="assignmentDutyZoneId">
+									<option value="">请选择责任区</option>
+								</select>
+							</div>
+							<div class="col-xs-3">
+								<select id="assignmentDutyGroupId" class="input-xs form-control" name="assignmentDutyGroupId">
+									<option value="">请选择责任组</option>
+								</select>
+							</div>
+							<div class="col-xs-3">
+								<select id="assignmentUserId" class="input-xs form-control" name="assignmentUserId">
+									<option value="">请选择责任人</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" id="dutySaleId" name="dutySaleId" value="${(assignmentMap.ID)!}" />
+	<input type="hidden" id="lastAssignment" name="lastAssignment" value="${(assignmentMap.LASTASSIGNMENT)!}" />
+	<input type="hidden" id="nextAssignment" name="nextAssignment" value="${(assignmentMap.NEXTASSIGNMENT)!}" />
+</div>
+<script type="text/javascript">
+aihome.addAssignment = function(updateFlag) {
+	var flag = false;
+	if($("#assignmentDutyAreaId").val() == "") {
+		alert("请选择分配对象！");
+		return flag;
+	}
+	if($("#oldAssignment").text() != "") {
+		if(!confirm("责任权限已被分配，是否修改？")) {
+			return flag;
+		}
+	}
+	if($("#nextAssignment").val() != 0) {
+		if(!confirm("下层所属已被分配，是否确定收回分配？")) {
+			return flag;
+		}
+	}
+	var areaId = $("#assignmentDutyAreaId").val();
+	var areaName = $("#assignmentDutyAreaId").find("[value='" + areaId + "']").text();
+	var zoneId = $("#assignmentDutyZoneId").val();
+	var zoneName = "";
+	if(zoneId != "") {
+		zoneName = $("#assignmentDutyZoneId").find("[value='" + zoneId + "']").text();
+	}
+	var groupId = $("#assignmentDutyGroupId").val();
+	var groupName = "";
+	if(groupId != "") {
+		groupName = $("#assignmentDutyGroupId").find("[value='" + groupId + "']").text();
+	}
+	var userId = $("#assignmentUserId").val();
+	var userName = "";
+	if(userId != "") {
+		userName = $("#assignmentUserId").find("[value='" + userId + "']").text();
+	}
+	$.ajax({
+		type : "post",
+		url : "${CTX}/addrDist/addSaleAssignment.do",
+		async : false,
+		dataType : 'json',
+		data : {
+					"orgLevel" : userId == "" ? groupId == "" ? zoneId == "" ? 1 : 2 : 3 : 4,
+					"orgCode" : userId == "" ? groupId == "" ? zoneId == "" ? areaId : zoneId : groupId : groupId,
+					"userId" : userId,
+					"userName" : userName,
+					"dataType" : $("#dataType").val(),
+					"premisesId" : $("#dataPremisesId").val(),
+					"groupId" : $("#dataGroupId").val(),
+					"buildingId" : $("#dataBuildingId").val(),
+					"unitId" : $("#dataUnitId").val(),
+					"areaName" : areaName,
+					"zoneName" : zoneName,
+					"groupName" : groupName,
+					"dutySaleId" : $("#dutySaleId").val(),
+					"lastAssignment" : $("#lastAssignment").val(),
+					"nextAssignment" : $("#nextAssignment").val(),
+					"updateFlag" : updateFlag
+				},
+		success : function(data){
+			if(data == 2) {
+				alert("所选分配人不在上层组织结构中！");
+			} else {
+				flag = true;
+				alert("操作成功！");
+			}
+		},
+	});
+	return flag;
+}
+$(function () {
+	$("#distChange .my-grid").css("top", $("#distChange .my-group").height() + 10);
+	// 大区
+	$("#assignmentDutyAreaId").change(function() {
+		if($(this).val() == "") {
+			aihome.cleanOption("assignmentDutyZoneId");
+			aihome.cleanOption("assignmentDutyGroupId");
+			aihome.cleanOption("assignmentUserId");
+			return;
+		}
+		// 大区 -> 区(级联) Start
+		aihome.getDutyZone($(this).val(), "assignmentDutyZoneId");
+		// 大区 -> 区(级联) End
+		aihome.cleanOption("assignmentDutyGroupId");
+		aihome.cleanOption("assignmentUserId");
+	});
+	// 区
+	$("#assignmentDutyZoneId").change(function() {
+		if($(this).val() == "") {
+			aihome.cleanOption("assignmentDutyGroupId");
+			aihome.cleanOption("assignmentUserId");
+			return;
+		}
+		// 区 -> 组(级联) Start
+		aihome.getDutyGroup($(this).val(), "assignmentDutyGroupId");
+		// 区 -> 组(级联) End
+		aihome.cleanOption("assignmentUserId");
+	});
+	// 组
+	$("#assignmentDutyGroupId").change(function() {
+		if($(this).val() == "") {
+			aihome.cleanOption("assignmentUserId");
+			return;
+		}
+		// 组 -> 人(级联) Start
+		aihome.getUser($(this).val(), "assignmentUserId");
+		// 组 -> 人(级联) End
+	});
+})
+</script>

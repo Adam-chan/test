@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="carPort">
+
+    <!-- 新增车位 -->
+	<insert id="insertCarPort" parameterType="map">  
+	    INSERT INTO CAR_PORT (
+			ID,
+			STATUS,
+			TYPE,
+			FLOOR,
+			PARK_NUM,
+			PREMISES_ID,
+			CREATE_TIME
+		)VALUES(
+		    CAR_PORT_SEQ.NEXTVAL, 
+		    1,
+			#{type,jdbcType=DECIMAL}, 
+			#{floor,jdbcType=DECIMAL}, 
+			#{parkNum,jdbcType=VARCHAR}, 
+			#{premisesId,jdbcType=DECIMAL}, 
+			SYSDATE
+		)
+    </insert>
+    
+    <!-- 分页查询车位 -->
+   	<select id="getCarPortListForPage" parameterType="map" resultType="carPortModel">
+		SELECT
+			cp.ID,
+			cp.STATUS,
+			cp.TYPE,
+			cp.FLOOR,
+			cp.PARK_NUM AS parkNum,
+			cp.AUTHORIZE,
+			cp.TELEPHONE,
+			bp.NAME AS premisesName
+		FROM
+			car_port cp
+		LEFT JOIN base_premises bp ON bp.id = cp.premises_id
+		<where>
+			<if test="premisesId != null and premisesId !=''"> 
+		    	AND cp.PREMISES_ID = #{premisesId}
+		    </if>
+			<if test="parkNum_search != null and parkNum_search !=''"> 
+		    	AND cp.PARK_NUM like '%${parkNum_search}%'
+		    </if>
+		    <if test="authorize != null and authorize !=''"> 
+		    	AND cp.AUTHORIZE = #{authorize}
+		    </if>
+		    <if test="telephone != null and telephone !=''"> 
+		    	AND cp.TELEPHONE like '%${telephone}%'
+		    </if>
+		    <if test="floor != null and floor !=''"> 
+		    	AND cp.FLOOR = #{floor}
+		    </if>
+		    <if test="type != null and type !=''"> 
+		    	AND cp.TYPE = #{type}
+		    </if>
+		</where>
+		ORDER BY
+			ID DESC
+   	</select>
+   	
+   	<!-- 根据id查询车位信息 -->
+   	<select id="getCarPortById" parameterType="map" resultType="carPortModel">
+		SELECT
+			cp.ID,
+			cp.PARK_NUM AS parkNum,
+			cp.FLOOR,
+			cp.STATUS,
+			cp.TYPE,
+			cp.AUTHORIZE,
+			cp.TELEPHONE,
+			cp.SPARE_TELEPHONE AS spareTelephone,
+			cp.OWNER_NAME AS ownerName,
+			cp.REMARK,
+			bh.id AS roomId,
+			bh.HOUSE_NAME AS roomNum
+			<if test="type !=null and type !=''">
+				,v.ADDR_DETAIL AS addressDetail
+				,bp.id AS premisesId
+				,bp.name AS premisesName
+			</if>
+		FROM
+			car_port cp
+		LEFT JOIN base_house bh ON bh.id = cp.room_id
+		<if test="type !=null and type !=''">
+			LEFT JOIN base_premises bp ON bp.id = cp.premises_id
+			LEFT JOIN view_residential v ON v.ROAD_ID = bp.road_id
+		</if>
+		WHERE
+			cp.id = #{id,jdbcType=DECIMAL}
+   	</select>
+   	  	<!-- 获取车位List -->
+   	<select id="getCarPortList" parameterType="map" resultType="carPortModel">
+		SELECT
+			cp.ID,
+			cp.PARK_NUM AS parkNum,
+			cp.FLOOR,
+			cp.STATUS,
+			cp.TYPE,
+			cp.AUTHORIZE
+		FROM
+			car_port cp
+		WHERE cp.ROOM_ID in (${roomId})
+   	</select>
+   	<!-- 根据id更新车位信息 -->
+   	<update id="updateCarPortById" parameterType="map">             
+	     UPDATE CAR_PORT 
+	      	<set>
+				<if test="parkNum != null and parkNum != ''">
+					 PARK_NUM = #{parkNum,jdbcType=VARCHAR}
+				</if>
+				<if test="ownerName != null and ownerName !=''">
+					 ,OWNER_NAME = #{ownerName,jdbcType=VARCHAR}
+				</if>
+				<if test="floor != null and floor !=''">
+					 ,FLOOR = #{floor,jdbcType=DECIMAL}
+				</if>
+				<if test="type != null and type !=''">
+					 ,TYPE = #{type,jdbcType=DECIMAL}
+				</if>
+				<if test="telephone != null and telephone !=''">
+					 ,TELEPHONE = #{telephone,jdbcType=VARCHAR}
+				</if>
+				<if test="spareTelephone != null and spareTelephone !=''">
+					 ,SPARE_TELEPHONE = #{spareTelephone,jdbcType=VARCHAR}
+				</if>
+				<if test="status != null and status !=''">
+					 ,STATUS = #{status,jdbcType=DECIMAL}
+				</if>
+				<if test="remark != null and remark !=''">
+					 ,REMARK = #{remark,jdbcType=VARCHAR}
+				</if>
+	      	</set>
+	     where id=#{carPortId,jdbcType=DECIMAL}
+	</update>  
+    
+    <!-- 车位号唯一校验 -->
+    <select id="getCarPortIs" parameterType="map" resultType="java.lang.Integer">
+    	SELECT
+			count(0)
+		FROM
+			car_port
+		WHERE
+			1=1
+			<if test="parkNum != null  and parkNum !=''"> 
+		    	AND PARK_NUM = #{parkNum}
+		    </if>
+		    <if test="floor != null  and floor !=''"> 
+		    	AND FLOOR = #{floor}
+		    </if>
+		    <if test="type != null  and type !=''"> 
+		    	AND TYPE = #{type}
+		    </if>
+		    <if test="premisesId != null  and premisesId !=''"> 
+		    	AND PREMISES_ID = #{premisesId}
+		    </if>
+		    <if test="carPortId != null  and carPortId !=''"> 
+		    	AND ID &lt;&gt; #{carPortId}
+		    </if>
+    </select>
+    
+    <!-- 车位关联房间 -->
+   	<update id="contactRoomByPortId" parameterType="map">  
+   		UPDATE CAR_PORT SET ROOM_ID = #{roomId,jdbcType=VARCHAR} WHERE ID = #{carPortId}
+   	</update>
+   	
+   	<!-- 解除车位和房间的关联 -->
+	<update id="removeRoom" parameterType="map">
+	    UPDATE CAR_PORT SET ROOM_ID = '' WHERE ID = #{carPortId}
+	</update>
+	
+	<!-- 批量删除车位 -->
+	<delete id="deleteCarPortByIds" parameterType="map">
+        DELETE FROM CAR_PORT WHERE id IN (${carPortIds})
+	</delete>
+	
+	<!-- 查询所有关联过房间的车位id -->
+	<select id="getPortListContactedRoom" parameterType="map" resultType="carPortModel">
+		SELECT
+			ID,
+			park_num AS parkNum
+		FROM
+			CAR_PORT
+		WHERE
+			1=1
+		AND PREMISES_ID = #{premisesId,jdbcType=DECIMAL}
+		AND ID IN (${carPortIds})
+        AND ROOM_ID IS NOT NULL
+   	</select>	
+   	
+   	<!-- 根据楼盘id查询楼栋-->
+	<select id="getBuildingsByPremisesId" resultType="baseBuildingModel" parameterType="map">
+	    SELECT 
+	    	ID,
+	    	BUILDING_NAME AS buildingName
+	    FROM BASE_BUILDING
+	    WHERE 
+	      1=1
+	      <if test="premisesId != null and premisesId !=''"> 
+		    	AND PREMISES_ID = #{premisesId}
+		  </if>
+	</select>
+   	
+   	<!-- 根据楼盘id查询栋座分组 -->
+	<select id="getGroupsByPremisesId" resultType="buildingGroupModel" parameterType="map">
+		SELECT
+			g.id,
+			g.group_name AS groupName
+		FROM
+			BUILDING_GROUP g
+		LEFT JOIN base_premises p ON p.id = g.premises_id
+		WHERE
+			1=1
+			<if test="premisesId != null and premisesId !=''"> 
+		    	AND p.id = #{premisesId}
+		  	</if>
+	</select>
+	
+	<!-- 根据栋座分组id栋座 -->
+	<select id="getBuildingsByGroupId" resultType="baseBuildingModel" parameterType="map">
+		SELECT
+			b.id,
+      		b.building_name as buildingName
+		FROM
+			BASE_BUILDING b
+		LEFT JOIN BUILDING_GROUP g ON g.id = b.building_group_id
+		WHERE
+			1=1
+			<if test="groupId != null and groupId !=''"> 
+		    	AND g.id = #{groupId}
+		  	</if>
+	</select>
+	
+	<!-- 根据楼栋id查询单元-->
+	<select id="getUnitsByBuildingId" resultType="buildingUnitsModel" parameterType="map">
+	    SELECT 
+	    	ID,
+	    	CODE
+	    FROM BUILDING_UNITS
+	    WHERE 
+	      1=1
+	      <if test="buildingId != null and buildingId !=''"> 
+		    	AND BUILDING_ID = #{buildingId}
+		  </if>
+	</select>
+	
+	<!-- 查询门牌号(房间)-->
+	<select id="getRoomList" resultType="parkContactRoomModel" parameterType="map">
+	   SELECT
+			h.id AS roomId,
+			b.building_name AS buildingName,
+			u.CODE AS unitName,
+			h.house_name AS roomNum
+		FROM
+			base_house h
+		LEFT JOIN building_units u ON u.id = h.unit_id
+		LEFT JOIN base_building b ON b.id = u.building_id
+		LEFT JOIN building_group g ON g.id = b.building_group_id
+		LEFT JOIN base_premises p ON p.id = b.premises_id
+		WHERE
+			1 = 1
+			<if test="premisesId != null and premisesId !=''">
+				AND p.id = #{premisesId}
+			</if>
+			<if test="groupId != null and groupId !=''">
+				AND g.id = #{groupId}
+			</if>
+			<if test="buildingId != null and buildingId !=''"> 
+			    AND b.id = #{buildingId}
+			</if>
+			<if test="unitId != null and unitId !=''"> 
+			    AND u.id = #{unitId}
+			</if>
+			<if test="roomNum != null and roomNum !=''"> 
+			    AND h.house_name like '%${roomNum}%'
+			</if>
+			<if test="matchStr != null and matchStr !=''"> 
+			    AND INSTR(h.house_name, #{matchStr}) > 0
+			</if>
+		ORDER BY
+			h.id
+	</select>
+	
+	<!-- 新增车位日志 -->
+	<insert id="insertCarPortLog" parameterType="map">  
+	    INSERT INTO CAR_PORT_LOG (
+			ID,
+			ROOM_ID,
+			CAR_PORT_ID,
+			CREATE_TIME,
+			OPERATER,
+			OPERATER_ID,
+			OPERATETYPE
+		)VALUES(
+		    CAR_PORT_LOG_SEQ.NEXTVAL, 
+			#{roomId,jdbcType=DECIMAL}, 
+			#{carPortId,jdbcType=DECIMAL}, 
+			SYSDATE,
+			#{operater,jdbcType=VARCHAR}, 
+			#{operaterId,jdbcType=VARCHAR}, 
+			#{operateType,jdbcType=DECIMAL}
+		)
+    </insert>
+    
+    <!-- 根据楼盘id查询所有车位号 -->
+   	<select id="getAllPortNumList" parameterType="map" resultType="java.lang.String">
+		SELECT
+			cp.PARK_NUM
+		FROM
+			car_port cp
+		LEFT JOIN base_premises bp ON bp.id = cp.premises_id
+		<where>
+			<if test="premisesId != null and premisesId !=''"> 
+			    AND bp.id = #{premisesId}
+			</if>
+			<if test="type != null and type !=''"> 
+			    AND cp.type = #{type}
+			</if>
+			<if test="floor != null and floor !=''"> 
+			    AND cp.floor= #{floor}
+			</if>
+		</where>
+   	</select>
+   	
+   	<!--批量生成 -->
+   	<insert id="insertCarPorts" parameterType="map" useGeneratedKeys="false">  
+	   	INSERT INTO CAR_PORT (id, STATUS, TYPE, FLOOR, PREMISES_ID, CREATE_TIME, PARK_NUM) 
+	    	SELECT 
+	    		CAR_PORT_SEQ.NEXTVAL,
+	    		1,
+				#{type},
+				#{floor},
+				#{premisesId},
+				SYSDATE,
+	    		a.* from (
+	    <foreach collection="portNumList" item="item" index="index" separator="UNION ALL" >
+	    	SELECT 
+	        	#{item}
+	        FROM DUAL
+	    </foreach>)a
+    </insert>
+    
+    <!-- 插入一条房源主表数据 -->
+    <insert id="insertHouseInfo" useGeneratedKeys="true" parameterType="map">  
+		<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="houseInfoId">
+			SELECT HOUSE_INFO_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO HOUSE_INFO (
+			ID,
+			DEMAND_TYPE,
+			IS_PROTECTED,
+			OPERATE_USER,
+			OPERATE_USER_ID
+		)
+		VALUES(
+			HOUSE_INFO_SEQ.NEXTVAL,
+			#{demandType,jdbcType=DECIMAL},
+			#{isProtected,jdbcType=DECIMAL},
+			#{userName,jdbcType=VARCHAR},
+			#{userId,jdbcType=VARCHAR}
+		)
+    </insert>
+    
+    <!-- 车位转为出租  -->
+	<insert id="insertCarPortLease" parameterType="map">  
+	    INSERT INTO HOUSE_LEASE (
+			ID,
+			HOUSE_INFO_ID,
+			CAR_PORT_ID,
+			ADDRESS_DETAIL,
+			ZZDZ_DETAIL,
+			PROPERTY_RIGHT_TYPE,
+			LEASE_PRICE,
+			ENTRUST_PRICE,
+			PROPERTY_FEE,
+			USE_STATUS,
+			FCK_CODE,
+			FCK_DATE,
+			OWNER_SOURCE,
+			STATUS,
+			TAGS,
+			TAGS2,
+			REMARK,
+			CREATE_TIME,
+			USE_TYPE
+		)VALUES(
+		    HOUSE_LEASE_SEQ.NEXTVAL,
+		    #{houseInfoId,jdbcType=DECIMAL}, 
+			#{carPortId,jdbcType=DECIMAL}, 
+			#{addressDetail,jdbcType=VARCHAR}, 
+			#{zzdzDetail,jdbcType=VARCHAR},
+			#{propertyRightType,jdbcType=DECIMAL}, 
+			#{leasePrice,jdbcType=DECIMAL}, 
+			#{entrustPrice,jdbcType=DECIMAL}, 
+			#{propertyFee,jdbcType=DECIMAL}, 
+			#{useStatus,jdbcType=DECIMAL},
+			#{fckCode,jdbcType=VARCHAR}, 
+			to_date(#{fckDate,jdbcType=DATE},'yyyy-mm-dd'),
+			#{houseSourceId,jdbcType=DECIMAL}, 
+			#{status,jdbcType=DECIMAL}, 
+			#{tags,jdbcType=VARCHAR}, 
+			#{tags2,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR}, 
+			SYSDATE,
+			4
+		)
+    </insert>
+    
+    <!-- 车位转为出售  -->
+	<insert id="insertCarPortSale" parameterType="map">  
+	    INSERT INTO HOUSE_SALE (
+			ID,
+			HOUSE_INFO_ID,
+			CAR_PORT_ID,
+			ADDRESS_DETAIL,
+			ZZDZ_DETAIL,
+			PROPERTY_RIGHT_TYPE,
+			SELL_PRICE,
+			ENTRUST_PRICE,
+			PROPERTY_FEE,
+			USE_STATUS,
+			FCK_CODE,
+			FCK_DATE,
+			OWNER_SOURCE,
+			STATUS,
+			TAGS,
+			TAGS2,
+			REMARK,
+			CREATE_TIME,
+			USE_TYPE
+		)VALUES(
+		    HOUSE_LEASE_SEQ.NEXTVAL,
+		    #{houseInfoId,jdbcType=DECIMAL}, 
+			#{carPortId,jdbcType=DECIMAL}, 
+			#{addressDetail,jdbcType=VARCHAR}, 
+			#{zzdzDetail,jdbcType=VARCHAR},
+			#{propertyRightType,jdbcType=DECIMAL}, 
+			#{sellPrice,jdbcType=DECIMAL}, 
+			#{entrustPrice,jdbcType=DECIMAL}, 
+			#{propertyFee,jdbcType=DECIMAL}, 
+			#{useStatus,jdbcType=DECIMAL},
+			#{fckCode,jdbcType=VARCHAR}, 
+			to_date(#{fckDate,jdbcType=DATE},'yyyy-mm-dd'),
+			#{houseSourceId,jdbcType=DECIMAL}, 
+			#{status,jdbcType=DECIMAL}, 
+			#{tags,jdbcType=VARCHAR}, 
+			#{tags2,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR}, 
+			SYSDATE,
+			4
+		)
+    </insert>
+    
+    <!-- 查询车位是否已出租 -->
+    <select id="carPortLeasedIs" parameterType="map" resultType="java.lang.Integer">
+    	SELECT
+			count(0)
+		FROM
+			house_lease
+		WHERE
+			car_port_id = #{carPortId}
+    </select>
+    
+    <!-- 查询车位是否已出售 -->
+    <select id="carPortSaledIs" parameterType="map" resultType="java.lang.Integer">
+    	SELECT
+			count(0)
+		FROM
+			house_sale
+		WHERE
+			car_port_id = #{carPortId}
+    </select>
+    
+    <!-- 更新车位的委托 -->
+   	<update id="updateAuthorizeByPortId" parameterType="map">  
+   		UPDATE CAR_PORT SET AUTHORIZE = #{authorize,jdbcType=DECIMAL} WHERE ID = #{carPortId}
+   	</update>
+   	
+   	<!--批量生成房源联系人 -->
+   	<insert id="insertHouseLinkMans" parameterType="map" useGeneratedKeys="false">  
+	   	INSERT INTO HOUSE_LINKMAN(id, HOUSE_INFO_ID, TYPE, NAME, CONTACT_TYPE) 
+	    	SELECT 
+	    		house_linkman_seq.NEXTVAL,
+	    		#{houseInfoId},
+	    		a.* from (
+	    <foreach collection="linkManList" item="item" index="index" separator="UNION ALL" >
+	    	SELECT 
+	        	#{item.type},
+	        	#{item.name},
+	        	#{item.contactType}
+	        FROM DUAL
+	    </foreach>)a
+    </insert>
+    
+    <!-- 模糊搜索车位 -->
+    <select id="getCarPortByMatch" parameterType="map" resultType="carPortModel">
+	    SELECT
+			id,
+			park_num AS parkNum
+		FROM
+			CAR_PORT
+		<where>
+			(authorize NOT IN (1, 3) or authorize is null)
+			<if test="matchStr != null  and matchStr !=''"> 
+		    	AND INSTR(PARK_NUM, #{matchStr}) > 0
+		    </if>
+		    <if test="premisesId != null  and premisesId !=''"> 
+		    	AND premises_id = #{premisesId}
+		    </if>
+		    <if test="type != null  and type !=''"> 
+		    	AND type = #{type}
+		    </if>
+		    <if test="floor != null  and floor !=''"> 
+		    	AND floor = #{floor}
+		    </if>
+		    </where>
+		ORDER BY
+			id
+    </select>
+   	
+</mapper>

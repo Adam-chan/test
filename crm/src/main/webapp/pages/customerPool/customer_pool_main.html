@@ -1,0 +1,176 @@
+<title>房源管理</title>
+<!-- tools S -->
+<div id="top_tools" class=" btn-group">
+  <button id="pool_query" class="btn btn-sm btn-white  confirmBtn">
+    <i class="iconfont">&#xe6e4;</i>
+    <span>查询</span>
+  </button>
+
+  <button id="pool_claim" class="btn btn-sm btn-white ladda-button" onclick="aihome.addAppointTakeLook();">
+    <i class="iconfont">&#xe6e0;</i>
+    <span>认领</span>
+  </button>
+  
+  <button id="pool_comment" class="btn btn-sm btn-white ladda-button" onclick="aihome.openDistributeDialog();">
+    <i class="iconfont">&#xe6e0;</i>
+    <span>分配</span>
+  </button>
+  
+</div>
+<div class="row">
+	<div class="col-xs-12">
+	  <div class="tabbable tabbable-lightBlue">
+	    <ul class="nav nav-tabs" >
+	      <li class="active">
+	        <a data-toggle="tab" tabUrl="${CTX}/customerPool/customerPoolTable.do?type=1" tabView="#tab-content1">公客池</a>
+	      </li>
+	      <li>
+	        <a data-toggle="tab" tabUrl="${CTX}/customerPool/customerPoolTable.do?type=2" tabView="#tab-content1">成交客户池</a>
+	      </li>
+	    </ul>
+	    <div class="tab-content" id="tab-content1"></div>
+	  </div>
+	</div> 
+</div> 
+
+<script type="text/javascript">
+
+$('.page-content-area').ace_ajax('loadScripts', [null, "../assets/js/bootbox.js"], function() {});
+
+	var aihome = {
+
+		/**约带看*/
+		addAppointTakeLook : function() {
+			var rowIds = $("#public_pool_jqGrid").jqGrid('getGridParam', 'selarrrow');
+			var selCount = rowIds.length;
+
+			if (selCount == 0) {
+				alert("没有选中的记录！");
+				return;
+			} else if (selCount > 1) {
+				alert("请只选择一条记录！");
+				return;
+			}
+			var rowData = $("#public_pool_jqGrid").jqGrid('getRowData', rowIds);
+			var userName = rowData.userName;
+			var demandCode = rowData.demandCode;
+
+			$.ajax({
+				url: "${CTX}/customerSource/getTakeLookCount.do",
+				dataType: "json",
+				async: false,
+				type: 'post',
+				data: {
+					rowIds: rowIds
+				},
+				success: function(data) {
+					alert("该客源已有新建中的约带看，请去约带看管理页面进行操作！")
+				},
+				error: function(data) {
+					var heights = $(window).height() * 0.9;
+					var widths = $(window).width() * 0.6;
+					oaDialogOpen("toAppointTakeLook", {
+						url: "${CTX}/customerSource/addAppointTakeLook.do?userName=" + userName + "&demandCode=" + demandCode + "&addCustomerId=" + rowIds,
+						title: "添加约带看",
+						closeOnEscpe: true,
+						closeBtn: true,
+						width: widths,
+						height: heights,
+						buttons: {
+							"添加": function() {
+								aihome.addDemandHouse();
+							},
+							"保存": function() {
+								takeType = $("#takeType").val();
+								if (takeType == 1) {
+									aihome.saveCustTakeLook(rowIds);
+								} else {
+									aihome.savePremisesTakeLook(rowIds);
+								}
+								$(this).dialog("close");
+								$("#public_pool_jqGrid").trigger('reloadGrid');
+							},
+							"取消": function() {
+								$(this).dialog("close");
+							}
+						}
+					});
+				}
+			});
+		},
+		/** 分配*/
+		openDistributeDialog: function() {
+			var rowIds = $("#public_pool_jqGrid").jqGrid('getGridParam', 'selarrrow');
+			var selCount = rowIds.length;
+			if (selCount == 0) {
+				alert("没有选中的记录！");
+				return;
+			}
+			oaDialogOpen("distributeDialog", {
+				url: "${CTX}/customerPool/distributeDialog.do",
+				closeOnEscpe: true,
+				width: 700,
+				height: 200,
+				modal: true,
+				title: "公客分配",
+				buttons: {
+					"分配": function() {
+						var operateUserId = $("#jingjiren").val();
+						if(operateUserId==""){
+							alert("请选择归属人！");
+							return;
+						}
+						$.ajax({
+							url: "${CTX}/customerPool/customerPoolComment.do",
+							dataType: "json",
+							async: false,
+							type: 'post',
+							data: {
+								operateUser:$("#jingjiren :selected").html(),
+								operateUserId:operateUserId,
+								orgCode:$("#zuOrg").val(),
+								demandIds:rowIds.join(",")
+							},
+							success: function(data) {
+								if(data>0){
+									alert("分配成功！");
+								}else{
+									alert("分配失败！");
+								}
+							}
+						});
+						$(this).dialog("close");
+						$("#public_pool_jqGrid").trigger('reloadGrid');
+					},
+					"取消": function() {
+						$(this).dialog("close");
+					}
+				},
+				closeCall: function() {
+					$(this).empty();
+				}
+			});
+		},
+		/** 联系人信息详情 */
+		showDetails: function(id) {
+			oaDialogOpen("customerSourceDetail", {
+				url: "${CTX}/customerSource/customerSourceDetail.do?id=" + id,
+				title: "客源详情",
+				closeOnEscpe: true,
+				closeBtn: true,
+				width: 1000,
+				height: 800,
+				buttons: {
+					"取消": function() {
+						$(this).dialog("close");
+					}
+				}
+			});
+		}
+	};
+	 
+</script>
+
+<style>
+	.datepicker.dropdown-menu{z-index:100!important;}
+</style>

@@ -1,0 +1,94 @@
+
+<div class="row">
+<div class="col-xs-12 my-grid">
+	<table id="demandsJqGrid"></table>
+	<div id="demandsJqGridPager"></div>
+</div>
+</div>
+<input id = "customerId" value="${customerId !''}" type="hidden">
+<script type="text/javascript">
+
+$(function() {
+	demandsInit();
+});
+
+	function demandsInit(){
+		$("#demandsJqGrid")
+		.jqGrid(
+				{
+					height : $(window).height() *0.7,
+					multiselect : true,
+					multiboxonly : true,
+					viewrecords : true,
+					rownumbers : true,
+					autowidth : true,
+					autoheight : true,
+					async : false,
+					url : "${CTX}/customerManage/getdemandsPage.do?id="+$("#customerId").val(),
+					postData : {
+						
+					},
+					datatype : "json",
+					colNames : [ '客源编号', '需求类型', '需求区域','意向小区', '录入组', '录入人', '录入时间' , '备注' , 'id'],
+					             
+					colModel : [       
+								{name : 'demandCode',sortable : false,width : 5,align : 'center', 
+									formatter:function(rowName, options, rowObject){
+										 var html = "";
+										 if(rowObject.demandCode){
+											 html += "<a style='color: blue;' onclick='showDetails("+rowObject.id+");'>"+rowObject.demandCode+"</a>";;
+										 }
+					            	     return html;
+						             }}, 
+								{name : 'demandTypes',sortable : false,width : 3,align : 'center', 
+									formatter:function(rowName, options, rowObject){
+									 var html = "";
+									 if(rowObject.demandTypeStr){
+										 html += rowObject.demandTypeStr;
+									 }
+									 if(rowObject.propertyTypeStr){
+										 html += rowObject.propertyTypeStr;
+									 }
+				            	     return html;
+					             }}, 
+								{name : 'demandRegion',sortable : false,width : 11,align : 'center'}, 
+								{name : 'demandPremises',sortable : false,width : 7,align : 'center'}, 
+								{name : 'orgName',sortable : false,width : 5,align : 'center'}, 
+								{name : 'operateUser',sortable : false,width : 3,align : 'center'}, 
+								{name : 'createTimeStr',sortable : false,width : 4,align : 'center'}, 
+								{name : 'remark',sortable : false,width : 7,align : 'center'},
+								{name : 'id',hidden:true}
+								],
+					rowNum : 10,
+					rowList : [ 10, 20, 30, 50, 100 ],
+					pager : "#demandsJqGridPager",
+					jsonReader : {
+						root : 'pagerResults',
+						page : 'currentPage',
+						rows : 'rowCount',
+						total : 'pageCount',
+						records : 'totalCount',
+						repeatitems : false
+					}
+				});
+	}
+	
+	/* 客源详情 */
+	 function showDetails(id) {					
+		oaDialogOpen("customerSourceDetail",//对话框ID，必填，且不能与当前页面的ID重复
+			{
+		url : "${CTX}/customerSource/customerSourceDetail.do?id="+id,//调用页面的url
+		title : "客源详情",//弹框的title
+		closeOnEscpe : true,//是否通过escpe关闭弹框
+		closeBtn : true,//是否显示关闭按钮
+		width : 1000,//弹框的宽度
+		height : 800,
+		buttons : {
+			"取消" : function() {
+				$(this).dialog("close");
+			}
+		}
+	});
+	}
+
+</script>

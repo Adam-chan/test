@@ -1,0 +1,64 @@
+<div class="row">
+	<div class="col-xs-12 my-group">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-xs form-group row">
+					<label class="col-xs-2 control-label">空看人：</label>
+					<label class="col-xs-4 control-label" style="text-align: left;">${operateUser!}</label>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-xs form-group row">
+					<label class="col-xs-2 control-label">空看时间：</label>
+					<input id="spaceSeeTime" name="spaceSeeTime" type="text" class="5i5jDateTime input-xs" style="margin-left: 5px; background-color: #FFFFFF !important;" readonly="readonly" />
+					<span class="clearTime" style="margin-left: -14px; font-size: 12px; cursor: default; display: none;">×</span>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-xs form-group row">
+					<label class="col-xs-2 control-label">备注：</label>
+					<div class="col-xs-10">
+						<textarea id="remark" name="remark" rows="3" maxlength="83" style="width: 100%; resize: none;"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input id="houseInfoId" name="houseInfoId" type="hidden" value="${houseInfoId!}" />
+	</div>
+</div>
+<script type="text/javascript">
+/* 添加空看 */
+aihome.addSpaceSee = function() {
+	if($("#spaceSeeTime").val() == "") {
+		alert("请选择空看时间！");
+		return false;
+	}
+	$.ajax({
+		url : "${CTX}/commonSearch/addSpaceSee.do",
+		dataType : "json",
+		data : {
+			houseInfoId : $("#houseInfoId").val(),
+			spaceSeeTime : $("#spaceSeeTime").val(),
+			remark : $("#remark").val(),
+			demandType : $("#demandTypeLayout").val()
+		},
+		async : false,
+		success : function(data) {
+			alert("添加空看成功！");
+		}
+	});
+	return true;
+}
+$(function () {
+	$(".5i5jDateTime").datetimepicker({
+		format: "YYYY-MM-DD HH:mm"
+	});
+	$(".5i5jDateTime").change(function() {
+		$(this).next().show();
+	});
+	$(".clearTime").click(function() {
+		$(this).prev().val("");
+		$(this).hide();
+	});
+})
+</script>

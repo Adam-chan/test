@@ -1,0 +1,220 @@
+<title>道路管理</title>
+<div id="top_tools" class=" btn-group">
+  <button id="edu_query" class="btn btn-sm btn-white  confirmBtn" id="confirm">
+    <i class="iconfont">&#xe6e4;</i>
+    <span>查询</span>
+  </button>
+
+  <button id="edu_add" class="btn btn-sm btn-white ladda-button" onclick="editEdu(1);"> 
+    <i class="iconfont">&#xe6e0;</i>
+    <span>新增</span>
+  </button>
+  
+ <button id="edu_edit" class="btn btn-sm btn-white btn-default" onclick="editEdu(2);">
+    <i class="iconfont">&#xe6dd;</i>
+    <span>修改</span>
+  </button>
+  
+  <button id="edu_del" class="btn btn-sm btn-white btn-info" onclick="deteleEdu();" >
+    <i class="iconfont">&#xe6e3;</i>
+    <span>删除</span>
+  </button>
+   
+</div>
+<div class="row">
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+		<div class="form-horizontal row my-inputs">
+		     <div class="col-md-3 col-sm-3 col-xs-3">
+		          <div class="form-xs form-group row">
+			          <label for="addClass" class="col-md-4 col-sm-4 col-xs-4 control-label">名称：</label>
+			          <div class="col-md-8 col-sm-8 col-xs-8">
+			              	<input class="col-md-8 col-sm-8 col-xs-8 searchKey"  type="hidden" id="eduTypeName" name="eduTypeName" value ="" />
+			              	<input class="col-md-8 col-sm-8 col-xs-8 searchKey" type="text" id="keyWord" placeholder="输入名称" value="">
+			          </div>
+		        </div>
+		   	</div>
+	        <div class="col-md-4 col-sm-4 col-xs-4">
+				<div class=" form-xs form-group row">
+					<label for="roleName" class="col-md-4 col-sm-4 col-xs-4 control-label">教育设施属性:</label>
+					<div class="col-md-8 col-sm-8 col-xs-8">
+						<select id="eduType" class=" searchKey  input-xs form-control">
+							<option value="" selected="selected">请选择属性</option>
+							<option value="1">幼儿园</option>
+							<option value="2">小学</option>
+							<option value="3">中学</option>
+							<option value="4">大学</option>
+							<option value="5">图书馆</option>
+							<option value="6">培训机构</option>
+							<option value="7">少年宫</option>
+						</select>
+					</div>
+				</div>
+         	</div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-grid " >
+		<table id="Edu_jqGrid">
+		</table>
+		<div id="jqGridPager"></div>
+	</div>
+</div>
+<input type=hidden id="tableType" value="${type!}" ></input> 
+<script type="text/javascript">
+$('.page-content-area').ace_ajax('loadScripts', [null,null], function () {});
+$(function (){
+	init_jqGrid();
+	 /* 查询 */
+	$("#edu_query").unbind().click(function(){
+		if($("#keyWord").val()==""){
+			$("#eduTypeName").val("");
+		}
+		var param = getSearchParam();
+		var url="${CTX}/edu/eduListForPage.do?"+param;
+		$("#Edu_jqGrid").setGridParam({url:url,page:1}).trigger('reloadGrid');
+	});
+});
+/* 分页 */
+function init_jqGrid(){
+	$("#Edu_jqGrid").jqGrid({
+		 url: '${CTX}/edu/eduListForPage.do', 
+         datatype: "json",
+         colModel:[  
+             {label: '名称',name:'eduName',index:'eduName',width:'15%',sortable:false,align:"center",formatter:function(rowName, options, rowObject){
+            	    return "<a onclick=\"lookUpEdu('"+rowObject.id+"')\" style='text-decoration:underline;color:blue'>"+rowName+"</a>";
+            	   }},
+             { label: '属性', name: 'eduTypeStr',index:'eduTypeStr',sortable : true,width: 30,align:'center'},
+             { label: '电话', name: 'eduPhone',index:'eduPhone',sortable : true,width: 30,align:'center' },
+             { label: '地址', name: 'addrDetail',index:'addrDetail',sortable : true,width: 40,align:'center' },
+             { label: '属性', name: 'eduType',index:'eduType',sortable : true,width: 30,hidden:true}
+               ], 
+         multiselect: true,
+         multiboxonly: true,
+         onSelectRow: function (rowId, status, e) {
+         	 rowDataNames = [];
+             var rowIds = $("#Edu_jqGrid").jqGrid('getGridParam', 'selarrrow');
+             $(rowIds).each(function(i,rowId){
+                 rowDataNames.push($("#roadNum_jqGrid").jqGrid('getRowData',rowId));
+             });
+         },
+         viewrecords: true,
+         autowidth:true,
+         height: $(window).height()-300,
+         rowNum:30,
+	     rowList:[10,20,30,50,100],
+         pager: "#jqGridPager",
+     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+    });
+}
+/* 模糊搜索*/
+$("#keyWord").autocomplete({
+	source : function(request, response) {
+		$.ajax({
+			url : "${CTX}/edu/geteduNameByMatch.do",
+			dataType : "json",
+			type : 'post',
+			data : {
+				matchStr : request.term
+			},
+			success : function(data) {
+				var array = new Array(data.length);
+				for (var i = 0; i < data.length; i++) {
+					var temp = {
+						key : data[i].id,
+						allEduName : data[i].eduName,
+						type : data[i].eduType, 
+						value : data[i].allEduName
+					};
+					array[i] = temp;
+				}
+				response(array);
+			}
+		});
+	},
+	select : function(event, ui) {
+		$("#eduTypeName").val(ui.item.type);
+		$("#keyWord").val(ui.item.allEduName);
+		event.preventDefault();
+	}
+});
+
+function lookUpEdu(eduId){
+	oaDialogOpen("lookUpEdu",//对话框ID，必填，且不能与当前页面的ID重复
+		      {url:"${CTX}/edu/lookUpEduIndex.do?eduId="+eduId,
+		      title:"查看详细信息",//弹框的title
+		      closeOnEscpe:true,//是否通过escpe关闭弹框
+		      closeBtn:true,//是否显示关闭按钮
+		      width: $(window).width()*0.4,//弹框的宽度
+			  height: $(window).height()*0.9,//弹框的高度
+		      openCall:function(){
+		      },//弹框打开后的回调函数
+		      closeCall:function(){
+		    	  $("#Edu_jqGrid").trigger("reloadGrid");
+		      }//弹框关闭后的回调函数
+		  })
+}
+/* 新增或修改 */
+function editEdu(num){
+	var title = "";
+	if(num==2){//修改
+		var rowId = $("#Edu_jqGrid").jqGrid('getGridParam','selarrrow');
+		var rowData = $("#Edu_jqGrid").jqGrid('getRowData',rowId);
+		var selCount=rowId.length;
+		if (selCount==0){
+			alert("没有选中的记录！");
+			return;
+		}else if(selCount>1){
+			alert("请选单条修改！");
+			return;
+		}
+		 title= "修改教育设施";
+	}else if(num==1){
+		 title= "新增教育设施";
+	}
+	oaDialogOpen("editEdu",//对话框ID，必填，且不能与当前页面的ID重复
+		      {url:"${CTX}/edu/editEduIndex.do?eduId="+rowId,
+		      title:title,//弹框的title
+		      closeOnEscpe:true,//是否通过escpe关闭弹框
+		      closeBtn:true,//是否显示关闭按钮
+			  width: $(window).width()*0.4,//弹框的宽度
+			  height: $(window).height()*0.9,//弹框的高度
+		      buttons:{
+		    	  "确定" : function() {
+		    		  if(ensureBtn(num)){
+		    			  $(this).dialog("close");
+		    		  }
+		    	  },
+		          "取消" : function() {
+		             	$(this).dialog("close");
+		          }
+		      },
+		      openCall:function(){
+		      },//弹框打开后的回调函数
+		      closeCall:function(){
+		    	  $("#Edu_jqGrid").trigger("reloadGrid");
+		      }//弹框关闭后的回调函数
+		  })
+};
+/* 删除*/
+function deteleEdu(){
+	var rowIds = $("#Edu_jqGrid").jqGrid('getGridParam','selarrrow');
+	var selCount=rowIds.length;
+	if (selCount==0){
+		alert("没有选中的记录！");
+		return;
+	}
+	var url = "${CTX}/edu/updateEduStatus.do";
+	if (confirm("确认删除？")) {
+		$.ajax({
+			url : url,
+			dataType : "json",
+			data : {
+				eduId : rowIds.join(",")//多条数据时，不连接 只会传一条数据
+			},
+			success : function(data) {
+				$("#Edu_jqGrid").trigger('reloadGrid');
+				alert("删除成功！");
+			}
+		});
+	}
+}
+</script> 

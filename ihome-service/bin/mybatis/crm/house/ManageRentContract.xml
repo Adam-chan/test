@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="manageRentContract" >
+  <sql id="Base_Column_List" >
+    ID as id, HOUSE_INFO_ID as houseInfoId, CODE as code, MIDDLEMAN as middleman, USER_ID as userId,
+    COUNTY as county, DEAL_HOUSE_ADDRESS as dealHouseAddress, MONTHLY_PRICE as monthlyPrice, 
+    REALIZED_INCOME_CUSTOMER as realizedIncomeCustomer,CUSTOMER_BROKERAGE_REMARK as customerBrokerageRemark,
+    REALIZED_INCOME_OWNE as realizedIncomeOwne, PROPRIETOR_BROKERAGE_REMARK as proprietorBrokerageRemark, 
+    PROPRIETOR as proprietor, PROPRIETOR_CALL as  proprietorCall,PROPRIETOR_IDENTITY_CARD as proprietorIdentityCard,
+    CUSTOMER_NAME as customerName,CUSTOMER_IDENTITY_CARD as  customerIdentityCard, 
+    PROPRIETOR_FIXATION_PHONE as proprietorFixationPhone, CUSTOMER_CALL as customerCall,
+    CUSTOMER_FIXATION_PHONE as  customerFixationPhone,HIRE_START_TIME as hireStartTime,HIRE_END_TIME as hireEndTime,
+    BARGAIN_HOUSE_PHONE as bargainHousePhone, CUSTOMER_DISCOUNT as customerDiscount,PROPRIETOR_DISCOUNT as proprietorDiscount,
+    PROPRIETOR_DISCOUNT_RMK as proprietorDiscountRmk,CUSTOMER_DISCOUNT_RMK as customerDiscountRmk,
+    PROPERTY_RIGH_CARD as  propertyRighCard, FACTORAGE as  factorage, TAXES as taxes, OTHER_FORMALITIES as  otherFormalities,
+    IS_COLLECTION as isCollection,INVOICE_TITLE as invoiceTitle,PAYMENT_CYCLE as  paymentCycle, GATHERING_MODE as gatheringMode,
+    PAYMENT_MODE as paymentMode, LESSOR_ACCOUNT as lessorAccount,OPENING_BANK as openingBank,ACCOUNT_NAME as accountName,
+    CUSTOMER_ADDRESS as customerAddress,IS_DEBT_INVOICE as isDebtInvoice, AGENT_BUSINESS as agentBusiness,BASE_AREA_ID as baseAreaId,
+    CUSTOMER_CODE as customerCode
+  </sql>
+  <!-- 普租合约根据条件查询 -->
+  <select id="getManageRentContract" resultType="manageRentContractModel" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from MANAGE_RENT_CONTRACT 
+    <where>
+    	<if test="id !=null and id != '' ">
+    		ID = #{id,jdbcType=DECIMAL}
+    	</if>
+    	<if test="houseInfoId !=null and houseInfoId != '' ">
+    		HOUSE_INFO_ID = #{houseInfoId,jdbcType=DECIMAL}
+    	</if>
+    </where>
+  </select>
+  <!-- 普租合约根据id删除 -->
+  <delete id="delete" parameterType="map" >
+    delete from MANAGE_RENT_CONTRACT
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <!-- 普租合约插入 -->
+  <insert id="insert" parameterType="map" >
+    insert into MANAGE_RENT_CONTRACT (ID, HOUSE_INFO_ID, CODE, 
+      MIDDLEMAN, USER_ID, COUNTY, 
+      DEAL_HOUSE_ADDRESS, MONTHLY_PRICE, REALIZED_INCOME_CUSTOMER, 
+      CUSTOMER_BROKERAGE_REMARK, REALIZED_INCOME_OWNE, 
+      PROPRIETOR_BROKERAGE_REMARK, PROPRIETOR, 
+      PROPRIETOR_CALL, PROPRIETOR_IDENTITY_CARD, 
+      CUSTOMER_NAME, CUSTOMER_IDENTITY_CARD, PROPRIETOR_FIXATION_PHONE, 
+      CUSTOMER_CALL, CUSTOMER_FIXATION_PHONE, HIRE_START_TIME, 
+      HIRE_END_TIME, BARGAIN_HOUSE_PHONE, CUSTOMER_DISCOUNT, 
+      PROPRIETOR_DISCOUNT, PROPRIETOR_DISCOUNT_RMK, 
+      CUSTOMER_DISCOUNT_RMK, PROPERTY_RIGH_CARD, 
+      FACTORAGE, TAXES, OTHER_FORMALITIES, 
+      IS_COLLECTION, INVOICE_TITLE, PAYMENT_CYCLE, 
+      GATHERING_MODE, PAYMENT_MODE, LESSOR_ACCOUNT, 
+      OPENING_BANK, ACCOUNT_NAME, CUSTOMER_ADDRESS, 
+      IS_DEBT_INVOICE, AGENT_BUSINESS,BASE_AREA_ID, CUSTOMER_CODE)
+    values (#{id,jdbcType=DECIMAL}, #{houseInfoId,jdbcType=DECIMAL}, #{code,jdbcType=VARCHAR}, 
+      #{middleman,jdbcType=VARCHAR}, #{userId,jdbcType=DECIMAL}, #{county,jdbcType=VARCHAR}, 
+      #{dealHouseAddress,jdbcType=VARCHAR}, #{monthlyPrice,jdbcType=DECIMAL}, #{realizedIncomeCustomer,jdbcType=DECIMAL}, 
+      #{customerBrokerageRemark,jdbcType=VARCHAR}, #{realizedIncomeOwne,jdbcType=DECIMAL}, 
+      #{proprietorBrokerageRemark,jdbcType=VARCHAR}, #{proprietor,jdbcType=VARCHAR}, 
+      #{proprietorCall,jdbcType=VARCHAR}, #{proprietorIdentityCard,jdbcType=VARCHAR}, 
+      #{customerName,jdbcType=VARCHAR}, #{customerIdentityCard,jdbcType=VARCHAR}, #{proprietorFixationPhone,jdbcType=VARCHAR}, 
+      #{customerCall,jdbcType=VARCHAR}, #{customerFixationPhone,jdbcType=VARCHAR}, #{hireStartTime,jdbcType=DATE}, 
+      #{hireEndTime,jdbcType=DATE}, #{bargainHousePhone,jdbcType=VARCHAR}, #{customerDiscount,jdbcType=DECIMAL}, 
+      #{proprietorDiscount,jdbcType=DECIMAL}, #{proprietorDiscountRmk,jdbcType=VARCHAR}, 
+      #{customerDiscountRmk,jdbcType=VARCHAR}, #{propertyRighCard,jdbcType=VARCHAR}, 
+      #{factorage,jdbcType=DECIMAL}, #{taxes,jdbcType=DECIMAL}, #{otherFormalities,jdbcType=DECIMAL}, 
+      #{isCollection,jdbcType=DECIMAL}, #{invoiceTitle,jdbcType=VARCHAR}, #{paymentCycle,jdbcType=DECIMAL}, 
+      #{gatheringMode,jdbcType=DECIMAL}, #{paymentMode,jdbcType=DECIMAL}, #{lessorAccount,jdbcType=VARCHAR}, 
+      #{openingBank,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, #{customerAddress,jdbcType=VARCHAR}, 
+      #{isDebtInvoice,jdbcType=DECIMAL}, #{agentBusiness,jdbcType=VARCHAR}, #{baseAreaId,jdbcType=DECIMAL},
+      #{customerCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <!-- 普租合约有选择插入 -->
+  <insert id="insertSelective" parameterType="map" >
+    insert into MANAGE_RENT_CONTRACT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        ID,
+      <if test="houseInfoId != null" >
+        HOUSE_INFO_ID,
+      </if>
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="middleman != null" >
+        MIDDLEMAN,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="county != null" >
+        COUNTY,
+      </if>
+      <if test="dealHouseAddress != null" >
+        DEAL_HOUSE_ADDRESS,
+      </if>
+      <if test="monthlyPrice != null" >
+        MONTHLY_PRICE,
+      </if>
+      <if test="realizedIncomeCustomer != null" >
+        REALIZED_INCOME_CUSTOMER,
+      </if>
+      <if test="customerBrokerageRemark != null" >
+        CUSTOMER_BROKERAGE_REMARK,
+      </if>
+      <if test="realizedIncomeOwne != null" >
+        REALIZED_INCOME_OWNE,
+      </if>
+      <if test="proprietorBrokerageRemark != null" >
+        PROPRIETOR_BROKERAGE_REMARK,
+      </if>
+      <if test="proprietor != null" >
+        PROPRIETOR,
+      </if>
+      <if test="proprietorCall != null" >
+        PROPRIETOR_CALL,
+      </if>
+      <if test="proprietorIdentityCard != null" >
+        PROPRIETOR_IDENTITY_CARD,
+      </if>
+      <if test="customerName != null" >
+        CUSTOMER_NAME,
+      </if>
+      <if test="customerIdentityCard != null" >
+        CUSTOMER_IDENTITY_CARD,
+      </if>
+      <if test="proprietorFixationPhone != null" >
+        PROPRIETOR_FIXATION_PHONE,
+      </if>
+      <if test="customerCall != null" >
+        CUSTOMER_CALL,
+      </if>
+      <if test="customerFixationPhone != null" >
+        CUSTOMER_FIXATION_PHONE,
+      </if>
+      <if test="hireStartTime != null" >
+        HIRE_START_TIME,
+      </if>
+      <if test="hireEndTime != null" >
+        HIRE_END_TIME,
+      </if>
+      <if test="bargainHousePhone != null" >
+        BARGAIN_HOUSE_PHONE,
+      </if>
+      <if test="customerDiscount != null" >
+        CUSTOMER_DISCOUNT,
+      </if>
+      <if test="proprietorDiscount != null" >
+        PROPRIETOR_DISCOUNT,
+      </if>
+      <if test="proprietorDiscountRmk != null" >
+        PROPRIETOR_DISCOUNT_RMK,
+      </if>
+      <if test="customerDiscountRmk != null" >
+        CUSTOMER_DISCOUNT_RMK,
+      </if>
+      <if test="propertyRighCard != null" >
+        PROPERTY_RIGH_CARD,
+      </if>
+      <if test="factorage != null" >
+        FACTORAGE,
+      </if>
+      <if test="taxes != null" >
+        TAXES,
+      </if>
+      <if test="otherFormalities != null" >
+        OTHER_FORMALITIES,
+      </if>
+      <if test="isCollection != null" >
+        IS_COLLECTION,
+      </if>
+      <if test="invoiceTitle != null" >
+        INVOICE_TITLE,
+      </if>
+      <if test="paymentCycle != null" >
+        PAYMENT_CYCLE,
+      </if>
+      <if test="gatheringMode != null" >
+        GATHERING_MODE,
+      </if>
+      <if test="paymentMode != null" >
+        PAYMENT_MODE,
+      </if>
+      <if test="lessorAccount != null" >
+        LESSOR_ACCOUNT,
+      </if>
+      <if test="openingBank != null" >
+        OPENING_BANK,
+      </if>
+      <if test="accountName != null" >
+        ACCOUNT_NAME,
+      </if>
+      <if test="customerAddress != null" >
+        CUSTOMER_ADDRESS,
+      </if>
+      <if test="isDebtInvoice != null" >
+        IS_DEBT_INVOICE,
+      </if>
+      <if test="agentBusiness != null" >
+        AGENT_BUSINESS,
+      </if>
+      <if test="baseAreaId != null" >
+        BASE_AREA_ID
+      </if>
+        <if test="customerCode != null" >
+        CUSTOMER_CODE
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+       MANAGE_RENT_CONTRACT_SEQ.NEXTVAL,
+      <if test="houseInfoId != null" >
+        #{houseInfoId,jdbcType=DECIMAL},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="middleman != null" >
+        #{middleman,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="county != null" >
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="dealHouseAddress != null" >
+        #{dealHouseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="monthlyPrice != null" >
+        #{monthlyPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="realizedIncomeCustomer != null" >
+        #{realizedIncomeCustomer,jdbcType=DECIMAL},
+      </if>
+      <if test="customerBrokerageRemark != null" >
+        #{customerBrokerageRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="realizedIncomeOwne != null" >
+        #{realizedIncomeOwne,jdbcType=DECIMAL},
+      </if>
+      <if test="proprietorBrokerageRemark != null" >
+        #{proprietorBrokerageRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="proprietor != null" >
+        #{proprietor,jdbcType=VARCHAR},
+      </if>
+      <if test="proprietorCall != null" >
+        #{proprietorCall,jdbcType=VARCHAR},
+      </if>
+      <if test="proprietorIdentityCard != null" >
+        #{proprietorIdentityCard,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerIdentityCard != null" >
+        #{customerIdentityCard,jdbcType=VARCHAR},
+      </if>
+      <if test="proprietorFixationPhone != null" >
+        #{proprietorFixationPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCall != null" >
+        #{customerCall,jdbcType=VARCHAR},
+      </if>
+      <if test="customerFixationPhone != null" >
+        #{customerFixationPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="hireStartTime != null" >
+        #{hireStartTime,jdbcType=DATE},
+      </if>
+      <if test="hireEndTime != null" >
+        #{hireEndTime,jdbcType=DATE},
+      </if>
+      <if test="bargainHousePhone != null" >
+        #{bargainHousePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="customerDiscount != null" >
+        #{customerDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="proprietorDiscount != null" >
+        #{proprietorDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="proprietorDiscountRmk != null" >
+        #{proprietorDiscountRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="customerDiscountRmk != null" >
+        #{customerDiscountRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="propertyRighCard != null" >
+        #{propertyRighCard,jdbcType=VARCHAR},
+      </if>
+      <if test="factorage != null" >
+        #{factorage,jdbcType=DECIMAL},
+      </if>
+      <if test="taxes != null" >
+        #{taxes,jdbcType=DECIMAL},
+      </if>
+      <if test="otherFormalities != null" >
+        #{otherFormalities,jdbcType=DECIMAL},
+      </if>
+      <if test="isCollection != null" >
+        #{isCollection,jdbcType=DECIMAL},
+      </if>
+      <if test="invoiceTitle != null" >
+        #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentCycle != null" >
+        #{paymentCycle,jdbcType=DECIMAL},
+      </if>
+      <if test="gatheringMode != null" >
+        #{gatheringMode,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentMode != null" >
+        #{paymentMode,jdbcType=DECIMAL},
+      </if>
+      <if test="lessorAccount != null" >
+        #{lessorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="openingBank != null" >
+        #{openingBank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerAddress != null" >
+        #{customerAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="isDebtInvoice != null" >
+        #{isDebtInvoice,jdbcType=DECIMAL},
+      </if>
+      <if test="agentBusiness != null" >
+        #{agentBusiness,jdbcType=VARCHAR},
+      </if>
+      <if test="baseAreaId != null" >
+        #{baseAreaId,jdbcType=DECIMAL},
+      </if>
+      <if test="customerCode != null" >
+        #{customerCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <!-- 普租合约有根据id选择更新 -->
+  <update id="updateSelective" parameterType="map" >
+    update MANAGE_RENT_CONTRACT
+    <set >
+      <if test="houseInfoId != null" >
+        HOUSE_INFO_ID = #{houseInfoId,jdbcType=DECIMAL},
+      </if>
+      <if test="code != null" >
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="middleman != null" >
+        MIDDLEMAN = #{middleman,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="county != null" >
+        COUNTY = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="dealHouseAddress != null" >
+        DEAL_HOUSE_ADDRESS = #{dealHouseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="monthlyPrice != null" >
+        MONTHLY_PRICE = #{monthlyPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="realizedIncomeCustomer != null" >
+        REALIZED_INCOME_CUSTOMER = #{realizedIncomeCustomer,jdbcType=DECIMAL},
+      </if>
+      <if test="customerBrokerageRemark != null" >
+        CUSTOMER_BROKERAGE_REMARK = #{customerBrokerageRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="realizedIncomeOwne != null" >
+        REALIZED_INCOME_OWNE = #{realizedIncomeOwne,jdbcType=DECIMAL},
+      </if>
+      <if test="proprietorBrokerageRemark != null" >
+        PROPRIETOR_BROKERAGE_REMARK = #{proprietorBrokerageRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="proprietor != null" >
+        PROPRIETOR = #{proprietor,jdbcType=VARCHAR},
+      </if>
+      <if test="proprietorCall != null" >
+        PROPRIETOR_CALL = #{proprietorCall,jdbcType=VARCHAR},
+      </if>
+      <if test="proprietorIdentityCard != null" >
+        PROPRIETOR_IDENTITY_CARD = #{proprietorIdentityCard,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        CUSTOMER_NAME = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerIdentityCard != null" >
+        CUSTOMER_IDENTITY_CARD = #{customerIdentityCard,jdbcType=VARCHAR},
+      </if>
+      <if test="proprietorFixationPhone != null" >
+        PROPRIETOR_FIXATION_PHONE = #{proprietorFixationPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCall != null" >
+        CUSTOMER_CALL = #{customerCall,jdbcType=VARCHAR},
+      </if>
+      <if test="customerFixationPhone != null" >
+        CUSTOMER_FIXATION_PHONE = #{customerFixationPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="hireStartTime != null" >
+        HIRE_START_TIME = #{hireStartTime,jdbcType=DATE},
+      </if>
+      <if test="hireEndTime != null" >
+        HIRE_END_TIME = #{hireEndTime,jdbcType=DATE},
+      </if>
+      <if test="bargainHousePhone != null" >
+        BARGAIN_HOUSE_PHONE = #{bargainHousePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="customerDiscount != null" >
+        CUSTOMER_DISCOUNT = #{customerDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="proprietorDiscount != null" >
+        PROPRIETOR_DISCOUNT = #{proprietorDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="proprietorDiscountRmk != null" >
+        PROPRIETOR_DISCOUNT_RMK = #{proprietorDiscountRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="customerDiscountRmk != null" >
+        CUSTOMER_DISCOUNT_RMK = #{customerDiscountRmk,jdbcType=VARCHAR},
+      </if>
+      <if test="propertyRighCard != null" >
+        PROPERTY_RIGH_CARD = #{propertyRighCard,jdbcType=VARCHAR},
+      </if>
+      <if test="factorage != null" >
+        FACTORAGE = #{factorage,jdbcType=DECIMAL},
+      </if>
+      <if test="taxes != null" >
+        TAXES = #{taxes,jdbcType=DECIMAL},
+      </if>
+      <if test="otherFormalities != null" >
+        OTHER_FORMALITIES = #{otherFormalities,jdbcType=DECIMAL},
+      </if>
+      <if test="isCollection != null" >
+        IS_COLLECTION = #{isCollection,jdbcType=DECIMAL},
+      </if>
+      <if test="invoiceTitle != null" >
+        INVOICE_TITLE = #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentCycle != null" >
+        PAYMENT_CYCLE = #{paymentCycle,jdbcType=DECIMAL},
+      </if>
+      <if test="gatheringMode != null" >
+        GATHERING_MODE = #{gatheringMode,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentMode != null" >
+        PAYMENT_MODE = #{paymentMode,jdbcType=DECIMAL},
+      </if>
+      <if test="lessorAccount != null" >
+        LESSOR_ACCOUNT = #{lessorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="openingBank != null" >
+        OPENING_BANK = #{openingBank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        ACCOUNT_NAME = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerAddress != null" >
+        CUSTOMER_ADDRESS = #{customerAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="isDebtInvoice != null" >
+        IS_DEBT_INVOICE = #{isDebtInvoice,jdbcType=DECIMAL},
+      </if>
+      <if test="agentBusiness != null" >
+        AGENT_BUSINESS = #{agentBusiness,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCode != null" >
+        CUSTOMER_CODE = #{customerCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <!-- 普租合约根据id跟新数据 -->
+  <update id="update" parameterType="map" >
+    update MANAGE_RENT_CONTRACT
+    set HOUSE_INFO_ID = #{houseInfoId,jdbcType=DECIMAL},
+      CODE = #{code,jdbcType=VARCHAR},
+      MIDDLEMAN = #{middleman,jdbcType=VARCHAR},
+      USER_ID = #{userId,jdbcType=DECIMAL},
+      COUNTY = #{county,jdbcType=VARCHAR},
+      DEAL_HOUSE_ADDRESS = #{dealHouseAddress,jdbcType=VARCHAR},
+      MONTHLY_PRICE = #{monthlyPrice,jdbcType=DECIMAL},
+      REALIZED_INCOME_CUSTOMER = #{realizedIncomeCustomer,jdbcType=DECIMAL},
+      CUSTOMER_BROKERAGE_REMARK = #{customerBrokerageRemark,jdbcType=VARCHAR},
+      REALIZED_INCOME_OWNE = #{realizedIncomeOwne,jdbcType=DECIMAL},
+      PROPRIETOR_BROKERAGE_REMARK = #{proprietorBrokerageRemark,jdbcType=VARCHAR},
+      PROPRIETOR = #{proprietor,jdbcType=VARCHAR},
+      PROPRIETOR_CALL = #{proprietorCall,jdbcType=VARCHAR},
+      PROPRIETOR_IDENTITY_CARD = #{proprietorIdentityCard,jdbcType=VARCHAR},
+      CUSTOMER_NAME = #{customerName,jdbcType=VARCHAR},
+      CUSTOMER_IDENTITY_CARD = #{customerIdentityCard,jdbcType=VARCHAR},
+      PROPRIETOR_FIXATION_PHONE = #{proprietorFixationPhone,jdbcType=VARCHAR},
+      CUSTOMER_CALL = #{customerCall,jdbcType=VARCHAR},
+      CUSTOMER_FIXATION_PHONE = #{customerFixationPhone,jdbcType=VARCHAR},
+      HIRE_START_TIME = #{hireStartTime,jdbcType=DATE},
+      HIRE_END_TIME = #{hireEndTime,jdbcType=DATE},
+      BARGAIN_HOUSE_PHONE = #{bargainHousePhone,jdbcType=VARCHAR},
+      CUSTOMER_DISCOUNT = #{customerDiscount,jdbcType=DECIMAL},
+      PROPRIETOR_DISCOUNT = #{proprietorDiscount,jdbcType=DECIMAL},
+      PROPRIETOR_DISCOUNT_RMK = #{proprietorDiscountRmk,jdbcType=VARCHAR},
+      CUSTOMER_DISCOUNT_RMK = #{customerDiscountRmk,jdbcType=VARCHAR},
+      PROPERTY_RIGH_CARD = #{propertyRighCard,jdbcType=VARCHAR},
+      FACTORAGE = #{factorage,jdbcType=DECIMAL},
+      TAXES = #{taxes,jdbcType=DECIMAL},
+      OTHER_FORMALITIES = #{otherFormalities,jdbcType=DECIMAL},
+      IS_COLLECTION = #{isCollection,jdbcType=DECIMAL},
+      INVOICE_TITLE = #{invoiceTitle,jdbcType=VARCHAR},
+      PAYMENT_CYCLE = #{paymentCycle,jdbcType=DECIMAL},
+      GATHERING_MODE = #{gatheringMode,jdbcType=DECIMAL},
+      PAYMENT_MODE = #{paymentMode,jdbcType=DECIMAL},
+      LESSOR_ACCOUNT = #{lessorAccount,jdbcType=VARCHAR},
+      OPENING_BANK = #{openingBank,jdbcType=VARCHAR},
+      ACCOUNT_NAME = #{accountName,jdbcType=VARCHAR},
+      CUSTOMER_ADDRESS = #{customerAddress,jdbcType=VARCHAR},
+      IS_DEBT_INVOICE = #{isDebtInvoice,jdbcType=DECIMAL},
+      AGENT_BUSINESS = #{agentBusiness,jdbcType=VARCHAR},
+      CUSTOMER_CODE = #{ customerCode,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  
+  <!-- 普租合约获取房源所在地区-->
+  <select id="getCounty" resultType="manageRentContractModel" parameterType="map" >
+	  select a.merger_name as mergerName, a.name as county,a.id as baseAreaId
+		  from base_area a
+	  left join base_building b
+	    on b.area_id = a.id
+	  left join base_house c
+	    on c.building_id = b.id
+	  left join house_info d
+	    on d.ROOM_ID = c.id
+    where  d.id = #{houseInfoId}
+  </select>
+</mapper>

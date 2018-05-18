@@ -1,0 +1,166 @@
+<div class="row">
+	<div class="col-xs-12 my-group">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">委托书编号：</label>
+					<div class="col-xs-8" style="width: 141px;">
+						<input id="entrustCode" name="entrustCode" type="text" class="input-xs" style="width: 100%;" maxlength="16" value="${(proxyInputInfo.ENTRUSTCODE)!}" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">签署时间：</label>
+					<input id="entrustTime" name="entrustTime" type="text" class="5i5jDateTime input-xs" style="margin-left: 5px; background-color: #FFFFFF !important;" readonly="readonly" value="${(proxyInputInfo.ENTRUSTTIME)!}" />
+					<span class="clearTime" style="margin-left: -14px; font-size: 12px; cursor: default; display: none;">×</span>
+				</div>
+			</div>
+			<#if (proxyInputInfo.PROXYID)??>
+			<div class="col-md-6 col-md-6 col-md-6" >
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">委托书：</label>
+					<a  onclick="aihome.downloadProxy();" href="javaScript:void(0);" style='text-decoration:underline;color:blue'>下载</a>
+				</div>
+			</div>
+			<#else>
+			<div class="col-md-6" >
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label" style="text-align: right;">委托书：</label>
+					<form id="form" enctype="multipart/form-data">
+						<a href="javascript:void(0);"style="position: relative;overflow: hidden;display: block;width: 55px; margin-left:10px; float: left;height: 21.5px;color:blue;">
+							<input onchange="aihome.fileUpload();" name="pic" type="file" style="position: absolute;top: -6px;left: -20px;opacity: 0;border: 0;width: 340px;height: 70px!important;line-height: 70px!important; cursor: pointer;">上传附件
+						</a>
+					</form>
+				</div>
+				<div class="row" style="margin-top: 5px;text-align: right;">
+					<div class="col-md-4 col-sm-4 col-xs-4" id="fileUpload" style=" margin-left: 130px;"></div>
+				</div>
+			</div>
+			</#if>
+			<div class="col-md-4 download">
+				<div class="form-xs form-group row">
+					<label class="col-xs-6 control-label">录入区：</label>
+					<label class="col-xs-6 control-label" style="text-align: left;">${(proxyInputInfo.COLELECTZONE)!}</label>
+				</div>
+			</div>
+			<div class="col-md-4 download">
+				<div class="form-xs form-group row">
+					<label class="col-xs-6 control-label">录入组：</label>
+					<label class="col-xs-6 control-label" style="text-align: left;">${(proxyInputInfo.OPERATEORG)!}</label>
+				</div>
+			</div>
+			<div class="col-md-4 download">
+				<div class="form-xs form-group row">
+					<label class="col-xs-6 control-label">录入人：</label>
+					<label class="col-xs-6 control-label" style="text-align: left;">${(proxyInputInfo.OPERATEUSER)!}</label>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-xs form-group row">
+					<label class="col-xs-2 control-label">备注：</label>
+					<div class="col-xs-10">
+						<textarea id="remark" name="remark" rows="3" maxlength="83" style="width: 100%; resize: none;">${(proxyInputInfo.REMARK)!}</textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input id="houseInfoId" name="houseInfoId" type="hidden" value="${houseInfoId!}" />
+		<input id="proxyInputId" name="proxyInputId" type="hidden" value="${(proxyInputInfo.PROXYID)!}" />
+		<input id="original" name="original" type="hidden" value="${(proxyInputInfo.FILENAME)!}" />
+		<input id="folderName" name="folderName" type="hidden" value="${(proxyInputInfo.FLODERNAME)!}" />
+		<input id="fileName" name="fileName" type="hidden" value="${(proxyInputInfo.FILENAMELONG)!}" />
+	</div>
+</div>
+<script type="text/javascript">
+aihome.fileUpload = function() {
+	var formData = new FormData($("#form")[0]);
+	$.ajax({
+		url : "${UPLOAD_URL}/save.do",
+		type : "POST",
+		data : formData,
+		dataType : "JSON",
+		async : false,
+		processData : false,
+		contentType : false,
+		success : function(data) {
+			$("#fileUpload").append('<span class="tag dataFiles" data-original="'+data.original+'" data-folderName="'+data.folderName+'" data-fileName="'+data.fileName+'" >'+data.original+'<button type="button" class="close" style="color:red;" onclick="aihome.closeSpan($(this));">×</button></span>');
+		},
+		error : function(data) {
+			alert("上传失败");
+		}
+	});
+}
+aihome.addProxyInput = function() {
+	if($("#openProxyInput #entrustCode").val() == ""){
+		alert("请输入委托书编号！");
+		return false;
+	}
+	if($("#entrustTime").val() == "") {
+		alert("请输入签署时间！");
+		return false;
+	}
+	$.ajax({
+		url : "${CTX}/commonSearch/addProxyInput.do",
+		async : false,
+		dataType : "json",
+		data : {
+			houseInfoId : $("#houseInfoId").val(),
+			entrustCode : $("#openProxyInput #entrustCode").val(),
+			entrustTime : $("#openProxyInput #entrustTime").val(),
+			fileName : $("#fileUpload").find(".dataFiles").attr("data-original"),//文件真名
+			folderName : $("#fileUpload").find(".dataFiles").attr("data-folderName"),//文件夹名
+			fileNameLong : $("#fileUpload").find(".dataFiles").attr("data-fileName"),//文件名
+			remark : $("#remark").val()
+		},
+		success : function(data) {
+			alert("添加委托书成功！");
+		}
+	});
+	return true;
+}
+/*下载*/
+aihome.downloadProxy = function(){
+ 	var url = "${IMAGE_URL}/${(proxyInputInfo.FLODERNAME)!''}/${(proxyInputInfo.FILENAMELONG)!''}";
+	if (confirm("确认下载吗？")){
+		window.open(url);
+	}
+}
+aihome.deleteProxyInput = function() {
+	if($("#proxyInputId").val() == "") {
+		alert("请先添加委托书！");
+		return false;
+	}
+	$.ajax({
+		url : "${CTX}/commonSearch/deleteProxyInput.do",
+		async : false,
+		dataType : "json",
+		data : {
+			proxyInputId : $("#proxyInputId").val()
+		},
+		success : function(data) {
+			alert("撤销成功！");
+		}
+	});
+	return true;
+}
+$(function () {
+	if($("#proxyInputId").val() == "") {
+		$(".upload").show();
+		$(".download").hide();
+	} else {
+		$(".upload").hide();
+		$(".download").show();
+	}
+	$(".5i5jDateTime").datetimepicker({
+		format: "YYYY-MM-DD HH:mm"
+	});
+	$(".5i5jDateTime").change(function() {
+		$(this).next().show();
+	});
+	$(".clearTime").click(function() {
+		$(this).prev().val("");
+		$(this).hide();
+	});
+})
+</script>

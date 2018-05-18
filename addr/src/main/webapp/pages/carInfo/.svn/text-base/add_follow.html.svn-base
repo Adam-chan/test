@@ -1,0 +1,23 @@
+<div class="col-xs-12">
+	<div id="add_follow">
+		<form id="followForm">
+			<div class="col-xs-12">
+				<table>
+					<tr>
+						<td>
+							<label for="addClass" class="col-xs-5 control-label" style="width:85px;">跟进内容:</label>
+						</td>
+						<td rowspan="2">
+							<textarea id="record" class="col-xs-7" style="height:90px;width:230px;" maxLength="30"></textarea>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+
+
+</script>

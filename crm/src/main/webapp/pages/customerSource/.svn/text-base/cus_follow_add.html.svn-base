@@ -1,0 +1,74 @@
+<div class="row">
+	<div class="col-xs-6">
+		<div class="form-xs form-group row">
+			<label class="col-xs-4 control-label">经纪人：</label>
+			<label class="col-xs-2 control-label">${(operateUser)!''}</label>
+			<input type="hidden" id="operateUser" value ="${(operateUser)!''}" />
+		</div>
+	</div>
+	<div class="col-xs-6">
+		<div class="form-xs form-group row">
+			<label class="col-xs-4 control-label">部门：</label>
+			<label class="col-xs-2 control-label">${(operateUser)!''}</label>
+			<input type="hidden" id="operateUser" value ="${(operateUser)!''}" />
+		</div>
+	</div>	
+</div>	
+<div class="row">
+	<div class="col-md-6">
+		<div class="form-xs form-group row">
+			<label class="col-xs-4 control-label">跟进时间： </label>
+			<label class="col-xs-5 control-label">${(dateStr)!''} </label>
+			<input type="hidden" id="dateStr" value ="${(dateStr)!''}" />
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-xs form-group row">
+			<label class="col-xs-4 control-label">跟进方式： </label>
+			<div class="col-xs-6">
+				<div class="col-xs-12">
+					<select id="followWay" class="input-xs form-control">
+						<option selected="selected" value="">请选择</option>
+						<option value="1">QQ</option>
+						<option value="2">电话</option>
+						<option value="3">短信</option>
+						<option value="4">手机</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="form-xs form-group row">
+			<label class="col-xs-2 control-label">跟进内容：</label>
+			<div class="col-xs-6">
+				<textarea id="content" rows="3" cols="70" maxlength="83" style="resize: none;" ></textarea>
+			</div>
+		</div>
+	</div>
+</div>
+<input type="hidden" id="custDemandId" value ="${(custDemandId)!''}" />
+<script type="text/javascript">
+
+aihome.follow = function (){//添加跟进
+	$.ajax({
+	       type: "POST",
+	       url: "${CTX}/customerSource/follow.do",
+	       async:false,
+	       dataType:"JSON",
+	       data: {
+				custDemandId : $("#custDemandId").val(),
+				   followWay : $("#followWay").val(),
+				   followTime : $("#dateStr").val(),
+					 content : $("#content").val(),
+				  followTime : $("#dateStr").val(),
+	    		   },
+	       success: function(data){
+		    	alert("跟进成功");
+	       }
+	});
+}
+
+</script>

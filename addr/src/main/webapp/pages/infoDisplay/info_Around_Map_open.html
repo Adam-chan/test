@@ -1,0 +1,81 @@
+<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+	<div id="element_id">
+		<div class="form-horizontal row my-inputs">
+			<div class="col-md-12 col-sm-6">
+				<div class=" form-xs form-group row">
+					<label for="userName" class="col-xs-3 control-label" value="">中心点：</label>
+					<div class="col-xs-9">
+		              	<#if (basePremisesModel)!??>
+				   		<input  id="coordinate" style="width:200px;" value="${(basePremisesModel.lng)!},${(basePremisesModel.lat)!}" lng="${(basePremisesModel.lng)!}" lat="${(basePremisesModel.lat)!}"/>
+                       	<#else>
+                       	<input  id="coordinate" value="" style="width:200px;"lng="" lat=""/>
+                       	</#if> 
+		          </div>
+				</div>
+           	</div>
+			 <div class="col-md-12 col-sm-6">
+				<div class=" form-xs form-group row" id="cloneTarget">
+					<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+					<div class="col-md-12 col-sm-12"  >
+						<div id="newMap" class="col-xs-12" style="height:500px;"></div>
+			           	</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+map = new BMap.Map("newMap",{minZoom:11,maxZoom:15});
+map.setDefaultCursor("crosshair");  
+var point = new BMap.Point(120.153576, 30.287459);
+map.centerAndZoom(point, 15);
+map.enableScrollWheelZoom();
+var marker = new BMap.Marker(point);  // 创建标注
+map.addOverlay(marker);// 将标注添加到地图中
+var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
+map.addControl(top_left_control);        
+map.addControl(top_left_navigation);     
+map.addControl(top_right_navigation); 
+map.addEventListener("click", showInfo);
+
+function showInfo(e){
+    map.clearOverlays();
+	var point = new BMap.Point(e.point.lng,e.point.lat);
+	map.centerAndZoom(point, 15);
+	var marker = new BMap.Marker(point);  // 创建标注
+	map.addOverlay(marker);// 将标注添加到地图中
+	$("#coordinate").attr("lng",e.point.lng);
+	$("#coordinate").attr("lat",e.point.lat);
+	$("#coordinate").val(e.point.lng+","+e.point.lat);
+}
+//保存按钮 保存楼盘经纬度
+function addMapLabel(){
+	if($("#coordinate").val()!=""){
+		var lng = $("#coordinate").attr("lng");
+		var lat = $("#coordinate").attr("lat");
+		$.ajax({
+		     type: "post",
+		     url: "${CTX}/infoDisplay/updatePremisesLable.do", 
+		     async:false,
+		     dataType:'json',
+		     data: {"lng":lng,"lat":lat,"premisesId":${(basePremisesModel.id)!}},
+		     success: function(data){
+		  	  if(data == 1){
+		  		getMapInfo(lng,lat);
+		 		   alert("保存成功");
+		 	   }else{
+		 		   alert("保存失败");
+		 	   }
+		     },
+		});
+	}
+	return true;
+}
+
+
+</script>
+
+

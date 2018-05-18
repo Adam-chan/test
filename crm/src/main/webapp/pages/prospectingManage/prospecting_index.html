@@ -1,0 +1,66 @@
+<div id="top_tools" class=" btn-group">
+	<button id="prospect_query" class="btn btn-sm btn-white confirmBtn">
+		<i class="iconfont">&#xe6e4;</i>
+		<span>查询</span>
+	</button>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<div id="tabs" class="tabbable tabbable-lightBlue">
+			<ul class="nav nav-tabs" >
+				<li class="active">
+					<a data-toggle="tab" tabUrl="${CTX}/prospectingManage/getProspectingTab.do?tabCode=1" tabView="#tab-content1">我当前的实勘</a>
+				</li>
+				<li>
+					<a data-toggle="tab" tabUrl="${CTX}/prospectingManage/getProspectingTab.do?tabCode=2" tabView="#tab-content1">被打假的实勘</a>
+				</li>
+			</ul>
+			<div class="tab-content" id="tab-content1"></div>
+		</div>
+	</div> 
+</div> 
+<div id="" ></div>
+<script type="text/javascript">
+var aihome={};
+aihome.getSelTabIndex=function(){
+	 var selTabIndex;
+	 if($("#tabs ul>li").eq(0).attr("class")=="active"){
+		 selTabIndex = 1;
+	 }else if($("#tabs ul>li").eq(1).attr("class")=="active"){
+		 selTabIndex = 2;
+	 }
+	 return selTabIndex;
+}
+
+$(function(){
+	$('.page-content-area').ace_ajax('loadScripts', [null, null], function () {});
+	$("#prospect_query").click(function(){
+		var tabCode = aihome.getSelTabIndex();
+		if(tabCode == 1){
+			$("#myProspecting_jqGrid").setGridParam({
+				postData : {
+					houseNumber : $("#myProspectList input[id='houseNumber']").val(),
+					businessType : $("#myProspectList select[id='businessType'] option:selected").val(),
+					useType : $("#myProspectList select[id='useType'] option:selected").val(),
+					premisesName : $("#myProspectList input[id='premisesName']").val(),
+					subTimeStart : $("#myProspectList input[id='subTimeStart']").val(),
+					subTimeEnd : $("#myProspectList input[id='subTimeEnd']").val(),
+					reviewStatus : $("#myProspectList select[id='reviewStatus'] option:selected").val()
+				}
+			}).trigger("reloadGrid");
+		}else if(tabCode == 2){
+			$("#fakeProspecting_jqGrid").setGridParam({
+				postData : {
+					houseNumber : $("#fakeProspectList input[id='houseNumber']").val(),
+					businessType : $("#fakeProspectList select[id='businessType'] option:selected").val(),
+					useType : $("#fakeProspectList select[id='useType'] option:selected").val(),
+					premisesName : $("#fakeProspectList input[id='premisesName']").val(),
+					fakeTimeStart : $("#fakeProspectList input[id='fakeTimeStart']").val(),
+					fakeTimeEnd : $("#fakeProspectList input[id='fakeTimeEnd']").val()
+					
+				}
+			}).trigger("reloadGrid");
+		}
+	})
+})
+</script>

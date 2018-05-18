@@ -1,0 +1,1881 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="houseSale">
+
+	<!-- 模糊查询详细地址(具体到房间号) -->
+	<select id="getAddrDetail" parameterType="map" resultType="addrDetailModel" >
+	    SELECT
+			*
+		FROM
+			(
+				SELECT
+				    r.addr_detail AS addrDetail,
+				    r.premises_id AS premisesId,
+                    r.premises AS premisesName,
+				    r.GROUP_ID AS groupId,
+				    r.GROUP_NAME AS groupName,
+				    r.BUILDING_ID AS buildingId,
+				    r.BUILDING AS buildingName,
+				    r.UNITS_ID AS unitId,
+				    r.UNITS AS unitName,
+				    r.ROOM_ID AS roomId,
+				    r.ROOM AS roomName,
+				    vh.ba1Name,
+				    vh.ba2Name,
+				    vh.floor,
+				    ROWNUM
+				  FROM
+				    base_house_addr r
+				  LEFT JOIN view_house_addrdetail vh ON vh.roomId = r.ROOM_ID
+				  WHERE
+				    r.status = 1
+	             <if test="matchStr!=null and matchStr!=''">
+					AND contains(r.addr_detail,#{matchStr}) > 0
+				 </if>
+			)
+			WHERE
+				ROWNUM &lt;= 30
+   	</select>
+   	
+	<!-- 模糊查询详细地址(具体到楼盘) -->
+	<select id="getAddrDetailB" parameterType="map" resultType="addrDetailModel" >
+	   	SELECT
+				*
+			FROM
+				(
+					SELECT
+						p.id AS premisesId,
+						p.NAME AS premisesName,
+						r.addr_detail AS addrDetail,
+						ROWNUM
+					FROM
+						base_premises p
+					LEFT JOIN area_road_num_addr r ON r.unite_id = p.road_id
+					WHERE
+						p.flag = 1
+					<if test="matchStr!=null and matchStr!=''">
+						AND contains(r.addr_detail,#{matchStr}) > 0
+					</if>
+				)
+			WHERE
+				ROWNUM &lt;= 30
+   	</select>
+	<!-- 模糊搜索教育设施 -->
+	<select id="getEdusByMatch" parameterType="map" resultType="eduFacilityModel" >
+   		SELECT
+			id,
+	        name AS eduName
+	    FROM
+	        around_edu_facilities
+		WHERE
+		    1=1
+        <if test="matchStr != null and matchStr !=''"> 
+	    	AND INSTR(NAME, #{matchStr}) > 0
+	    </if>
+   	</select>  
+	  	  
+   <!-- insert houseInfo-->
+    <insert id="insertHourseInfo" useGeneratedKeys="true" parameterType="map">  
+		<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="houseInfoId">
+			SELECT HOUSE_INFO_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO HOUSE_INFO (
+			ID,
+			DEMAND_TYPE,
+			IS_PROTECTED,
+			CODE,
+			ROOM_ID,
+			OPERATE_USER_ID,
+			OPERATE_USER,
+			OPERATE_ORG,
+			OPERATE_ORG_CODE,
+			OPERATE_QU,
+			OPERATE_QU_CODE,
+			OPERATE_DAQU,
+			DIVIDE_USER_ID,
+			DIVIDE_USER,
+			DIVIDE_ORG,
+			DIVIDE_ORG_CODE,
+			DIVIDE_QU,
+			DIVIDE_DAQU
+		)
+		VALUES(
+			HOUSE_INFO_SEQ.NEXTVAL,
+			1,
+			1,
+			#{code,jdbcType=VARCHAR},
+			#{roomId,jdbcType=DECIMAL},
+			#{userId,jdbcType=VARCHAR},
+			#{userName,jdbcType=VARCHAR},
+			#{userOrg,jdbcType=VARCHAR},
+			#{userOrgCode,jdbcType=VARCHAR},
+			#{userQu,jdbcType=VARCHAR},
+			#{userQuCode,jdbcType=VARCHAR},
+			#{userDaQu,jdbcType=VARCHAR},
+			#{divideId,jdbcType=VARCHAR},
+			#{divideUser,jdbcType=VARCHAR},
+			#{divideOrg,jdbcType=VARCHAR},
+			#{divideOrgCode,jdbcType=VARCHAR},
+			#{divideQu,jdbcType=VARCHAR},
+			#{divideDaQu,jdbcType=VARCHAR}
+		)
+    </insert>
+    
+    <!-- 新增买卖房源-住宅 -->
+	<insert id="insertResidenceSale" parameterType="map">  
+		INSERT INTO HOUSE_SALE (
+			 ID,
+			 HOUSE_INFO_ID,
+			 STATUS,
+			 USE_TYPE,
+	    	 ROOMS,	 
+	    	 OFFICE,
+	    	 KITCHEN,
+	    	 WC,
+	    	 BUILDING_FLOOR,
+	    	 PROPERTY,
+	    	 PROPERTY_RIGHT,
+	    	 CHAO_XIANG,
+	    	 COVERED_AREA,
+	    	 USED_AREA,
+			 BUILD_TIME,
+			 DECORADION,
+			 DECORADION_TIME,
+			 SELL_PRICE,
+			 UNIT_PRICE,
+			 ENTRUST_PRICE,
+			 USE_STATUS,
+			 HJ_INFO_TYPE,
+			 ZHENG_DAI,
+			 TAXATION,
+			 FCK_USE,
+			 HOUSE_LEVEL,
+			 FCK_CODE,
+			 FCK_DATE,
+			 MOVE_OUT_TYPE,
+			 TAKE_EMPTY,
+			 SELL_REASON,
+			 LOOK_WAY,
+			 LOOK_WAY2,
+			 BUY_DEMAND,
+			 HAUNTED,
+			 HAUNTED2,
+			 SPECIAL,
+			 SPECIAL2,
+			 TAGS,
+			 TAGS2,
+			 REMARK,
+			 OWNER_NAME,
+			 OWNER_TEL,
+			 CARPORT_SELL_PRICE,
+			 TAXATION_RAMARK,
+			 CREATE_TIME,
+			 OPERATE_TIME,
+			 ADDRESS_DETAIL,
+			 ZZDZ_DETAIL,
+			 OWNER_SOURCE
+		)
+		VALUES(
+			HOUSE_SALE_SEQ.NEXTVAL, 
+			#{houseInfoId,jdbcType=DECIMAL}, 
+			1,
+	    	#{useType,jdbcType=DECIMAL}, 
+	    	#{rooms,jdbcType=DECIMAL}, 
+	    	#{office,jdbcType=DECIMAL},  
+	    	#{kitchen,jdbcType=DECIMAL},
+	    	#{wc,jdbcType=DECIMAL},
+	    	#{buildingFloor,jdbcType=DECIMAL},
+	    	#{property,jdbcType=DECIMAL}, 
+	    	#{propertyRight,jdbcType=DECIMAL}, 
+	    	#{chaoXiang,jdbcType=DECIMAL},
+	    	#{coveredArea,jdbcType=DECIMAL},
+	    	#{usedArea,jdbcType=DECIMAL},
+	    	#{buildTime,jdbcType=DECIMAL},
+	    	#{decoradion,jdbcType=DECIMAL},
+	    	#{decoradionTime,jdbcType=DATE},
+	    	#{sellPrice,jdbcType=DECIMAL},
+	    	#{unitPrice,jdbcType=DECIMAL},
+	    	#{entrustPrice,jdbcType=DECIMAL},
+	    	#{useStatus,jdbcType=DECIMAL},
+	    	#{hjInfoType,jdbcType=DECIMAL},
+	    	#{zhengdai,jdbcType=DECIMAL},
+	    	#{taxation,jdbcType=DECIMAL},
+	    	#{fukUse,jdbcType=DECIMAL},
+	    	#{houseLevel,jdbcType=DECIMAL},
+	    	#{fckCode,jdbcType=DECIMAL},
+	    	to_date(#{fckDate,jdbcType=DATE},'yyyy-mm-dd'),
+			#{moveOutType,jdbcType=DECIMAL},
+			#{takeEmpty,jdbcType=DECIMAL},
+			#{sellReason,jdbcType=DECIMAL},
+			#{lookWay,jdbcType=VARCHAR},
+			#{lookWay2,jdbcType=VARCHAR},
+			#{bugDemand,jdbcType=VARCHAR},
+			#{haunted,jdbcType=VARCHAR},
+			#{haunted2,jdbcType=VARCHAR},
+			#{special,jdbcType=VARCHAR},  
+			#{special2,jdbcType=VARCHAR},
+			#{tags,jdbcType=VARCHAR}, 
+			#{tags2,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR}, 
+			#{ownerName,jdbcType=VARCHAR},
+			#{ownerTel,jdbcType=VARCHAR},
+			#{carPortSellPrice,jdbcType=DECIMAL}, 
+			#{taxationRamark,jdbcType=VARCHAR}, 
+			SYSDATE, 
+			SYSDATE, 
+			#{addrDetail,jdbcType=VARCHAR}, 
+			#{zzdz,jdbcType=VARCHAR},  
+			#{childSource,jdbcType=DECIMAL}
+			
+		)
+    </insert> 
+    
+    <!-- 新增买卖房源-商铺  -->
+	<insert id="insertShopsSale" parameterType="map">  
+		INSERT INTO HOUSE_SALE (
+			 ID,
+			 HOUSE_INFO_ID,
+			 STATUS,
+			 USE_TYPE,
+	    	 ROOMS,
+	    	 OFFICE,
+	    	 KITCHEN,
+	    	 WC,
+	    	 BUILDING_TYPE,
+	    	 COVERED_AREA,
+	    	 USED_AREA,
+	    	 YIELD,
+	    	 BUILDING_FLOOR,
+			 SELL_PRICE,
+			 UNIT_PRICE,
+			 CARPORT_SELL_PRICE,
+			 ENTRUST_PRICE,
+			 PROPERTY_FEE,
+			 LOOK_WAY,
+			 LOOK_WAY2,
+			 ZHENG_DAI,
+			 USE_STATUS,
+			 SELL_REASON,
+			 FIT_MANAGEMENT,
+			 NEAR_POSITION,
+			 FCK_CODE,
+			 FCK_DATE,
+			 HOUSE_LEVEL,
+			 SPECIAL,
+			 SPECIAL2,
+			 TAGS,
+			 TAGS2,
+			 REMARK,
+			 OWNER_NAME,
+			 OWNER_TEL,
+			 CREATE_TIME,
+			 OPERATE_TIME,
+			 ADDRESS_DETAIL,
+			 ZZDZ_DETAIL,
+			 OWNER_SOURCE
+		)
+		VALUES(
+			HOUSE_SALE_SEQ.NEXTVAL, 
+			#{houseInfoId,jdbcType=DECIMAL}, 
+			1,
+	    	#{useType,jdbcType=DECIMAL}, 
+	    	#{rooms,jdbcType=DECIMAL}, 
+	    	#{office,jdbcType=DECIMAL},  
+	    	#{kitchen,jdbcType=DECIMAL},
+	    	#{wc,jdbcType=DECIMAL},
+	    	#{buildingType,jdbcType=DECIMAL},
+	    	#{coveredArea,jdbcType=DECIMAL},
+	    	#{usedArea,jdbcType=DECIMAL},
+	    	#{yield,jdbcType=DECIMAL},
+	    	#{buildingFloor,jdbcType=DECIMAL},
+	    	#{sellPrice,jdbcType=DECIMAL},
+	    	#{unitPrice,jdbcType=DECIMAL},
+	    	#{carPortSellPrice,jdbcType=DECIMAL}, 
+	    	#{entrustPrice,jdbcType=DECIMAL},
+	    	#{propertyFee,jdbcType=DECIMAL},
+	    	#{lookWay,jdbcType=VARCHAR},
+	    	#{lookWay2,jdbcType=VARCHAR},
+	    	#{zhengdai,jdbcType=DECIMAL},
+	    	#{useStatus,jdbcType=DECIMAL},
+	    	#{sellReason,jdbcType=DECIMAL},
+	    	#{fitManagement,jdbcType=DECIMAL},
+	    	#{nearPosition,jdbcType=VARCHAR},
+	    	#{fckCode,jdbcType=DECIMAL},
+	    	to_date(#{fckDate,jdbcType=DATE},'yyyy-mm-dd'),
+	    	#{houseLevel,jdbcType=DECIMAL},
+			#{special,jdbcType=VARCHAR},  
+			#{special2,jdbcType=VARCHAR},
+			#{tags,jdbcType=VARCHAR}, 
+			#{tags2,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR},
+			#{ownerName,jdbcType=VARCHAR},
+			#{ownerTel,jdbcType=VARCHAR}, 
+			SYSDATE, 
+			SYSDATE, 
+			#{addrDetail,jdbcType=VARCHAR}, 
+			#{zzdz,jdbcType=VARCHAR},  
+			#{childSource,jdbcType=DECIMAL}
+		)
+    </insert> 
+    
+    <!-- 新增买卖房源  写字楼  -->
+	<insert id="insertOfficeSale" parameterType="map">  
+		INSERT INTO HOUSE_SALE (
+			 ID,
+			 HOUSE_INFO_ID,
+			 STATUS,
+			 USE_TYPE,
+	    	 ROOMS,
+	    	 OFFICE,
+	    	 KITCHEN,
+	    	 WC,
+	    	 COVERED_AREA,
+	    	 USED_AREA,
+	    	 YIELD,
+	    	 OFFICE_LEVEL,
+	    	 USE_STATUS,
+	    	 BUILDING_FLOOR, 
+			 SELL_PRICE,
+			 UNIT_PRICE,
+			 CARPORT_SELL_PRICE,
+			 ENTRUST_PRICE,
+			 CONTAIN_PRESON,
+			 LOOK_WAY,
+			 LOOK_WAY2,
+			 ZHENG_DAI,
+			 SELL_REASON,
+			 FCK_CODE,
+			 FCK_DATE,
+			 OWNER_SOURCE,
+			 HOUSE_LEVEL,
+			 TOILET,
+			 SPECIAL,
+			 SPECIAL2,
+			 TAGS,
+			 TAGS2,
+			 REMARK,
+			 OWNER_NAME,
+			 OWNER_TEL,
+			 CREATE_TIME,
+			 OPERATE_TIME,
+			 ADDRESS_DETAIL,
+			 ZZDZ_DETAIL
+		)
+		VALUES(
+			HOUSE_SALE_SEQ.NEXTVAL, 
+			#{houseInfoId,jdbcType=DECIMAL}, 
+			1,
+	    	#{useType,jdbcType=DECIMAL}, 
+	    	#{rooms,jdbcType=DECIMAL}, 
+	    	#{office,jdbcType=DECIMAL},  
+	    	#{kitchen,jdbcType=DECIMAL},
+	    	#{wc,jdbcType=DECIMAL},
+	    	#{coveredArea,jdbcType=DECIMAL},
+	    	#{usedArea,jdbcType=DECIMAL},
+	    	#{yield,jdbcType=DECIMAL},
+	    	#{officeLevel,jdbcType=DECIMAL},
+	    	#{useStatus,jdbcType=DECIMAL},
+	    	#{buildingFloor,jdbcType=DECIMAL},
+	    	#{sellPrice,jdbcType=DECIMAL},
+	    	#{unitPrice,jdbcType=DECIMAL},
+	    	#{carPortSellPrice,jdbcType=DECIMAL},
+	    	#{entrustPrice,jdbcType=DECIMAL},
+	    	#{containPerson,jdbcType=DECIMAL},
+	    	#{lookWay,jdbcType=VARCHAR},
+	    	#{lookWay2,jdbcType=VARCHAR},
+	    	#{zhengdai,jdbcType=DECIMAL},
+	    	#{sellReason,jdbcType=DECIMAL},
+	    	#{fckCode,jdbcType=DECIMAL},
+	    	to_date(#{fckDate,jdbcType=DATE},'yyyy-mm-dd'),
+	    	#{childSource,jdbcType=DECIMAL},
+	    	#{houseLevel,jdbcType=DECIMAL},
+	    	#{toilet,jdbcType=DECIMAL},
+	    	#{special,jdbcType=VARCHAR},  
+			#{special2,jdbcType=VARCHAR},
+	    	#{tags,jdbcType=VARCHAR}, 
+			#{tags2,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR}, 
+			#{ownerName,jdbcType=VARCHAR},
+			#{ownerTel,jdbcType=VARCHAR},
+			SYSDATE, 
+			SYSDATE, 
+			#{addrDetail,jdbcType=VARCHAR}, 
+			#{zzdz,jdbcType=VARCHAR} 
+		)
+    </insert> 
+    
+    <!-- 新增买卖房源  车位  -->
+	<insert id="insertCarPortSale" parameterType="map">  
+		INSERT INTO HOUSE_SALE (
+			 ID,
+			 HOUSE_INFO_ID,
+			 STATUS,
+			 USE_TYPE,
+			 PROPERTY_RIGHT_TYPE,
+			 CAR_PORT_ID,
+			 CARFLOOR,
+			 CARPORT_SELL_PRICE,
+			 ENTRUST_PRICE,
+			 PROPERTY_FEE,
+			 USE_STATUS,
+			 FCK_CODE,
+			 FCK_DATE,
+			 OWNER_SOURCE,
+	    	 HOUSE_LEVEL,
+	    	 TAGS,
+			 TAGS2,
+			 REMARK,
+			 OWNER_NAME,
+			 OWNER_TEL,
+			 CREATE_TIME,
+			 OPERATE_TIME,
+			 ADDRESS_DETAIL,
+			 ZZDZ_DETAIL,
+			 NEAR_BUILDING
+			 		)
+		VALUES(
+			HOUSE_SALE_SEQ.NEXTVAL, 
+			#{houseInfoId,jdbcType=DECIMAL}, 
+			1,
+	    	4, 
+	    	#{carPropertyRightType,jdbcType=DECIMAL},
+	    	#{carPortId,jdbcType=DECIMAL}, 
+	    	#{carFloor,jdbcType=DECIMAL},
+	    	#{carPortSellPrice,jdbcType=DECIMAL},
+	    	#{entrustPrice,jdbcType=DECIMAL},
+	    	#{propertyFee,jdbcType=DECIMAL},
+	    	#{useStatus,jdbcType=DECIMAL},
+	    	#{fckCode,jdbcType=DECIMAL},
+	    	to_date(#{fckDate,jdbcType=DATE},'yyyy-mm-dd'),
+	    	#{childSource,jdbcType=DECIMAL},
+	    	#{houseLevel,jdbcType=DECIMAL},
+	    	#{tags,jdbcType=VARCHAR}, 
+			#{tags2,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR}, 
+			#{ownerName,jdbcType=VARCHAR},
+			#{ownerTel,jdbcType=VARCHAR},
+			SYSDATE, 
+			SYSDATE, 
+			#{addrDetail,jdbcType=VARCHAR}, 
+			#{zzdz,jdbcType=VARCHAR},
+			#{closeBuilding,jdbcType=VARCHAR}
+		)
+    </insert> 
+    <!-- 判断车位是否关联房源  -->
+    <select id="isContactHouseSale" parameterType="map" resultType="houseSaleModel">
+    	SELECT
+    		info.id,
+			info.code
+		FROM
+			house_info info
+		LEFT JOIN house_sale sale ON sale.house_info_id = info.id
+		WHERE
+			info.room_id = (
+				SELECT
+					p.room_id
+				FROM
+					car_port p
+				WHERE
+					p.id = #{carPortId}
+			)
+		AND info.demand_type = 1
+		AND sale.STATUS IN (1, 2, 3)
+    </select>
+    <!--房源买卖列表   住宅  -->
+    <select id="getHouseSaleListForPage" parameterType="map" resultType="HouseSaleModel">
+      SELECT
+			a.*
+		FROM
+		( select
+		      info.id AS houseInfoId,
+		      info.room_id AS roomId,
+		      info.code,
+		      sale.id,
+		      sale.owner_name as ownerName,
+		      sale.owner_tel as ownerTel,
+		      sale.status,
+			  vh.ba2_id AS ba2Id,
+			  vh.ba2_name AS ba2Name,
+			  vh.bp_id AS premisesId,
+			  vh.bp_name AS premisesName,
+		      sale.rooms,
+		      sale.office,
+		      sale.kitchen,
+		      sale.wc,
+		      CASE WHEN (vh.bh_num IS NOT NULL AND vh.bu_floors IS NOT NULL) THEN vh.bh_num || '/' || vh.bu_floors ELSE '' END AS floor,
+		      sale.covered_area as coveredArea,
+		      sale.used_area as usedArea,
+		      sale.yield*100 as yield, <!-- 商铺/写字楼   实得率-->
+		      sale.near_position as nearPosition, <!-- 商铺/写字楼  临近位置 -->
+		      sale.contain_preson as containPerson, <!-- 写字楼  容纳人数 -->
+		      sale.use_status as useStatus, <!-- 写字楼 使用现状 -->
+		      sale.sell_price as sellPrice,
+		      sale.unit_price as unitPrice,
+		      sale.carport_sell_price as carportSellPrice,
+		      to_char (sale.create_time,'yyyy-mm-dd') AS createTime,
+		      ','|| premises.edu_ids ||',' AS eduIds,
+		      sale.remark,
+		      sale.house_level as houseLevel,
+		      info.operate_user_id AS operatorId,
+			  info.operate_user AS operator,
+			  info.divide_user_id AS divideUserId,
+		      info.divide_user AS divideUser,
+			  info.divide_org AS divideOrg,
+			  info.divide_qu AS divideQu,
+		      <!-- 最后跟进时间 -->
+		      to_char (
+						(
+							select
+								max(trunc(f.follow_time))
+							from
+								house_follow f
+							where
+								f.house_info_id = info.id
+						),
+						'yyyy-mm-dd'
+					) AS lastFollowTime,
+			 <!-- 限时速递次数 -->
+			 (
+					SELECT
+						count(0)
+					FROM
+						manage_time_limit_express mtl
+					WHERE
+						mtl.house_info_id = info.id
+				    AND mtl.status in (1,2)
+				) AS timeLimitCount,
+			  <!-- 实勘次数 -->
+		      (
+				    select
+						count(0)
+					from
+						manage_prospect_info mpi
+						LEFT JOIN manage_prospect_image image ON image.prospect_id = mpi.id
+						WHERE
+							mpi.house_info_id = info.id
+			  ) AS prospectCount,
+			  <!-- 钥匙个数 -->
+			  (
+					SELECT
+						count(0)
+					FROM
+						manage_key_info k
+					WHERE
+						k.house_info_id = info.id
+					AND k.status = 1
+				) AS keyCount,
+			    
+				<!-- 看房次数 -->
+				(
+					SELECT
+						count(0)
+					FROM
+						customer_promise p
+					WHERE
+						p.take_type = 1
+					AND p.house_info_id = info.id
+				) AS watchHouseCount,
+				<!-- 最新一次价格变动情况 -->
+				(
+					SELECT
+						pc.type
+					FROM
+						house_price_change pc
+					WHERE
+						pc.create_time = (
+							SELECT
+								max(hcp.create_time)
+							FROM
+								house_price_change hcp
+							WHERE
+					      	hcp.house_info_id = info.id
+					    )
+				) AS priceChangeType
+			from  house_info info
+			left join house_sale sale on sale.house_info_id = info.id
+			left join view_house vh ON vh.bh_id = info.room_id
+			left join base_premises premises ON premises.id = vh.bp_id
+			left join manage_prospect_info prospect ON prospect.house_info_id = info.id
+			left join house_price_change hpc on hpc.house_info_id = info.id
+			<if test="entrustCode != null and entrustCode !=''"> <!-- 协议编号 -->
+				LEFT JOIN house_entrust entrust ON entrust.house_info_id = info.id AND entrust.status = 1
+			</if>
+			<if test="propertyCode != null and propertyCode !=''"> <!-- 产权证编号 -->
+				LEFT JOIN house_property property ON property.house_info_id = info.id AND property.status = 1
+			</if>
+			<where>
+				sale.USE_TYPE = #{useType}
+				<if test="ba1 != null and ba1 !=''"> <!-- 大商圈 -->
+			    	AND vh.ba1_id = #{ba1}
+			    </if>
+			    <if test="ba2 != null and ba2 !=''"> <!-- 小商圈 -->
+			    	AND vh.ba2_id = #{ba2}
+			    </if>
+			    <if test="premisesId != null and premisesId !=''">
+				    AND vh.bp_id = #{premisesId}
+				</if>
+			    <if test="createTimeS != null and createTimeS !=''"> <!-- 登记日期 -->
+			    	AND sale.create_time &gt;= to_date (#{createTimeS}, 'yyyy-mm-dd')
+			    </if>
+			    <if test="createTimeE != null and createTimeE !=''">
+			    	AND sale.create_time &lt;= to_date (#{createTimeE}||' '||'23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+			    </if>
+			    <if test="priceChangeType != null and priceChangeType !=''"> <!-- 价格变动-->
+			    	AND hpc.type = #{priceChangeType}
+			    </if>	   
+			    <if test="rooms != null and rooms !=''"> <!-- 户型 室 -->
+				    AND sale.rooms in (${rooms})
+				</if>
+				<if test="office_search != null and office_search !=''"> <!-- 厅  -->
+			    	AND sale.office = #{office_search}
+			    </if>
+			    <if test="kitchen_search != null and kitchen_search !=''"> <!-- 厨 -->
+			    	AND sale.kitchen = #{kitchen_search}
+			    </if>
+			    <if test="wc_search != null and wc_search !=''"> <!-- 卫 -->
+			    	AND sale.wc = #{wc_search}
+			    </if>
+			    <if test="houseCode != null and houseCode !=''"> <!-- 房源编号 -->
+			    	AND info.code = #{houseCode}
+			    </if>
+			    <if test="ownerName != null and ownerName !=''"> <!-- 业主姓名 -->
+			    	AND sale.owner_name = #{ownerName}
+			    </if>
+			    <if test="ownerTel != null and ownerTel !=''"> <!-- 业主电话 -->
+			    	AND sale.owner_tel = #{ownerTel}
+			    </if>
+				<if test="wwDealed != null and wwDealed !=''"> <!-- 外网已签意向 -->
+			    	AND sale.WW_DEALED = #{wwDealed}
+			    </if>
+			    <if test="wsDealed != null and wsDealed !=''"> <!-- 外司已网签 -->
+			    	AND sale.WS_DEALED = #{wsDealed}
+			    </if>
+				<if test="decoration != null and decoration !=''"> <!-- 装修 -->
+			    	AND sale.decoradion in (${decoration})
+			    </if> 
+			    <if test="floorType != null and floorType !=''"> <!-- 楼层 -->
+			    	AND sale.building_type in (${floorType})
+			    </if> 
+			    <if test="houseLevel != null and houseLevel !=''"> <!-- 房源等级 -->
+			    	AND sale.house_level in (${houseLevel})
+			    </if> 
+				<if test="status != null and status !=''"> <!-- 房源状态 -->
+			    	AND sale.status in (${status})
+			    </if>
+			    <if test="xqCategory != null and xqCategory !=''"> <!-- 小区维护类别 -->
+			    	AND premises.maintenance_category in (${xqCategory})
+			    </if> 
+			    <if test="prospectStatus != null and prospectStatus !=''"> <!-- 实勘审核 -->
+			    	AND prospect.status = #{prospectStatus}
+			    </if>
+				<if test="entrustCode != null and entrustCode !=''"> <!-- 协议编号 -->
+			    	AND entrust.code = #{propertyCode}
+			    </if>     
+				<if test="entrustStatus != null and entrustStatus !=''"> <!-- 协议状态 -->
+					AND entrust.status = #{entrustStatus}
+				</if>
+				<if test="propertyCode != null and propertyCode !=''"> <!-- 产权证编号 -->
+					AND property.code = #{propertyCode}
+				</if>
+				<if test="propertyStatus != null and propertyStatus !=''"> <!-- 收产权证状态 -->
+					AND property.status = #{propertyStatus}
+				</if>
+				<if test="priceMapList != null and priceMapList != ''">  <!-- 售价 -->
+					AND (
+						<foreach collection="priceMapList" item="item" index="index"  separator="OR">
+						(
+								sale.sell_price &gt;= ${item.startPrice}
+							<if test="item.endPrice != null and item.endPrice != ''">
+								AND sale.sell_price &lt;= ${item.endPrice}
+							</if>
+						)
+						</foreach>
+					)
+				</if>
+				<if test="coveredMapList!=null and coveredMapList!=''"> <!-- 建筑面积 -->
+					AND (
+						<foreach collection="coveredMapList" item="item" index="index"  separator="OR">
+						(
+								sale.covered_area &gt;= ${item.startCovered}
+							<if test="item.endCovered != null and item.endCovered != ''">
+								AND sale.covered_area &lt;= ${item.endCovered}
+							</if>
+						)
+						</foreach>
+						)
+				</if> 
+				<if test="tagsFlag !=null and tagsFlag !=''"> <!-- 房源标签 -->
+					AND (
+						<foreach collection="tagsFlag" item="item" index="index" separator="OR">
+							INSTR(','||sale.tags||',',','||${item}||',') &gt;0
+						</foreach>
+					)
+				</if>
+				<if test="fitmanagementFlag !=null and fitmanagementFlag !=''"> <!-- 适合经营 -->
+					AND (
+						<foreach collection="fitmanagementFlag" item="item" index="index" separator="OR">
+							INSTR(','||sale.fit_management||',',','||${item}||',') &gt;0
+						</foreach>
+					)
+				</if>
+				<if test="edu!=null and edu!=''"> <!-- 学区-->
+					AND INSTR(','|| premises.edu_ids ||',',#{edu}) &gt;0			
+				</if>
+				<if test="(followTimeS != null and followTimeS !='') or (followTimeE != null and followTimeE !='')"> <!-- 跟进日期 -->
+			    	AND EXISTS (
+							SELECT
+								hf.house_info_id
+							FROM
+								house_follow hf
+							WHERE
+								hf.house_info_id = info.id
+							<if test="followTimeS != null and followTimeS !=''">
+								AND hf.follow_time &gt;= to_date (#{followTimeS}, 'yyyy-mm-dd')
+							</if>
+							<if test="followTimeE != null and followTimeE !=''">
+								AND hf.follow_time &lt;= to_date (#{followTimeE}||' '||'23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+							</if>
+						)
+			    </if>
+			    <if test="(keyTimeS != null and keyTimeS !='') or (keyTimeE != null and keyTimeE !='')"> <!-- 收钥匙日期 -->
+					AND EXISTS (
+							SELECT
+								mki.house_info_id
+							FROM
+								manage_key_info mki
+							WHERE
+								mki.house_info_id = info.id
+					    	AND mki.status = 1
+				    	<if test="keyTimeS != null and keyTimeS !=''">
+							AND mki.create_time &gt;= to_date (#{keyTimeS}, 'yyyy-mm-dd')
+						</if>
+						<if test="keyTimeE != null and keyTimeE !=''">
+							AND mki.create_time &lt;= to_date (#{keyTimeE}||' '||'23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+						</if>
+					  )
+				</if>
+				<if test="key !=null and key !=''"> <!-- 是否有钥匙 -->
+					AND 
+					<if test="key==1">
+						EXISTS
+					</if>
+					<if test="key==2">
+						NOT EXISTS
+					</if>
+					(
+						SELECT
+							mki.house_info_id
+						FROM
+							manage_key_info mki
+						WHERE
+							mki.house_info_id = info.id
+				    	AND mki.status = 1
+				   	)
+				</if>
+				<if test="(limitTimeS != null and limitTimeS !='') or (limitTimeE != null and limitTimeE !='')"> <!-- 独家日期 -->
+					AND EXISTS (
+							SELECT
+								mtl.house_info_id
+							FROM
+								manage_time_limit_express mtl
+							WHERE
+								mtl.house_info_id = info.id
+				   			AND mtl.status in (1,2)
+				   		<if test="limitTimeS != null and limitTimeS !=''">
+							AND mtl.create_time &gt;= to_date (#{limitTimeS}, 'yyyy-mm-dd')
+						</if>
+						<if test="limitTimeE != null and limitTimeE !=''">
+							AND mtl.create_time &lt;= to_date (#{limitTimeE}||' '||'23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+						</if>
+					  )
+				</if>
+				<if test="limitTime !=null and limitTime!=''"> <!-- 是否有限时速递 -->
+					AND 
+					<if test="limitTime==1">
+						EXISTS
+					</if>
+					<if test="limitTime==2">
+						NOT EXISTS
+					</if>
+					(
+						SELECT
+							mtl.house_info_id
+						FROM
+							manage_time_limit_express mtl
+						WHERE
+							mtl.house_info_id = info.id
+				   		AND mtl.status in (1,2)
+				   	)
+				</if>
+				<if test="(watchHouseTimeS != null and watchHouseTimeS !='') or (watchHouseTimeE != null and watchHouseTimeE !='')"> <!-- 看房日期 -->
+					AND EXISTS (
+							SELECT
+								cp.house_info_id
+							FROM
+								customer_promise cp
+							WHERE
+								cp.house_info_id = info.id
+					    	AND cp.promise_status = 1
+				   		<if test="watchHouseTimeS != null and watchHouseTimeS !=''">
+							AND cp.create_time &gt;= to_date (#{watchHouseTimeS}, 'yyyy-mm-dd')
+						</if>
+						<if test="watchHouseTimeE != null and watchHouseTimeE !=''">
+							AND cp.create_time &lt;= to_date (#{watchHouseTimeE}||' '||'23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+						</if>
+					  )
+				</if>
+				<if test="isEntrust !=null and isEntrust !=''"> <!-- 是否签署委托协议 -->
+					AND 
+					<if test="isEntrust==1">
+						EXISTS
+					</if>
+					<if test="isEntrust==2">
+						NOT EXISTS
+					</if>
+					(
+						SELECT
+							e.house_info_id
+						FROM
+							house_entrust e
+						WHERE
+							e.house_info_id = info.id
+				   	)
+				</if>
+				<if test="(entrustStatus != null and entrustStatus !='') or (entrustTimeS != null and entrustTimeS !='') or (entrustTimeE != null and entrustTimeE !='')"> <!-- 委托协议状态/签署委托时间 -->
+					AND EXISTS (
+						SELECT
+							entrust.house_info_id
+						FROM
+							house_entrust entrust
+						WHERE
+							entrust.house_info_id = info.id
+						<if test="entrustStatus != null and entrustStatus !=''">
+							AND entrust.status in (${entrustStatus})
+						</if>
+						<if test="entrustTimeS != null and entrustTimeS !=''"> <!-- 签署委托时间 -->
+							AND entrust.create_time &gt;= to_date (#{entrustTimeS}, 'yyyy-mm-dd')
+						</if>
+						<if test="entrustTimeE != null and entrustTimeE !=''">
+							AND entrust.create_time &lt;= to_date (#{entrustTimeE}||' '||'23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+						</if>
+					 ) 
+				</if>
+				<if test="property !=null and property !=''"> <!-- 是否有产权书 -->
+					AND 
+					<if test="property==1">
+						EXISTS
+					</if>
+					<if test="property==2">
+						NOT EXISTS
+					</if>
+					(
+						SELECT
+							p.house_info_id
+						FROM
+							house_property p
+						WHERE
+							p.house_info_id = info.id
+				   	)
+				</if>
+				<if test="propertyStatus != null and propertyStatus !=''"> <!-- 收产权证状态 -->
+					AND EXISTS (
+						SELECT
+							p.house_info_id
+						FROM
+							house_property p
+						WHERE
+							p.house_info_id = info.id
+						AND p.status in (${propertyStatus})
+					 ) 
+				</if>
+				<if test="(priceChangeTimeS != null and priceChangeTimeS !='') or (priceChangeTimeE != null and priceChangeTimeE !='')"> <!-- 价格变动日期 -->
+					AND EXISTS (
+						SELECT
+							hpc.house_info_id
+						FROM
+							house_price_change hpc
+						WHERE
+							hpc.house_info_id = info.id
+							AND hpc.type = #{priceChangeType}
+						<if test="priceChangeTimeS != null and priceChangeTimeS !=''">
+							AND hpc.create_time &gt;= to_date (#{priceChangeTimeS}, 'yyyy-mm-dd')
+						</if>
+						<if test="priceChangeTimeE != null and priceChangeTimeE !=''">
+							AND hpc.create_time &lt;= to_date (#{priceChangeTimeE}||' '||'23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+						</if>
+					 ) 
+				</if>
+				
+				<if test="prospectStatus != null and prospectStatus !=''"> <!-- 实勘审核 -->
+					AND EXISTS (
+						SELECT
+							mpi.house_info_id
+						FROM
+							manage_prospect_info mpi
+						WHERE
+							mpi.house_info_id = info.id
+						AND mpi.status in (${prospectStatus})
+					 ) 
+				</if>
+				<if test="houseRange==1">
+					AND info.operate_user_id = #{userId}
+				</if>
+				<if test="houseRange==2">
+					AND info.divide_user_id = #{userId}
+				</if>
+				<if test="houseRange==3">
+					AND (info.operate_user_id = #{userId} OR info.divide_user_id = #{userId})
+				</if>
+				<if test="divideQu !=null and divideQu !=''">
+					AND info.DIVIDE_QU_CODE = #{divideQu}
+				</if>
+				<if test="divideOrg !=null and divideOrg !=''">
+					AND info.DIVIDE_ORG_CODE = #{divideOrg}
+				</if>
+				<if test="divideUser !=null and divideUser !=''">
+					AND info.DIVIDE_USER_ID = #{divideUser}
+				</if>
+				<if test="operateQu !=null and operateQu !=''">
+					AND info.OPERATE_QU_CODE = #{operateQu}
+				</if>
+				<if test="operateOrg !=null and operateOrg !=''">
+					AND info.OPERATE_ORG_CODE = #{operateOrg}
+				</if>
+				<if test="operater !=null and operater !=''">
+					AND info.OPERATE_USER_ID = #{operater}
+				</if>
+			</where>
+			<if test="orderFlag ==null or orderFlag==''">
+		    	ORDER BY info.id DESC
+		    </if>
+			<if test="orderFlag==1"> <!-- 按照单价排序 -->
+				ORDER BY  sale.unit_price DESC
+			</if>
+			<if test="orderFlag==2"> <!-- 按照建筑面积排序 -->
+				ORDER BY sale.sell_price DESC
+			</if>
+			<if test="orderFlag==3"> <!-- 按照建筑面积排序 -->
+				ORDER BY sale.covered_area DESC
+			</if>
+			
+			) a
+		<where>
+			<if test="watchHouseCountS != null and watchHouseCountS !=''"> <!-- 看房次数 -->
+		    	AND a.watchHouseCount &gt;= #{watchHouseCountS}
+		    </if>
+		    <if test="watchHouseCountE != null and watchHouseCountE !=''">
+		    	AND a.watchHouseCount &lt;= #{watchHouseCountE}
+		    </if>
+			<if test="prospectPicture == 1"> <!-- 实勘图片（有） -->
+		    	AND a.prospectCount &gt; 0
+		    </if>
+		    <if test="prospectPicture == 2"> <!-- 实勘图片（无） -->
+		    	AND a.prospectCount = 0
+		    </if>
+		</where>	
+    </select>
+    
+    <!--房源买卖列表   车位  -->
+    <select id="getCarPortSaleListForPage" parameterType="map" resultType="HouseSaleModel">
+     	select 
+     		a.*
+     	from
+	    	(select
+			      info.id AS houseInfoId,
+			      sale.id,
+			      sale.status,
+			      info.code,
+			      sale.owner_name as ownerName,
+			      sale.owner_tel as ownerTel,
+			      bp.name AS premisesName,
+				  ba1.name AS ba1Name,
+				  ba2.name AS ba2Name,
+			      sale.use_status as useStatus,
+			      port.type AS carPortType,
+				  port.floor AS carFloor,
+			      sale.carport_sell_price as carportSellPrice,
+			      to_char (sale.create_time,'yyyy-mm-dd') AS createTime,
+			      sale.house_level as houseLevel,
+			      sale.remark,
+			      info.operate_user_id AS operatorId,
+				  info.operate_user AS operator,
+				  info.divide_user_id AS divideUserId,
+				  info.divide_user AS divideUser,
+				  info.divide_org AS divideOrg,
+				  info.divide_qu AS divideQu,
+			      <!-- 最后跟进时间 -->
+			      to_char (
+					(
+						select
+							max(trunc(f.follow_time))
+						from
+							house_follow f
+						where
+							f.house_info_id = info.id
+					),
+					'yyyy-mm-dd'
+				  ) AS lastFollowTime,
+			      <!-- 实勘次数 -->
+			      (
+				    select
+						count(0)
+					from
+						manage_prospect_info mpi
+						LEFT JOIN manage_prospect_image image ON image.prospect_id = mpi.id
+						WHERE
+							mpi.house_info_id = info.id
+				  ) AS prospectCount,
+			     <!-- 限时速递次数 -->
+				 (
+					SELECT
+						count(0)
+					FROM
+						manage_time_limit_express mtl
+					WHERE
+						mtl.house_info_id = info.id
+				    AND mtl.status in (1,2)
+				 ) AS timeLimitCount,
+				 <!-- 看房次数 -->
+				 (
+					SELECT
+						count(0)
+					FROM
+						customer_promise p
+					LEFT JOIN house_info i ON i.id = p.house_info_id
+					WHERE
+						p.take_type = 1
+					AND p.house_info_id = info.id
+				  ) AS watchHouseCount
+			from  house_info info
+		    LEFT JOIN house_sale sale ON sale.house_info_id = info.id
+		    LEFT JOIN car_port port ON port.id = sale.car_port_id
+		    LEFT JOIN view_house vh ON vh.bh_id = info.room_id
+		    LEFT JOIN base_premises bp ON bp.id = port.premises_id
+			LEFT JOIN busi_area ba2 ON ba2.id = bp.busi_area_id
+			LEFT JOIN busi_area ba1 ON ba1.id = ba2.parent_id
+			LEFT JOIN manage_prospect_info prospect ON prospect.house_info_id = info.id
+		    <if test="entrustCode != null and entrustCode !=''"> <!-- 协议编号 -->
+				LEFT JOIN house_entrust entrust ON entrust.house_info_id = info.id AND entrust.status = 1
+			</if>
+			<if test="propertyCode != null and propertyCode !=''"> <!-- 产权证编号 -->
+				LEFT JOIN house_property property ON property.house_info_id = info.id AND property.status = 1
+			</if>
+			<where>
+				AND sale.USE_TYPE = 4
+				<if test="ba1 != null and ba1 !=''">
+				    	AND ba1.ba1_id = #{ba1}
+				    </if>
+				    <if test="ba2 != null and ba2 !=''">
+				    	AND ba2.ba2_id = #{ba2}
+				    </if>
+				    <if test="premisesId != null and premisesId !=''">
+				    	AND bp.bp_id = #{premisesId}
+				    </if>
+					 <if test="createTimeS != null and createTimeS !=''"> <!-- 登记时间 -->
+				    	AND sale.create_time &gt;= (to_date (#{createTimeS}, 'yyyy-mm-dd'))
+				    </if>
+				    <if test="createTimeE != null and createTimeE !=''">
+				    	AND sale.create_time &lt;= to_date (#{createTimeE}||' '||'23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+				    </if>
+				    <if test="(priceChangeTimeS != null and priceChangeTimeS !='') or (priceChangeTimeE != null and priceChangeTimeE !='')"> <!-- 价格变动日期 -->
+						AND EXISTS (
+							SELECT
+								hpc.house_info_id
+							FROM
+								house_price_change hpc
+							WHERE
+								hpc.house_info_id = info.id
+								AND hpc.type = #{priceChangeType}
+							<if test="priceChangeTimeS != null and priceChangeTimeS !=''">
+								AND hpc.create_time &gt;= to_date (#{priceChangeTimeS}, 'yyyy-mm-dd')
+							</if>
+							<if test="priceChangeTimeE != null and priceChangeTimeE !=''">
+								AND hpc.create_time &lt;= to_date (#{priceChangeTimeE}||' '||'23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+							</if>
+						 ) 
+					</if>
+					<if test="(watchHouseTimeS != null and watchHouseTimeS !='') or (watchHouseTimeE != null and watchHouseTimeE !='')"> <!-- 看房日期 -->
+						AND EXISTS (
+								SELECT
+									cp.house_info_id
+								FROM
+									customer_promise cp
+								WHERE
+									cp.house_info_id = info.id
+						    	AND cp.promise_status = 1
+					   		<if test="watchHouseTimeS != null and watchHouseTimeS !=''">
+								AND cp.create_time &gt;= to_date (#{watchHouseTimeS}, 'yyyy-mm-dd')
+							</if>
+							<if test="watchHouseTimeE != null and watchHouseTimeE !=''">
+								AND cp.create_time &lt;= to_date (#{watchHouseTimeE}||' '||'23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+							</if>
+						  )
+					</if>
+					<if test="(followTimeS != null and followTimeS !='') or (followTimeE != null and followTimeE !='')"> <!-- 跟进日期 -->
+				    	AND EXISTS (
+							SELECT
+								hf.house_info_id
+							FROM
+								house_follow hf
+							WHERE
+								hf.house_info_id = info.id
+							<if test="followTimeS != null and followTimeS !=''">
+								AND hf.follow_time &gt;= to_date (#{followTimeS}, 'yyyy-mm-dd')
+							</if>
+							<if test="followTimeE != null and followTimeE !=''">
+								AND hf.follow_time &lt;= to_date (#{followTimeE}||' '||'23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+							</if>
+						)
+				    </if>
+				    <if test="(limitTimeS != null and limitTimeS !='') or (limitTimeE != null and limitTimeE !='')"> <!-- 独家日期 -->
+						AND EXISTS (
+								SELECT
+									mtl.house_info_id
+								FROM
+									manage_time_limit_express mtl
+								WHERE
+									mtl.house_info_id = info.id
+					   			AND mtl.status in (1,2)
+					   		<if test="limitTimeS != null and limitTimeS !=''">
+								AND mtl.create_time &gt;= to_date (#{limitTimeS}, 'yyyy-mm-dd')
+							</if>
+							<if test="limitTimeE != null and limitTimeE !=''">
+								AND mtl.create_time &lt;= to_date (#{limitTimeE}||' '||'23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+							</if>
+						  )
+					</if>
+					<if test="prospectStatus != null and prospectStatus !=''"> <!-- 实勘审核 -->
+						AND EXISTS (
+							SELECT
+								mpi.house_info_id
+							FROM
+								manage_prospect_info mpi
+							WHERE
+								mpi.house_info_id = info.id
+							AND mpi.status in (${prospectStatus})
+						 ) 
+					</if>
+					<if test="limitTime !=null and limitTime!=''"> <!-- 是否有限时速递 -->
+						AND 
+						<if test="limitTime==1">
+							EXISTS
+						</if>
+						<if test="limitTime==2">
+							NOT EXISTS
+						</if>
+						(
+							SELECT
+								mtl.house_info_id
+							FROM
+								manage_time_limit_express mtl
+							WHERE
+								mtl.house_info_id = info.id
+					   		AND mtl.status in (1,2)
+					   	)
+					</if>
+					<if test="entrustCode != null and entrustCode !=''"> <!-- 协议编号 -->
+				    	AND entrust.code = #{propertyCode}
+				    </if>     
+					<if test="propertyCode != null and propertyCode !=''"> <!-- 产权证编号 -->
+						AND property.code = #{propertyCode}
+					</if>
+					<if test="property !=null and property !=''"> <!-- 是否收产权书 -->
+						AND 
+						<if test="property==1">
+							EXISTS
+						</if>
+						<if test="property==2">
+							NOT EXISTS
+						</if>
+						(
+							SELECT
+								p.house_info_id
+							FROM
+								house_property p
+							WHERE
+								p.house_info_id = info.id
+					   	)
+					</if>
+					<if test="isEntrust !=null and isEntrust !=''"> <!-- 是否签署委托协议 -->
+						AND 
+						<if test="isEntrust==1">
+							EXISTS
+						</if>
+						<if test="isEntrust==2">
+							NOT EXISTS
+						</if>
+						(
+							SELECT
+								e.house_info_id
+							FROM
+								house_entrust e
+							WHERE
+								e.house_info_id = info.id
+					   	)
+					</if>
+					<if test="(entrustStatus != null and entrustStatus !='') or (entrustTimeS != null and entrustTimeS !='') or (entrustTimeE != null and entrustTimeE !='')"> <!-- 委托协议状态/签署委托时间 -->
+						AND EXISTS (
+							SELECT
+								entrust.house_info_id
+							FROM
+								house_entrust entrust
+							WHERE
+								entrust.house_info_id = info.id
+							<if test="entrustStatus != null and entrustStatus !=''">
+								AND entrust.status in (${entrustStatus})
+							</if>
+							<if test="entrustTimeS != null and entrustTimeS !=''"> <!-- 签署委托时间 -->
+								AND entrust.create_time &gt;= to_date (#{entrustTimeS}, 'yyyy-mm-dd')
+							</if>
+							<if test="entrustTimeE != null and entrustTimeE !=''">
+								AND entrust.create_time &lt;= to_date (#{entrustTimeE}||' '||'23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+							</if>
+						 ) 
+					</if>
+				    <if test="houseCode != null and houseCode !=''"> <!-- 房源编号 -->
+			    		AND info.code = #{houseCode}
+				    </if>
+				    <if test="ownerName != null and ownerName !=''"> <!-- 业主姓名 -->
+				    	AND sale.owner_name = #{ownerName}
+				    </if>
+				    <if test="ownerTel != null and ownerTel !=''"> <!-- 业主电话 -->
+				    	AND sale.owner_tel = #{ownerTel}
+				    </if>
+					<if test="wwDealed != null and wwDealed !=''"> <!-- 外网已签意向 -->
+				    	AND sale.WW_DEALED = #{wwDealed}
+				    </if>
+				    <if test="wsDealed != null and wsDealed !=''"> <!-- 外司已网签 -->
+				    	AND sale.WS_DEALED = #{wsDealed}
+				    </if>
+					<if test="houseLevel != null and houseLevel !=''"> <!-- 房源等级 -->
+				    	AND sale.house_level in (${houseLevel})
+				    </if> 
+					<if test="status != null and status !=''"> <!-- 房源状态 -->
+				    	AND sale.status in (${status})
+				    </if>
+				    <if test="carPortPriceMapList != null and carPortPriceMapList != ''">  <!-- 车位售价 -->
+						AND (
+							<foreach collection="carPortPriceMapList" item="item" index="index"  separator="OR">
+							(
+									sale.CARPORT_SELL_PRICE &gt;= ${item.startCarPrice}
+								<if test="item.endCarPrice != null and item.endCarPrice != ''">
+									AND sale.CARPORT_SELL_PRICE &lt;= ${item.endCarPrice}
+								</if>
+							)
+							</foreach>
+						)
+					</if>
+					<if test="tagsFlag !=null and tagsFlag !=''"> <!-- 房源标签 -->
+						AND (
+							<foreach collection="tagsFlag" item="item" index="index" separator="OR">
+								INSTR(','||sale.tags||',',','||${item}||',') &gt;0
+							</foreach>
+						)
+					</if>
+				</where>
+				<if test="orderFlag ==null or orderFlag==''">
+			    	ORDER BY info.id DESC
+			    </if>
+				)a
+			<where>
+				<if test="watchHouseCountS != null and watchHouseCountS !=''"> <!-- 看房次数 S-->
+			    	AND a.watchHouseCount &gt;= #{watchHouseCountS}
+			    </if>
+			    <if test="watchHouseCountE != null and watchHouseCountE !=''"> <!-- 看房次数 E-->
+			    	AND a.watchHouseCount &lt;= #{watchHouseCountE}
+			    </if>
+				<if test="prospectPicture == 1"> <!-- 实勘图片（有） -->
+			    	AND a.prospectCount &gt; 0
+			    </if>
+			    <if test="prospectPicture == 2"> <!-- 实勘图片（无） -->
+			    	AND a.prospectCount = 0
+			    </if>
+			</where>
+    </select>
+    
+    <!-- 查询大商圈 dl-->
+   	<select id="getBa1List" resultType="busiAreaModel">
+   		SELECT ba.id,ba.NAME AS busiAreaName FROM busi_area ba WHERE ba.parent_id IS NULL 
+    </select>
+    
+    <!-- 根据大商圈查询小商圈 dl-->
+   	<select id="getBa2List" parameterType="map" resultType="busiAreaModel">
+   		select ba.id,ba.name AS busiAreaName FROM busi_area ba WHERE ba.parent_id IS NOT NULL AND ba.parent_id = #{ba1Id}
+    </select>
+    
+    <!-- 根据houseInfoId(住宅、商铺、写字楼)查询房源信息   -->
+    <select id="getHouseSaleById" parameterType="map" resultType="houseSaleModel">
+    	select  
+		    info.id as houseInfoId,
+		    sale.id,
+		    sale.address_detail  as addressDetail,
+		    sale.zzdz_detail as zzdzDetail,
+		    v.premisesName,
+		    v.ba1Name,
+		    v.ba2Name,
+		    v.groupName,
+		    v.buildingName,
+		    v.unitCode,
+		    v.floor,
+		    v.roomId,
+		    v.roomName,
+		    sale.use_type as useType,
+		    sale.rooms,
+		    sale.office,
+		    sale.kitchen,
+		    sale.wc,
+		    sale.building_floor as buildingFloor,
+		    sale.building_type as buildingType,
+		    sale.property,
+		    sale.property_right as propertyRightType,
+		    sale.property_fee as propertyFee,
+		    sale.chao_xiang as chaoXiang,
+		    sale.covered_area as coveredArea,
+		    sale.used_area as usedArea,
+		    sale.yield,
+		    sale.build_time as buildTime,
+		    sale.decoradion,
+		    sale.decoradion_time as decoradionTime,
+		    sale.unit_price as unitPrice,
+		    sale.sell_price as sellPrice,
+		    sale.carport_sell_price as carportSellPrice,
+		    sale.entrust_price as entrustPrice,
+		    sale.use_status as useStatus,
+		    sale.hj_info_type as hjInfoType,
+		    sale.taxation,
+		    sale.taxation_ramark as taxationRamark,
+		    sale.sell_reason as sellReason,
+		    sale.fck_code as fckCode,
+		    to_char (sale.fck_date,'yyyy-mm-dd') as fckDate, 
+		    sale.house_level as houseLevel,
+		    sale.move_out_type as moveOutType,
+		    sale.take_empty as takeEmpty,
+		    sale.fck_use as fukUse,
+		    sale.zheng_dai as zhengDai,
+		    os.id as source2,
+		    os.parent_id as source1,
+		    sale.look_way as lookWay,
+		    sale.haunted,
+		    sale.special,
+		    sale.tags,
+		    sale.status,
+		    sale.remark,
+		    sale.near_position as nearPosition,
+		    sale.fit_management as fitManagement,
+		    sale.toilet,
+		    sale.office_level as officeLevel,
+		    sale.contain_preson as containPerson
+		from house_info info
+		left join house_sale sale on sale.house_info_id =  info.id
+		left join view_house_addrdetail v on v.roomId = info.room_id
+		left join owner_source os on os.id = sale.owner_source
+		<where>
+			<if test="useType!=null and useType!=''">
+				sale.use_type = #{useType}
+			</if>
+			<if test="houseInfoId!=null and houseInfoId!=''">
+				and info.id = #{houseInfoId}
+			</if>
+		</where>
+    </select>
+    
+    <!-- 查询车位信息 -->
+    <select id="getHouseCarPortById" parameterType="map" resultType="houseSaleModel">
+    	select 
+		    sale.id,
+		    sale.house_info_id as houseInfoId,
+		    sale.address_detail as addressDetail,
+		    sale.zzdz_detail as zzdzDetail,
+		    premises.id premisesId,
+		    premises.name premisesName,
+		    sale.near_building as closeBuildingId,
+		    port.id as carPortId,
+		    port.park_num as parkNum,
+		    port.type as carPortType,
+		    port.floor as carPortFloor,
+		    sale.property_right_type as carPropertyRightType, 
+		    sale.carport_sell_price as carPortSellPrice,
+		    sale.entrust_price as entrustPrice,
+		    sale.property_fee as propertyFee,
+		    sale.fck_code fckCode,
+		    to_char (sale.fck_date,'yyyy-mm-dd') as fckDate, 
+		    sale.use_status as useStatues,
+		    os.id as source2,
+		    os.parent_id as source1,
+		    sale.house_level houseLevel,
+		    sale.tags,
+		    sale.status,
+		    sale.remark
+		from house_sale sale
+		left join car_port port on port.id = sale.car_port_id
+		left join base_premises premises on premises.id = port.premises_id
+		left join owner_source os on os.id = sale.owner_source
+		<where>
+			sale.use_type = 4
+			<if test="houseInfoId !=null and houseInfoId !=''">
+				AND sale.house_info_id = #{houseInfoId}
+			</if>
+		</where>   
+    </select>
+    
+    <!-- 查询房源联系人  -->
+    <select id="getHouseLinkManList" parameterType="map" resultType="houseLinkManModel">
+	    SELECT
+	       l.id,
+	       l.type,
+	       l.name,
+	       l.CONTACT_TYPE as contactType
+		FROM  
+			HOUSE_LINKMAN l
+	    <where>
+	    	<if test="houseInfoId !=null and houseInfoId !=''">
+				AND l.house_Info_Id = #{houseInfoId}
+			order by 
+				l.id
+			</if>
+	    </where>
+    </select>
+  <!-- insert房源价格变动记录 -->
+    <insert id="insertHousePriceChange" parameterType="map">  
+    	INSERT INTO house_price_change (
+			id,
+			HOUSE_INFO_ID,
+			LAST_PRICE,
+			NOW_PRICE,
+			TYPE,
+			CREATE_TIME,
+			OPERATE_USER,
+			OPERATE_USER_ID
+		)
+		VALUES(
+			HOUSE_PRICE_CHANGE_SEQ.NEXTVAL,
+			#{houseInfoId,jdbcType=DECIMAL},
+			#{lastPrice,jdbcType=DECIMAL},
+			#{nowPrice,jdbcType=DECIMAL},
+			#{type,jdbcType=DECIMAL},
+			SYSDATE,
+			#{userName,jdbcType=VARCHAR},
+			#{userId,jdbcType=VARCHAR}
+		)
+    </insert>
+    
+    <!-- 房源价格变动-insert跟进记录 -->
+    <insert id="insertHouseFollow" parameterType="map">  
+    	INSERT INTO HOUSE_FOLLOW (
+			id,
+			HOUSE_INFO_ID,
+			FOLLOW_TIME,
+			FOLLOW_CONTENT,
+			CREATE_TIME,
+			OPERATE_USER,
+			OPERATE_USER_ID,
+			FOLLOW_WAY,
+			FOLLOW_TYPE
+		)
+		VALUES(
+			HOUSE_FOLLOW_SEQ.NEXTVAL,
+			#{houseInfoId,jdbcType=DECIMAL},
+			SYSDATE,
+			#{followContent,jdbcType=VARCHAR},
+			SYSDATE,
+			#{userName,jdbcType=VARCHAR},
+			#{userId,jdbcType=VARCHAR},
+			5,
+			2
+		)
+    </insert>
+  
+    <!-- 根据id更新houseInfo sy -->
+   	<update id="updateHouseInfoById" parameterType="map">             
+	     UPDATE HOUSE_INFO
+	      	<set>
+	      		<if test="roomId != null and roomId != ''">
+					ROOM_ID = #{roomId},
+				</if>
+				<if test="divideId != null and divideId != ''">
+					DIVIDE_USER_ID = #{divideId},
+				</if>
+				 <if test="divideUser != null and divideUser != ''">
+					DIVIDE_USER = #{divideUser},
+				</if>
+				<if test="divideOrg != null and divideOrg != ''">
+					DIVIDE_ORG = #{divideOrg},
+				</if>
+				<if test="divideOrgCode != null and divideOrgCode != ''">
+					DIVIDE_ORG_CODE = #{divideOrgCode},
+				</if>
+				<if test="divideQu != null and divideQu != ''">
+					DIVIDE_QU = #{divideQu},
+				</if>
+				<if test="divideDaQu != null and divideDaQu != ''">
+					DIVIDE_DAQU = #{divideDaQu},
+				</if>
+				<if test="operateTime != null and operateTime != ''">
+					OPERATE_TIME = #{operateTime}
+				</if>
+	      	</set>
+	     WHERE id=#{houseInfoId}
+	</update> 
+	<!-- 根据id更新houseSale sy -->
+	<update id="updateHouseSaleById" parameterType="map">
+		UPDATE HOUSE_SALE
+			<set>
+				<if test="addrDetail != null and addrDetail != ''">
+					 ADDRESS_DETAIL = #{addrDetail,jdbcType=VARCHAR}
+				</if>
+				<if test="zzdz != null and zzdz!=''">
+					 ,ZZDZ_DETAIL = #{zzdz,jdbcType=VARCHAR}
+				</if>
+				<if test="property != null and property != ''">
+					 ,PROPERTY = #{property,jdbcType=DECIMAL}
+				</if>
+				<if test="propertyRight != null and propertyRight !=''">
+					 ,PROPERTY_RIGHT = #{propertyRight,jdbcType=DECIMAL}
+				</if>
+				<if test="rooms != null and rooms !=''">
+					 ,rooms = #{rooms,jdbcType=DECIMAL}
+				</if> 
+				<if test="office != null and office !=''">
+					 ,office = #{office,jdbcType=DECIMAL}
+				</if>
+				<if test="kitchen != null and kitchen !=''">
+					 ,kitchen = #{kitchen,jdbcType=DECIMAL}
+				</if>
+				<if test="wc != null and wc !=''">
+					 ,wc = #{wc,jdbcType=DECIMAL}
+				</if>
+				<if test="coveredArea != null and coveredArea !=''">
+					 ,covered_area = #{coveredArea,jdbcType=DECIMAL}
+				</if>
+				<if test="usedArea != null and usedArea !=''">
+					 ,used_area = #{usedArea,jdbcType=DECIMAL}
+				</if>
+				<if test="buildingFloor != null and buildingFloor !=''">
+					 ,building_floor = #{buildingFloor,jdbcType=DECIMAL}
+				</if>
+				<if test="chaoXiang != null and chaoXiang !=''">
+					 ,chao_xiang = #{chaoXiang,jdbcType=DECIMAL}
+				</if>
+				<if test="buildTime != null and buildTime !=''">
+					 ,build_time = #{buildTime,jdbcType=DECIMAL}
+				</if>
+				<if test="decoradion != null and decoradion !=''">
+					 ,decoradion = #{decoradion,jdbcType=DECIMAL}
+				</if>
+				<if test="decoradionTime != null and decoradionTime !=''">
+					 ,decoradion_time = #{decoradionTime,jdbcType=DECIMAL}
+				</if>
+				<if test="unitPrice != null and unitPrice !=''">
+					 ,unit_price = #{unitPrice,jdbcType=DECIMAL}
+				</if>
+				<if test="sellPrice != null and sellPrice !=''">
+					 ,sell_price = #{sellPrice,jdbcType=DECIMAL}
+				</if>
+				<if test="carPortSellPrice != null and carPortSellPrice !=''">
+					 ,carport_sell_price = #{carPortSellPrice,jdbcType=DECIMAL}
+				</if>
+				<if test="entrustPrice != null and entrustPrice !=''">
+					 ,entrust_price = #{entrustPrice,jdbcType=DECIMAL}
+				</if>
+				<if test="useStatus != null and useStatus !=''">
+					 ,use_status = #{useStatus,jdbcType=DECIMAL}
+				</if>
+				<if test="hjInfoType != null and hjInfoType !=''">
+					 ,hj_info_type = #{hjInfoType,jdbcType=DECIMAL}
+				</if>
+				<if test="taxation != null and taxation !=''">
+					 ,taxation = #{taxation,jdbcType=DECIMAL}
+				</if>
+				<if test="taxationRamark != null and taxationRamark !=''">
+					 ,taxation_ramark = #{taxationRamark,jdbcType=DECIMAL}
+				</if>
+				<if test="sellReason != null and sellReason !=''">
+					 ,sell_reason = #{sellReason,jdbcType=DECIMAL}
+				</if>
+				<if test="fckCode != null and fckCode !=''">
+					 ,fck_code = #{fckCode,jdbcType=DECIMAL}
+				</if>
+				<if test="houseLevel != null and houseLevel !=''">
+					 ,house_level = #{houseLevel,jdbcType=DECIMAL}
+				</if>
+				<if test="moveOutType != null and moveOutType !=''">
+					 ,move_out_type = #{moveOutType,jdbcType=DECIMAL}
+				</if>	
+				<if test="takeEmpty != null and takeEmpty !=''">
+					 ,take_empty = #{takeEmpty,jdbcType=DECIMAL}
+				</if>	
+				<if test="fukUse != null and fukUse !=''">
+					 ,fck_use = #{fukUse,jdbcType=VARCHAR}
+				</if>
+				<if test="zhengDai != null and zhengDai !=''">
+					 ,zheng_dai = #{zhengDai,jdbcType=DECIMAL}
+				</if>
+				<if test="childSource != null and childSource !=''">
+					 ,owner_source = #{childSource,jdbcType=DECIMAL}
+				</if>
+				<if test="lookWay != null and lookWay !=''">
+					 ,look_way = #{lookWay,jdbcType=VARCHAR}
+				</if>
+				<if test="haunted != null and haunted !=''">
+					 ,haunted = #{haunted,jdbcType=VARCHAR}
+				</if>
+				<if test="special != null and special !=''">
+					 ,special = #{special,jdbcType=VARCHAR}
+				</if>
+				<if test="tags != null and tags !=''">
+					 ,tags = #{tags,jdbcType=VARCHAR}
+				</if>
+				<if test="status != null and status !=''">
+					 ,status = #{status,jdbcType=DECIMAL}
+				</if>
+				<if test="remark != null and remark !=''">
+					 ,remark = #{remark,jdbcType=VARCHAR}
+				</if>
+				<if test="ownerName != null and ownerName !=''">
+					 ,owner_name = #{ownerName,jdbcType=VARCHAR}
+				</if>
+				<if test="ownerTel != null and ownerTel !=''">
+					 ,owner_tel = #{ownerTel,jdbcType=VARCHAR}
+				</if> 
+				<if test="nearPosition != null and nearPosition !=''">
+					 ,near_position = #{nearPosition,jdbcType=VARCHAR}
+				</if>
+				<if test="fitManagement != null and fitManagement !=''">
+					 ,fit_management = #{fitManagement,jdbcType=DECIMAL}
+				</if>
+				<if test="toilet != null and toilet !=''">
+					 ,toilet = #{toilet,jdbcType=DECIMAL}
+				</if>
+				<if test="officeLevel != null and officeLevel !=''">
+					 ,office_level = #{officeLevel,jdbcType=DECIMAL}
+				</if>
+				<if test="containPerson != null and containPerson !=''">
+					 ,contain_preson = #{containPerson,jdbcType=DECIMAL}
+				</if>
+				<if test="propertyFee != null and propertyFee !=''">
+					 ,property_fee = #{propertyFee,jdbcType=DECIMAL}
+				</if> 
+				<if test="closeBuilding != null and closeBuilding !=''">
+					 ,near_building = #{closeBuilding,jdbcType=DECIMAL}
+				</if> 
+				<if test="carPropertyRightType != null and carPropertyRightType !=''">
+					 ,property_right_type = #{carPropertyRightType,jdbcType=DECIMAL}
+				</if> 
+				<if test="carPortId != null and carPortId !=''">
+					 ,CAR_PORT_ID = #{carPortId,jdbcType=DECIMAL}
+				</if>
+			</set>
+		<where>
+	     	house_info_id=#{houseInfoId}
+	     </where> 
+	
+	</update> 
+	
+    <!-- 删除房源联系人 sy -->
+    <delete id="deleteHouseLinkMans" parameterType="java.lang.String">
+	    DELETE FROM HOUSE_LINKMAN WHERE id IN (${_parameter})
+	</delete>
+	
+	<!-- 更新房间表的证载地址 sy -->
+    <update id="updateHouseZzdz" parameterType="map">
+         UPDATE BASE_HOUSE
+         	<set>        		
+				ZZDZ_DETAIL = #{zzdz,jdbcType=VARCHAR}	
+         	</set>
+         	<where>
+         	   ID = #{roomId}
+         	</where>
+    </update>
+    
+    <!-- 校验房源是否已存在 sy -->
+	<select id="isExistWithHouseSale" parameterType="map" resultType="java.lang.Integer" >
+   		SELECT
+			count(0)
+		FROM
+			house_info info
+		LEFT JOIN house_sale sale ON sale.house_info_id = info.id
+		WHERE
+			1=1
+			AND sale. STATUS IN (1, 2)
+			<if test="demandType != null and demandType !=''"> 
+				AND info.demand_type = #{demandType}
+			</if>
+			<if test="roomId != null and roomId !=''"> 
+		    	AND info.room_id = #{roomId}
+		    </if>
+   	</select>
+   	
+	<!-- 更新houseSale表数据 地址库地址 -->
+	<update id="updateHouseSale" parameterType="map">
+	  update HOUSE_SALE
+	  <set >
+	    <if test="houseAddr != null and houseAddr != ''">
+	      ADDRESS_DETAIL = #{houseAddr}
+	    </if>
+	  </set>
+	  where HOUSE_INFO_ID = #{houseInfoId}
+	</update>
+    <!--获取评论 -->
+   	<select id="getCommemnt" parameterType="map" resultType="CommentModel" >
+   		select
+	<!--评论人ID -->
+   			USER_ID as userId,
+	<!--评论人姓名 -->
+   			USER_NAME as userName,
+	<!--评论人姓名 -->
+   			DISCUSS as discuss
+	<!--房源评论表 -->
+   		from HOUSE_COMMENT
+   		where
+	<!--房源信息表ID -->
+   			house_info_id = #{houseInfoId}
+	<!--状态1正常, 2已删除 -->
+   			and STAUTS = 1
+	<!--评论时间 -->
+   		order by ID
+   	</select>
+	<!--发表评论 -->
+	<insert id="saveComment" parameterType="map" >
+		insert into HOUSE_COMMENT (
+			"ID", 
+			"HOUSE_INFO_ID", 
+			"DISCUSS", 
+			"TYPE", 
+			"CREATE_TIME", 
+			"USER_NAME", 
+			"USER_ID",
+			"STAUTS"
+		) 
+		values (
+			HOUSE_COMMENT_SEQ.NEXTVAL,
+			#{houseInfoId},
+			#{discuss},
+			1,
+			#{createTime,jdbcType=DATE},
+			#{userName,jdbcType=VARCHAR},
+			#{userId},
+			1
+		)
+	</insert>
+		        <!--买卖详情页-->
+     <select id="getHouseSaleDetail" parameterType="map" resultType="houseSaleModel">
+	     select distinct
+              info.id AS houseInfoId,
+              info.operate_user AS operator,
+	          info.OPERATE_USER_ID as operatorId,
+	          info.OPERATE_ORG as operateOrg,
+	          info.OPERATE_ORG_CODE as operateOrgCode,
+	          info.OPERATE_QU as operateQu,
+	          info.OPERATE_QU_CODE as operateQuCode,
+	          info.CODE as code,
+	          info.ROOM_ID as roomId,
+	          info.DIVIDE_USER_ID as divideUserId,
+	          to_char(info.OPERATE_TIME,'yyyy-mm-dd hh24:mi:ss') as infoOperateTime,
+	          info.DIVIDE_USER as divideUser,
+	          info.DIVIDE_ORG as divideOrg,
+	          info.DIVIDE_QU as divideQu,
+	          info.DIVIDE_DAQU as divideDaqu,
+	          info.DIVIDE_ORG_CODE as divideOrgCode,
+              sale.status as status,
+              sale.USE_TYPE as useType,
+              sale.PROPERTY as property,
+              sale.ADDRESS_DETAIL as addressDetail,
+              sale.ZZDZ_DETAIL as zzdzDetail,
+              sale.BUILDING_TYPE as buildingType,
+              sale.ROOMS as rooms,
+              sale.OFFICE as office,
+              sale.WC as wc,
+              sale.KITCHEN as kitchen,
+              sale.CHAO_XIANG as chaoXiang,
+              sale.COVERED_AREA as coveredArea,
+              sale.USED_AREA as usedArea,
+              sale.BUILD_TIME as buildTime,
+              sale.DECORADION as decoradion,
+              sale.DECORADION_TIME as decoradionTime,
+              sale.SELL_PRICE as sellPrice,
+              sale.ENTRUST_PRICE as entrustPrice,
+              sale.USE_STATUS as useStatus,
+              sale.HJ_INFO_TYPE as hjInfoType,
+              sale.ZHENG_DAI as zhengDai,
+              sale.TAXATION as taxation,
+              sale.FCK_USE as fukUse,
+              sale.HOUSE_LEVEL as houseLevel,
+              sale.FCK_CODE as fckCode,
+              sale.EVALUATE as assess,
+              to_char(sale.FCK_DATE,'yyyy-mm-dd hh24:mi:ss') as fckDate,
+              sale.MOVE_OUT_TYPE as moveOutType,
+              sale.TAKE_EMPTY as  takeEmpty,
+              sale.SELL_REASON as sellReason,
+              sale.LOOK_WAY as lookWay,
+              sale.BUY_DEMAND as bugDemand,
+              to_char(sale.CREATE_TIME,'yyyy-mm-dd hh24:mi:ss') as createTime,
+              sale.SPECIAL as special,
+              sale.TAGS as tags,
+              sale.REMARK as remark,
+              sale.PROPERTY_FEE as  propertyFee,
+              sale.YIELD as yield,
+              sale.NEAR_POSITION as nearPosition,
+              sale.FIT_MANAGEMENT as fitManagement,
+              sale.CARPORT_SELL_PRICE as carportSellPrice,
+              sale.OFFICE_LEVEL as officeLevel,
+              sale.BUILDING_FLOOR as buildingFloor,
+              sale.CONTAIN_PRESON as containPerson,
+              sale.TOILET as toilet,
+              sale.OWNER_NAME as ownerName,
+              sale.OWNER_TEL as ownerTel,
+              premises.ID AS premisesId,
+              premises.NAME AS premisesName,
+              premises.edu_ids AS premisesEduIds,
+              premises.BUS_STATION as busStation,
+              premises.SUBWAY_STATION as subwayStation,
+              os.source as source1,
+              WMSYS.WM_CONCAT(oss.source) OVER(PARTITION BY info.id ORDER BY info.id) as source2, 
+              mk.id as keyId,
+              mk.KEY_CODE as keyCode,
+              mk.TYPE as keyType,
+              mk.COLELECT_USER as colelectUser,
+              mk.COLELECT_USER_ID as colelectUserId,
+              mk.COLELECT_CONTACT as colelectContact,
+              mk.COLELECT_ZONE as colelectZone,
+              mk.COLELECT_ZONE_CODE as colelectZoneCode,
+              mk.COLELECT_ORG as colelectOrg,
+              mk.COLELECT_ORG_CODE as colelectOrgCode,
+              mk.DEPOSIT as deposit,
+              mk.DEPOSIT_CONTACT as  depositContact,
+              mk.REMARK as  keyRemark,
+              mk.PASSWORD as password,
+              mk.DEPOSIT_STORE_ID as depositStoreId,
+              to_char(mk.OPERATE_TIME,'yyyy-mm-dd hh24:mi:ss') as keyOperatetime,
+              bh.NUM as bhNum,
+           	  mpi.ID as skId,
+           	  WMSYS.WM_CONCAT(cp.id) OVER(PARTITION BY info.ROOM_ID ORDER BY info.ROOM_ID) as cpId
+        from  house_info info
+        left join house_sale sale on sale.house_info_id = info.id
+        left join OWNER_SOURCE os  on os.id = sale.OWNER_SOURCE
+        left join OWNER_SOURCE oss on os.id = oss.parent_id
+        left join BASE_HOUSE bh on info.room_id = bh.id
+        left join base_premises premises ON premises.id = bh.premises_id
+        left join manage_key_info mk on mk.house_info_id = info.id
+        left join MANAGE_PROSPECT_INFO mpi on mpi.HOUSE_INFO_ID = sale.house_info_id
+        left join CAR_PORT cp on cp.ROOM_ID = info.ROOM_ID
+      where info.id = #{houseInfoId}
+     </select>
+     	<!--买卖房源联系人-->
+     <select id="getHouseSaleLinkManList" parameterType="map" resultType="houseSaleModel">
+	    select  TYPE as linkType,
+	    		NAME as linkName,
+	    		CONTACT_TYPE as contactType
+		 	from  HOUSE_LINKMAN
+	    where HOUSE_INFO_ID = #{houseInfoId}
+     </select>
+      <!-- 获取限时速递租赁的参数 -->
+    <select id="getManageTimeLimitExpress" resultType="houseSaleModel" parameterType="map">
+	    select OWNER_TEL      as ownerTel,
+	       ZZDZ_DETAIL as zzdzDetail,
+	       OWNER_NAME     as ownerName,
+	       b.code as code
+	  	from house_sale a
+	  	left join house_info b on b.id = a.HOUSE_INFO_ID
+		where a.HOUSE_INFO_ID = #{houseInfoId} 
+    </select>
+</mapper>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="match" >
+<!-- 	赛事字段 -->
+	<sql id="Match_Column_List" >
+		ID as id, NAME as name, CATEGORY_ID as categoryId, START_TIME as startTime, END_TIME as endTime,
+		STATUS as status, PUBLISHER as publisher, PUBLISH_TIME as publishTime, RULE as rule, REMARK as remark
+	</sql>
+<!-- 	根据id删除赛事 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Double" >
+		delete from MATCH
+		where "ID" = #{id,jdbcType=DECIMAL}
+	</delete>
+<!-- 	插入一条赛事数据 -->
+	<insert id="insert" parameterType="map" >
+	  	<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="matchId">
+			  SELECT MATCH_SEQ.NEXTVAL + 1 FROM DUAL
+		</selectKey>
+		insert into MATCH (
+			"ID", 
+			"NAME", 
+			"CATEGORY_ID", 
+			"START_TIME", 
+			"END_TIME", 
+			"STATUS", 
+			<if test="publisher != null and publisher != ''">
+				"PUBLISHER", 
+			</if>
+			<if test="publishTime != null and publishTime != ''">
+				"PUBLISH_TIME", 
+			</if>
+			"RULE", 
+			"REMARK"
+		)
+		values (
+			MATCH_SEQ.NEXTVAL, 
+			#{name,jdbcType=VARCHAR}, 
+			#{categoryId,jdbcType=DECIMAL}, 
+			#{startTime,jdbcType=DATE}, 
+			#{endTime,jdbcType=DATE}, 
+			1, 
+			<if test="publisher != null and publisher != ''">
+				#{publisher,jdbcType=VARCHAR}, 
+			</if>
+			<if test="publishTime != null and publishTime != ''">
+				#{publishTime,jdbcType=DATE},
+			</if>
+			#{rule,jdbcType=VARCHAR}, 
+			#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+<!-- 	插入赛区 目标 -->
+	<insert id="insertMatchTarget" parameterType="map" >
+		insert into MATCH_TARGET (
+			"ID", 
+			"MATCH_ID", 
+			<if test="deal != null and deal != ''">
+				"TARGET_DEAL", 
+			</if>
+			<if test="rent != null and rent != ''">
+				"TARGET_RENT", 
+			</if>
+			"MATCH_ZONE_ID"
+		)
+		values (
+			MATCH_TARGET_SEQ.NEXTVAL, 
+			#{matchId},
+			<if test="deal != null and deal != ''">
+				#{deal}, 
+			</if>
+			<if test="rent != null and rent != ''">
+				#{rent},
+			</if>
+			#{matchZoneId}
+		)
+	</insert>
+<!-- 	更新赛区 目标 -->
+	<update id="editMatchTarget" parameterType="matchModel" >
+		update MATCH_TARGET
+		set 
+			"MATCH_ID" = #{matchId}
+			<if test="deal != null and deal != ''">
+				,"TARGET_DEAL" = #{deal}
+			</if>
+			<if test="rent != null and rent != ''">
+				,"TARGET_RENT" = #{rent}
+			</if>
+		where "MATCH_ID" = #{matchId} and "MATCH_ZONE_ID" = #{matchZoneId}
+	</update>
+<!-- 	根据id更新一条赛事数据 -->
+	<update id="updateByPrimaryKey" parameterType="map" >
+		update MATCH
+		set "NAME" = #{name},
+			"CATEGORY_ID" = #{categoryId},
+			"START_TIME" = #{startTime},
+			"END_TIME" = #{endTime},
+			<if test="status != null and status != ''">
+				"STATUS" = #{status},
+			</if>
+			"PUBLISHER" = 'admin',
+<!-- 			"PUBLISHER" = #{publisher}, -->
+			<if test="publishTime != null and publishTime != ''">
+				"PUBLISH_TIME" = #{publishTime},
+			</if>
+			"RULE" = #{rule},
+			"REMARK" = #{remark}
+		where "ID" = #{id}
+	</update>
+<!-- 	根据id发布赛事 -->
+	<update id="publishMatch" parameterType="map" >
+		update MATCH
+		set "PUBLISHER" = #{publisher},
+			"PUBLISH_TIME" = #{publishTime},
+			"STATUS" = 2
+		where "ID" = #{id}
+	</update>
+<!-- 	根据id查询一条赛事实体 -->
+	<select id="selectByPrimaryKey" resultType="matchModel" parameterType="map" >
+		select
+			<include refid="Match_Column_List" />
+		from MATCH
+		where "ID" = #{matchId}
+	</select>
+<!-- 	查询所有赛事 -->
+	<select id="selectAll" resultType="matchModel" >
+		select
+		<include refid="Match_Column_List" />
+		from MATCH
+		order by id desc
+	</select>
+<!-- 	删除赛事 -->
+	<delete id="deleteMatch" parameterType="map">
+		delete from MATCH where id in (${id})
+	</delete>
+<!-- 	赛区类别下拉列表 -->
+	<select id="getSelectCategory" resultType="matchModel" >
+		select mc.ID as categoryId,
+			mc.NAME as categoryName 
+		from MATCH_CATEGORY mc where mc.STATUS != -1
+	</select>
+<!-- 	获取所有赛区 -->
+	<select id="getMatchZone" resultType="matchModel" >
+		select 
+			mz.ID as zoneId
+			,mz.NAME as zoneName
+			,mz.BUSSUNESS_TYPE as zoneType
+			<if test="matchId != 0 and matchId != '0'">
+				,mt.TARGET_DEAL as deal
+				,mt.TARGET_RENT as rent
+			</if>
+		from MATCH_TARGET mt
+			<if test="matchId != 0 and matchId != '0'">
+				left join MATCH_ZONE mz
+			</if>
+			<if test="matchId == 0 or matchId == '0'">
+				right join MATCH_ZONE mz
+			</if>
+				on mt.MATCH_ZONE_ID = mz.ID
+			<if test="matchId != 0 and matchId != '0'">
+				where mt.MATCH_ID = #{matchId}
+			</if>
+			<if test="matchId == 0 or matchId == '0'">
+				group by mz.ID, mz.NAME, mz.BUSSUNESS_TYPE
+			</if>
+ 	</select>
+<!-- 	分页查询 -->
+	<select id="getMatchJQPage" resultType="matchModel" parameterType="map" >
+		select
+			m.ID as id,
+			m.NAME as name,
+			mc.name as categoryName,
+			m.START_TIME as startTime,
+			m.END_TIME as endTime,
+			m.STATUS as status,
+			m.PUBLISHER as publisher,
+			m.PUBLISH_TIME as publishTime,
+			m.RULE as rule,
+			m.REMARK as remark
+		from MATCH m
+		left join match_category mc on m.category_id = mc.id
+		<where>
+			1=1
+			<if test="name != null and name != ''">
+				and m.NAME like '%'||#{name}||'%'
+			</if>
+			<if test="categoryId != null and categoryId != ''">
+				and mc.id = #{categoryId}
+			</if>
+			<if test="year != null and year != ''">
+				and TO_CHAR(m.START_TIME,'yyyy') = #{year}
+			</if>
+			<if test="startTime != null and startTime != ''">
+				and m.START_TIME &gt;= TO_DATE(#{startTime},'yyyy/mm/dd pm hh12:mi:ss')
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and m.START_TIME &lt;= TO_DATE(#{endTime},'yyyy/mm/dd pm hh12:mi:ss')
+			</if>
+			<if test="status == 1">
+				and m.STATUS = 1 or m.STATUS = 3
+			</if>
+			<if test="status == 2">
+				and m.STATUS = #{status}
+			</if>
+<!-- 			未开始 -->
+			<if test="matchStatus == 1">
+				and m.STATUS = 2 and SYSDATE &lt; START_TIME
+			</if>
+<!-- 			进行中 -->
+			<if test="matchStatus == 2">
+				and m.STATUS = 2 and SYSDATE &gt;= START_TIME and SYSDATE &lt;= END_TIME
+			</if>
+<!-- 			已结束 -->
+			<if test="matchStatus == 3">
+				and m.STATUS = 2 and SYSDATE &gt; END_TIME
+			</if>
+		</where>
+	</select>
+	
+	<select id="getTeamName" parameterType="map" resultType="matchModel">
+		select mz.id as zoneId,
+			wm_concat(case when mzt.bussiness_type = 1 then mzt.name end) as dealTeamName,
+			wm_concat(case when mzt.bussiness_type = 2 then mzt.name end) as rentTeamName
+		from match_zone mz
+		inner join match_zone_team mzt on mz.id = mzt.match_zone_id
+		group by mz.id--, mzt.MATCH_ZONE_ID, mz.id
+	<where>
+		<if test="zoneName!=null and zoneName !='' ">
+			and mz.name = #{zoneName,jdbcType=VARCHAR}
+		</if>
+		
+		<if test="categoryName!=null and categoryName !='' ">
+			and mc.name = #{categoryName,jdbcType=VARCHAR}
+		</if>
+		
+		<if test="grade!=null and grade !='' ">
+			and mz.grade = #{grade,jdbcType=DECIMAL}
+		</if>
+	</where>
+	</select>
+</mapper>

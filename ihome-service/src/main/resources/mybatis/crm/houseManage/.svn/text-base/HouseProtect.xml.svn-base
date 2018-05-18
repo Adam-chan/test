@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="houseProtect">
+	<select id="getHouseProjectPage" parameterType="map" resultType="houseProtectModel">
+		select 
+		      hp.id,
+		      hp.HOUSE_INFO_ID as houseInfoId,
+		      hp.USER_NAME as protectUser,
+		      hp.USER_ID as protectUserId,
+		      hp.EXAMINE_STATUS examineStatus,
+		      hp.CREATE_TIME createTime,
+		      hp.EXAMINE_TIME examineTime,
+		      hp.EXAMINE_USER examineUser,
+		      hp.END_TIME endDate,
+		      hp.remark,
+		      hi.code houseCode,
+		      hi.demand_type demandType,
+		      case hi.demand_type when 1 then hl.owner_name else ha.owner_name end ownerName,
+		      case when hl.id is null then hl.use_type else ha.use_type end useType,
+		      vh.BP_NAME premisesName
+	    from HOUSE_PROTECT hp
+	    left join HOUSE_INFO hi on hi.id= hp.house_info_id
+	    left join HOUSE_LINKMAN hm on hm.house_info_id = hi.id
+	    left join HOUSE_LEASE hl on hl.house_info_id = hi.id and hi.demand_type =1
+	    left join HOUSE_SALE ha on ha.house_info_id = hi.id and hi.demand_type =2
+	    left join VIEW_HOUSE vh on vh.BH_ID = hi.room_id 
+	    <where>
+	    	hp.EXAMINE_STATUS = 3
+	    	<if test="houseCode !=null  and  houseCode != '' ">
+	    		hi.code =#{houseCode}
+	    	</if>
+	    	<if test="premisesName !=null  and  premisesName != '' ">
+	    		and instr(vh.BP_NAME,#{premisesName}) &lt; 0
+	    	</if>
+	    	<if test="useType !=null  and  useType != '' ">
+	    		and (hl.use_type =#{useType} or ha.use_type =#{useType})
+	    	</if>
+	    	<if test="demandType !=null  and  demandType != '' ">
+	    		and hi.demand_type = #{demandType}
+	    	</if>
+	    	<if test="ownerTell !=null  and  ownerTell != '' ">
+	    		and hm.contact_type = #{ownerTell}
+	    	</if>
+	    	<if test="quOrg !=null  and  quOrg != '' ">
+	    		<!-- 暂没有 -->
+	    	</if>
+	    	<if test="zuOrg !=null  and  zuOrg != '' ">
+	    		<!-- 暂没有 -->
+	    	</if>
+	    	<if test="jingjiren !=null  and  jingjiren != '' ">
+	    		<!-- 暂没有 -->
+	    	</if>
+	    	<if test="startTime !=null  and  startTime != '' ">
+	    		and hp.CREATE_TIME &gt; to_date(#{startTime},'yyyy-MM-dd')
+	    	</if>
+	    	<if test="endTime !=null  and  endTime != '' ">
+	    		and hp.CREATE_TIME &lt; to_date(#{endTime},'yyyy-MM-dd')
+	    	</if>
+	    	<if test="protectUser !=null  and  protectUser != '' ">
+	    		 and instr(hp.USER_NAME,#{protectUser}) &gt; 0
+	    	</if>
+	    </where>
+	</select>
+	<update id="cancelProtect" parameterType="string">
+		update HOUSE_PROTECT set EXAMINE_STATUS = 4,END_TIME = sysdate
+		where id in (${_parameter})
+	</update>
+</mapper>

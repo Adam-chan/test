@@ -1,0 +1,12 @@
+<div>
+<input name="examineType" id="examineType" value="${examineType!}" type="hidden" />
+是否审核通过?
+</div>
+
+<script type="text/javascript">
+$(function (){
+	
+});
+		
+
+</script>

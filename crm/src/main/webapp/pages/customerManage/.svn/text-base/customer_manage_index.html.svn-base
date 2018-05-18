@@ -1,0 +1,502 @@
+<div id="top_tools" class=" btn-group">
+	<button id="premises_query" class="btn btn-sm btn-white"
+		onclick="clearQuery();">
+		<i class="iconfont">&#xe626;</i> <span>清空</span>
+	</button>
+	<button id="" class="btn btn-sm btn-white" onclick="queryCustomers();">
+		<i class="iconfont">&#xe6e4;</i> <span>查询</span>
+	</button>
+	<button id="" class="btn btn-sm btn-white" onclick="toAddCustomer();">
+		<i class="iconfont">&#xe6e0;</i> <span>新增</span>
+	</button>
+	<button id="" class="btn btn-sm btn-white"
+		onclick="toUpdateCustomer();">
+		<i class="iconfont">&#xe6dd;</i> <span>修改</span>
+	</button>
+	<button id="" class="btn btn-sm btn-white" onclick="addBlackList();">
+		<i class="iconfont">&#xe6e3;</i> <span>拉黑</span>
+	</button>
+</div>
+<div class="row">
+	<div class="col-xs-12 my-group">
+		<div id="cssUp" class="form-horizontal row my-inputs">
+		<form id="customerForm">
+		<div class="row">
+			
+			<div class="col-md-2 col-sm-2">
+				<div class="form-xs form-group row">
+					<label for="userType" class="col-xs-5 control-label">联系人类型：</label>
+					<div class="col-xs-7">
+						<select id="userType" class="input-xs form-control">
+							<option value=""></option>
+							<option value="1">个人</option>
+							<option value="2">企业</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2 col-sm-2">
+				<div class="form-xs form-group row">
+					<label for="userName" class="col-xs-5 control-label">联系人名称：</label>
+					<div class="col-xs-7">
+						<input id="userName" mustauto="false"
+							class="form-control input-xs" placeholder="输入联系人名称" /> <input
+							id="id" name="id" type="hidden" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-3">
+				<div class="form-xs form-group row">
+					<label for="userCode" class="col-xs-5 control-label">联系人编号：</label>
+					<div class="col-xs-7">
+						<input id="userCode" class="form-control input-xs" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-3">
+				<div class="form-xs form-group row">
+					<label for="tell" class="col-xs-5 control-label">联系人电话：</label>
+					<div class="col-xs-7">
+						<input id="tell" class="form-control input-xs" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2 col-sm-2">
+				<div class="form-xs form-group row">
+					<label for="censusRegister" class="col-xs-5 control-label">户籍：</label>
+					<div class="col-xs-7">
+						<input id="censusRegister" class="form-control input-xs"
+							placeholder="输入户籍" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2 col-sm-2">
+				<div class="form-xs form-group row">
+					<label for="entryPerson" class="col-xs-5 control-label">首录人：</label>
+					<div class="col-xs-7">
+						<input id="entryPerson" class="form-control input-xs" />
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-md-2 col-sm-2">
+				<div class="form-xs form-group row">
+					<label for="idCode" class="col-xs-5 control-label">证件号码：</label>
+					<div class="col-xs-7">
+						<input id="idCode" class="form-control input-xs" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-3">
+				<div class="form-xs form-group row">
+					<label for="entryPerson" class="col-xs-5 control-label">录入时间：</label>
+					<div class="col-xs-7">
+						<div class=" input-daterange input-group 5i5jdate" style="">
+							<input type="text" class="form-control input-xs"
+								id="entryDateStart" placeholder="开始时间"> <span
+								class="input-group-addon addon-xs"> <i
+								class="fa fa-exchange"></i>
+							</span> <input type="text" class="form-control input-xs"
+								id="entryDateEnd" placeholder="结束时间">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-3">
+				<div class="form-xs form-group row">
+					<label for="updateDate" class="col-xs-5 control-label">更新时间：</label>
+					<div class="col-xs-7">
+						<input id="updateDate" class="form-control input-xs" type="hidden" />
+						<div class=" input-daterange input-group 5i5jdate">
+							<input type="text" class="form-control input-xs"
+								id="updateDateStart" placeholder="开始时间"> <span
+								class="input-group-addon addon-xs"> <i
+								class="fa fa-exchange"></i>
+							</span> <input type="text" class="form-control input-xs"
+								id="updateDateEnd" placeholder="结束时间">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2 col-sm-2">
+				<div class="form-xs form-group row">
+					<label for="blackList" class="col-xs-5 control-label">黑名单：</label>
+					<input id="blackList" onchange="showBlackList();" type="checkbox" class="ace input-xs"/><span class="lbl"></span>
+				</div>
+			</div>
+		</div>
+		</form>
+		</div>
+		<div id="more-input" class="" style="height: 71px;">
+			<div>
+				<i class="iconfont"></i>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-xs-12 my-grid">
+		<!-- PAGE CONTENT BEGINS -->
+		<table id="jqGrid">
+		</table>
+		<div id="jqGridPager"></div>
+		<!-- PAGE CONTENT ENDS -->
+	</div>
+
+	<input type="hidden" id="premisesIdLayout" value="" /> <input
+		type="hidden" id="auditingStatus" value="" />
+</div>
+<script type="text/javascript">
+	var aihome = {};
+	$('.page-content-area').ace_ajax('loadScripts', [ null, null ], function() {
+	});
+
+	$(function() {
+		customerInit();
+	});
+
+	/* 模糊搜索*/
+	$("#userName").autocomplete({
+		source : function(request, response) {
+			$.ajax({
+				url : "${CTX}/customerManage/getUserName.do",
+				dataType : "json",
+				type : 'post',
+				data : {
+					matchStr : request.term
+				},
+				success : function(data) {
+					var array = new Array(data.length);
+					for (var i = 0; i < data.length; i++) {
+						var temp = {
+							key : data[i].id,
+							value : data[i].userName
+						};
+						array[i] = temp;
+					}
+					response(array);
+				}
+			});
+		},
+		select : function(event, ui) {
+			$("#id").val(ui.item.key);
+			$("#userName").val(ui.item.value);
+			event.preventDefault();
+		}
+	});
+	function customerInit() {
+		$("#jqGrid")
+				.jqGrid(
+						{
+							height : $(window).height() - 249,
+							multiselect : true,
+							multiboxonly : true,
+							viewrecords : true,
+							rownumbers : true,
+							autowidth : true,
+							autoheight : true,
+							async : false,
+							url : "${CTX}/customerManage/getCustomerManagePage.do",
+							postData : {
+								
+							},
+							datatype : "json",
+							colNames : [ '联系人编号', '联系人名称','电话', '类型', '户籍', '首次录入人',
+									'录入时间', '更新时间', '需求数', 'id' ],
+							colModel : [
+									{
+										name : 'userCode',
+										sortable : false,
+										width : 10,
+										align : 'center',
+										formatter : function(cellvalue,
+												options, rowObject) {
+											return "<a onclick=\"showDetails('"
+													+ cellvalue
+													+ "');\" style=\"text-decoration:underline;color:blue\">"
+													+ cellvalue + "</a>";
+										}
+									},
+									{
+										name : 'userName',
+										sortable : false,
+										width : 12,
+										align : 'center',
+										formatter : function(cellvalue,
+												options, rowObject) {
+											var html = "<div >";
+											if(rowObject.blackListId > 0){
+												html += "<div class='col-xs-4'><i class='iconfont' style='color:red;cursor:pointer;'>&#xe6e9;</i></div>&nbsp;&nbsp;";
+											}else{
+												html +="<div class='col-xs-4'></div>"
+											}
+											return html + "<div class='col-xs-6'>"+rowObject.userName+"</div></div>";
+										}
+									},
+									{
+										name : 'tell',
+										sortable : false,
+										width : 12,
+										align : 'center',
+										formatter : function(cellvalue,
+												options, rowObject) {
+											var customerId = rowObject.id;
+											return "<a onclick='aihome.userCheckInfoFun(this)' demandType='3' customerId = '"+customerId+"' style='text-decoration:underline;color:blue'> 查看 </a>";
+													
+												
+										}
+									},
+									{
+										name : 'userTypeStr',
+										sortable : false,
+										width : 8,
+										align : 'center'
+									},
+									{
+										name : 'censusRegister',
+										sortable : false,
+										width : 8,
+										align : 'center'
+									},
+									{
+										name : 'entryPerson',
+										sortable : false,
+										width : 10,
+										align : 'center'
+									},
+									{
+										name : 'entryDateStr',
+										sortable : false,
+										width : 12,
+										align : 'center'
+									},
+									{
+										name : 'updateDateStr',
+										sortable : false,
+										width : 12,
+										align : 'center'
+									},
+									{
+										name : 'demandNum',
+										index : 'demandNum',
+										sortable : false,
+										width : 6,
+										align : 'center',
+										formatter : function(rowName, options,
+												rowObject) {
+											var html = "";
+											var demandNum = rowObject.demandNum ? rowObject.demandNum
+													: '';
+											html += "<a style='color: blue;' onclick='showDemands("+ rowObject.id+ ");'>"
+													+ demandNum + "</a>";
+											return html;
+										}
+									}, {
+										name : 'id',
+										hidden : true
+									} ],
+							rowNum : 30,
+							rowList : [ 10, 20, 30, 50, 100 ],
+							pager : "#jqGridPager",
+							jsonReader : {
+								root : 'pagerResults',
+								page : 'currentPage',
+								rows : 'rowCount',
+								total : 'pageCount',
+								records : 'totalCount',
+								repeatitems : false
+							}
+						});
+	}
+
+	/* 联系人信息详情 */
+	function showDetails(value) {
+		var heights = $(window).height() * 0.7;
+		var widths = $(window).width() * 0.45;
+
+		oaDialogOpen("showCustomerDetails",//对话框ID，必填，且不能与当前页面的ID重复
+		{
+			url : "${CTX}/customerManage/showDetails.do?userCode=" + value,//调用页面的url
+			title : "联系人详情",//弹框的title
+			closeOnEscpe : true,//是否通过escpe关闭弹框
+			closeBtn : true,//是否显示关闭按钮
+			width : widths,//弹框的宽度
+			height : heights,
+			buttons : {
+				"确定" : function() {
+					$(this).dialog("close");
+					$("#jqGrid").trigger('reloadGrid');
+				},
+				"取消" : function() {
+					$(this).dialog("close");
+				}
+			},
+			openCall : function() {
+			},//弹框打开后的回调函数
+			closeCall : function() {
+			}//弹框关闭后的回调函数
+		});
+	}
+
+	/* 联系人添加 */
+	function toAddCustomer() {
+		oaDialogOpen("toAddCustomer",//对话框ID，必填，且不能与当前页面的ID重复
+		{
+			url : "${CTX}/customerManage/toAddCustomer.do",//调用页面的url
+			title : "添加联系人",//弹框的title
+			closeOnEscpe : true,//是否通过escpe关闭弹框
+			closeBtn : true,//是否显示关闭按钮
+			width : 1200,//弹框的宽度
+			height : 400,
+			buttons : {
+				"保存" : function() {
+					saveCustomer(1);
+					$(this).dialog("close");
+					$("#jqGrid").trigger('reloadGrid');
+				},
+				"取消" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	}
+	/* 联系人修改 */
+	function toUpdateCustomer() {
+		var rowIds = $("#jqGrid").jqGrid('getGridParam', 'selarrrow').join(",");
+		var selCount = rowIds.length;
+		if (selCount != 1) {
+			alert("请选择一个联系人进行修改");
+			return;
+		}
+		oaDialogOpen("toAddCustomer",//对话框ID，必填，且不能与当前页面的ID重复
+		{
+			url : "${CTX}/customerManage/toUpdateCustomer.do?id=" + rowIds,//调用页面的url
+			title : "修改联系人",//弹框的title
+			closeOnEscpe : true,//是否通过escpe关闭弹框
+			closeBtn : true,//是否显示关闭按钮
+			width : 850,//弹框的宽度
+			height : 400,
+			buttons : {
+				"保存" : function() {
+					saveCustomer(2);
+					$(this).dialog("close");
+					$("#jqGrid").trigger('reloadGrid');
+				},
+				"取消" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	}
+
+	/* 查询 */
+	function queryCustomers() {
+		/* if ($("#userName").val() == "") {
+			$("#id").val("");
+		} */
+		$("#jqGrid").setGridParam({
+			postData : {
+				userName : $("#userName").val(),
+				userType : $("#userType").val(),
+				userCode : $("#userCode").val(),
+				censusRegister : $("#censusRegister").val(),
+				isDemand : $("#isDemand").val(),
+				entryPerson : $("#entryPerson").val(),
+				tell : $("#tell").val(),
+				idCode : $("#idCode").val(),
+				updateDateStart : $("#updateDateStart").val(),
+				updateDateEnd : $("#updateDateDateEnd").val(),
+				entryDateStart : $("#entryDateStart").val(),
+				entryDateEnd : $("#entryDateEnd").val()
+			}
+		}).trigger("reloadGrid");
+	}
+
+	/* 清空 */
+	function clearQuery() {
+		$("#customerForm")[0].reset();
+	}
+
+	/* 显示黑名单 */
+	function showBlackList() {
+		var isCheck = $("#blackList").is(':checked');
+		$("#jqGrid").setGridParam({
+			postData : {
+				blackList : isCheck
+			}
+		}).trigger("reloadGrid")
+	}
+
+	/*拉黑*/
+	function addBlackList() {
+		var rowIds = $("#jqGrid").jqGrid('getGridParam', 'selarrrow');
+		var selCount = rowIds.length;
+
+		if (selCount == 0) {
+			alert("没有选中的联系人！");
+			return;
+		} else if (selCount > 1) {
+			alert("请只选择一个联系人！");
+			return;
+		}
+
+		var url = "${CTX}/customerManage/queryBlackListById.do";
+
+		$.ajax({
+			url : url,
+			dataType : "json",
+			data : {
+				rowIds : rowIds
+			},
+
+			success : function(data) {
+				if (data == '1') {
+					alert("此联系人已在黑名单中！");
+					return;
+				}
+				oaDialogOpen("toAddBlackList",//对话框ID，必填，且不能与当前页面的ID重复
+				{
+					url : "${CTX}/customerManage/addBlackList.do?id=" + rowIds,//调用页面的url
+					title : "拉黑联系人",//弹框的title
+					closeOnEscpe : true,//是否通过escpe关闭弹框
+					closeBtn : true,//是否显示关闭按钮
+					width : 450,//弹框的宽度
+					height : 400,
+					buttons : {
+						"保存" : function() {
+							saveBlackList(rowIds);
+							$(this).dialog("close");
+							$("#jqGrid").trigger('reloadGrid');
+						},
+						"取消" : function() {
+							$(this).dialog("close");
+						}
+					}
+				});
+			}
+		});
+	}
+	/*显示客源列表*/
+	function showDemands(customerId) {
+		var heights = $(window).height()*0.5;
+		var widths = $(window).width()*0.6;
+		oaDialogOpen("showDemands",//对话框ID，必填，且不能与当前页面的ID重复
+		{
+			url : "${CTX}/customerManage/showDemandsIndex.do?id="
+					+ customerId,//调用页面的url
+			title : "客户需求",//弹框的title
+			closeOnEscpe : true,//是否通过escpe关闭弹框
+			closeBtn : true,//是否显示关闭按钮
+			width : widths,//弹框的宽度
+			height : heights,
+			buttons : {
+				"取消" : function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+
+	}
+	<#include "../users/users_check.html">
+</script>

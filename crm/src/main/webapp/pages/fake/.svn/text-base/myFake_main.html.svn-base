@@ -1,0 +1,237 @@
+<title>我的打假</title>
+<div id="top_tools" class=" btn-group">
+  <button class="btn btn-sm btn-white  confirmBtn" onclick="aihome.queryFake();">
+    <i class="iconfont">&#xe6e4;</i>
+    <span>查询</span>
+  </button>
+  <button  class="btn btn-sm btn-white ladda-button" onclick="aihome.lookOver();"> 
+     <i class="iconfont">&#xe6e4;</i>
+    <span>查看</span>
+  </button>
+  <button  class="btn btn-sm btn-white btn-info" onclick="aihome.cleanBtn();">
+    <i class="iconfont">&#xe6e3;</i>
+    <span>清空</span>
+  </button>
+</div>
+<div class="row">
+	<div class="col-xs-12 my-group">
+		<div enterfor=".confirmBtn" class="form-horizontal row my-inputs" style="overflow: hidden; height: 60px;">
+			<form action="" id="fakeSearch">
+			<div class="row">
+				<div class="col-lg-2 col-md-4 col-sm-6">
+	              <div class=" form-xs form-group row">
+	                  <label for="tempName" class="col-xs-5 control-label">房源编号：</label>
+	                  <div class="col-xs-7">
+	                      <input class="form-control input-xs searchKey" name="houseCode" id="houseCode" placeholder="房源编号" type="text">
+	                  </div>
+	              </div>
+	            </div>
+			 	<div class="col-lg-2 col-md-4 col-sm-6">
+	                <div class=" form-xs form-group row ">
+	                    <label for="type" class="col-xs-5 control-label">打假类型:</label>
+		                 	 <div class="col-xs-7">
+		                        <select class="form-control input-xs searchKey" id="fakeType" name="fakeType">
+		                              <option value="">请选择</option>
+						              <option value="1">房源打假</option>
+						              <option value="2">钥匙打假</option>
+						              <option value="3">实勘打假</option>
+						              <option value="4">委托书打假</option>
+		                        </select>
+		                    </div>
+	                </div>
+	            </div>
+	            <div class="col-lg-2 col-md-4 col-sm-6">
+	                <div class=" form-xs form-group row">
+	                    <label for="status" class="col-xs-5 control-label">审核状态:</label>
+	                    <div class="col-xs-7">
+	                        <select class="form-control input-xs searchKey" id="examineStatus" name="examineStatus">
+	                              <option value="">请选择</option>
+					              <option value="1">通过</option>
+					              <option value="2">驳回</option>
+					              <option value="3">未审核</option>
+	                        </select>
+	                    </div>
+	                </div>
+	            </div>
+            </div>
+            <div class="row">
+	            <div class="col-lg-2 col-md-4 col-sm-6">
+	                <div class=" form-xs form-group row">
+	                   	<label for="houseNum" class="col-xs-5 control-label">打假时间:</label>
+	                	<div class="col-xs-7">
+							<div class="input-daterange input-group 5i5jdate">
+								<input id="startTime" name="startTime" type="text" class="form-control input-xs searchKey" placeholder="开始时间" value="">
+								<span class="input-group-addon addon-xs">～</span>
+								<input id="endTime" name="endTime" type="text" class="form-control input-xs searchKey" placeholder="结束时间" value="">
+							</div>
+					 	</div>
+	                </div>
+	            </div>
+	            <div class="col-lg-2 col-md-4 col-sm-6 ">
+	                <div class=" form-xs form-group row">
+	                    <label for="status" class="col-xs-5 control-label">业务类型:</label>
+	                    <div class="col-xs-7">
+	                        <select class="form-control input-xs searchKey" id="transType" name="transType">
+	                            <option value="">全部</option>
+	                            <option value="1">买卖</option>
+	                            <option value="2">租赁</option>
+	                        </select>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-lg-2 col-md-4 col-sm-6">
+	                <div class=" form-xs form-group row">
+	                    <label for="houseNum" class="col-xs-5 control-label">使用类别:</label>
+	                    <div class="col-xs-7">
+		                   	<select class="form-control input-xs searchKey" id="useType" name="useType">
+		                          <option value="">请选择</option>
+					              <option value="1">住宅</option>
+					              <option value="2">商铺</option>
+					              <option value="3">写字楼</option>
+					              <option value="3">车位</option>
+		                     </select>
+	                     </div>
+	                </div>
+	            </div>
+             </div>
+            </form>
+		</div>
+	</div>
+	<div class="col-xs-12 my-grid" >
+		<table id="myFake_jqGrid"></table>
+		<div id="jqGridPager"></div>
+	</div>
+</div>
+<script type="text/javascript">
+$('.page-content-area').ace_ajax('loadScripts', [null,"../assets/js/bootbox.js"], function () {});
+var aihome ={
+	cleanBtn:function(){
+		document.getElementById("fakeSearch").reset();
+	},
+	/* open */
+	lookOver : function() {
+		var fakeId = "";//打假主表ID
+		var fakeType = "";//打假类型1房源打假，2实勘打假，3钥匙打假 4:委托书打假
+		var title = "";//标题
+		var	rowId = $("#myFake_jqGrid").jqGrid('getGridParam','selarrrow');
+		var rowData = $("#myFake_jqGrid").jqGrid('getRowData',rowId);
+		var selCount = rowId.length;
+		if (selCount==0){
+			alert("没有选中的记录！");
+			return;
+		}else if(selCount>1){
+			alert("请选单条修改！");
+			return;
+		}
+		fakeType = rowData.type;
+		if(fakeType==1){
+			title = "房源打假审核";
+		}else if(fakeType==2){
+			title = "实勘审核";
+		}else if(fakeType==3){
+			title = "钥匙打假审核";
+		}else{
+			title = "委托书打假审核";
+		}
+		oaDialogOpen("openFakeIndex",{
+			url: "${CTX}/fake/myFakeOpen.do?fakeId="+rowId+"&fakeType="+fakeType,
+			title: title,
+			closeOnEscpe: true,
+			closeBtn: true,
+			width: $(window).width()*0.5,
+			height: $(window).height()*0.5,
+			buttons: {
+				"关闭" : function() {
+					$(this).dialog("close");
+				}
+			},
+			closeCall: function() {
+				$("#myFake_jqGrid").trigger('reloadGrid');
+			}
+		})
+	},
+	queryFake : function() {
+		var param = $("#fakeSearch").result();
+		$("#myFake_jqGrid").setGridParam({postData:param,page:1}).trigger("reloadGrid");
+	},
+	//分页方法
+	init_jqGrid : function() {
+		$("#myFake_jqGrid").jqGrid({
+			 url: '${CTX}/fake/getFakePage.do', 
+	         datatype: "json",
+	         colModel: [
+   	             {label: '房源编号',name:'houseCode',index:'houseCode',width: 30,
+  	            	 formatter:function(rowName, options, rowObject){
+	            	    return "<a href=\"javascript:aihome.lookUpInfo('"+rowObject.houseInfoId+"','"+rowObject.transType+"','"+rowObject.useType+"');\"  style='text-decoration:underline;color:blue'>"+rowName+"</a>";
+	          		 }
+   	             },
+   	         	 { label: '使用类别', name: 'useType',index:'useType',sortable : true,width: 30,
+   	            	formatter : function(trueValue, options, rowObject){
+						if(trueValue ==1){
+							return "<span >住宅</span>";
+						}else if(trueValue == 2){
+							return "<span >商铺</span>";
+						}else if(trueValue == 3){
+							return "<span >写字楼</span>";
+						}else if(trueValue == 4){
+							return "<span>车位</span>";
+						}
+					}
+   	             },
+   	     	     { label: '业务类型', name: 'transType',index:'transType',sortable : true,width: 30,
+   	            	formatter : function(trueValue, options, rowObject){
+						if(trueValue ==1){
+							return "<span >买卖</span>";
+						}else if(trueValue == 2){
+							return "<span >租赁</span>";
+						}
+					}
+   	             },
+   	          	{ label: '打假类型', name: 'type',index:'type',sortable : true,width: 30,hidden:true},
+   	         	{ label: '打假类型', name: 'typeStr',index:'typeStr',sortable : true,width: 30,},
+   	            { label: '打假时间', name: 'createTimeStr',index:'createTimeStr',sortable : true,width: 40},
+   	            { label: '审核时间', name: 'examineTimeStr',index:'examineTimeStr',sortable : true,width: 30 },
+	   	       	{ label: '审核状态', name: 'examineStatus',index:'examineStatus',sortable : true,width: 30,
+		            	formatter : function(trueValue, options, rowObject){
+							if(trueValue ==1){
+								return "<span >未处理</span>";
+							}else if(trueValue == 2){
+								return "<span >通过</span>";
+							}else if(trueValue == 3){
+								return "<span >驳回</span>";
+							}
+						}
+		        }
+	    	 ],
+	         multiselect: true,
+	         multiboxonly: true,
+	         viewrecords: true, 
+	         autowidth:true,
+	         height: $(window).height()-300,
+	         rowNum:30, 
+		     rowList:[10,20,30,50,100],
+	         pager: "#jqGridPager",
+	     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+	    });
+	},
+	lookUpInfo : function(houseId,type,num){
+		var url = "";
+		var param = "houseInfoId="+houseId+"&type="+type+"&num="+num;
+		if(type==1){
+			url="${CTX}/houseManage/lookUpDetail.do?"+param;
+		}else{
+			url="${CTX}/houseLease/lookUpDetail.do?"+param;
+		}
+		oaDialogOpen("lookUpfake",{url:url,
+	      title:"查看详细信息",
+	      closeOnEscpe:true,
+	      closeBtn:true,
+	      width: $(window).width()*0.8,
+		  height: $(window).height()*0.9,
+		})
+	}
+};
+$(function (){
+	aihome.init_jqGrid();
+});
+</script> 

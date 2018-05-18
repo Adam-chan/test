@@ -1,0 +1,767 @@
+<#assign x=2.582/>
+<#assign y=4/>
+#{x; M2} <#-- 输出2.58 --><br>
+#{y; M2} <#-- 输出4 --><br>
+#{x; m2} <#-- 输出2.6 --><br>
+#{y; m2} <#-- 输出4.0 --><br>
+#{x; m1M2} <#-- 输出2.58 --><br>
+#{y; m1M2} <#-- 输出4.0 --><br>
+<div class="row">
+	<div class="row">
+		<div class="col-sm-6 widget-container-col ui-sortable"  style="min-height: 259px; padding-left: 32px;" >
+			<div class="widget-box ui-sortable-handle" style="opacity: 1; z-index: 0;">
+				<div class="widget-header widget-header-small">
+					 <h5 class="widget-title  pull-left"><i class="ace-icon fa fa-table"></i>客户评价自定义配置</h5>
+					  <div class="widget-toolbar" >
+			              <a href="javaScript:void(0);" onclick="aihome.getSysParameterType(1,1);" >
+			                <i class="">新增</i>
+			              </a>
+			              <a href="javaScript:void(0);" onclick="aihome.getSysParameterType(1,2);">
+			                <i class="">修改</i>
+			              </a>
+			               <a href="javaScript:void(0);" onclick="aihome.getSysParameterType(1,3);"class="orange">
+			                <i class="">删除</i>
+			              </a>
+            		</div>
+				</div>
+				<div class="widget-body">
+					<div class="widget-main no-padding">
+				    	<div class="tab-content no-padding">
+							<div class="tab-pane active">
+			        		<div class="col-xs-12" style="padding: 0;">
+			                	<table id="KHPJTable" class="table table-striped table-bordered table-hover">
+				                    <thead>
+					                    <tr>
+					                        <th class="center">选择</th>
+					                        <th>排序</th>
+					                        <th>评价</th>
+					                    </tr>
+				                    </thead>
+				                    <tbody>
+				                    	<#list (result.KHPJ)! as item>
+					                    <tr class="active">
+					                        <td class="center" style="width: 20%">
+					                            <label class="pos-rel">
+					                                <input name="KHPJ_Check" type="checkbox" class="ace">
+					                                 <span class="lbl"></span>
+					                            </label>
+					                        </td>
+					                        <td style="width: 20%" hidden>${(item.id)!''}</td>
+					                        <td style="width: 20%">${(item.sysCoustomerSort)!''}</td>
+					                        <td style="width: 60%">${(item.sysCoustomerDescribe)!''}</td>
+					                    </tr>
+			                 			</#list>
+				                   	</tbody>
+			                	</table>
+            				</div>
+				      		</div>
+				    	</div>
+				  </div>
+				</div>
+			</div>
+      	</div>
+		 <div class="col-sm-6 widget-container-col ui-sortable" style="min-height: 259px; padding-right: 32px;">
+			<div class="widget-box ui-sortable-handle" style="opacity: 1; z-index: 0;">
+				<div class="widget-header widget-header-small">
+					 <h5 class="widget-title  pull-left"><i class="ace-icon fa fa-table"></i>时间参数配置</h5>
+					  <div class="widget-toolbar no-border pull-left">
+					    <ul class="nav nav-tabs" id="myDataTab">
+					      <li class="active">
+					        <a data-toggle="tab"  href="#SKZGK" aria-expanded="true">私客转公客时间参数设置</a>
+					      </li>
+					      <li class="">
+					        <a data-toggle="tab"  href="#SGIMG" aria-expanded="false">修改约带看记录时间配置</a>
+					      </li>
+					    </ul>
+					  </div>
+				</div>
+				<div class="widget-body">
+					<div class="widget-main no-padding">
+				    	<div class="tab-content no-padding">
+							<div id="SKZGK" class="tab-pane active" style="margin-top: 90px;">
+			        		<div class="row form-xs">
+			        			<label class="col-xs-6 control-label" style="color:#669fc7; font-size: 22px;">默认私客转公客天数:</label>
+								<div class="col-xs-2" style="margin-top: 10px;">
+									<div class="col-xs-7">
+									<#if (result.SKZGK)??>
+									<#list (result.SKZGK)! as item>
+										<div>
+											<input id="SKZGKNum" SKZGKNum="${(item.id)!''}" class="form-control input-xs" maxlength="4" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" value="${(item.sysCoustomerDescribe)!''}" />
+										</div>
+									</#list>
+									<#else>
+										<div>
+											<input id="SKZGKNum" class="form-control input-xs" maxlength="4" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" value="" />
+										</div>
+									</#if>
+									</div>
+									<label class="col-xs-2 control-label">天</label>
+								</div>
+								 	<button  class="col-md-1 col-sm-1 col-xs-1 btn btn-xs btn-blue ladda-button" style="margin-top: 8px;" onclick="aihome.saveCustomerInfo('SKZGK');">
+					    			<span>保存</span>
+					  				</button> 
+				      		</div>
+				      		</div>
+				      		<div id="SGIMG" class="tab-pane" style="margin-top: 90px;">
+								<div class="row form-xs">
+				        			<label class="col-xs-6 control-label" style="color:#669fc7; font-size: 22px;">约带看可修改时间:</label>
+									<div class="col-xs-2" style="margin-top: 10px;">
+										<div class="col-xs-9">
+										<#if (result.SGIMG)??>
+										<#list (result.SGIMG)! as item>
+											<div>
+												<input id="SGIMGNum" SGIMGNum="${(item.id)!''}" class="form-control input-xs" maxlength="4" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" value="${(item.sysCoustomerDescribe)!''}" />
+											</div>
+										</#list>
+										<#else>
+											<div>
+												<input id="SGIMGNum" class="form-control input-xs" maxlength="4" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" value="" />
+											</div>
+										</#if>
+										</div>
+										<label class="col-xs-3 control-label">小时</label>
+									</div>
+									<button  class="col-md-1 col-sm-1 col-xs-1 btn btn-xs btn-blue ladda-button" style="margin-top: 8px;" onclick="aihome.saveCustomerInfo('SGIMG');">
+					    			<span>保存</span>
+					  				</button>
+					      		</div>
+				      		</div>
+				    	</div>
+				  </div>
+				</div>
+			</div>
+      	</div>
+	</div>
+	
+	<div class="row" style="margin-top:20px;">
+		<div class="col-sm-6 widget-container-col ui-sortable"  style="min-height: 259px; padding-left: 32px;">
+			<div class="widget-box ui-sortable-handle" style="opacity: 1; z-index: 0;">
+				<div class="widget-header widget-header-small" >
+					 <h5 class="widget-title  pull-left"><i class="ace-icon fa fa-table"></i>跟进提醒设置</h5>
+					  <div class="widget-toolbar no-border pull-left">
+					    <ul class="nav nav-tabs" id="myDataTab">
+					      <li class="active">
+					        <a data-toggle="tab" onclick="aihome.getTypeParameter(1);" href="#JJRGJ" aria-expanded="true">经纪人跟进提醒设置</a>
+					      </li>
+					      <li class="">
+					        <a data-toggle="tab" onclick="aihome.getTypeParameter(2);" href="#DZHF" aria-expanded="false">店长回访提醒设置</a>
+					      </li>
+					      <li class="">
+					        <a data-toggle="tab" onclick="aihome.getTypeParameter(3);" href="#HMDJB" aria-expanded="false">黑名单级别设置</a>
+					      </li>
+					      <li class="">
+					        <a data-toggle="tab" onclick="aihome.getTypeParameter(4);" href="#FYSSR" aria-expanded="false">房源所属人提醒设置</a>
+					      </li>
+					    </ul>
+					  </div>
+					  <div class="widget-toolbar" id="gjButton" >
+			              <a href="javaScript:void(0);" onclick="aihome.getSysParameterType(2,1);">
+			                <i class="">新增</i>
+			              </a>
+			              <a href="javaScript:void(0);" onclick="aihome.getSysParameterType(2,2);">
+			                <i class="">修改</i>
+			              </a>
+			              <a href="javaScript:void(0);" onclick="aihome.getSysParameterType(2,3);"class="orange">
+			                <i class="">删除</i>
+			              </a>
+            		</div>
+				</div>
+				<div class="widget-body">
+					<div class="widget-main no-padding">
+				    	<div class="tab-content no-padding">
+							<div id="JJRGJ" class="tab-pane active">
+				        		<div class="col-xs-12" style="padding: 0;">
+				                	<table id="JJRGJTable" class="table table-striped table-bordered table-hover">
+					                    <thead>
+						                    <tr>
+						                        <th class="center">选择</th>
+						                        <th>排序</th>
+						                        <th>提醒类别</th>
+						                        <th>提醒天数</th>
+						                    </tr>
+					                    </thead>
+					                    <tbody>
+					                    	<#list (result.JJRGJ)! as item>
+						                    <tr class="active">
+						                        <td class="center" style="width: 20%">
+						                            <label class="pos-rel">
+						                                <input name="JJRGJ_Check" type="checkbox" class="ace">
+						                                 <span class="lbl"></span>
+						                            </label>
+						                        </td>
+						                        <td style="width: 20%" hidden>${(item.id)!''}</td>
+						                        <td style="width: 20%">${(item.sysCoustomerSort)!''}</td>
+						                        <td style="width: 30%">${(item.sysCoustomerDescribe)!''}</td>
+						                        <td style="width: 30%">${(item.sysCoustomerTDescribe)!''}</td>
+						                    </tr>
+				                 			</#list>
+					                   	</tbody>
+				                	</table>
+	            				</div>
+				      		</div>
+				      		<div id="DZHF" class="tab-pane " style="margin-top: 90px;">
+				        		<div class="row form-xs" style="margin-left: 30px;">
+				        			<label class="col-xs-6 control-label" style="color:#669fc7; font-size: 20px;">提醒时长:</label>
+									<div class="col-xs-2" style="margin-top: 10px;">
+										<div class="col-xs-9">
+										<#if (result.DZHF)??>
+										<#list (result.DZHF)! as item>
+											<div>
+												<input id="DZHFNum" DZHFNum="${(item.id)!''}"  class="form-control input-xs" maxlength="4" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" value="${(item.sysCoustomerDescribe)!''}" />
+											</div>
+										</#list>
+										<#else>
+											<div>
+												<input id="DZHFNum" class="form-control input-xs" maxlength="4" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" value="" />
+											</div>
+										</#if>
+										</div>
+										<label class="col-xs-3 control-label">小时</label>
+									</div>
+									<button  class="col-md-1 col-sm-1 col-xs-1 btn btn-xs btn-blue ladda-button" style="margin-top: 8px;" onclick="aihome.saveCustomerInfo('DZHF');">
+					    			<span>保存</span>
+					  				</button>
+					      		</div>
+				      		</div>
+				      		<div id="HMDJB" class="tab-pane">
+								<div class="col-xs-12" style="padding: 0;">
+				                	<table id="HMDJBTable" class="table table-striped table-bordered table-hover">
+					                    <thead>
+						                    <tr>
+						                        <th class="center">选择</th>
+						                        <th>排序</th>
+						                        <th>黑名单级别</th>
+						                    </tr>
+					                    </thead>
+					                    <tbody>
+					                    	<#list (result.HMDJB)! as item>
+							                    <tr class="active">
+							                        <td class="center" style="width: 20%">
+							                            <label class="pos-rel">
+							                                <input name="HMDJB_Check" type="checkbox" class="ace">
+							                                 <span class="lbl"></span>
+							                            </label>
+							                        </td>
+							                        <td style="width: 20%" hidden>${(item.id)!''}</td>
+							                        <td style="width: 20%">${(item.sysCoustomerSort)!''}</td>
+							                        <td style="width: 60%">${(item.sysCoustomerDescribe)!''}</td>
+							                    </tr>
+					                 		</#list>
+					                   	</tbody>
+				                	</table>
+           						</div>
+				      		</div>
+				      		<div id="FYSSR" class="tab-pane " style="margin-top: 90px;">
+				        		<div class="row form-xs" style="margin-left: 30px;">
+				        			<label class="col-xs-6 control-label" style="color:#669fc7; font-size: 20px;">房源所属人提醒设置:</label>
+									<div class="col-xs-2" style="margin-top: 10px;">
+										<div class="col-xs-9">
+											<#if (result.FYSSR)??>
+												<#list (result.FYSSR)! as item>
+													<div>
+														<input id="FYSSRNum" FYSSRNum="${(item.id)!''}" class="form-control input-xs " maxlength="4" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" value="${(item.sysCoustomerDescribe)!''}" />
+													</div>
+												</#list>
+											<#else>
+												<div>
+													<input id="FYSSRNum" class="form-control input-xs checkNum" maxlength="4" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" value="" />
+												</div>
+											</#if>	
+										</div>
+										<label class="col-xs-1 control-label">天</label>
+									</div>
+									<button  class="col-md-1 col-sm-1 col-xs-1 btn btn-xs btn-blue ladda-button" style="margin-top: 8px;" onclick="aihome.saveCustomerInfo('FYSSR');">
+					    			<span>保存</span>
+					  				</button>
+					      		</div>
+				      		</div>
+				    	</div>
+				  </div>
+				</div>
+			</div>
+      	</div>
+		<div class="col-sm-6 widget-container-col ui-sortable" style="min-height: 259px; padding-right: 32px;">
+			<div class="widget-box ui-sortable-handle" style="opacity: 1; z-index: 0;">
+				<div class="widget-header widget-header-small">
+					 <h5 class="widget-title  pull-left"><i class="ace-icon fa fa-table"></i>查看电话次数配置</h5>
+					  <div class="widget-toolbar no-border pull-left">
+					    <ul class="nav nav-tabs" id="myDataTab">
+					      <li class="active">
+					        <a data-toggle="tab" onclick="aihome.getTypeParameter(7);"  href="#FYCKDH" aria-expanded="true">房源查看电话和地址次数配置</a>
+					      </li>
+					      <li >
+					        <a data-toggle="tab" onclick="aihome.getTypeParameter(8);"  href="#KYCKDH" aria-expanded="false">客源查看电话和地址次数配置</a>
+					      </li>
+					    </ul>
+					  </div>
+					  <div class="widget-toolbar" id="ckButton" style="display: none;">
+			              <a href="javaScript:void(0);" onclick="aihome.getSysParameterType(3,1);">
+			                <i class="">新增</i>
+			              </a>
+			              <a href="javaScript:void(0);"onclick="aihome.getSysParameterType(3,2);">
+			                <i class="">修改</i>
+			              </a>
+			              <a href="javaScript:void(0);" onclick="aihome.getSysParameterType(3,3);"class="orange">
+			                <i class="">删除</i>
+			              </a>
+            		 </div>
+				</div>
+				<div class="widget-body">
+					<div class="widget-main no-padding">
+				    	<div class="tab-content no-padding">
+				      		<div id="FYCKDH" class="tab-pane active">
+								<div class="col-xs-12" style="padding: 0;">
+				                	<table id="FYCKDHTable" class="table table-striped table-bordered table-hover">
+					                    <thead>
+						                    <tr>
+						                        <th class="center">选择</th>
+						                        <th>职称</th>
+						                        <th>买卖房源查看电话次数</th>
+						                        <th>买卖房源查看地址次数</th>
+						                        <th>租赁房源查看电话次数</th>
+						                        <th>租赁房源查看地址次数</th>
+						                    </tr>
+					                    </thead>
+					                    <tbody>
+					                    	<#list (result.FYCKDH)! as item>
+							                    <tr class="active">
+							                        <td class="center" style="width: 10%">
+							                            <label class="pos-rel">
+							                                <input name="FYCKDH_Check" type="checkbox" class="ace">
+							                                 <span class="lbl"></span>
+							                            </label>
+							                        </td>
+							                        <td  hidden>${(item.id)!''}</td>
+							                        <td  hidden>${(item.sysCoustomerDescribe)!''}</td>
+							                        <td style="width: 10%">${(item.sysCoustomerDescribeStr)!''}</td>
+							                        <#list (item.sysCoustomerTDescribe)?split(",") as count>    
+							                        	<td style="width: 20%">${(count)!''}</td>
+							                        </#list>
+							                    </tr>
+					                 		</#list>
+					                   	</tbody>
+				                	</table>
+           						</div>
+				      		</div>
+				      			<div id="KYCKDH" class="tab-pane">
+								<div class="col-xs-12" style="padding: 0;">
+				                	<table id="KYCKDHTable" class="table table-striped table-bordered table-hover">
+					                    <thead>
+						                    <tr>
+						                        <th class="center">选择</th>
+						                        <th>职称</th>
+						                        <th>买卖客源查看电话次数</th>
+						                        <th>买卖客源查看地址次数</th>
+						                        <th>租赁客源查看电话次数</th>
+						                        <th>租赁客源查看地址次数</th>
+						                    </tr>
+					                    </thead>
+					                    <tbody>
+					                    	<#list (result.KYCKDH)! as item>
+							                    <tr class="active">
+							                        <td class="center" style="width: 10%">
+							                            <label class="pos-rel">
+							                                <input name="KYCKDH_Check" type="checkbox" class="ace">
+							                                 <span class="lbl"></span>
+							                            </label>
+							                        </td>
+							                        <td  hidden>${(item.id)!''}</td>
+							                        <td  hidden>${(item.sysCoustomerDescribe)!''}</td>
+							                        <td style="width: 10%">${(item.sysCoustomerDescribeStr)!''}</td>
+							                        <#list (item.sysCoustomerTDescribe)?split(",") as count>    
+							                        	<td style="width: 20%">${(count)!''}</td>
+							                        </#list>
+							                    </tr>
+					                 		</#list>
+					                   	</tbody>
+				                	</table>
+           						</div>
+				      		</div>
+				    	</div>
+				  	</div>
+				</div>
+			</div>
+      	</div>   
+    </div>
+</div>
+<script type="text/javascript">
+var aihome = {
+	TabIdentity : "",//添加类型 4个按钮的8种类型
+	title : "",//弹框title
+	sysCoustomerDescribe : "",//往后台传的描述
+	sysCoustomId : "",
+	appendStr : "",//新增成功后追加的Str
+	lable : "",//新增修改是lable
+	ADDTYPE :"",//新增时添加参数类型
+	closeFlag : "",//关闭
+	checkBoxLength :0,
+	updateSort : "",
+	updateDescribe : "",
+	updateDescribeStr :"",
+	updateTDescribe :"",
+	updateTDescribe1 :"",
+	updateTDescribe2 :"",
+	updateTDescribe3 :"",
+	updateTDescribe4 :"",
+	updateType : "",//修改时 修改参数的类型
+	getTypeParameter : function(num) {//切换TAB时获取标识
+		if(num==1||num==3){
+			$("#gjButton").show();
+		}else if(num==2||num==4){
+			$("#gjButton").hide();
+		}else if(num==5||num==6){
+			$("#ckButton").hide();
+		}else if(num==7||num==8){
+			$("#ckButton").show();
+		}
+		this.TabIdentity = num;
+	},
+	saveCustomerInfo : function(Type){
+		if($("#"+Type+"Num").val()!=""){
+			aihome.sysCoustomerDescribe = parseInt($("#"+Type+"Num").val());
+			aihome.sysCoustomId = $("#"+Type+"Num").attr(""+Type+"Num");
+		}else{
+			alert("设置该系统参数时不能填空值,如果想设置为空请输入0。");
+			return;
+		}//新增和修改没写
+		 $.ajax({
+		       type: "post",
+		       url: "${CTX}/sys/insertCustomerInfo.do",
+		       async:false,
+		       dataType:'json',
+		       data: {"sysCoustomId":aihome.sysCoustomId ,"sysCoustomerDescribe":aihome.sysCoustomerDescribe,"sysCoustomerType":Type},
+		       success: function(data){
+		    	  if(data==1){
+		    		  alert("操作成功");
+		    		  aihome.getSysCustomerParame(Type);
+		    	  }else{
+		    		  alert("请注意更改的数据没有发生改变");
+		    	  }
+		       },
+		 });
+	},
+	getSysCustomerParame : function(Type){//查询客源参数回显
+			 $.ajax({
+			       type: "post",
+			       url: "${CTX}/sys/getSysCustomerParame.do", 
+			       async:false,
+			       dataType:'json',
+			       data: {"sysCoustomerType":Type},
+			       success: function(data){
+			    	   aihome.getSysCustomerInfo(data,Type);
+			       }
+			 });
+	},
+	getSysCustomerInfo : function(data,Type){//查询客户追加数据
+		$("#"+Type+"Table tbody").children().remove();
+		if(Type=="KHPJ"||Type=="HMDJB"){
+			for(var i=0;i<data.length;i++){
+				var appendStr = '<tr class="active"><td class="center" style="width: 20%"><label class="pos-rel"><input name="'+Type+'_Check" type="checkbox" class="ace"><span class="lbl"></span></label></td><td style="width: 20%" hidden>'+data[i].id+'</td><td style="width: 20%">'+data[i].sysCoustomerSort+'</td><td style="width: 60%">'+data[i].sysCoustomerDescribe+'</td></tr>';
+				$("#"+Type+"Table tbody").append(appendStr);
+			}
+		}else if(Type=="JJRGJ"){
+			for(var i=0;i<data.length;i++){
+				var appendStr = '<tr class="active"><td class="center" style="width: 20%"><label class="pos-rel"><input name="'+Type+'_Check" type="checkbox" class="ace"><span class="lbl"></span></label></td><td style="width: 20%" hidden>'+data[i].id+'</td><td style="width: 20%">'+data[i].sysCoustomerSort+'</td><td style="width: 30%">'+data[i].sysCoustomerDescribe+'</td><td style="width: 30%">'+data[i].sysCoustomerTDescribe+'</td></tr>';
+				$("#"+Type+"Table tbody").append(appendStr);
+			}
+		}else if(Type=="FYCKDH"||Type=="KYCKDH"){
+			for(var i=0;i<data.length;i++){
+			var sysCoustomerTDescribe =	data[i].sysCoustomerTDescribe.split(",");
+				var appendStr = '<tr class="active"><td class="center" style="width: 10%"><label class="pos-rel"><input name="'+Type+'_Check" type="checkbox" class="ace"><span class="lbl"></span></label></td><td style="width: 20%" hidden>'+data[i].id+'</td><td style="width: 10%" hidden>'+data[i].sysCoustomerDescribe+'</td><td style="width: 10%">'+data[i].sysCoustomerDescribeStr+'</td><td style="width: 20%">'+sysCoustomerTDescribe[0]+'</td><td style="width: 20%">'+sysCoustomerTDescribe[1]+'</td><td style="width: 20%">'+sysCoustomerTDescribe[2]+'</td><td style="width: 20%">'+sysCoustomerTDescribe[3]+'</td></tr>';
+				$("#"+Type+"Table tbody").append(appendStr);
+			}
+		}else{
+			$("#"+Type+"Num").val(data[0].sysCoustomerDescribe);
+		}
+		$("tr.active").unbind("click").click(function (){
+			if(!$(this).find(":checkbox").prop("checked")) {
+				$(this).find(":checkbox").prop("checked", "checked");
+				$(this).find(":checkbox").trigger("change");
+			}else{
+				$(this).find(":checkbox").prop("checked", "");
+			}
+		})
+		$(":checkbox").unbind("change").change(function (){
+			aihome.updateType = $(this).attr("name").split("_")[0];
+			if($(this).prop("checked")) {
+				$("#" + aihome.updateType + "Table :checkbox").prop("checked", "");
+				$(this).prop("checked", "checked");
+			}
+	    });
+	},
+	getSysParameterType : function(type,num){
+		if(type==1){ //type 是4个添加按钮
+			this.title = "客户评价添加";
+			this.lable = "客户评价";
+			this.ADDTYPE = "KHPJ";
+		}
+		if(type==2){
+		 	if(this.TabIdentity==3){
+		 		this.title = "黑名单级别配置";
+				this.lable = "黑名单级别";
+				this.ADDTYPE = "HMDJB";
+			}else{
+				this.title = "经纪人跟进提醒配置";//自己的页面
+				this.ADDTYPE = "JJRGJ";
+			}
+		}
+		if(type==3){
+			if(this.TabIdentity==7){
+				this.title = "房源查看电话次数配置";//
+				this.ADDTYPE = "FYCKDH";
+			}else if(this.TabIdentity==8){
+				this.title = "客源查看电话次数配置";//
+				this.ADDTYPE = "KYCKDH";
+			}
+		
+		}
+		if(num!=1){
+			//2修改和3删除
+			var checkObj = $(":input[name='" + aihome.ADDTYPE + "_Check']:checked");
+			if(checkObj.length==0){
+				alert("请选中一条数据!");
+				return ;
+			}else{
+				if(type==1||(type==2&&aihome.TabIdentity==3)){
+					aihome.sysCoustomId = checkObj.parent().parent().siblings().eq(0).text();
+					aihome.updateSort = checkObj.parent().parent().siblings().eq(1).text();
+					aihome.updateDescribe = checkObj.parent().parent().siblings().eq(2).text();
+					if(num==2){
+						aihome.addSysParameter(type,num);
+					}
+				}else if((type==2&&aihome.TabIdentity!=3)){//经纪人跟进
+					aihome.sysCoustomId = checkObj.parent().parent().siblings().eq(0).text();
+					aihome.updateSort = checkObj.parent().parent().siblings().eq(1).text();
+					aihome.updateDescribe = checkObj.parent().parent().siblings().eq(2).text();
+					aihome.updateTDescribe = checkObj.parent().parent().siblings().eq(3).text();
+					if(num==2){
+						aihome.editBroker(type,num);
+					}
+				}else if(type==3){//查看房源电话地址次数
+					aihome.sysCoustomId = checkObj.parent().parent().siblings().eq(0).text();
+					aihome.updateDescribe = checkObj.parent().parent().siblings().eq(1).text();
+					aihome.updateDescribeStr = checkObj.parent().parent().siblings().eq(2).text();
+					aihome.updateTDescribe1 = checkObj.parent().parent().siblings().eq(3).text();
+					aihome.updateTDescribe2 = checkObj.parent().parent().siblings().eq(4).text();
+					aihome.updateTDescribe3 = checkObj.parent().parent().siblings().eq(5).text();
+					aihome.updateTDescribe4 = checkObj.parent().parent().siblings().eq(6).text();
+					if(num==2){
+						aihome.editTellTime(type,num);
+					}
+				}
+			}
+			
+		}
+		if(num==1){
+			if(type==1||(type==2&&aihome.TabIdentity==3)){
+				aihome.sysCoustomId = "";
+				aihome.updateSort = "";//客户评价自定义配置   黑名单级别
+				aihome.updateDescribe = "";
+				aihome.addSysParameter(type,num);
+			}else if((type==2&&aihome.TabIdentity!=3)){//经纪人
+				aihome.sysCoustomId = "";
+				aihome.updateSort = "";
+				aihome.updateDescribe = "";
+				aihome.updateTDescribe = "";
+				aihome.editBroker(type,num);
+			}else if(type==3){
+				aihome.sysCoustomId = "";
+				aihome.updateDescribe = "";
+				aihome.updateDescribeStr = "";
+				aihome.updateTDescribe1 ="";
+				aihome.updateTDescribe2 ="";
+				aihome.updateTDescribe3 ="";
+				aihome.updateTDescribe4 ="";
+				aihome.editTellTime(type,num);
+			}
+		}
+		if(num==3){
+			aihome.deleteSysParameter(aihome.ADDTYPE);
+			return false;
+		}
+	},
+	deleteSysParameter : function(type){
+		if (confirm("确认删除？")){
+			 $.ajax({
+			       type: "post",
+			       url: "${CTX}/sys/deleteSysCustomer.do", 
+			       async:false,
+			       dataType:'json',
+			       data: {"sysCoustomId":aihome.sysCoustomId},
+			       success: function(data){
+			    	   if(data!=0){
+			    		   alert("删除成功");
+			    		   aihome.getSysCustomerParame(type);  
+			    	   }
+			       }
+			 });
+		}
+	},
+	addSysParameter : function(type,num){
+		bootbox.dialog({
+			title:aihome.title,
+			message:"<div style=\"margin-left:auto;margin-right: auto;\"class=\"row form-xs\"><label  class=\"col-xs-2 control-label\" value=\"\">排序号:</label><input maxlength=\"10\" onkeyup=\"this.value=this.value.replace(/\\D/g,'')\" onafterpaste=\"this.value=this.value.replace(/\\D/g,'')\" class=\"col-xs-3\" id=\"openSort\" name=\"\" type=\"text\" value=\"" + aihome.updateSort + "\" /><label  class=\"col-xs-2 control-label\" value=\"\">" + aihome.lable + ":</label><input maxlength=\"20\" class=\"col-xs-3\" id=\"openDescribe\" name=\"\" type=\"text\" value=\"" + aihome.updateDescribe + "\" /></div>",
+		    buttons:{
+		        "success" :
+	             {
+	                "label" : "<i class='icon-ok'></i> 保存",
+	                "className" : "btn-sm btn-success",
+	                "callback": function() {
+	                	var	openDescribe ="";
+	                    var	openSort = "";
+		                openDescribe = $("#openDescribe").val();
+		                openSort = $("#openSort").val();
+		                aihome.closeFlag = false;
+		                if(openDescribe!=""&&openSort!=""){
+	                	  $.ajax({
+		                        type: "post",
+		                        dataType: "json",
+		                        url: "${CTX}/sys/insertCustomerInfo.do",
+		                        data:{"sysCoustomerDescribe":openDescribe,"sysCoustomerSort":openSort,"sysCoustomId":aihome.sysCoustomId,"updateSort":aihome.updateSort,"updateDescribe":aihome.updateDescribe, openDescribe,"sysCoustomerType":aihome.ADDTYPE,"operationType":num},
+		                        async: false,
+		                        success: function(data){
+		                            if (data==2){
+		                            	alert("输入的"+aihome.lable+"已存在");
+		                            }else if(data==3){
+		                            	alert("输入的排序号已存在");
+		                            }else{
+		                            	if(num==1){
+		                            		alert("保存成功");
+		                            		aihome.getSysCustomerParame(aihome.ADDTYPE);
+		                            	}else{
+		                            		alert("修改成功");
+		                            		aihome.getSysCustomerParame(aihome.ADDTYPE);
+		                            	}
+		                            	$(":input[name='" + aihome.updateType + "_Check']:checked").prop("checked", "");
+		                            	aihome.closeFlag = true;
+		                            }
+		                        }
+		                  });
+		                }else{
+		                	alert("请填写未填写内容!");
+		                }
+		                return aihome.closeFlag;
+	                }
+	            }
+		    },
+		});
+	},
+	editBroker : function(type,num){
+		bootbox.dialog({
+			title:aihome.title,
+			message:" <script type=\"text\/javascript\">$(\"#remindType option[value='"+aihome.updateDescribe+"']\").attr(\"selected\", \"selected\");<\/script><div style=\"margin-left:auto;margin-right: auto;\"class=\"row form-xs\"><div class=\"row\" ><label  class=\"col-xs-3 control-label\" value=\"\">排序号:</label><input style=\"margin-left: 5px;\" maxlength=\"10\" onkeyup=\"this.value=this.value.replace(/\\D/g,'')\" onafterpaste=\"this.value=this.value.replace(/\\D/g,'')\" class=\"col-xs-3\" id=\"openSort\" name=\"\" type=\"text\" value=\"" + aihome.updateSort + "\" /></div><div class=\"row\"><label  class=\"col-xs-3 control-label\" value=\"\">需要选择类型:</label><div class=\"col-xs-4\" ><select id=\"remindType\"  class=\" col-xs-3 input-xs form-control\" style=\"width:147px;\"><option value=\"A类\" selected>A</option><option value=\"B类\">B</option><option value=\"C类\">C</option><option value=\"D类\">D</option></select></div></div><div class=\"row\"><label  class=\"col-xs-3 control-label\" value=\"\">需要提醒的天数:</label><input style=\"margin-left: 5px;\" maxlength=\"20\" class=\"col-xs-3\" id=\"openTDescribe\" name=\"\" type=\"text\" value=\"" + aihome.updateTDescribe + "\" />天</div></div>",
+		    buttons:{
+		        "success" :
+	             {
+	                "label" : "<i class='icon-ok'></i> 保存",
+	                "className" : "btn-sm btn-success",
+	                "callback": function() {
+	                	var	openDescribe ="";
+	                	var	openTDescribe ="";
+	                	var	openSort = "";
+	                	openSort = $("#openSort").val();
+	                    openDescribe = $("#remindType  option:selected").val();
+		                openTDescribe = $("#openTDescribe").val();
+		                aihome.closeFlag = false;
+		                if(openDescribe!=""&&openSort!=""&&openTDescribe!=""){
+	                	  $.ajax({
+		                        type: "post",
+		                        dataType: "json",
+		                        url: "${CTX}/sys/saveSysCustomer.do",
+		                        data:{"sysCoustomId":aihome.sysCoustomId,"updateSort":aihome.updateSort,"sysCoustomerDescribe":openDescribe,"sysCoustomerTDescribe":openTDescribe,"sysCoustomerSort":openSort,"sysCoustomerType":aihome.ADDTYPE,"operationType":num},
+		                        async: false,
+		                        success: function(data){
+		                           	if(data==3){
+		                            	alert("输入的排序号已存在,请输入其他排序号.");
+		                            }else{
+		                            	if(num==1){
+		                            		alert("保存成功");
+		                            	}else{
+		                            		alert("修改成功");
+		                            	}
+		                            	aihome.getSysCustomerParame(aihome.ADDTYPE);
+		                            	$(":input[name='" + aihome.updateType + "_Check']:checked").prop("checked", "");
+		                            	aihome.closeFlag = true;
+		                            }
+		                        }
+		                  });
+		                }else{
+		                	alert("请填写未填写内容!");
+		                }
+		                return aihome.closeFlag;
+	                }
+	            }
+		    },
+		});
+	},
+	editTellTime : function(type,num){
+		bootbox.dialog({
+			title:aihome.title,
+			message:"<script type=\"text\/javascript\">$(\"#remindType option[value='"+aihome.updateDescribe+"']\").attr(\"selected\", \"selected\");<\/script><div style=\"margin-left:auto;margin-right: auto;\"class=\"row form-xs\"><div class=\"row\"><label  class=\"col-xs-3 control-label\" value=\"\">职位:</label><div class=\"col-xs-4\" ><select id=\"remindType\"  class=\" col-xs-3 input-xs form-control\" style=\"width:147px;\"><option value=\"3\">区经理</option><option value=\"2\">店长</option><option value=\"1\"selected>经纪人</option></select></div></div><div class=\"row\"><label  class=\"col-xs-3 control-label\" value=\"\">买卖房源地址查看次数:</label><input style=\"margin-left: 5px;\" maxlength=\"20\" class=\"col-xs-3\" id=\"openMMFYAddr\" name=\"\" type=\"text\" value=\"" + aihome.updateTDescribe1 + "\" />次</div><div class=\"row\"><label  class=\"col-xs-3 control-label\" value=\"\">买卖房源电话查看次数:</label><input style=\"margin-left: 5px;\" maxlength=\"20\" class=\"col-xs-3\" id=\"openMMFYtell\" name=\"\" type=\"text\" value=\"" + aihome.updateTDescribe2 + "\" />次</div><div class=\"row\"><label  class=\"col-xs-3 control-label\" value=\"\">租赁房源地址查看次数:</label><input style=\"margin-left: 5px;\" maxlength=\"20\" class=\"col-xs-3\" id=\"openZLFYaddr\" name=\"\" type=\"text\" value=\"" + aihome.updateTDescribe3 + "\" />次</div><div class=\"row\"><label  class=\"col-xs-3 control-label\" value=\"\">租赁房源电话查看次数:</label><input style=\"margin-left: 5px;\" maxlength=\"20\" class=\"col-xs-3\" id=\"openZLFYtell\" name=\"\" type=\"text\" value=\"" + aihome.updateTDescribe4 + "\" />次</div></div>",
+		    buttons:{
+		        "success" :
+	             {
+	                "label" : "<i class='icon-ok'></i> 保存",
+	                "className" : "btn-sm btn-success",
+	                "callback": function() {
+	                	var	openDescribe ="";
+	                    var	openTDescribe ="";
+	                    var openMMFYAddr =  $("#openMMFYAddr").val();
+	                    var openMMFYtell =  $("#openMMFYtell").val();
+	                    var openZLFYaddr =  $("#openZLFYaddr").val();
+	                    var openZLFYtell =  $("#openZLFYtell").val();
+	                    openDescribe = $("#remindType  option:selected").val();
+		                openTDescribe = openMMFYAddr+","+openMMFYtell+","+openZLFYaddr+","+openZLFYtell;
+		                aihome.closeFlag = false;
+		                if(openDescribe!=""&&openMMFYAddr!=""&&openMMFYtell!=""&&openZLFYaddr!=""&&openZLFYtell!=""){
+	                	  $.ajax({
+		                        type: "post",
+		                        dataType: "json",
+		                        url: "${CTX}/sys/saveSysCustomerTell.do",
+		                        data:{"sysCoustomId":aihome.sysCoustomId,"sysUpdateDescribe":aihome.updateDescribe,"sysCoustomerDescribe":openDescribe,"sysCoustomerTDescribe":openTDescribe,"sysCoustomerType":aihome.ADDTYPE,"operationType":num},
+		                        async: false,
+		                        success: function(data){
+		                            if(data==4){
+		                            	alert("职称已存在数据，请修改成其他职位");
+		                            }else{
+		                            	if(num==1){
+		                            		alert("保存成功");
+		                            	}else{
+		                            		alert("修改成功");
+		                            	}
+		                            	aihome.getSysCustomerParame(aihome.ADDTYPE);
+		                            	$(":input[name='" + aihome.updateType + "_Check']:checked").prop("checked", "");
+		                            	aihome.closeFlag = true;
+		                            }
+		                        }
+		                  });
+		                }else{
+		                	alert("请填写未填写内容!");
+		                }
+		                return aihome.closeFlag;
+	                }
+	            }
+		    },
+		});
+	}
+};
+$(function(){
+	$('.page-content-area').ace_ajax('loadScripts', [null,"../assets/js/bootbox.js"], function () {});
+	$(".tab-content.no-padding").css({"width": "100%", "height": "227px"});
+	$("tr.active").unbind("click").bind("click",function (){
+		if(!$(this).find(":checkbox").prop("checked")) {
+			$(this).find(":checkbox").prop("checked", "checked");
+			$(this).find(":checkbox").trigger("change");
+		}else{
+			$(this).find(":checkbox").prop("checked", "");
+		}
+	})
+	$(":checkbox").unbind("change").bind("change",function (){
+		aihome.updateType = $(this).attr("name").split("_")[0];
+		if($(this).prop("checked")) {
+			$("#" + aihome.updateType + "Table :checkbox").prop("checked", "");
+			$(this).prop("checked", "checked");
+		}
+    });
+})
+</script>

@@ -1,0 +1,51 @@
+package com.golden.addr.web.controller;
+
+import java.io.IOException;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.golden.port.framework.stores.IServiceStore;
+import com.golden.port.framework.stores.results.ResultValue;
+
+@Controller
+@RequestMapping(value = "demo")
+public class DemoController {
+	 
+	@Resource(name="addrService")
+	private IServiceStore addrService;
+	
+	@RequestMapping(value = "index")
+	public String index(ModelMap model) throws IOException {
+		/*long start = System.currentTimeMillis();
+		ResultValue result = addrService.access("demo/demoService", null);
+		long end = System.currentTimeMillis();
+		System.out.println(end-start);
+		model.put("data", JSON.parse(result.getData()));*/
+		return "demo/demo";
+	}
+	@RequestMapping(value = "page")
+	public String page() throws IOException {
+		return "demo/page_table";
+	}
+	@ResponseBody
+	@RequestMapping(value = "ajax")
+	public String ajax(@RequestParam Map<String,Object> params) throws IOException {
+		String currentPage = params.get("page").toString();
+		String rowCount = params.get("rows").toString();
+		params.put("currentPage", currentPage);
+		params.put("rowCount", rowCount);
+		ResultValue result = addrService.access("demo/demoService.getDemoList2", params);
+		return result.getData();
+	}
+	@RequestMapping(value = "upload")
+	public String upload() throws IOException {
+		return "demo/upload";
+	}
+}

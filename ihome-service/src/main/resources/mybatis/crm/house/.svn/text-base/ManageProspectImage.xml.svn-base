@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="manageProspectImage" >
+
+  <sql id="Base_Column_List" >
+    ID as id, PROSPECT_ID as prospectId, FOLDER_NAME as folderName, FILE_NAME as fileName,
+    CREATE_TIME as createTime, TYPE as type
+  </sql>
+  <select id="getManageProspectImagePage" resultType="manageProspectImageModel" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from MANAGE_PROSPECT_IMAGE
+    where PROSPECT_ID = #{prospectId,jdbcType=DECIMAL}
+    and TYPE = #{type,jdbcType=DECIMAL}
+  </select>
+
+	<!-- 批量删除图片 -->
+	<delete id="deletePicture" parameterType="map">
+		DELETE
+		FROM
+		MANAGE_PROSPECT_IMAGE
+		WHERE
+		id IN (${rowIdsStr})
+	</delete>
+  
+	<!-- 保存上传的实勘图片 -->
+	<insert id="saveProspectPicture" parameterType="map">
+		INSERT INTO MANAGE_PROSPECT_IMAGE
+		(ID,PROSPECT_ID,FOLDER_NAME,FILE_NAME,TYPE,CREATE_TIME)
+		select
+		MANAGE_PROSPECT_IMAGE_SEQ.NEXTVAL,#{prospectId},a.*,sysdate
+		from (
+		<foreach collection="dataStr" item="item" index="index"
+			separator="UNION ALL">
+			SELECT
+			#{item.folderName},#{item.fileName},#{item.picType}
+			FROM DUAL
+		</foreach>
+		)a
+	</insert>
+  
+  <insert id="insert" parameterType="map" >
+    insert into MANAGE_PROSPECT_IMAGE (ID, PROSPECT_ID, FOLDER_NAME, 
+      FILE_NAME, CREATE_TIME, TYPE
+      )
+    values (MANAGE_PROSPECT_IMAGE_SEQ.NEXTVAL, #{prospectId,jdbcType=DECIMAL}, #{folderName,jdbcType=VARCHAR}, 
+      #{fileName,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, #{type,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="map" >
+    insert into MANAGE_PROSPECT_IMAGE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        ID,
+      <if test="prospectId != null" >
+        PROSPECT_ID,
+      </if>
+      <if test="folderName != null" >
+        FOLDER_NAME,
+      </if>
+      <if test="fileName != null" >
+        FILE_NAME,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+      MANAGE_PROSPECT_IMAGE_SEQ.NEXTVAL,
+      </if>
+      <if test="prospectId != null" >
+        #{prospectId,jdbcType=DECIMAL},
+      </if>
+      <if test="folderName != null" >
+        #{folderName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateSelective" parameterType="map" >
+    update MANAGE_PROSPECT_IMAGE
+    <set >
+      <if test="prospectId != null" >
+        PROSPECT_ID = #{prospectId,jdbcType=DECIMAL},
+      </if>
+      <if test="folderName != null" >
+        FOLDER_NAME = #{folderName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        FILE_NAME = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="update" parameterType="map" >
+    update MANAGE_PROSPECT_IMAGE
+    set PROSPECT_ID = #{prospectId,jdbcType=DECIMAL},
+      FOLDER_NAME = #{folderName,jdbcType=VARCHAR},
+      FILE_NAME = #{fileName,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=DATE},
+      TYPE = #{type,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

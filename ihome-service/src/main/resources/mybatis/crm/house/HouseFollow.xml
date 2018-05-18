@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="houseFollow">
+
+	<!-- 分页查询房源跟进记录 -->
+	<select id="getHouseFollowListForPage" parameterType="map" resultType="houseFollowModel">
+		SELECT
+			hf.id,
+			hf.follow_time AS followTime,
+			hf.follow_content AS followContent,
+			hf.operate_user AS operateUser,
+			hf.operate_user_id AS operateUserId,
+			hf.follow_way AS followWay,
+			hf.follow_type AS followType,
+			info.id AS houseInfoId,
+			info.code AS houseCode,
+			info.demand_type AS demandType,
+			CASE WHEN lease.id IS NULL THEN sale.use_type ELSE lease.use_type END AS useType,
+			info.divide_qu AS divideQu,
+		    info.divide_qu_code AS divideQuCode,
+		    info.divide_org AS divideOrg,
+		    info.divide_org_code AS divideOrgCode,
+		    info.divide_user AS divideUser,
+		    info.divide_user_id AS divideUserId,
+		    (
+				SELECT
+					DESCRIBE
+				FROM
+					SYS_HOUSE_PARAME shp
+				WHERE
+					shp.id = hf.follow_way
+			) AS followWay2
+		FROM
+			house_follow hf
+		LEFT JOIN house_info info ON info.id = hf.house_info_id
+		LEFT JOIN house_lease lease ON lease.house_info_id = info.id
+		LEFT JOIN house_sale sale ON sale.house_info_id = info.id
+		<if test="searchFlagList !=null and searchFlagList !=''"> 
+			LEFT JOIN (
+				SELECT
+			    	tl.house_info_id AS houseInfoId,
+			    	tl.limit_user_id AS limitUserId
+			    FROM
+			    	manage_time_limit_express tl
+			    WHERE
+			    	tl. STATUS IN (1, 2)
+			) a ON a.houseInfoId = hf.house_info_id
+		</if>
+		<where>
+			hf.follow_time = (
+				SELECT
+					max(f.follow_time)
+				FROM
+					house_follow f
+				WHERE
+					f.house_info_id = hf.house_info_id
+			)
+			<if test="quOrg !=null and quOrg !=''">
+				AND INSTR(info.divide_org_code,#{quOrg}) > 0
+			</if>
+			<if test="zuOrg !=null and zuOrg !=''">
+				AND info.divide_org_code = #{zuOrg}
+			</if>
+			<if test="jingjiren !=null and jingjiren !=''">
+				AND info.divide_user_id = #{jingjiren}
+			</if>
+			<if test="followWay !=null and followWay !=''">
+				AND hf.follow_way = #{followWay}
+			</if>
+			<if test="followTimeS !=null and followTimeS !=''">
+				AND hf.follow_time &gt;= to_date (#{followTimeS}, 'yyyy-mm-dd')
+			</if>
+			<if test="followTimeE !=null and followTimeE !=''">
+				AND hf.follow_time &lt;= to_date (#{followTimeE}, 'yyyy-mm-dd')
+			</if>
+			<if test="demanType !=null and demanType !=''"> <!-- 业务类型、房源状态 -->
+				AND info.demand_type = #{demanType}
+				<if test="demanType==1 and houseStatus !=null and houseStatus !=''">
+					AND sale.status = #{houseStatus}
+				</if>
+				<if test="demanType==2 and houseStatus !=null and houseStatus !=''">
+					AND lease.status = #{houseStatus}
+				</if>
+			</if>
+			<if test="searchFlagList !=null and searchFlagList !=''"> 
+				AND (
+					<foreach collection="searchFlagList" item="item" index="index" separator="OR">
+						<if test="item==1">
+							info.divide_user_id = a.limitUserId
+						</if>
+						<if test="item==2">
+							info.divide_user_id NOT IN (
+							    SELECT
+							      hf.operate_user_id
+							    FROM
+							      house_follow hf
+							    WHERE
+							      hf.house_info_id = info.id
+							  )
+						</if>
+						<if test="item==3">
+							info.divide_user_id IN (
+							    SELECT
+							      hf.operate_user_id
+							    FROM
+							      house_follow hf
+							    WHERE
+							      hf.house_info_id = info.id
+							  )
+						</if>
+					</foreach>
+				)
+			</if>
+		</where>
+		ORDER BY
+			hf.follow_time
+	</select>
+	
+</mapper>

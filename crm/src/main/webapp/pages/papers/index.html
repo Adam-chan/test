@@ -1,0 +1,165 @@
+<div id="top_tools" class=" btn-group">
+	<button id="paper_query" class="btn btn-sm btn-white" >
+		<i class="iconfont">&#xe6e4;</i>
+		<span>查询</span>
+	</button>
+	<button id="add_area" class="btn btn-sm btn-white ladda-button" onclick="aihome.addInfo('1');">
+		<i class="iconfont">&#xe6e0;</i>
+		<span>新增</span>
+	</button>
+	<button id="area_edit" class="btn btn-sm btn-white btn-default" onclick="aihome.addInfo('2');">
+		<i class="iconfont">&#xe6dd;</i>
+		<span>修改</span>
+	</button>
+	<button id="area_del" class="btn btn-sm btn-white btn-info" onclick="deteleArea();">
+		<i class="iconfont">&#xe6e3;</i>
+		<span>删除</span>
+	</button>
+</div>
+<div class="widget-box transparent ui-sortable-handle">
+	<div class="widget-header">
+		<h4 class="widget-title yahei">房源纸模板</h4>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12 my-group" >
+		<div class="form-horizontal row my-inputs">
+		 	<div class="col-lg-2 col-md-4 col-sm-6">
+                <div class=" form-xs form-group row">
+                    <label for="tempName" class="col-xs-4 control-label">模板标题</label>
+                    <div class="col-xs-8">
+                        <input class="form-control input-xs searchKey" name="tempName" id="tempName" placeholder="模板标题" type="text">
+                    </div>
+                </div>
+            </div>
+		 	<div class="col-lg-2 col-md-4 col-sm-6">
+                <div class=" form-xs form-group row">
+                    <label for="type" class="col-xs-4 control-label">模板类型</label>
+                    <div class="col-xs-8">
+                        <select class="form-control input-xs searchKey" id="paperType">
+                            <option value="">全部</option>
+                            <option value="1">橱窗</option>
+                            <option value="2">招贴纸</option>
+                            <option value="3">列表式</option>
+                            <option value="4">宣传单</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class=" form-xs form-group row">
+                    <label for="houseNum" class="col-xs-4 control-label">适应房数</label>
+                    <div class="col-xs-8">
+                        <input class="form-control input-xs searchKey" id="houseNum" placeholder="适应房数" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class=" form-xs form-group row">
+                    <label for="status" class="col-xs-4 control-label">状态</label>
+                    <div class="col-xs-8">
+                        <select class="form-control input-xs searchKey" id="paperStatus">
+                            <option value="">全部</option>
+                            <option value="1">启用</option>
+                            <option value="2">未启用</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+         </div>
+	</div>
+	<div class="col-xs-12 my-grid " >
+		<table id="paper_jqGrid">
+		
+		</table>
+		<div id="jqGridPager"></div>
+	</div>
+</div>
+<script type="text/javascript">
+$('.page-content-area').ace_ajax('loadScripts', [null,null], function () {});
+var aihome ={
+	paperListInit : function (){
+		 $("#paper_jqGrid").jqGrid({
+			height: $(window).height()-203,
+			multiselect: true,
+		    multiboxonly: true,
+		    viewrecords: true,
+		    autowidth:true,
+		    rownumbers:true,
+		    async:false,
+	      	url: "${CTX}/paper/paperListPage.do",
+	      	datatype: "json",                
+	      	colNames : ['序号','模板标题','模板类型','需要房源数','状态','pid'],
+	      	colModel: [
+			 	{name: 'sort',index:'sort',sortable : true, width: 50},
+	         	{name: 'tempName',index:'tempName',sortable : true, width: 50},
+	            {name: 'type',index:'type',sortable : true, width: 50,editable:true,formatter:aihome.typeFormater},
+	            {name: 'houseNum',index:'houseNum',sortable : true, width: 50},
+	            {name: 'status',index:'status',sortable : true, width: 50,editable:true,formatter:aihome.statusFormater},
+	            {name: 'paperId',index:'paperId', sorttype : 'int',hidden:true,key:true}
+	      	],
+	      	gridComplete: function () {},
+	      	rowNum:30, 
+		  	rowList:[10,20,30,50,100],
+	      	pager: "#jqGridPager",
+	  	 	jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false}
+	  	});
+	},
+	statusFormater:function (cellvalue, options, rowObject){
+		if(cellvalue != 1){
+			return "未启用";
+		}else{
+			return "启用";
+		}
+	},
+	typeFormater:function (cellvalue, options, rowObject){
+		if(cellvalue == 1){
+			return "橱窗";
+		}else if (cellvalue == 2){
+			return "招贴纸";
+		}else if (cellvalue == 3){
+			return "列表式";
+		}else{
+			return "宣传单";
+		}
+	},
+	addInfo:function (way){
+		var paperId = "";
+		//如果是1则是新增
+		if(way == '2'){
+			paperId = jQuery("#paper_jqGrid").jqGrid('getGridParam', 'selarrrow');
+			var selCount=paperId.length;
+			if(selCount==0){
+				alert("没有选中的记录！");
+				return;
+			}
+			if(selCount >1){
+				alert("每次只能修改一条道路信息，请重新选择！");
+				return;
+			}
+		}
+		this.editInfo(paperId);
+	},
+	editInfo:function (paperId){
+		var paperTitle ="新增模板";
+		if(paperId!=''){
+			paperTitle="修改模板"
+		}
+		window.location.href="#crm/paper/addIndex.do?paperId="+paperId;
+	}
+};
+$(function (){
+	 /* 条件查询 */
+	$("#paper_query").unbind("").click(function(){
+		var param = {
+				tempName:$("#tempName").val(),
+				type:$("#paperType").find("option:selected").val(),
+				status:$("#paperStatus").find("option:selected").val(),
+				houseNum:$("#houseNum").val()
+		}
+		$("#paper_jqGrid").setGridParam({postData:param,page:1}).trigger("reloadGrid");
+	});
+	aihome.paperListInit();
+});
+
+</script>

@@ -1,0 +1,2145 @@
+<!-- 租赁房源列表 -->
+<div id="houseLeaseTable" class="row">
+	<div class="col-xs-12 my-group">
+		<div class="row my-inputs">
+			<form id="search_form">
+			<!-- search row1 S -->
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-xs-4">
+						<div class="form-xs form-group row">
+							<label class="col-xs-3 control-label">使用类别:</label>
+							<div class="col-xs-6">
+								<select id="useType" class="input-xs form-control searchKey">
+									<option value="1">住宅</option>
+									<option value="2">商铺</option>
+									<option value="3">写字楼</option>
+									<option value="4">车位</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-4">
+						<div class="form-xs form-group row">
+							<label class="col-xs-3 control-label">商圈:</label>
+							<div class="col-xs-4">
+								<select id="ba1" class="ba1 input-xs form-control searchKey" onchange="aihome.getBa2();">
+									<option value="">请选择</option>
+									<#list ba1List as item>
+										<option value="${item.id!}">
+											${item.busiAreaName!}
+										</option>
+									</#list>
+								</select>
+							</div>
+							<div class="col-xs-4">
+								<select id="ba2" class="ba2 input-xs form-control searchKey">
+									<option value="">请选择</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="premises_div col-xs-4">
+						<div class="form-xs form-group row">
+							<label class="col-xs-3 control-label">小区:</label>
+							<div class="col-xs-6">
+								<input id="premisesName_search" class="premisesName_search form-control input-xs selectInput">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4">
+						<div class="form-xs form-group row">
+							<label class="col-xs-3 control-label">价格变动日期:</label>
+							<div class="col-xs-3">
+								<select id="priceChangeType" class="input-xs form-control searchKey">
+									<option value="1">涨价</option>
+									<option value="2">降价</option>
+								</select>
+							</div>
+							<div class="col-xs-6">
+								<div class="input-daterange input-group 5i5jdate">
+									<input id="priceChangeTimeS" type="text" class="form-control input-xs searchKey" name="start" placeholder="开始时间">
+									<span class="input-group-addon addon-xs">
+										<i class="fa fa-exchange"></i>
+									</span>
+									<input id="priceChangeTimeE" type="text" class="form-control input-xs searchKey" name="end" placeholder="结束时间">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-4">
+						<div class="form-xs form-group row">
+							<label class="col-xs-3 control-label">看房时间:</label>
+							<div class="col-xs-8">
+								<div class="input-daterange input-group 5i5jdate">
+									<input id="watchHouseTimeS" type="text" class="form-control input-xs searchKey" name="start" placeholder="开始时间">
+									<span class="input-group-addon addon-xs">
+										<i class="fa fa-exchange"></i>
+									</span>
+									<input id="watchHouseTimeE" type="text" class="form-control input-xs searchKey" name="end" placeholder="结束时间">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-4">
+						<div class="form-xs form-group row">
+							<label class="col-xs-3 control-label">被看次数:</label>
+							<div class="col-xs-3">
+								<input id="watchHouseCountS" class="form-control input-xs checkNum searchKey" format="5">
+							</div>
+							<div class="col-xs-3">
+								<input id="watchHouseCountE" class="form-control input-xs checkNum searchKey" format="5">
+							</div>
+							<label class="col-xs-1 control-label" style="left:-5%">次</label>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4">
+						<div class="form-xs form-group row">
+							<label class="col-xs-3 control-label">登记日期:</label>
+							<div class="col-xs-3">
+								<select class="dateRange input-xs form-control">
+									<option value="">全部</option>
+									<option value="1">今日</option>
+									<option value="2">三天内</option>
+									<option value="3">本周</option>
+									<option value="4">本月</option>
+								</select>
+							</div>
+							<div class="col-xs-6">
+								<div class="input-daterange input-group 5i5jdate">
+									<input id="createTimeS" type="text" class="form-control input-xs searchKey" name="start" placeholder="开始时间">
+									<span class="input-group-addon addon-xs">
+										<i class="fa fa-exchange"></i>
+									</span>
+									<input id="createTimeE" type="text" class="form-control input-xs searchKey" name="end" placeholder="结束时间">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4">
+						<div class="form-xs form-group row">
+							<label class="col-xs-3 control-label">跟进日期:</label>
+							<div class="col-xs-3">
+								<select class="dateRange input-xs form-control">
+									<option value="">全部</option>
+									<option value="1">今日</option>
+									<option value="2">三天内</option>
+									<option value="3">本周</option>
+									<option value="4">本月</option>
+								</select>
+							</div>
+							<div class="col-xs-6">
+								<div class="input-daterange input-group 5i5jdate">
+									<input id="followTimeS" type="text" class="form-control input-xs searchKey" name="start" placeholder="开始时间">
+									<span class="input-group-addon addon-xs">
+										<i class="fa fa-exchange"></i>
+									</span>
+									<input id="followTimeE" type="text" class="form-control input-xs searchKey" name="end" placeholder="结束时间">
+								</div>
+							</div>
+						</div>
+					</div>	
+				</div>
+				<div class="key_date_div row">
+					<div class="col-xs-4">
+						<div class="form-xs form-group row">
+							<label class="col-xs-3 control-label">收钥匙日期:</label>
+							<div class="col-xs-3">
+								<select class="dateRange input-xs form-control searchKey">
+									<option value="">全部</option>
+									<option value="1">今日</option>
+									<option value="2">三天内</option>
+									<option value="3">本周</option>
+									<option value="4">本月</option>
+								</select>
+							</div>
+							<div class="col-xs-6">
+								<div class="input-daterange input-group 5i5jdate">
+									<input id="keyTimeS" type="text" class="form-control input-xs searchKey" name="start" placeholder="开始时间">
+									<span class="input-group-addon addon-xs">
+										<i class="fa fa-exchange">
+										</i>
+									</span>
+									<input id="keyTimeE" type="text" class="form-control input-xs searchKey" name="end" placeholder="结束时间">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="limitTime_div row">
+					<div class="col-xs-4">
+						<div class="form-xs form-group row">
+							<label class="col-xs-3 control-label">独家日期:</label>
+							<div class="col-xs-3">
+								<select class="dateRange input-xs form-control">
+									<option value="">全部</option>
+									<option value="1">今日</option>
+									<option value="2">三天内</option>
+									<option value="3">本周</option>
+									<option value="4">本月</option>
+								</select>
+							</div>
+							<div class="col-xs-6">
+								<div class="input-daterange input-group 5i5jdate">
+									<input id="limitTimeS" type="text" class="form-control input-xs searchKey" name="start" placeholder="开始时间">
+									<span class="input-group-addon addon-xs">
+										<i class="fa fa-exchange"></i>
+									</span>
+									<input id="limitTimeE" type="text" class="form-control input-xs searchKey" name="end" placeholder="结束时间">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class=" form-xs form-group row">
+						<label class="col-xs-1 control-label">房源范围:</label>
+						<div class="col-xs-2 checkbox-inline input-xs">
+							<label>
+								<input type="checkbox" class="houseRange ace" value="1">
+								<span class="lbl"> 我登记的房源</span>
+							</label>
+						</div>
+						<div class="col-xs-2 checkbox-inline input-xs">
+							<label>
+								<input type="checkbox" class="houseRange ace" value="2">
+								<span class="lbl"> 我所属的房源</span>
+							</label>
+						</div>
+						<div class="col-xs-2 checkbox-inline input-xs">
+							<label>
+								<input type="checkbox" class="ace" value="3">
+								<span class="lbl"> 全部房源</span>
+							</label>
+						</div>
+					</div>
+				<div class="house_type_div form-xs form-group row">
+						<label class="col-xs-1 control-label">户型:</label>
+						<div class="col-xs-1 checkbox-inline input-xs">
+							<label>
+								<input type="checkbox" class="house_type_search ace" value="1">
+								<span class="lbl"> 一室</span>
+							</label>
+						</div>
+						<div class="col-xs-1 checkbox-inline input-xs">
+							<label>
+								<input type="checkbox" class="house_type_search ace" value="2">
+								<span class="lbl"> 两室</span>
+							</label>
+						</div>
+						<div class="col-xs-1 checkbox-inline input-xs">
+							<label>
+								<input type="checkbox" class="house_type_search ace" value="3">
+								<span class="lbl"> 三室</span>
+							</label>
+						</div>
+						<div class="col-xs-1 checkbox-inline input-xs">
+							<label>
+								<input type="checkbox" class="house_type_search ace" value="4">
+								<span class="lbl"> 四室</span>
+							</label>
+						</div>
+						<div class="col-xs-1 checkbox-inline input-xs">
+							<label>
+								<input type="checkbox" class="house_type_search ace" value="5">
+								<span class="lbl"> 五室及以上</span>
+							</label>
+						</div>
+						<div class="col-xs-1 checkbox-inline input-xs">
+							<label>
+								<a onclick="aihome.show_define(this);">自定义</a>
+							</label>
+						</div>
+						<div class="house_type_define col-xs-5" hidden>
+							<div class="row">
+							<label class="col-xs-1 control-label">户型:</label>
+							<div class="col-xs-1">
+								<input id="rooms_search" type="text" class="form-control input-xs checkNum" format="2">
+							</div>
+							<div class="col-xs-1">室</div>
+							<div class="col-xs-1" style="left: -5%;">
+								<input id="office_search" type="text" class="form-control input-xs checkNum searchKey" format="2">
+							</div>
+							<div class="col-xs-1" style="left: -4%;">厅</div>
+							<div class="col-xs-1" style="left: -9%;">
+								<input id="kitchen_search" type="text" class="form-control input-xs checkNum searchKey" format="2">
+							</div>
+							<div class="col-xs-1" style="left: -8%;">厨</div>
+							<div class="col-xs-1" style="left: -13%;">
+								<input id="wc_search" type="text" class="form-control input-xs checkNum searchKey" format="2">
+							</div>
+							<div class="col-xs-1" style="left: -12%;">卫</div>
+							</div>
+						</div>
+					</div>
+				<div class="lease_price_div row form-xs form-group" name="1">
+					<label class="col-xs-1 control-label">意向租金(元):</label>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="leasePrice1_search ace" value="0-1000">
+							<span class="lbl"> 1000以下</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="leasePrice1_search ace" value="1000-1500">
+							<span class="lbl"> 1000-1500</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="leasePrice1_search ace" value="1500-2000">
+							<span class="lbl"> 1500-2000</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="leasePrice1_search ace" value="2000-2500">
+							<span class="lbl"> 2000-2500</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="leasePrice1_search ace" value="2500-3000">
+							<span class="lbl"> 2500-3000</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="leasePrice1_search ace" value="3000-">
+							<span class="lbl"> 3000以上</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<a onclick="aihome.show_define(this);">自定义</a>
+						</label>
+					</div>
+					<div hidden>
+						<div class="col-xs-1">
+							<input class="leasePriceS1 form-control input-xs checkNum" format="2">
+						</div>
+						<div class="col-xs-1">
+							<input class="leasePriceE1 form-control input-xs checkNum" format="2">
+						</div>
+						<div class="col-xs-1">万</div>
+					</div>
+				</div>
+				<div class="lease_price_div row" name="2" value="3" hidden>
+					<div class="col-xs-12">
+						<div class="form-xs form-group row">
+							<label class="col-xs-1 control-label">意向租金:</label>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="leasePrice2_search ace" value="0-10000">
+									<span class="lbl"> 1.0万以下</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="leasePrice2_search ace" value="10000-15000">
+									<span class="lbl"> 1.0-1.5万</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="leasePrice2_search ace" value="15000-20000">
+									<span class="lbl"> 1.5-2.0万</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="leasePrice2_search ace" value="20000-30000">
+									<span class="lbl"> 2.0-3.0万</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="leasePrice2_search ace" value="30000-50000">
+									<span class="lbl"> 3.0-5.0万</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="leasePrice2_search ace" value="50000-">
+									<span class="lbl"> 5.0万以上</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<a onclick="aihome.show_define(this);">自定义</a>
+								</label>
+							</div>
+							<div hidden>
+								<div class="col-xs-1">
+									<input class="leasePriceS2 form-control input-xs checkNum" format="10">
+								</div>
+								<div class="col-xs-1">
+									<input class="leasePriceE2 form-control input-xs checkNum" format="10">
+								</div>
+								<div class="col-xs-1">万</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="lease_price_div row" name="4" hidden>
+					<div class="col-xs-12">
+						<div class="form-xs form-group row">
+							<label class="col-xs-1 control-label" style="width: 9%;">意向租金:</label>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="leasePrice3_search ace" value="0-100000">
+									<span class="lbl"> 10万以下</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="leasePrice3_search ace" value="100000-150000">
+									<span class="lbl"> 10万-15万</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="leasePrice3_search ace" value="150000-200000">
+									<span class="lbl"> 15万-20万</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="leasePrice3_search ace" value="200000-300000">
+									<span class="lbl"> 20万-30万</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="leasePrice3_search ace" value="300000-500000">
+									<span class="lbl"> 30万-50万</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="leasePrice3_search ace" value="500000-">
+									<span class="lbl"> 50万以上</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<a onclick="aihome.show_define(this);">自定义</a>
+								</label>
+							</div>
+							<div hidden>
+								<div class="col-xs-1">
+									<input class="leasePriceS3 form-control input-xs checkNum" format="10">
+								</div>
+								<div class="col-xs-1">
+									<input class="leasePriceE3 form-control input-xs checkNum" format="10">
+								</div>
+								<div class="col-xs-1">万</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="covered_area_div row ">
+					<div class="col-xs-12">
+						<div class="coveredArea_div form-xs form-group row">
+							<label class="col-xs-1 control-label">建面:</label>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="coveredArea_search ace" value="0-50">
+									<span class="lbl"> 50平以下</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="coveredArea_search ace" value="50-70">
+									<span class="lbl"> 50-70平</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="coveredArea_search ace" value="70-90">
+									<span class="lbl"> 70-90平</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="coveredArea_search ace" value="90-110">
+									<span class="lbl"> 90-110平</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="coveredArea_search ace" value="110-130">
+									<span class="lbl"> 110-130平</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="coveredArea_search ace" value="130-">
+									<span class="lbl"> 130平以上</span>
+								</label>
+							</div>
+							<div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<a onclick="aihome.show_define(this);">自定义</a>
+								</label>
+							</div>
+							<div hidden>
+								<div class="col-xs-1">
+									<input id="coveredAreaS" class="form-control input-xs searchKey checkNum" format="10">
+								</div>
+								<div class="col-xs-1">
+									<input id="coveredAreaE" class="form-control input-xs searchKey checkNum" format="10">
+								</div>
+								<div class="col-xs-1">平</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="decoration_div row form-xs form-group">
+					<label class="col-xs-1 control-label">装修:</label>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="decoration_search ace" value="1">
+							<span class="lbl"> 毛坯</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="decoration_search ace" value="2">
+							<span class="lbl"> 简装</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="decoration_search ace" value="3">
+							<span class="lbl"> 精装</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="decoration_search ace" value="4">
+							<span class="lbl"> 豪装</span>
+						</label>
+					</div>
+				</div>
+				<div class="floor_type_div form-xs form-group row">
+					<label class="col-xs-1 control-label">楼层:</label>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="floor_type_search ace" value="1">
+							<span class="lbl"> 低楼层</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="floor_type_search ace" value="2">
+							<span class="lbl"> 中楼层</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="floor_type_search ace" value="3">
+							<span class="lbl"> 高楼层</span>
+						</label>
+					</div>
+				</div>
+				<div class=" form-xs form-group row">
+					<label class="col-xs-1 control-label">房源状态:</label>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="house_status_search ace" value="1">
+							<span class="lbl"> 待租</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="house_status_search ace" value="2">
+							<span class="lbl"> 暂不租</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="house_status_search ace" value="3">
+							<span class="lbl"> 已成交</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="house_status_search ace" value="4">
+							<span class="lbl"> 错误信息</span>
+						</label>
+					</div>
+				</div>
+				<div class="xqCategory_div form-xs form-group row">
+					<label class="col-xs-1 control-label">小区维护类别:</label>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="xqCategory_search ace" value="1">
+							<span class="lbl"> 责任盘</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="xqCategory_search ace" value="2">
+							<span class="lbl"> 非责任盘</span>
+						</label>
+					</div>
+				</div>
+				<div class="form-xs form-group row">
+					<label class="col-xs-1 control-label">实勘图片:</label>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="prospectPicture ace" value="1">
+							<span class="lbl"> 有</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="prospectPicture ace" value="2">
+							<span class="lbl"> 无</span>
+						</label>
+					</div>
+				</div>
+				<div class=" form-xs form-group row">
+					<label class="col-xs-1 control-label">实勘审核:</label>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="prospectStatus ace" value="1">
+							<span class="lbl"> 合格</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="prospectStatus ace" value="2">
+							<span class="lbl"> 不合格</span>
+						</label>
+					</div>
+				</div>
+				<div class=" form-xs form-group row">
+					<label class="col-xs-1 control-label">限时速递:</label>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="limitTime_search ace">
+							<span class="lbl"> 是</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="limitTime_search ace">
+							<span class="lbl"> 否</span>
+						</label>
+					</div>
+				</div>
+				<div class="key_div form-xs form-group row">
+					<label class="col-xs-1 control-label">是否有钥匙:</label>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="key_search ace">
+							<span class="lbl"> 有</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="key_search ace">
+							<span class="lbl"> 无</span>
+						</label>
+					</div>
+				</div>
+				<div class=" form-xs form-group row">
+					<label class="col-xs-1 control-label">是否收产权证:</label>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="property_search ace">
+							<span class="lbl"> 有</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="property_search ace">
+							<span class="lbl"> 无</span>
+						</label>
+					</div>
+				</div>
+				<div class=" form-xs form-group row">
+					<label class="col-xs-1 control-label">外司已成交:</label>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="ws_dealed ace">
+							<span class="lbl"> 是</span>
+						</label>
+					</div>
+					<div class="col-xs-1 checkbox-inline input-xs">
+						<label>
+							<input type="checkbox" class="ws_dealed ace">
+							<span class="lbl"> 否</span>
+						</label>
+					</div>
+				</div>
+				<div class=" form-xs form-group row">
+					<label class="col-xs-1 control-label">房源标签:</label>
+					<#if (sysParamMap.ZLFYBQ)?? >
+						<#list sysParamMap.ZLFYBQ as item>  
+					        <div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="tags_search ace" value="${item.id!''}">
+									<span class="lbl">
+										${item.sysHouseDescribe!''}
+									</span>
+								</label>
+							</div>
+							<#if (item_index+1)%10==0>
+								<label class="col-xs-2 control-label"></label>
+							</#if> 
+					    </#list> 
+				    </#if>
+				</div>
+				<div class="fitmanagement_div form-xs form-group row" hidden>
+					<label class="col-xs-1 control-label">适合经营:</label>
+					<#if (sysParamMap.ZLSHJY)?? >
+						<#list sysParamMap.ZLSHJY as item>  
+					        <div class="col-xs-1 checkbox-inline input-xs">
+								<label>
+									<input type="checkbox" class="fitmanagement_search ace" value="${item.id!''}">
+									<span class="lbl">
+										${item.sysHouseDescribe!''}
+									</span>
+								</label>
+							</div>
+							<#if (item_index+1)%10==0>
+								<label class="col-xs-2 control-label"></label>
+							</#if> 
+					    </#list>  
+				    </#if>
+				</div>
+				<div class="row" id="morediv" hidden>
+					<!-- search row1 S -->
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-4">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">业主姓名:</label>
+									<div class="col-xs-6">
+										<input id="ownerName" class="form-control input-xs searchKey">
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-4">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">业主电话:</label>
+									<div class="col-xs-6">
+										<input id="ownerTel" class="form-control input-xs searchKey">
+									</div>
+								</div>
+							</div>
+							<div class="edu_div col-xs-4">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">学区:</label>
+									<div class="col-xs-6">
+										<input id="eduName" class="form-control input-xs selectInput">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- search row1 E -->
+					<!-- search row2 S -->
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-4">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">所属区:</label>
+									<div class="col-xs-6">
+										<select id="divideQu" class="quOrg input-xs form-control searchKey" onchange="aihome.changeQuOrg(this);">
+											<option value="">请选择</option>
+											<#list quOrgList as item>
+												<option value="${item.orgCode}">${item.name}</option>
+											</#list>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-4">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">所属组:</label>
+									<div class="col-xs-6">
+										<select id="divideOrg" class="zuOrg input-xs form-control searchKey" onchange="aihome.changeZuOrg(this);">
+											<option value="">请选择</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-4">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">所属人:</label>
+									<div class="col-xs-6">
+										<select id="divideUser" class="jingjiren input-xs form-control searchKey">
+											<option value="">请选择</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- search row2 E -->
+					<!-- search row3 S -->
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-4">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">登记区:</label>
+									<div class="col-xs-6">
+										<select id="operateQu" class="quOrg input-xs form-control searchKey" onchange="aihome.changeQuOrg(this);">
+											<option value="">请选择</option>
+											<#list quOrgList as item>
+												<option value="${item.orgCode}">${item.name}</option>
+											</#list>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-4">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">登记组:</label>
+									<div class="col-xs-6">
+										<select id="operateOrg" class="zuOrg input-xs form-control searchKey" onchange="aihome.changeZuOrg(this);">
+											<option value="">请选择</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-4">
+								<div class=" form-xs form-group row">
+									<label class="col-xs-3 control-label">登记人:</label>
+									<div class="col-xs-6">
+										<select id="operater" class="jingjiren input-xs form-control searchKey">
+											<option value="">请选择</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- search row3 E -->
+					<!-- search row4 E -->
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-4">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">协议编号:</label>
+									<div class="col-xs-6">
+										<input id="entrustCode" class="form-control input-xs searchKey">
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-4">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">是否签委托协议:</label>
+									<div class="col-xs-6">
+										<select id="isEntrust" class="input-xs form-control searchKey">
+											<option value="">请选择</option>
+											<option value="1"> 是</option>
+											<option value="2"> 否</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-4">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">签署委托时间:</label>
+									<div class="col-xs-6">
+										<div class="input-daterange input-group 5i5jdate">
+											<input id="entrustTimeS" type="text" class="form-control input-xs searchKey" name="start" placeholder="开始时间">
+											<span class="input-group-addon addon-xs">
+												<i class="fa fa-exchange"></i>
+											</span>
+											<input id="entrustTimeE" type="text" class="form-control input-xs searchKey" name="end" placeholder="结束时间">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- search row4 E -->
+					<!-- search row5 S -->
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-4">
+								<div class=" form-xs form-group row">
+									<label class="col-xs-3 control-label">协议状态:</label>
+									<div class="col-xs-6">
+										<select id="entrustStatus" class="input-xs form-control searchKey">
+											<option value=""> 请选择</option>
+											<option value="1"> 有效</option>
+											<option value="2"> 无效</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-4">
+								<div class=" form-xs form-group row">
+									<label class="col-xs-3 control-label">产权证编号:</label>
+									<div class="col-xs-6">
+										<input id="propertyCode" class="form-control input-xs searchKey">
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-4">
+								<div class=" form-xs form-group row">
+									<label class="col-xs-3 control-label">收产权证状态:</label>
+									<div class="col-xs-6">
+										<select id="propertyStatus" class="input-xs form-control searchKey">
+											<option value="">请选择</option>
+											<option value="1">有效</option>
+											<option value="2">无效</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-xs form-group row">
+					  <label class="strong1 col-xs-1 control-label">
+				      	<strong>限:</strong>限时速递
+				      </label>
+				      <label class="strong2 col-xs-1 control-label">
+				      	<strong>管:</strong>房管
+				      </label>
+				      <label class="strong3 col-xs-1 control-label">
+				      	<strong>图:</strong>有实勘图
+				      </label>
+				      <label class="strong4 col-xs-1 control-label">
+				      	<strong>钥:</strong>有钥匙
+				      </label>
+				     <div class="col-xs-3">
+						<div class=" form-xs form-group row">
+							<label class="col-xs-4 control-label">
+							</label>
+							<div class="col-xs-8">
+								<a id="more">更多</a>
+							</div>
+						</div>
+					 </div>
+			    </div>
+				<!-- 搜索结束 -->
+			</div>
+		    <!-- 隐藏域 S-->
+		    <input id="ba1Id" class="searchKey" type="hidden">
+		    <input id="ba2Id" class="searchKey" type="hidden">
+		    <input id="premisesId" class="searchKey" type="hidden">
+		    <input id="eduId" type="hidden">
+		    <input id="curUser" type="hidden" value="${curUser}">
+		    
+		    <!-- 隐藏域 E -->
+			</form>
+		</div>
+		<div id="more-input" class="" style="height: 71px; display: flex;">
+			<div>
+				<i class="iconfont"></i>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-grid">
+	      <table id="house_lease_jqGrid">
+	      
+	      </table>
+	      <div id="house_lease_jqGridPager"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(window).on("resize.houseLeaseTable", function () {
+    $("#houseLeaseTable .my-grid").css("top", $("#houseLeaseTable .my-group").height() + 10);
+    $("#houseLeaseTable .ui-jqgrid-bdiv").css("height", $(window).height() - $("#houseLeaseTable .my-group").height() - 207);
+	$("#houseLeaseTable .ui-jqgrid").css("width", $("#houseLeaseTable .my-grid").width());
+	$("#houseLeaseTable .ui-jqgrid-hdiv").css("width", $("#houseLeaseTable .my-grid").width());
+	$("#houseLeaseTable .ui-jqgrid-htable").css("width", $("#houseLeaseTable .my-grid").width());
+	$("#houseLeaseTable .ui-jqgrid-bdiv").css("width", $("#houseLeaseTable .my-grid").width());
+	$("#houseLeaseTable .ui-jqgrid-btable").css("width", $("#houseLeaseTable .my-grid").width());
+	$("#houseLeaseTable .ui-jqgrid-pager").css("width", $("#houseLeaseTable .my-grid").width());
+});
+	aihome.init_jqGrid = function(){
+		//住宅列表
+		$("#house_lease_jqGrid").jqGrid({
+			 url: "${CTX}/houseLease/getHouseLeaseListForPage.do", 
+			 postData: {
+				 useType:$("#useType").val()
+			 },
+	         datatype: "json",
+	         colModel: [
+				 { label: 'houseInfoId', name: 'houseInfoId',index:'houseInfoId',hidden:true},
+				 { label: 'id', name: 'id',index:'id',hidden:true},
+				 { label: 'premisesId', name: 'premisesId',index:'premisesId',hidden:true},
+				 { label: 'roomId', name: 'roomId',index:'roomId',hidden:true},
+				 { label: '独', name: 'timeLimitCount',index:'timeLimitCount',width: 40,
+					 formatter:function(rowName, options, rowObject){
+	            	     var html = "";
+	            	     if(rowName && rowName>0){
+	            	    	 html+="<i class='iconfont'>&#xe721;</i>"
+	            	     }
+	            	     return html;
+		             }	 
+				 },
+				 { label: '管', name: 'houseManage',index:'houseManage',width: 40 ,
+					 formatter:function(rowName, options, rowObject){
+	            	     var html = "";
+	            	     if(rowName && rowName!=""){
+	            	    	 html+="<i class='iconfont'>&#xe724;</i>"
+	            	     }
+	            	     return html;
+		             }	 
+				 },
+				 { label: '图', name: 'prospectCount',index:'prospectCount',width: 40,
+					 formatter:function(rowName, options, rowObject){
+	            	     var html = "";
+	            	     if(rowName && rowName>0){
+	            	    	 html+="<i class='iconfont'>&#xe723;</i>"
+	            	     }
+	            	     return html;
+		             }	 
+				 },
+				 { label: '钥', name: 'keyCount',index:'keyCount',width: 40,
+					 formatter:function(rowName, options, rowObject){
+	            	     var html = "";
+	            	     if(rowName && rowName>0){
+	            	    	 html+="<i class='iconfont'>&#xe71f;</i>"
+	            	     }
+	            	     return html;
+		             } 
+				 },
+				 {label: '房源编号',name:'code',index:'code',width: 130,align:"center",
+					 formatter:function(rowName, options, rowObject){
+	            	    return "<a href=\"javascript:aihome.houseDetail('"+rowObject.houseInfoId+"',2,1);\"  style='text-decoration:none;color:blue'>"+rowName+"</a>";
+	             	 }
+				 },
+				 { label: '房源状态', name: 'statusStr',index:'statusStr',width: 80},
+				 { label: '业主姓名', name: 'ownerName',index:'ownerName',width: 120 },
+				 { label: '业主电话', name: 'ownerTel',index:'ownerTel',width: 120,
+					 formatter:function(rowName, options, rowObject){
+						 return "<a href=\"javascript:void(0);\" style='text-decoration:none;color:blue' seeType='1' demandType='2' houseId='"+rowObject.houseInfoId+"' onclick='aihome.userCheckInfoFun(this);'>查看电话</a>";
+	            	 }
+				 },
+				 { label: '二级商圈', name: 'ba2Name',index:'ba2Name',width: 120},
+				 { label: '楼盘名称', name: 'premisesName',index:'premisesName',width: 120 },
+				 { label: '户型', name: 'floorType',index:'floorType',width: 100,
+					 formatter:function(rowName, options, rowObject){
+						 var html = "";
+						 if(rowObject.rooms){
+							 html += rowObject.rooms+"室";
+						 }
+						 if(rowObject.office){
+							 html += rowObject.office+"厅";
+						 }
+						 if(rowObject.kitchen){
+							 html += rowObject.kitchen+"厨";
+						 }
+						 if(rowObject.wc){
+							 html += rowObject.wc+"卫";
+						 }
+	            	     return html;
+		             }
+				 },
+				 { label: '楼层', name: 'floor',index:'floor',width: 80},
+				 { label: '意向租金(元/月)', name: 'leasePrice',index:'leasePrice',width:100,sortable:true,
+					 formatter:function(rowName, options, rowObject){
+	            	     var html = rowName;
+	            	     var priceChangeType = rowObject.priceChangeType;//最新一次价格变动类型 1涨价 2降价
+	            	     if(priceChangeType==1){
+	            	    	 html+="<i class='iconfont'>&#xe6a4;</i>";
+	            	     }else if(priceChangeType==2){
+	            	    	 html+="<i class='iconfont'>&#xe6a5;</i>";
+	            	     }
+	            	     return html;
+		             }	
+				 },
+				 { label: '建筑面积(m2)', name: 'coveredArea',index:'coveredArea',width:100},
+				 { label: '装修', name: 'decoradionStr',index:'decoradionStr',width:80 },
+				 { label: '出租方式', name: 'leaseTypeStr',index:'leaseTypeStr',width:80},
+				 { label: '付款方式', name: 'payTypeStr',index:'payTypeStr',width:80},
+				 { label: '看房次数', name: 'watchHouseCount',index:'watchHouseCount',width:60},
+				 { label: '所属区', name: 'divideQu',index:'divideQu',width:80},
+				 { label: '所属组', name: 'divideOrg',index:'divideOrg',width:80},
+				 { label: '所属人', name: 'divideUser',index:'divideUser',width:80},
+				 { label: '委托期限', name: 'entrustTerm',index:'entrustTerm',width:80},
+				 { label: '承租期限', name: 'leaseTerm',index:'leaseTerm',width:80},
+				 { label: '收房人', name: 'collectHouseUser',index:'collectHouseUser',width:80},
+				 { label: '收房组', name: 'collectHouseOrg',index:'collectHouseOrg',width:80},
+				 { label: '经纪人', name: 'operator',index:'operator',width:80},
+				 { label: '登记日期', name: 'createTime',index:'createTime',width:90},
+				 { label: '最后跟进时间', name: 'lastFollowTime',index:'lastFollowTime',width:90},
+				 { label: '备注', name: 'remark',index:'remark',numberOfConlumns: 2}
+	         ],
+	         onSortCol: function (index, colindex, sortorder){
+	        	 if(index=="leasePrice"){
+	        		 aihome.searchElement(1);
+	        	 }else if(index=="coveredArea"){
+	        		 aihome.searchElement(2);
+	        	 }
+	         },
+	         gridComplete: function () {
+		         $("#houseLeaseTable .my-grid").css("top", $("#houseLeaseTable .my-group").height() + 10);
+		         $("#houseLeaseTable .ui-jqgrid-bdiv").css("height", $(window).height() - $("#houseLeaseTable .my-group").height() - 207);
+	         },
+	         multiselect: true,
+	         multiboxonly: true,
+	         viewrecords:true, 
+	         autowidth:true,
+	         shrinkToFit:false,   
+	         autoScroll:true, 
+	         height: $(window).height()*0.58,
+	         rowNum:20, 
+		     rowList:[10,20,30,50,100],
+	         pager: "#house_lease_jqGridPager",
+	     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false}
+	    });
+	}
+	//更改jqgrid
+	aihome.change_jqgrid = function(){
+		jQuery('#house_lease_jqGrid').GridUnload();//卸载Grid再进行重绘  
+		var useType = $("#useType").val();
+		//住宅列表
+		if(useType==1){
+			$("#house_lease_jqGrid").jqGrid({
+				 url: "${CTX}/houseLease/getHouseLeaseListForPage.do", 
+				 postData: {
+					 useType:$("#useType").val()
+				 },
+		         datatype: "json",
+		         colModel: [
+                     { label: 'houseInfoId', name: 'houseInfoId',index:'houseInfoId',hidden:true},
+					 { label: 'id', name: 'id',index:'id',hidden:true},
+					 { label: 'premisesId', name: 'premisesId',index:'premisesId',hidden:true},
+					 { label: 'roomId', name: 'roomId',index:'roomId',hidden:true},
+					 { label: '独', name: 'timeLimitCount',index:'timeLimitCount',width: 40,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe721;</i>"
+		            	     }
+		            	     return html;
+			             }	 
+					 },
+					 { label: '管', name: 'houseManage',index:'houseManage',width: 40 ,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName!=""){
+		            	    	 html+="<i class='iconfont'>&#xe724;</i>"
+		            	     }
+		            	     return html;
+			             }	 
+					 },
+					 { label: '图', name: 'prospectCount',index:'prospectCount',width: 40,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe723;</i>"
+		            	     }
+		            	     return html;
+			             }	 
+					 },
+					 { label: '钥', name: 'keyCount',index:'keyCount',width: 40,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe71f;</i>"
+		            	     }
+		            	     return html;
+			             } 
+					 },
+					 {label: '房源编号',name:'code',index:'code',width: 130,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     return "<a href=\"javascript:aihome.houseDetail('"+rowObject.houseInfoId+"',2,1);\"  style='text-decoration:none;color:blue'>"+rowName+"</a>";
+		            	 }
+					 },
+					 { label: '房源状态', name: 'statusStr',index:'statusStr',width: 80},
+					 { label: '业主姓名', name: 'ownerName',index:'ownerName',width: 120 },
+					 { label: '业主电话', name: 'ownerTel',index:'ownerTel',width: 120,
+						 formatter:function(rowName, options, rowObject){
+							 return "<a href=\"javascript:void(0);\" style='text-decoration:none;color:blue' seeType='1' demandType='2' houseId='"+rowObject.houseInfoId+"' onclick='aihome.userCheckInfoFun(this);'>查看电话</a>";
+		            	 }
+					 },
+					 { label: '二级商圈', name: 'ba2Name',index:'ba2Name',width: 120},
+					 { label: '楼盘名称', name: 'premisesName',index:'premisesName',width: 120 },
+					 { label: '户型', name: 'floorType',index:'floorType',width: 100,
+						 formatter:function(rowName, options, rowObject){
+							 var html = "";
+							 if(rowObject.rooms){
+								 html += rowObject.rooms+"室";
+							 }
+							 if(rowObject.office){
+								 html += rowObject.office+"厅";
+							 }
+							 if(rowObject.kitchen){
+								 html += rowObject.kitchen+"厨";
+							 }
+							 if(rowObject.wc){
+								 html += rowObject.wc+"卫";
+							 }
+		            	     return html;
+			             }
+					 },
+					 { label: '楼层', name: 'floor',index:'floor',width: 80},
+					 { label: '意向租金(元/月)', name: 'leasePrice',index:'leasePrice',width:100,sortable:true,
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = rowName;
+		            	     var priceChangeType = rowObject.priceChangeType;//最新一次价格变动类型 1涨价 2降价
+		            	     if(priceChangeType==1){
+		            	    	 html+="<i class='iconfont'>&#xe6a4;</i>";
+		            	     }else if(priceChangeType==2){
+		            	    	 html+="<i class='iconfont'>&#xe6a5;</i>";
+		            	     }
+		            	     return html;
+			             }	
+					 },
+					 { label: '建筑面积(m2)', name: 'coveredArea',index:'coveredArea',width:100},
+					 { label: '装修', name: 'decoradionStr',index:'decoradionStr',width:80 },
+					 { label: '出租方式', name: 'leaseTypeStr',index:'leaseTypeStr',width:80},
+					 { label: '付款方式', name: 'payTypeStr',index:'payTypeStr',width:60},
+					 { label: '看房次数', name: 'watchHouseCount',index:'watchHouseCount',width:80},
+					 { label: '所属区', name: 'divideQu',index:'divideQu',width:80},
+					 { label: '所属组', name: 'divideOrg',index:'divideOrg',width:80},
+					 { label: '所属人', name: 'divideUser',index:'divideUser',width:80},
+					 { label: '委托期限', name: 'entrustTerm',index:'entrustTerm',width:80},
+					 { label: '承租期限', name: 'leaseTerm',index:'leaseTerm',width:80},
+					 { label: '收房人', name: 'collectHouseUser',index:'collectHouseUser',width:80},
+					 { label: '收房组', name: 'collectHouseOrg',index:'collectHouseOrg',width:80},
+					 { label: '经纪人', name: 'operator',index:'operator',width:80},
+					 { label: '登记日期', name: 'createTime',index:'createTime',width:90},
+					 { label: '最后跟进时间', name: 'lastFollowTime',index:'lastFollowTime',width:90},
+					 { label: '备注', name: 'remark',index:'remark',numberOfConlumns: 2 }
+		         ],
+		         onSortCol: function (index, colindex, sortorder){
+		        	 if(index=="leasePrice"){
+		        		 aihome.searchElement(1);
+		        	 }else if(index=="coveredArea"){
+		        		 aihome.searchElement(2);
+		        	 }
+		         },
+		         gridComplete: function () {
+			         $("#houseLeaseTable .my-grid").css("top", $("#houseLeaseTable .my-group").height() + 10);
+			         $("#houseLeaseTable .ui-jqgrid-bdiv").css("height", $(window).height() - $("#houseLeaseTable .my-group").height() - 207);
+		         },
+		         multiselect: true,
+		         multiboxonly: true,
+		         viewrecords:true, 
+		         autowidth:true,
+		         shrinkToFit:false,   
+		         autoScroll:true, 
+		         height: $(window).height()*0.58,
+		         rowNum:20, 
+			     rowList:[10,20,30,50,100],
+		         pager: "#house_lease_jqGridPager",
+		     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+		    });
+		}
+		//商铺列表
+		if(useType==2){
+			$("#house_lease_jqGrid").jqGrid({
+				 url: "${CTX}/houseLease/getHouseLeaseListForPage.do", 
+				 postData: {
+					 useType:useType
+				 },
+		         datatype: "json",
+		         colModel: [
+  				     { label: 'houseInfoId', name: 'houseInfoId',index:'houseInfoId',hidden:true},
+					 { label: 'id', name: 'id',index:'id',hidden:true},
+					 { label: 'premisesId', name: 'premisesId',index:'premisesId',hidden:true},
+					 { label: 'roomId', name: 'roomId',index:'roomId',hidden:true},
+					 { label: '独', name: 'timeLimitCount',index:'timeLimitCount',width: 40,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe721;</i>"
+		            	     }
+		            	     return html;
+			             }	 
+					 },
+					 { label: '管', name: 'houseManage',index:'houseManage',width: 40 ,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName!=""){
+		            	    	 html+="<i class='iconfont'>&#xe724;</i>"
+		            	     }
+		            	     return html;
+			             }	 
+					 },
+					 { label: '图', name: 'prospectCount',index:'prospectCount',width: 40,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe723;</i>"
+		            	     }
+		            	     return html;
+			             }	 
+					 },
+					 { label: '钥', name: 'keyCount',index:'keyCount',width: 40,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe71f;</i>"
+		            	     }
+		            	     return html;
+			             } 
+					 },
+					 {label: '房源编号',name:'code',index:'code',width: 130,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	    return "<a href=\"javascript:aihome.houseDetail('"+rowObject.houseInfoId+"',2,2);\"  style='text-decoration:none;color:blue'>"+rowName+"</a>";
+		            	 }
+					 },
+					 { label: '房源状态', name: 'statusStr',index:'statusStr',width: 80},
+					 { label: '业主姓名', name: 'ownerName',index:'ownerName',width: 120 },
+					 { label: '业主电话', name: 'ownerTel',index:'ownerTel',width: 120,
+						 formatter:function(rowName, options, rowObject){
+							 return "<a href=\"javascript:void(0);\" style='text-decoration:none;color:blue' seeType='1' demandType='2' houseId='"+rowObject.houseInfoId+"' onclick='aihome.userCheckInfoFun(this);'>查看电话</a>";
+		            	 }
+					 },
+					 { label: '二级商圈', name: 'ba2Name',index:'ba2Name',width: 120},
+					 { label: '楼盘名称', name: 'premisesName',index:'premisesName',width: 120 },
+					 { label: '户型', name: 'floorType',index:'floorType',width: 100,
+						 formatter:function(rowName, options, rowObject){
+							 var html = "";
+							 if(rowObject.rooms){
+								 html += rowObject.rooms+"室";
+							 }
+							 if(rowObject.office){
+								 html += rowObject.office+"厅";
+							 }
+							 if(rowObject.kitchen){
+								 html += rowObject.kitchen+"厨";
+							 }
+							 if(rowObject.wc){
+								 html += rowObject.wc+"卫";
+							 }
+		            	     return html;
+			             }
+					 },
+					 { label: '楼层', name: 'floor',index:'floor',width: 80 },
+					 { label: '意向租金(元/月)', name: 'leasePrice',index:'leasePrice',width:100,sortable:true,
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = rowName;
+		            	     var priceChangeType = rowObject.priceChangeType;//最新一次价格变动类型 1涨价 2降价
+		            	     if(priceChangeType==1){
+		            	    	 html+="<i class='iconfont'>&#xe6a4;</i>";
+		            	     }else if(priceChangeType==2){
+		            	    	 html+="<i class='iconfont'>&#xe6a5;</i>";
+		            	     }
+		            	     return html;
+			             }	
+					 },
+					 { label: '建筑面积(m2)', name: 'coveredArea',index:'coveredArea',width:100},
+					 { label: '适合经营', name: 'fitManagement2',index:'fitManagement2',width: 120 },
+					 { label: '临近', name: 'closePosition',index:'closePosition',width: 120 },
+					 { label: '看房次数', name: 'watchHouseCount',index:'watchHouseCount',width:80 },
+					 { label: '所属区', name: 'divideQu',index:'divideQu',width:80},
+					 { label: '所属组', name: 'divideOrg',index:'divideOrg',width:80},
+					 { label: '所属人', name: 'divideUser',index:'divideUser',width:80},
+					 { label: '委托期限', name: 'entrustTerm',index:'entrustTerm',width:80},
+					 { label: '承租期限', name: 'leaseTerm',index:'leaseTerm',width:80},
+					 { label: '收房人', name: 'collectHouseUser',index:'collectHouseUser',width:80},
+					 { label: '收房组', name: 'collectHouseOrg',index:'collectHouseOrg',width:80},
+					 { label: '经纪人', name: 'operator',index:'operator',width:80 },
+					 { label: '登记日期', name: 'createTime',index:'createTime',width:90 },
+					 { label: '最后跟进时间', name: 'lastFollowTime',index:'lastFollowTime',width:90 },
+					 { label: '备注', name: 'remark',index:'remark',numberOfConlumns: 2 }
+		         ],
+		         onSortCol: function (index, colindex, sortorder){
+		        	 if(index=="leasePrice"){
+		        		 aihome.searchElement(1);
+		        	 }else if(index=="coveredArea"){
+		        		 aihome.searchElement(2);
+		        	 }
+		         },
+		         gridComplete: function () {
+			         $("#houseLeaseTable .my-grid").css("top", $("#houseLeaseTable .my-group").height() + 10);
+			         $("#houseLeaseTable .ui-jqgrid-bdiv").css("height", $(window).height() - $("#houseLeaseTable .my-group").height() - 207);
+		         },
+		         multiselect: true,
+		         multiboxonly: true,
+		         viewrecords:true, 
+		         autowidth:true,
+		         shrinkToFit:false,   
+		         autoScroll:true, 
+		         height: $(window).height()*0.58,
+		         rowNum:20, 
+			     rowList:[10,20,30,50,100],
+		         pager: "#house_lease_jqGridPager",
+		     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+		    });
+		}
+		//写字楼列表
+		if(useType==3){
+			$("#house_lease_jqGrid").jqGrid({
+				 url: "${CTX}/houseLease/getHouseLeaseListForPage.do", 
+				 postData: {
+					 useType:useType
+				 },
+		         datatype: "json",
+		         colModel: [
+					 { label: 'houseInfoId', name: 'houseInfoId',index:'houseInfoId',hidden:true},
+					 { label: 'id', name: 'id',index:'id',hidden:true},
+					 { label: 'premisesId', name: 'premisesId',index:'premisesId',hidden:true},
+					 { label: 'roomId', name: 'roomId',index:'roomId',hidden:true},
+					 { label: '独', name: 'timeLimitCount',index:'timeLimitCount',width: 40,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe721;</i>"
+		            	     }
+		            	     return html;
+			             }	 
+					 },
+					 { label: '管', name: 'houseManage',index:'houseManage',width: 40 ,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName!=""){
+		            	    	 html+="<i class='iconfont'>&#xe724;</i>"
+		            	     }
+		            	     return html;
+			             }	 
+					 },
+					 { label: '图', name: 'prospectCount',index:'prospectCount',width: 40,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe723;</i>"
+		            	     }
+		            	     return html;
+			             }	 
+					 },
+					 { label: '钥', name: 'keyCount',index:'keyCount',width: 40,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe71f;</i>"
+		            	     }
+		            	     return html;
+			             } 
+					 },
+					 {label: '房源编号',name:'code',index:'code',width: 130,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	    return "<a href=\"javascript:aihome.houseDetail('"+rowObject.houseInfoId+"',2,3);\"  style='text-decoration:none;color:blue'>"+rowName+"</a>";
+		            	 }
+					 },
+					 { label: '房源状态', name: 'statusStr',index:'statusStr',width: 80},
+					 { label: '业主姓名', name: 'ownerName',index:'ownerName',width: 120 },
+					 { label: '业主电话', name: 'ownerTel',index:'ownerTel',width: 120,
+						 formatter:function(rowName, options, rowObject){
+							 return "<a href=\"javascript:void(0);\" style='text-decoration:none;color:blue' seeType='1' demandType='2' houseId='"+rowObject.houseInfoId+"' onclick='aihome.userCheckInfoFun(this);'>查看电话</a>";
+		            	 }
+					 },
+					 { label: '二级商圈', name: 'ba2Name',index:'ba2Name',width: 120},
+					 { label: '楼盘名称', name: 'premisesName',index:'premisesName',width: 120 },
+					 { label: '户型', name: 'floorType',index:'floorType',width: 100,
+						 formatter:function(rowName, options, rowObject){
+							 var html = "";
+							 if(rowObject.rooms){
+								 html += rowObject.rooms+"室";
+							 }
+							 if(rowObject.office){
+								 html += rowObject.office+"厅";
+							 }
+							 if(rowObject.kitchen){
+								 html += rowObject.kitchen+"厨";
+							 }
+							 if(rowObject.wc){
+								 html += rowObject.wc+"卫";
+							 }
+		            	     return html;
+			             }
+					 },
+					 { label: '写字楼等级', name: 'officeGradeStr',index:'officeGradeStr',width: 100 },
+					 { label: '楼层', name: 'floor',index:'floor',width: 80 },
+					 { label: '意向租金(元/月)', name: 'leasePrice',index:'leasePrice',width:100,sortable:true,
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = rowName;
+		            	     var priceChangeType = rowObject.priceChangeType;//最新一次价格变动类型 1涨价 2降价
+		            	     if(priceChangeType==1){
+		            	    	 html+="<i class='iconfont'>&#xe6a4;</i>";
+		            	     }else if(priceChangeType==2){
+		            	    	 html+="<i class='iconfont'>&#xe6a5;</i>";
+		            	     }
+		            	     return html;
+			             }	
+					 },
+					 { label: '建筑面积(m2)', name: 'coveredArea',index:'coveredArea',width:100 },
+					 { label: '可办公人数', name: 'containPerson',index:'containPerson',width:100 },
+					 { label: '现状', name: 'useStatusStr',index:'useStatusStr',width:100 },
+					 { label: '看房次数', name: 'watchHouseCount',index:'watchHouseCount',width:80 },
+					 { label: '所属区', name: 'divideQu',index:'divideQu',width:80},
+					 { label: '所属组', name: 'divideOrg',index:'divideOrg',width:80},
+					 { label: '所属人', name: 'divideUser',index:'divideUser',width:80},
+					 { label: '委托期限', name: 'entrustTerm',index:'entrustTerm',width:80},
+					 { label: '承租期限', name: 'leaseTerm',index:'leaseTerm',width:80},
+					 { label: '收房人', name: 'collectHouseUser',index:'collectHouseUser',width:80},
+					 { label: '收房组', name: 'collectHouseOrg',index:'collectHouseOrg',width:80},
+					 { label: '登记日期', name: 'createTime',index:'createTime',width:90 },
+					 { label: '最后跟进时间', name: 'lastFollowTime',index:'lastFollowTime',width:90 },
+					 { label: '备注', name: 'remark',index:'remark',numberOfConlumns: 2}
+		         ],
+		         onSortCol: function (index, colindex, sortorder){
+		        	 if(index=="leasePrice"){
+		        		 aihome.searchElement(1);
+		        	 }else if(index=="coveredArea"){
+		        		 aihome.searchElement(2);
+		        	 }
+		         },
+		         gridComplete: function () {
+			         $("#houseLeaseTable .my-grid").css("top", $("#houseLeaseTable .my-group").height() + 10);
+			         $("#houseLeaseTable .ui-jqgrid-bdiv").css("height", $(window).height() - $("#houseLeaseTable .my-group").height() - 207);
+		         },
+		         multiselect: true,
+		         multiboxonly: true,
+		         viewrecords:true, 
+		         autowidth:true,
+		         shrinkToFit:false,   
+		         autoScroll:true, 
+		         height: $(window).height()*0.58,
+		         rowNum:20, 
+			     rowList:[10,20,30,50,100],
+		         pager: "#house_lease_jqGridPager",
+		     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+		    });
+		}
+		//车位表
+		if(useType==4){
+			$("#house_lease_jqGrid").jqGrid({
+				 url: "${CTX}/houseLease/getHouseLeaseListForPage.do", 
+				 postData: {
+					 useType:useType
+				 },
+		         datatype: "json",
+		         colModel: [
+					 { label: 'houseInfoId', name: 'houseInfoId',index:'houseInfoId',hidden:true},
+					 { label: 'id', name: 'id',index:'id',hidden:true},
+					 { label: 'premisesId', name: 'premisesId',index:'premisesId',hidden:true},
+					 { label: '独', name: 'timeLimitCount',index:'timeLimitCount',width: 40,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe721;</i>"
+		            	     }
+		            	     return html;
+			             }	 
+					 },
+					 { label: '图', name: 'prospectCount',index:'prospectCount',width: 40,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = "";
+		            	     if(rowName && rowName>0){
+		            	    	 html+="<i class='iconfont'>&#xe723;</i>"
+		            	     }
+		            	     return html;
+			             }	 
+					 },
+					 {label: '房源编号',name:'code',index:'code',width: 130,align:"center",
+						 formatter:function(rowName, options, rowObject){
+		            	    return "<a href=\"javascript:aihome.houseDetail('"+rowObject.houseInfoId+"',2,4);\"  style='text-decoration:none;color:blue'>"+rowName+"</a>";
+		            	 }
+					 },
+					 { label: '房源状态', name: 'statusStr',index:'statusStr',width: 80},
+					 { label: '业主姓名', name: 'ownerName',index:'ownerName',width: 120 },
+					 { label: '业主电话', name: 'ownerTel',index:'ownerTel',width: 120,
+						 formatter:function(rowName, options, rowObject){
+							 return "<a href=\"javascript:void(0);\" style='text-decoration:none;color:blue' seeType='1' demandType='2' houseId='"+rowObject.houseInfoId+"' onclick='aihome.userCheckInfoFun(this);'>查看电话</a>";
+		            	 }
+					 },
+					 { label: '二级商圈', name: 'ba2Name',index:'ba2Name',width: 120},
+					 { label: '楼盘名称', name: 'premisesName',index:'premisesName',width: 120 },
+					 { label: '类型', name: 'carPortType',index:'carPortType',width: 100 },
+					 { label: '楼层', name: 'floor',index:'floor',width: 100 },
+					 { label: '意向租金(元/月)', name: 'leasePrice',index:'leasePrice',width:100,sortable:true,
+						 formatter:function(rowName, options, rowObject){
+		            	     var html = rowName;
+		            	     var priceChangeType = rowObject.priceChangeType;//最新一次价格变动类型 1涨价 2降价
+		            	     if(priceChangeType==1){
+		            	    	 html+="<i class='iconfont'>&#xe6a4;</i>";
+		            	     }else if(priceChangeType==2){
+		            	    	 html+="<i class='iconfont'>&#xe6a5;</i>";
+		            	     }
+		            	     return html;
+			             }	
+					 },
+					 { label: '现状', name: 'useStatusStr',index:'useStatusStr',width:100 },
+					 { label: '看房次数', name: 'watchHouseCount',index:'watchHouseCount',width:80 },
+					 { label: '委托期限', name: 'entrustTerm',index:'entrustTerm',width:80},
+					 { label: '承租期限', name: 'leaseTerm',index:'leaseTerm',width:80},
+					 { label: '收房人', name: 'collectHouseUser',index:'collectHouseUser',width:80},
+					 { label: '收房组', name: 'collectHouseOrg',index:'collectHouseOrg',width:80},
+					 { label: '登记日期', name: 'createTime',index:'createTime',width:90 },
+					 { label: '最后跟进时间', name: 'lastFollowTime',index:'lastFollowTime',width:90 },
+					 { label: '备注', name: 'remark',index:'remark',numberOfConlumns: 2 }
+		         ],
+		         onSortCol: function (index, colindex, sortorder){
+		        	 if(index=="leasePrice"){
+		        		 aihome.searchElement(1);
+		        	 }
+		         },
+		         gridComplete: function () {
+			         $("#houseLeaseTable .my-grid").css("top", $("#houseLeaseTable .my-group").height() + 10);
+			         $("#houseLeaseTable .ui-jqgrid-bdiv").css("height", $(window).height() - $("#houseLeaseTable .my-group").height() - 207);
+		         },
+		         multiselect: true,
+		         multiboxonly: true,
+		         viewrecords:true, 
+		         autowidth:true,
+		         shrinkToFit:false,   
+		         autoScroll:true, 
+		         height: $(window).height()*0.58,
+		         rowNum:20, 
+			     rowList:[10,20,30,50,100],
+				 pager: "#house_lease_jqGridPager",
+		     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+		    });
+		}
+	}
+	//大商圈级联小商圈
+	aihome.getBa2 = function(){
+		var ba1Id = $(".ba1 option:selected").val();
+		$(".ba2").empty();
+		$("#ba2Id").val("");
+		if(ba1Id==""){
+			$(".ba2").append("<option value=''>请选择</option>");
+		}else{
+			$.ajax({
+			       type: "post",
+			       url: "${CTX}/houseLease/getBa2List.do", 
+			       dataType:'json',
+			       data: {
+			    	   "ba1Id":ba1Id
+		    	   },
+			       success: function(data){
+			    	   var html = "<option value=''>请选择</option>";
+			    	   if(data.length>0){
+			    		   for(var i = 0;i<data.length;i++){
+				    		   html+="<option value='"+data[i].id+"'>"+data[i].busiAreaName+"</option>";
+				    	   }
+			    	   }
+			    	   $(".ba2").append(html);
+			       }
+			 });
+		}
+	}
+	//查看租赁房源详情页
+	aihome.houseDetail = function(houseId,type,num){
+		oaDialogOpen("lookUpHouse",//对话框ID，必填，且不能与当前页面的ID重复
+			 {url:"${CTX}/houseLease/lookUpDetail.do?houseInfoId="+houseId+"&type="+type+"&num="+num,
+			      title:"查看详细信息",//弹框的title
+			      closeOnEscpe:true,//是否通过escpe关闭弹框
+			      closeBtn:true,//是否显示关闭按钮
+			      width: $(window).width()*0.8,//弹框的宽度
+				  height: $(window).height()*0.9,
+			  })
+	}
+	//查看业主电话
+	aihome.lookOwnerTel = function(ownerTel) {
+		bootbox.dialog({
+		title:"联系方式:",
+		message: "<div style=\"margin-left:auto;margin-right: auto;\"class=\"row form-xs\">"+ownerTel+"</div>",
+		});
+	};
+	//查看业主电话
+	aihome.unlookOwnerTel = function(ownerTel) {
+		bootbox.dialog({
+		title:"联系方式:",
+		message: "没有权限",
+		});
+	};
+	//切换搜索条件
+	aihome.change_search = function(){
+		var useType = $("#useType").val();
+		$("#search_form")[0].reset();//清空表单
+		$("#useType").val(useType);//"使用类别"赋值
+		$("#morediv").hide();
+		if(useType==1){
+			$(".decoration_div").show();
+			$(".floor_type_div").show();
+			$(".xqCategory_div").show();
+			$(".edu_div").show();
+		}else{
+			$(".decoration_div").hide();
+			$(".floor_type_div").hide();
+			$(".xqCategory_div").hide();
+			$(".edu_div").hide();
+		}
+		if(useType==4){
+			$(".key_div").hide();
+			$(".key_date_div").hide();
+			$(".limitTime_div").hide();
+			$(".house_type_div").hide();
+			$(".coveredArea_div").hide();
+			$(".strong2").hide();
+			$(".strong4").hide();
+		}else{
+			$(".key_div").show();
+			$(".key_date_div").show();
+			$(".limitTime_div").show();
+			$(".house_type_div").show();
+			$(".coveredArea_div").show();
+			$(".strong2").show();
+			$(".strong4").show();
+		}
+		//适合经营
+		if(useType==2){
+			$(".fitmanagement_div").show();
+		}else{
+			$(".fitmanagement_div").hide();
+		}
+		//租价显示和隐藏
+		$(".lease_price_div").each(function(){
+			if($(this).attr("name")==useType || $(this).attr("value")==useType){
+				$(this).show();
+			}else{
+				$(this).hide();
+			}
+		});
+	}
+	//显示自定义"户型"
+	aihome.show_define = function(element){
+		$(element).parent().parent().hide();
+		$(element).parent().parent().next().show();
+	};
+	//搜索条件
+	aihome.searchElement = function(orderFlag){
+		//使用类别
+		var useType = $("#useType").val();
+		/* 户型  */
+		var rooms = "";
+		$(".house_type_search:checked").each(function(i){
+	        if(i==0){
+	        	rooms = $(this).val();
+	        }else{
+	        	rooms += (","+$(this).val());
+	        }
+        });
+		if(!$("#house_type_define").is(":hidden")){
+			var roomsDefine = $("#rooms_search").val();
+			if(roomsDefine!=""){
+				if(rooms==""){
+					rooms += roomsDefine;
+				}else{
+					rooms += (","+roomsDefine);
+				}
+			}
+		}
+		/* 意向租金  */
+		var leasePriceFlag = "";
+		var priceClass = "";
+		var priceDefineS = "";//自定义：开始价格
+		var priceDefineE = "";//自定义：结束价格
+		//checkbox
+		if(useType==1){
+			priceClass = $(".leasePrice1_search");//住宅
+			priceDefineS = $(".leasePriceS1");
+			priceDefineE = $(".leasePriceE1");
+		}else if(useType==2 || useType==3){
+			priceClass = $(".leasePrice2_search");//商铺、写字楼
+			priceDefineS = $(".leasePriceS2");
+			priceDefineE = $(".leasePriceE2");
+		}else{
+			priceClass = $(".leasePrice3_search");//车位
+			priceDefineS = $(".leasePriceS3");
+			priceDefineE = $(".leasePriceE3");
+		}
+		//自定义
+		var leasePriceS = $(priceDefineS).val();
+		var leasePriceE = $(priceDefineE).val();
+		//拼接参数
+		$(priceClass).each(function(i){
+			if($(this).is(":checked")){
+				leasePriceFlag+=$(this).val()+",";
+			}
+        });
+		if(leasePriceS!="" || leasePriceE!=""){
+			if(leasePriceS==""){
+				leasePriceS = 0;
+			}
+			leasePriceFlag+=(leasePriceS+"-"+leasePriceE);
+		}
+		/* 建面  */
+		var coveredAreaFlag = "";
+		var coveredDefineS = $("#coveredAreaS").val();
+		var coveredDefineE = $("#coveredAreaE").val();
+		$(".coveredArea_search").each(function(i){
+			if($(this).is(":checked")){
+				coveredAreaFlag+=$(this).val()+",";
+			}
+        });
+		if(coveredDefineS!="" || coveredDefineE!=""){
+			if(coveredDefineS==""){
+				coveredDefineS = 0;
+			}
+			coveredAreaFlag+=(coveredDefineS+"-"+coveredDefineE);
+		}
+		/* 装修 */
+		var decoration = "";
+		$(".decoration_search:checked").each(function(i){
+	        if(i==0){
+	        	decoration = $(this).val();
+	        }else{
+	        	decoration += (","+$(this).val());
+	        }
+        });
+		/* 楼层 */
+		var floorType = "";
+		$(".floor_type_search:checked").each(function(i){
+	        if(i==0){
+	        	floorType = $(this).val();
+	        }else{
+	        	floorType += (","+$(this).val());
+	        }
+        });
+		/* 房源状态 */
+		var status = "";
+		$(".house_status_search:checked").each(function(i){
+	        if(i==0){
+	        	status = $(this).val();
+	        }else{
+	        	status += (","+$(this).val());
+	        }
+        });
+		var errorStatusFlag = "";//判断是否选中错误信息
+		if($(".house_status_search").eq(3).is(":checked")){
+			errorStatusFlag = 1;
+		}
+		/* 小区维护 */
+		var xqCategory = "";
+		$(".xqCategory_search:checked").each(function(i){
+	        if(i==0){
+	        	xqCategory = $(this).val();
+	        }else{
+	        	xqCategory += (","+$(this).val());
+	        }
+        });
+		/* 实勘图片 */
+		var prospectPicture = "";
+		var pic1 = $(".prospectPicture").eq(0).is(":checked");
+		var pic2 = $(".prospectPicture").eq(1).is(":checked");
+		if(pic1==true && pic2==false){
+			prospectPicture = 1;//有
+		}else if(pic1==false && pic2==true){
+			prospectPicture = 2;//无
+		}
+		/* 实勘审核 */
+		var prospectStatus = "";
+		var ps1 = $(".prospectStatus").eq(0).is(":checked");
+		var ps2 = $(".prospectStatus").eq(1).is(":checked");
+		if(ps1==true && ps2==false){
+			prospectStatus = 2;//合格
+		}else if(ps1==false && ps2==true){
+			prospectStatus = 3;//不合格
+		}else if(ps1==true && ps2==true){
+			prospectStatus = "2,3";
+		}
+		/* 限时速递 */
+		var limitTime = "";
+		var lt1 = $(".limitTime_search").eq(0).is(":checked");
+		var lt2 = $(".limitTime_search").eq(1).is(":checked");
+		if(lt1==true && lt2==false){
+			limitTime = 1;//是
+		}else if(lt1==false && lt2==true){
+			limitTime = 2;//否
+		}
+		/* 是否有钥匙 */
+		var key = "";
+		var key1 = $(".key_search").eq(0).is(":checked");
+		var key2 = $(".key_search").eq(1).is(":checked");
+		if(key1==true && key2==false){
+			key = 1;//有
+		}else if(key1==false && key2==true){
+			key = 2;//无
+		}
+		/* 产权 */
+		var property = "";
+		var property1 = $(".property_search").eq(0).is(":checked");
+		var property2 = $(".property_search").eq(1).is(":checked");
+		if(property1==true && property2==false){
+			property = 1;//有
+		}else if(property1==false && property2==true){
+			property = 2;//无
+		}
+		/* 外司已成交 */
+		var wsDealed = "";
+		var deal1 = $(".ws_dealed").eq(0).is(":checked");
+		var deal2 = $(".ws_dealed").eq(1).is(":checked");
+		if(deal1==true && deal2==false){
+			wsDealed = 1;//是
+		}else if(deal1==false && deal2==true){
+			wsDealed = 2;//否
+		}
+		/* 房源标签 */
+		var tagsFlag = "";
+		$(".tags_search").each(function(i){
+			if($(this).is(":checked")){
+				tagsFlag+=$(this).val()+",";
+			}
+        });
+		/* 学区 */
+		var edu = "";
+		var eduId = $("#eduId").val();
+		if(eduId!=""){
+			edu = ","+eduId+",";
+		}
+		/* 商铺-适合经营 */
+		var fitmanagementFlag = "";
+		$(".fitmanagement_search").each(function(i){
+			if($(this).is(":checked")){
+				fitmanagementFlag+=$(this).val()+",";
+			}
+        });
+		/* 房源范围*/
+		var houseRange = "";
+		var hosueRange1 = $(".houseRange").eq(0).is(":checked");
+		var houseRange2 = $(".houseRange").eq(1).is(":checked");
+		if(hosueRange1==true &&　houseRange2==false){
+			houseRange = 1;//我登记的房源
+		}else if(hosueRange1==false &&　houseRange2==true){
+			houseRange = 2;//我所属的房源
+		}else if(hosueRange1==true &&　houseRange2==true){
+			houseRange = 3;
+		}
+		var param = getSearchParam();
+		param += "&rooms="+rooms+"&leasePriceFlag="+leasePriceFlag+"&coveredAreaFlag="+coveredAreaFlag+"&decoration="+decoration+
+				 "&floorType="+floorType+"&status="+status+"&xqCategory="+xqCategory+"&prospectPicture="+prospectPicture+
+				 "&prospectStatus="+prospectStatus+"&limitTime="+limitTime+"&key="+key+"&property="+property+"&wsDealed="+wsDealed+
+				 "&edu="+edu+"&tagsFlag="+tagsFlag+"&fitmanagementFlag="+fitmanagementFlag+"&errorStatusFlag="+errorStatusFlag+
+				 "&houseRange="+houseRange+"&orderFlag="+orderFlag;
+ 		$("#house_lease_jqGrid").setGridParam({url:"${CTX}/houseLease/getHouseLeaseListForPage.do?"+param,page:1}).trigger('reloadGrid');
+	};
+	//区
+	aihome.changeQuOrg = function(element){
+		var orgCode = $(element).val();
+		//区数据变更，下级全部清空
+		var zuOrg = $(element).parent().parent().parent().next().find("select");
+		var jingjiren = $(zuOrg).parent().parent().parent().next().find("select");
+		$(zuOrg).children().first().siblings().remove();
+		$(jingjiren).children().first().siblings().remove();
+		aihome.getAddress(orgCode, "zuOrg", zuOrg);
+	};
+	//组
+	aihome.changeZuOrg = function(element){
+		var orgCode = $(element).val();
+		//组数据变更，下级全部清空
+		var jingjiren = $(element).parent().parent().parent().next().find("select");
+		$(jingjiren).children().first().siblings().remove();
+		aihome.getAddress(orgCode, "jingjiren", jingjiren);
+	};
+	
+	aihome.getAddress = function (val, objId, element) {
+		var _url  = "${CTX}/org/orgList.do";
+		if(objId == "jingjiren"){
+			_url= "${CTX}/org/userList.do";
+		}
+		$.ajax({
+			type : "post",
+			url : _url,
+			async : false,
+			dataType : 'json',
+			async:false,
+			data : {
+				"orgCode" : val
+			},
+			success : function(data) {
+				aihome.changeAddress(data, objId, element);
+			}
+		});
+	};
+	
+	aihome.changeAddress = function(data, objId, element) {
+		var obj = $(element);
+		obj.children().first().siblings().remove();
+		var str = "";
+		for (var i = 0; i < data.length; i++) {
+			var orgCode = "";
+			if(objId==="jingjiren"){
+				orgCode = data[i].userId;
+			}else{
+				orgCode = data[i].orgCode;
+			}
+			var name = data[i].name;
+			str = '<option value="'+orgCode+'">'
+					+ name + '</option>';
+			obj.append(str);
+		}
+	}
+	
+	$(function (){
+		$(".page-content-area").find(".my-inputs").css({"overflow": "hidden", "height": "60px"});
+		$(".page-content-area").find("#more-input").removeClass("hide");
+		$(".page-content-area").find(".my-grid").css("top", "69px");
+		//初始化列表
+		aihome.init_jqGrid();
+		//时间控件
+		$('.5i5jdate').datepicker({
+		    clearBtn: true,
+		    language: "zh-CN",
+		    autoclose: true,
+		    todayHighlight: true,
+		    format: "yyyy-mm-dd",
+		});
+		//时间范围显示
+		$(".dateRange").change(function(){
+			var dateRange = $(this).val();//1.今日 2.三天内 3.本周 4.本月
+			var start = $(this).parent().next().find("[name='start']");
+			var end = $(this).parent().next().find("[name='end']");
+			var week_day = new Date().getDay()-1;//当前时间是本周第几天
+			var month_day = new Date().getDate()-1;//当前日期是本月第几天
+			if(dateRange==1){
+				$(start).datepicker('setDate', 'null');
+			}else if(dateRange==2){
+				$(start).datepicker('setDate', '-3d');
+			}else if(dateRange==3){
+				$(start).datepicker('setDate', '-'+week_day+'d');
+			}else if(dateRange==4){
+				$(start).datepicker('setDate', '-'+month_day+'d');
+			}else if(dateRange==""){
+				$(start).val("");
+			}
+			if(dateRange!=""){
+				$(end).datepicker('setDate', 'null');
+			}else{
+				$(end).val("");
+			}
+		});
+		//【更多】搜索条件
+		$("#more").unbind("").click(function(){
+			if($(this).html() == "更多"){
+				$("#morediv").show();
+				$(this).html("收起");
+			}else{
+				$("#morediv").hide();
+				$(this).html("更多");
+			}
+		});
+		//更改使用类别
+		$("#useType").change(function(){
+			aihome.change_jqgrid();
+			aihome.change_search();
+		});
+		//查询
+		$("#house_query").unbind("").click(function(){
+			aihome.searchElement(0);//"0"代表搜索来源为：点击"查询"
+		});
+		//小区模糊查询
+		$(".premisesName").autocomplete({
+			source : function(request, response) {
+				$.ajax({
+					url : "${CTX}/houseLease/getPremisesByMatch.do",
+					dataType : "json",
+					type : 'post',
+					data : {
+						matchStr : request.term
+					},
+					success : function(data) {
+						var array = [];
+						for (var i = 0; i < data.length; i++) {
+							var temp = {
+								key : data[i].id,
+								value : data[i].name
+							};
+							array.push(temp);
+						}
+						response(array);
+					}
+				});
+			},
+			select : function(event, ui) {
+				$("#premisesId").val(ui.item.key);
+				$(".premisesName").val(ui.item.value);
+				event.preventDefault();
+				aihome.getBuildingsByPremisesId(ui.item.key);
+			}
+		});
+		$("#premisesName").blur(function(){
+			if($("#premisesName").val()==""){
+				$("#premisesId").val("");
+			}
+		});
+		$("#eduName").blur(function(){
+			if($("#eduName").val()==""){
+				$("#eduId").val("");
+			}
+		});
+		//模糊搜索教育设施
+		$("#eduName").autocomplete({
+			source:function(request,response){
+				$.ajax({
+					url:"${CTX}/houseLease/getEdusByMatch.do",
+					dataType:"json",
+					type : 'post',
+					data : {
+						matchStr : request.term
+					},
+					success : function(data) {
+						var array = [];
+						for (var i = 0; i < data.length; i++) {
+							var temp = {
+								key : data[i].id,
+								value : data[i].eduName
+							};
+							array.push(temp);
+						}
+						response(array);
+					}
+				});
+			},
+			select : function(event, ui) {
+				$("#eduId").val(ui.item.key);
+				$("#eduName").val(ui.item.value);
+				event.preventDefault();
+			}
+		});
+		
+		$(".checkNum").keyup(function() {
+			var value = $(this).val();
+			var integerResult = "";
+			var decimalResult = "";
+			var integerSize = $(this).attr("format").split(".")[0];
+			var decimalSize = 0;
+			// 小数存在标识
+			var decimalExist = 0;
+			if($(this).attr("format").split(".").length > 1) {
+				decimalSize = $(this).attr("format").split(".")[1];
+				integerSize = integerSize - decimalSize;
+			}
+			if(value.indexOf(".") == -1 || decimalSize == 0) {
+				// 未输入小数点
+				integerResult = value.replace(/\D/g, "");
+				if(integerResult != "") {
+					integerResult = parseInt(integerResult).toString();
+				}
+				if(integerResult.length > integerSize) {
+					integerResult = integerResult.substring(0, integerSize);
+				}
+			} else {
+				// 已输入小数点
+				var splitValue = value.split(".");
+				// 整数部分
+				integerResult = splitValue[0].replace(/\D/g, "");
+				if(integerResult.length > integerSize) {
+					integerResult = integerResult.substring(0, integerSize);
+				}
+				// 小数部分
+				for (var i = 1; i < splitValue.length; i++) {
+					decimalResult += splitValue[i].replace(/\D/g, "");
+				}
+				if(decimalResult.length > decimalSize) {
+					decimalResult = decimalResult.substring(0, decimalSize)
+				}
+				decimalExist = 1;
+			}
+			if(decimalExist == 0) {
+				$(this).val(integerResult);
+			} else {
+				$(this).val(integerResult + "." + decimalResult);
+			}
+			// 数字输入标准 End
+		});
+		
+	});
+	<#include "../users/users_check.html">	
+</script> 

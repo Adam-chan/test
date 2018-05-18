@@ -1,0 +1,653 @@
+<div id="top_tools" class=" btn-group">
+	<button id="hiddenOn" class="btn btn-sm btn-white" onclick="aihome.updateHidden(2);">
+		<span>隐藏</span>
+	</button>
+	<button id="hiddenOff" class="btn btn-sm btn-white" onclick="aihome.updateHidden(1);">
+		<span>显示</span>
+	</button>
+	<button id="saleSealOn" class="btn btn-sm btn-white" onclick="aihome.updateSaleSeal(2);">
+		<i class="iconfont">&#xe6e6;</i>
+		<span>买卖封盘</span>
+	</button>
+	<button id="saleSealOff" class="btn btn-sm btn-white" onclick="aihome.updateSaleSeal(1);">
+		<span>买卖解封</span>
+	</button>
+	<button id="leaseSealOn" class="btn btn-sm btn-white" onclick="aihome.updateLeaseSeal(2);">
+		<i class="iconfont">&#xe6e6;</i>
+		<span>租赁封盘</span>
+	</button>
+	<button id="leaseSealOff" class="btn btn-sm btn-white" onclick="aihome.updateLeaseSeal(1);">
+		<span>租赁解封</span>
+	</button>
+	<button id="premises_query" class="btn btn-sm btn-white" onclick="aihome.queryPremises();">
+		<i class="iconfont">&#xe6e4;</i>
+		<span>查询</span>
+	</button>
+	<button id="premises_add" class="btn btn-sm btn-white" onclick="aihome.addPremises();">
+		<i class="iconfont">&#xe6e0;</i>
+		<span>新增</span>
+	</button>
+	<button id="premises_edit" class="btn btn-sm btn-white" onclick="aihome.updatePremises();">
+		<i class="iconfont">&#xe6dd;</i>
+		<span>修改</span>
+	</button>
+	<button id="premises_del" class="btn btn-sm btn-white" onclick="aihome.deletePremises();">
+		<i class="iconfont">&#xe6e3;</i>
+		<span>删除</span>
+	</button>
+</div>
+<div class="row">
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+		<div id="element_id" class="form-horizontal row my-inputs">
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="areaIdLayout" class="col-xs-3 control-label">区域：</label>
+					<div class="col-xs-9">
+						<input id="areaName" class="form-control input-xs" placeholder="输入区域名称" />
+						<input id="areaIdLayout" name="areaIdLayout" type="hidden" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="busiAreaIdLayout" class="col-xs-3 control-label">商圈：</label>
+					<div class="col-xs-9">
+						<select id="busiAreaParentIdLayout" class="input-xs form-control" style="float: left; width: 46%;" name="busiAreaParentIdLayout">
+							<option value="">全部</option>
+							<#list busiZoninglist as item>
+								<option value="${item.id!}">${item.busiAreaName!}</option>
+							</#list>
+						</select>
+						<span style="float: left; width: 8%; text-align: center;">—</span>
+						<select id="busiAreaIdLayout" class="input-xs form-control" style="float: left; width: 46%;" name="busiAreaIdLayout">
+							<option value="">全部</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="buildingAgeLayout" class="col-xs-3 control-label">建房年代：</label>
+					<div class="col-xs-9">
+						<select id="buildingAgeLayout" class="input-xs form-control" name="buildingAgeLayout">
+							<option value="">全部</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="typeLayout" class="col-xs-3 control-label">类型：</label>
+					<div class="col-xs-9">
+						<select id="typeLayout" class="input-xs form-control" name="typeLayout">
+							<option value="">全部</option>
+							<option value="1">二手楼盘</option>
+							<option value="2">一手楼盘</option>
+							<option value="3">一手兼二手楼盘</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="typeLayout" class="col-xs-3 control-label">小区维护类别：</label>
+					<div class="col-xs-9">
+						<select id="maintenanceCategoryLayout" class="input-xs form-control" name="maintenanceCategoryLayout">
+							<option value="">全部</option>
+							<option value="1">责任盘</option>
+							<option value="2">非责任盘</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="housingPurposesLayout" class="col-xs-3 control-label">建筑类型：</label>
+					<div class="col-xs-9">
+						<select id="housingPurposesLayout" class="input-xs form-control" name="housingPurposesLayout">
+							<option value="">全部</option>
+							<option value="1">住宅</option>
+							<option value="2">商铺</option>
+							<option value="3">写字楼</option>
+							<option value="4">商住两用</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<!-- 
+			<div class="col-md-3 col-sm-3">
+				<div class="form-xs form-group row">
+					<label for="typeLayout" class="col-xs-3 control-label">资料完整：</label>
+					<div class="col-xs-9">
+						<select id="completeStatus" class="input-xs form-control" name="completeStatus">
+							<option value="">全部</option>
+							<option value="1">完整</option>
+							<option value="3">不完整</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-3">
+				<div class="form-xs form-group row">
+					<label for="typeLayout" class="col-xs-3 control-label">数据核实：</label>
+					<div class="col-xs-9">
+						<select id="dataStatus" class="input-xs form-control" name="dataStatus">
+							<option value="">全部</option>
+							<option value="1">通过</option>
+							<option value="3">不通过</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			 -->
+		</div>
+		<div id="more-input" class="" style="height: 71px;">
+			<div>
+				<i class="iconfont"></i>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 my-grid">
+		<!-- PAGE CONTENT BEGINS -->
+		<table id="jqGrid">
+		</table>
+		<div id="jqGridPager"></div>
+		<!-- PAGE CONTENT ENDS -->
+	</div>
+	<input type="hidden" id="premisesIdLayout" value="" />
+</div>
+<script type="text/javascript">
+var aihome = {
+	/* 大商圈 -> 小商圈(级联) */
+	getBusiAreaLayout : function(busiAreaParentId, objId) {
+		if(busiAreaParentId != "") {
+			$.ajax({
+				type : "post",
+				url : "${CTX}/busiArea/getBusiAreaList.do", 
+				async : false,
+				dataType : "json",
+				data : {"busiAreaParentId" : busiAreaParentId},
+				success : function(data) {
+					aihome.changeOptionLayout(data, objId);
+				},
+			});
+		} else {
+			this.cleanOptionLayout(objId);
+		}
+	},
+	/* 级联改变下拉框内容 */
+	changeOptionLayout : function(data, objId) {
+		this.cleanOptionLayout(objId);
+		var str = "";
+		for(var i=0; i < data.length; i++) {
+			var id = data[i].id
+			var name = data[i].name == undefined ? data[i].busiAreaName : data[i].name;
+			var optionShow = $("[id$='" + objId + "']");
+			str = "<option value=\"" + id + "\">" + name + "</option>";
+			optionShow.append(str);
+		}
+	},
+	/* 清空下拉框内容 */
+	cleanOptionLayout : function(objId) {
+		$("#" + objId).children().first().siblings().remove();
+	},
+	premisesListInit : function() {
+		$("#jqGrid").jqGrid({
+			height: $(window).height() - 219,
+			multiboxonly: true,
+			viewrecords: true,
+			autowidth: true,
+			async: false,
+			url: "${CTX}/premisesManage/getPremisesList.do",
+			postData: {
+				areaId: $("#areaIdLayout").val(),
+				busiAreaParentId: $("#busiAreaParentIdLayout").val(),
+				busiAreaId: $("#busiAreaIdLayout").val(),
+				buildingAge: $("#buildingAgeLayout").val(),
+				housingPurposes: $("#housingPurposesLayout").val(),
+				type: $("#typeLayout").val(),
+				maintenanceCategory: $("#maintenanceCategoryLayout").val(),
+				completeStatus: $("#completeStatus").val(),
+				dataStatus: $("#dataStatus").val()
+			},
+			datatype: "json",
+			colNames : ['楼盘名称', '类型', '栋', '单元', '户', '房源(租)', '房源(售)', '车位',
+						'类型', '区域', '区域ID', '商圈', '责任区', '实体店', '责任组', '责任人',
+						'隐藏', '封盘', '小区维护类别', //'资料完整', '数据核实',
+						'楼盘名称', '隐藏Code', '租赁封盘Code', '买卖封盘Code', '类型Code',
+						'住宅栋数', '住宅单元数', '住宅户数', '住宅房源租', '住宅房源售',
+						'商业栋数', '商业单元数', '商业户数', '商业房源租', '商业房源售'],
+			colModel: [
+				{ name: 'Modify1', sortable: false, width: 32, align: 'center'},
+				{ name: 'Modify2', sortable: false, width: 15, align: 'center'},
+				{ name: 'Modify3', sortable: false, width: 15, align: 'center'},
+				{ name: 'Modify4', sortable: false, width: 15, align: 'center'},
+				{ name: 'Modify5', sortable: false, width: 15, align: 'center'},
+				{ name: 'Modify6', sortable: false, width: 22, align: 'center'},
+				{ name: 'Modify7', sortable: false, width: 22, align: 'center'},
+				{ name: 'parkingNum', index: 'parkingNum', sortable: false, width: 20, align: 'center'},
+				{ name: 'type', index: 'type', sortable: false, width: 29, align: 'center',
+					formatter: function(cellvalue, options, rowObject){
+						if(cellvalue == 1) {
+							return "二手楼盘";
+						} else if(cellvalue == 2) {
+							return "一手楼盘";
+						} else {
+							return "一手兼二手楼盘";
+						}
+					}
+				},
+				{ name: 'areaName', index: 'areaName', sortable: false, width: 29, align: 'center'},
+				{ name: 'areaId', index: 'areaId', hidden: true},
+				{ name: 'busiAreaName', index: 'busiAreaName', sortable: false, width: 28, align: 'center'},
+				{ name: 'responsibilityZone', index: 'responsibilityZone', sortable: false, width: 28, align: 'center'},
+				{ name: 'physicalStore', index: 'physicalStore', sortable: false, width: 28, align: 'center'},
+				{ name: 'responsibilityGroup', index: 'responsibilityGroup', sortable: false, width: 28, align: 'center'},
+				{ name: 'responsibilityPerson', index: 'responsibilityPerson', sortable: false, width: 28, align: 'center'},
+				{ name: 'hidden', index: 'hidden', sortable: false, width: 26, align: 'center',
+					formatter: function(cellvalue, options, rowObject){
+						if(cellvalue == 2) {
+							return "隐藏";
+						} else {
+							return "---";
+						}
+					}
+				},
+				{ name: 'Modify8', sortable: false, width: 26, align: 'center'},
+				{ name: 'maintenanceCategory', index: 'maintenanceCategory', sortable: false, width: 36, align: 'center',
+					formatter: function(cellvalue, options, rowObject){
+						if(cellvalue == 1) {
+							return "责任盘";
+						} else if(cellvalue == 2) {
+							return "非责任盘";
+						} else {
+							return "---";
+						}
+					}
+				},
+// 				{ name: 'completeStatus', index: 'completeStatus', sortable: false, width: 26, align: 'center',
+// 					formatter: function(cellvalue, options, rowObject){
+// 						if(cellvalue == 1) {
+// 							return "完整";
+// 						} else if(cellvalue == 3) {
+// 							return "不完整";
+// 						} else {
+// 							return "---";
+// 						}
+// 					}
+// 				},
+// 				{ name: 'dataStatus', index: 'dataStatus', sortable: false, width: 32, align: 'center',
+// 					formatter: function(cellvalue, options, rowObject){
+// 						if(cellvalue == 1) {
+// 							return "核实通过";
+// 						} else if(cellvalue == 3) {
+// 							return "核实不通过";
+// 						} else {
+// 							return "---";
+// 						}
+// 					}
+// 				},
+				{ name: 'name', index: 'name', hidden: true},
+				{ name: 'hidden', index: 'hidden', hidden: true},
+				{ name: 'saleSeal', index: 'saleSeal', hidden: true},
+				{ name: 'leaseSeal', index: 'leaseSeal', hidden: true},
+				{ name: 'type', index: 'type', hidden: true},
+				{ name: 'residenceNum', index: 'residenceNum', hidden: true},
+				{ name: 'residenceUnits', index: 'residenceUnits', hidden: true},
+				{ name: 'residenceRooms', index: 'residenceRooms', hidden: true},
+				{ name: 'residenceLease', index: 'residenceLease', hidden: true},
+				{ name: 'residenceSales', index: 'residenceSales', hidden: true},
+				{ name: 'businessNum', index: 'businessNum', hidden: true},
+				{ name: 'businessUnits', index: 'businessUnits', hidden: true},
+				{ name: 'businessRooms', index: 'businessRooms', hidden: true},
+				{ name: 'businessLease', index: 'businessLease', hidden: true},
+				{ name: 'businessSales', index: 'businessSales', hidden: true}
+			],
+			onSelectRow: function (rowId, status, e) {
+				var rowIds = jQuery("#jqGrid").jqGrid('getGridParam', 'selarrrow');
+				var rowData = $("#jqGrid").jqGrid('getRowData',rowId);
+				$("#premisesIdLayout").val(rowId);
+				$("#premises_edit").removeAttr("disabled");
+				$("#premises_del").removeAttr("disabled");
+				if(rowData.hidden == 2) {
+					$("#hiddenOff").css("display", "inline");
+					$("#hiddenOn").css("display", "none");
+				} else {
+					$("#hiddenOn").css("display", "inline");
+					$("#hiddenOff").css("display", "none");
+				}
+				if(rowData.type == 2) {
+					$("#saleSealOn").attr("disabled", "disabled");
+					$("#saleSealOff").attr("disabled", "disabled");
+					$("#leaseSealOn").attr("disabled", "disabled");
+					$("#leaseSealOff").attr("disabled", "disabled");
+				} else {
+					if(rowData.saleSeal == 2) {
+						$("#saleSealOff").removeAttr("disabled");
+						$("#saleSealOn").attr("disabled", "disabled");
+					} else {
+						$("#saleSealOn").removeAttr("disabled");
+						$("#saleSealOff").attr("disabled", "disabled");
+					}
+					if(rowData.leaseSeal == 2) {
+						$("#leaseSealOff").removeAttr("disabled");
+						$("#leaseSealOn").attr("disabled", "disabled");
+					} else {
+						$("#leaseSealOn").removeAttr("disabled");
+						$("#leaseSealOff").attr("disabled", "disabled");
+					}
+				}
+			},
+			gridComplete: function () {
+				var ids = $("#jqGrid").jqGrid("getDataIDs");
+				for (var i = 0; i < ids.length; i++) {
+					var id = ids[i];
+					var rowData = $("#jqGrid").jqGrid('getRowData',id);
+					var modify1 = "<div><a href=\"#addr/infoDisplay/index.do?id=" + id + "&areaId=" + rowData.areaId + "\" style=\"color: blue;\">" + rowData.name + "</a></div>";
+					var modify2 = "<div><div style=\"color: green; border-bottom: 1px solid #E5E5E5;\">住宅</div><div style=\"color: red;\">商业</div></div>";
+					var modify3 = "<div><div style=\"border-bottom: 1px solid #E5E5E5;\">" + rowData.residenceNum + "</div><div style=\"text-align: center;\">" + rowData.businessNum + "</div></div>";
+					var modify4 = "<div><div style=\"border-bottom: 1px solid #E5E5E5;\">" + rowData.residenceUnits + "</div><div style=\"text-align: center;\">" + rowData.businessUnits + "</div></div>";
+					var modify5 = "<div><div style=\"border-bottom: 1px solid #E5E5E5;\">" + rowData.residenceRooms + "</div><div style=\"text-align: center;\">" + rowData.businessRooms + "</div></div>";
+					var modify6 = "<div><div style=\"border-bottom: 1px solid #E5E5E5;\">" + rowData.residenceLease + "</div><div style=\"text-align: center;\">" + rowData.businessLease + "</div></div>";
+					var modify7 = "<div><div style=\"border-bottom: 1px solid #E5E5E5;\">" + rowData.residenceSales + "</div><div style=\"text-align: center;\">" + rowData.businessSales + "</div></div>";
+					$("[aria-describedby='jqGrid_Modify2']").css("padding", 0)
+					$("[aria-describedby='jqGrid_Modify3']").css("padding", 0)
+					$("[aria-describedby='jqGrid_Modify4']").css("padding", 0)
+					$("[aria-describedby='jqGrid_Modify5']").css("padding", 0)
+					$("[aria-describedby='jqGrid_Modify6']").css("padding", 0)
+					$("[aria-describedby='jqGrid_Modify7']").css("padding", 0)
+					var modify8 = "";
+					if(rowData.saleSeal == 2 && rowData.leaseSeal == 2) {
+						modify8 = "<div>买卖封盘<br>租赁封盘</div>";
+					} else if(rowData.saleSeal == 2 && rowData.leaseSeal != 2) {
+						modify8 = "<div>买卖封盘</div>";
+					} else if(rowData.saleSeal != 2 && rowData.leaseSeal == 2) {
+						modify8 = "<div>租赁封盘</div>";
+					} else {
+						modify8 = "<div>---</div>";
+					}
+					$("#jqGrid").jqGrid("setRowData", id, { Modify1: modify1 });
+					$("#jqGrid").jqGrid("setRowData", id, { Modify2: modify2 });
+					$("#jqGrid").jqGrid("setRowData", id, { Modify3: modify3 });
+					$("#jqGrid").jqGrid("setRowData", id, { Modify4: modify4 });
+					$("#jqGrid").jqGrid("setRowData", id, { Modify5: modify5 });
+					$("#jqGrid").jqGrid("setRowData", id, { Modify6: modify6 });
+					$("#jqGrid").jqGrid("setRowData", id, { Modify7: modify7 });
+					$("#jqGrid").jqGrid("setRowData", id, { Modify8: modify8 });
+				}
+			},
+			rowNum:30, 
+			rowList:[10,20,30,50,100],
+			pager: "#jqGridPager",
+			jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false}
+		});
+	},
+	/* 隐藏/显示 */
+	updateHidden : function(hiddenCode) {
+		if($("#premisesIdLayout").val() == "") {
+			alert("没有选中的记录！");
+			return;
+		}
+		if(hiddenCode == 2) {
+			if(confirm("你确定隐藏此楼盘？")) {
+				$.ajax({
+					url : "${CTX}/premisesManage/updateHidden.do",
+					dataType : "json",
+					data : {
+						hidden : hiddenCode,
+						premisesId : $("#premisesIdLayout").val()
+					},
+					success : function(data) {
+						aihome.queryPremises();
+						alert("楼盘隐藏成功！");
+					}
+				});
+			};
+		} else {
+			if(confirm("你确定显示此楼盘？")) {
+				$.ajax({
+					url : "${CTX}/premisesManage/updateHidden.do",
+					dataType : "json",
+					data : {
+						hidden : hiddenCode,
+						premisesId : $("#premisesIdLayout").val()
+					},
+					success : function(data) {
+						aihome.queryPremises();
+						alert("楼盘显示成功！");
+					}
+				});
+			}
+		}
+	},
+	/* 买卖封盘/买卖解封 */
+	updateSaleSeal : function(saleSealCode) {
+		if($("#premisesIdLayout").val() == "") {
+			alert("没有选中的记录！");
+			return;
+		}
+		if(saleSealCode == 2) {
+			if(confirm("你确定对此楼盘的买卖进行封盘？")) {
+				$.ajax({
+					url : "${CTX}/premisesManage/updateSaleSeal.do",
+					dataType : "json",
+					data : {
+						saleSeal : saleSealCode,
+						premisesId : $("#premisesIdLayout").val()
+					},
+					success : function(data) {
+						aihome.queryPremises();
+						alert("买卖封盘成功！");
+					}
+				});
+			};
+		} else {
+			if(confirm("你确定对此楼盘的买卖进行解封？")) {
+				$.ajax({
+					url : "${CTX}/premisesManage/updateSaleSeal.do",
+					dataType : "json",
+					data : {
+						saleSeal : saleSealCode,
+						premisesId : $("#premisesIdLayout").val()
+					},
+					success : function(data) {
+						aihome.queryPremises();
+						alert("买卖解封成功！");
+					}
+				});
+			}
+		}
+	},
+	/* 租赁封盘/租赁解封 */
+	updateLeaseSeal : function(leaseSealCode) {
+		if($("#premisesIdLayout").val() == "") {
+			alert("没有选中的记录！");
+			return;
+		}
+		if(leaseSealCode == 2) {
+			if(confirm("你确定对此楼盘的租赁进行封盘？")) {
+				$.ajax({
+					url : "${CTX}/premisesManage/updateLeaseSeal.do",
+					dataType : "json",
+					data : {
+						leaseSeal : leaseSealCode,
+						premisesId : $("#premisesIdLayout").val()
+					},
+					success : function(data) {
+						aihome.queryPremises();
+						alert("租赁封盘成功！");
+					}
+				});
+			};
+		} else {
+			if(confirm("你确定对此楼盘的租赁进行解封？")) {
+				$.ajax({
+					url : "${CTX}/premisesManage/updateLeaseSeal.do",
+					dataType : "json",
+					data : {
+						leaseSeal : leaseSealCode,
+						premisesId : $("#premisesIdLayout").val()
+					},
+					success : function(data) {
+						aihome.queryPremises();
+						alert("租赁解封成功！");
+					}
+				});
+			}
+		}
+	},
+	/* 查询 */
+	queryPremises : function() {
+		$("#premisesIdLayout").val("");
+		$("#hiddenOn").css("display", "inline");
+		$("#hiddenOff").css("display", "inline");
+		$("#saleSealOn").removeAttr("disabled");
+		$("#saleSealOff").removeAttr("disabled");
+		$("#leaseSealOn").removeAttr("disabled");
+		$("#leaseSealOff").removeAttr("disabled");
+		$("#premises_edit").removeAttr("disabled");
+		$("#premises_del").removeAttr("disabled");
+		if($("#areaName").val() == "") {
+			$("#areaIdLayout").val("");
+		}
+		$("#jqGrid").setGridParam({postData:{areaId: $("#areaIdLayout").val(), busiAreaParentId: $("#busiAreaParentIdLayout").val(), busiAreaId: $("#busiAreaIdLayout").val(), buildingAge: $("#buildingAgeLayout").val(), housingPurposes: $("#housingPurposesLayout").val(), type: $("#typeLayout").val(), maintenanceCategory: $("#maintenanceCategoryLayout").val(), completeStatus: $("#completeStatus").val(), dataStatus: $("#dataStatus").val()}, page:1}).trigger("reloadGrid");
+	},
+	/* 新增 */
+	addPremises : function() {
+		oaDialogOpen(
+			"addPremises",//对话框ID，必填，且不能与当前页面的ID重复
+			{
+				url: "${CTX}/premisesManage/premisesInfo.do",//调用页面的url
+				title: "新增楼盘",//弹框的title
+				closeOnEscpe: true,//是否通过esc关闭弹框
+				closeBtn: true,//是否显示关闭按钮
+				width: $(window).width()*0.7,//弹框的宽度
+				height: $(window).height()*0.9,//弹框的高度
+				buttons: {
+					"保存" : function() {
+						aihome.savePremises();
+					},
+					"返回" : function() {
+						$(this).dialog("close");
+					}
+				},
+				openCall: function() {
+					//弹框打开后的回调函数
+				},
+				closeCall: function() {
+					//弹框关闭后的回调函数
+				}
+			}
+		)
+	},
+	/* 修改 */
+	updatePremises : function() {
+		if($("#premisesIdLayout").val() == "") {
+			alert("没有选中的记录！");
+			return;
+		}
+		oaDialogOpen(
+			"addPremises",//对话框ID，必填，且不能与当前页面的ID重复
+			{
+				url: "${CTX}/premisesManage/premisesInfo.do?premisesId="+$("#premisesIdLayout").val(),//调用页面的url
+				title: "修改楼盘",//弹框的title
+				closeOnEscpe: true,//是否通过esc关闭弹框
+				closeBtn: true,//是否显示关闭按钮
+				width: $(window).width()*0.7,//弹框的宽度
+				height: $(window).height()*0.9,//弹框的高度
+				buttons: {
+					"保存" : function() {
+						aihome.updPremises();
+					},
+					"返回" : function() {
+						$(this).dialog("close");
+					}
+				},
+				openCall: function() {
+					//弹框打开后的回调函数
+				},
+				closeCall: function() {
+					//弹框关闭后的回调函数
+				}
+			}
+		)
+	},
+	/* 删除 */
+	deletePremises : function() {
+		if($("#premisesIdLayout").val() == "") {
+			alert("没有选中的记录！");
+			return;
+		}
+		if(confirm("你确定删除此楼盘？")) {
+			$.ajax({
+				url : "${CTX}/premisesManage/deletePremises.do",
+				dataType : "json",
+				data : {
+					premisesId : $("#premisesIdLayout").val()
+				},
+				success : function(data) {
+					if(data == 0) {
+						alert("该楼盘下有房源信息，不能删除！");
+					} else {
+						aihome.queryPremises();
+						alert("楼盘删除成功！");
+					}
+				}
+			});
+		}
+	}
+};
+$(function () {
+	$('.page-content-area').ace_ajax('loadScripts', [null,null], function () {});
+	/* 模糊搜索*/
+	$("#areaName").autocomplete({
+		source : function(request, response) {
+			$.ajax({
+				url : "${CTX}/area/getAreaByMatchOfLevel3.do",
+				dataType : "json",
+				type : 'post',
+				data : {
+					matchStr : request.term
+				},
+				success : function(data) {
+					var array = new Array(data.length);
+					for (var i = 0; i < data.length; i++) {
+						var temp = {
+							key : data[i].id,
+							value : data[i].name
+						};
+						array[i] = temp;
+					}
+					response(array);
+				}
+			});
+		},
+		select : function(event, ui) {
+			$("#areaIdLayout").val(ui.item.key);
+			$("#areaName").val(ui.item.value);
+			event.preventDefault();
+		}
+	});
+	$("#areaName").blur(function() {
+		$(this).attr("placeholder", "输入区域名称");
+	});
+	// 商圈 Start
+	$("#busiAreaParentIdLayout").change(function() {
+		// 大商圈 -> 小商圈(级联) Start
+		aihome.getBusiAreaLayout($(this).val(), "busiAreaIdLayout");
+		// 大商圈 -> 小商圈(级联) End
+	});
+	// 商圈 End
+	// 建筑年代 Start
+	var nowDate = new Date();
+	var buildingAgeLayout = document.getElementById("buildingAgeLayout");
+	for(var i = nowDate.getFullYear() + 5; i >= 1950; i--) {
+		buildingAgeLayout.options.add(new Option(i,i));
+	}
+	// 建筑年代 End
+	// 明细列表 Start
+	aihome.premisesListInit();
+	// 明细列表 End
+	$(".ui-autocomplete.ui-front.ui-menu.ui-widget.ui-widget-content").css("height", "145");
+});
+</script>

@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sync" >
+	<!-- 同步房间索引 -->
+	<select id="houseSyncIndex">
+		BEGIN ctx_ddl.sync_index('BASE_HOUSE_ADDR_INDEX'); END;
+	</select>
+	<!-- 同步道路索引 -->
+	<select id="roadSyncIndex">
+		BEGIN ctx_ddl.sync_index('AREA_ROAD_NUM_ADDR_INDEX'); END;
+	</select>
+	<!-- 优化房间索引碎片（定时器） -->
+	<select id="houseOptimizeIndex">
+		BEGIN ctx_ddl.optimize_index('BASE_HOUSE_ADDR_INDEX','fast'); END;
+	</select>
+	<!-- 优化道路索引碎片 （定时器）-->
+	<select id="roadOptimizeIndex">
+		BEGIN ctx_ddl.optimize_index('AREA_ROAD_NUM_ADDR_INDEX','fast'); END;
+	</select>
+	<!-- 插入房间地址 -->
+	<insert id="insertHouseAddr" parameterType="java.util.Map">
+		insert into base_house_addr(
+				ID,
+				ROOM_ID,
+				ADDR_DETAIL,
+				PROVINCE,
+				CITY,
+				AREA,
+				ROAD,
+			<if test="roadId != null and roadId!=''">
+				ROAD_ID,
+			</if>
+				ROAD_NUM,
+				PREMISES,
+				PREMISES_ID,
+			<if test="groupName!=null and groupName!=''">
+				GROUP_NAME,
+			</if>
+			<if test="groupId!=null and groupId!=''">
+				GROUP_ID,
+			</if>
+				BUILDING,
+				BUILDING_ID,
+			<if test="unitName!=null and unitName!=''">
+				UNITS,
+			</if>
+			<if test="unitId!=null and unitId!=''">
+				UNITS_ID,
+			</if>
+				ROOM
+		) values (
+			BASE_HOUSE_ADDR_SEQ.NEXTVAL,
+			#{houseId},
+			#{addrdetail},
+			#{province},
+			#{city},
+			#{area},
+	 		#{road},
+	 	<if test="roadId != null and roadId!=''">
+			#{roadId},
+		</if>
+	 		#{roadnum},
+	 		#{premisesName},
+	 		#{premisesId},
+	 	<if test="groupName!=null and groupName!=''">
+	 		#{groupName},
+	 	</if>
+	 	<if test="groupId!=null and groupId!=''">
+	 		#{groupId},
+	 	</if>
+	 		#{buildingName},
+	 		#{buildingId},
+	 	<if test="unitName!=null and unitName!=''">
+	 		#{unitName},
+	 	</if>
+	 	<if test="unitId!=null and unitId!=''">
+	 		#{unitId},
+	 	</if>
+	        #{houseName}
+		)
+	</insert>
+	 <!-- 批量插入房间 -->
+	 <insert id="insertBatchHouse" parameterType="map" useGeneratedKeys="false">  
+		insert into base_house_addr(
+				ID,
+				ADDR_DETAIL,
+				PROVINCE,
+				CITY,
+				AREA,
+				AREA_ID,
+				ROAD,
+			<if test="roadId != null and roadId!=''">
+				ROAD_ID,
+			</if>
+				ROAD_NUM,
+				PREMISES,
+				PREMISES_ID,
+			<if test="groupName!=null and groupName!=''">
+				GROUP_NAME,
+			</if>
+			<if test="groupId!=null and groupId!=''">
+				GROUP_ID,
+			</if>
+				BUILDING,
+				BUILDING_ID,
+				UNITS_ID,
+				UNITS,
+				ROOM,
+				ROOM_ID
+		) 
+	 	select  
+	 	BASE_HOUSE_ADDR_SEQ.NEXTVAL,
+		#{addrDetail},
+	 	#{province},
+	 	#{city},
+	 	#{area},
+	 	#{areaId},
+	 	#{road},
+	 <if test="roadId != null and roadId!=''">
+		#{roadId},
+	</if>
+	 	#{roadNum},
+	 	#{premisesName},
+	 	#{premisesId},
+	 <if test="groupName!=null and groupName!=''">
+	 	#{groupName},
+	 </if>
+	 <if test="groupId!=null and groupId!=''">
+		#{groupId},
+	</if>
+	 	#{buildingName},
+	 	#{buildingId},
+	 	a.unitId,a.unitName,a.houseName,a.houseId from (
+	 <foreach collection="list" item="item" index="index" separator="UNION ALL" >
+	 	SELECT 
+	 	  #{item.unitId} as unitId,
+	      #{item.unitName} as unitName,
+	      #{item.houseName} as houseName,
+	      #{item.houseId} as houseId
+	     FROM DUAL
+	 </foreach>)a
+	</insert>
+	<!-- 更新房间 -->
+	<update id="updateHouseAddr" parameterType="java.util.Map">
+		update base_house_addr 
+		<set>
+		<if test="province != null and province != '' ">
+			addr_detail = #{province}||' '||city || ' '|| area || ' ' || ROAD || ' ' || ROAD_NUM ||'号'|| ' ' || premises || ' ' || group_name || ' '|| building || ' '||units ||' '||room
+		</if>
+		<if test="city != null and city != '' ">
+			addr_detail = province||' '||#{city} || ' '|| area || ' ' || ROAD || ' ' || ROAD_NUM||'号'|| ' ' || premises || ' ' || group_name || ' '|| building || ' '||units ||' '||room
+		</if>
+		<if test="area != null and area != '' ">
+			addr_detail = province||' '||city || ' '|| #{area} || ' ' || ROAD || ' ' || ROAD_NUM||'号'|| ' ' || premises || ' ' || group_name || ' '|| building || ' '||units ||' '||room
+		</if>
+		<if test="road != null and road != '' ">
+			addr_detail = province||' '||city || ' '|| area || ' ' || #{road} || ' ' || ROAD_NUM||'号'|| ' ' || premises || ' ' || group_name || ' '|| building || ' '||units ||' '||room
+		</if>
+		<if test="roadNum != null and roadNum != '' ">
+			addr_detail = province||' '||city || ' '|| area || ' ' || ROAD || ' ' || #{roadNum} ||'号'|| ' ' || premises || ' ' || group_name || ' '|| building || ' '||units ||' '||room
+		</if>
+		<!-- 拼楼盘房间 -->
+		<if test="premises != null and premises != '' ">
+			addr_detail = province||' '||city || ' '|| area || ' ' || ROAD || ' ' || ROAD_NUM ||'号'|| ' ' || #{premises}|| ' ' || group_name || ' '|| building || ' '||units ||' '||room
+		</if>
+		<!-- 拼楼栋分组 -->
+		<if test="groupName != null">
+			addr_detail = province||' '||city || ' '|| area || ' ' || ROAD || ' ' || ROAD_NUM ||'号'|| ' ' || premises|| ' ' || #{groupName} || ' '|| building || ' '||units ||' '||room
+		</if>
+		<!-- 拼楼栋 -->
+		<if test="building != null and building != '' ">
+			addr_detail = province||' '||city || ' '|| area || ' ' || ROAD || ' ' || ROAD_NUM ||'号'|| ' ' || premises|| ' ' || group_name || ' '|| #{building} || ' '||units ||' '||room
+		</if>
+		<!-- 拼单元 -->
+		<if test="units != null and units != '' ">
+			addr_detail = province||' '||city || ' '|| area || ' ' || ROAD || ' ' || ROAD_NUM ||'号'|| ' ' || premises|| ' ' || group_name || ' '|| building || ' '||#{units} ||' '||room
+		</if>
+		<!-- 拼房间 -->
+		<if test="roomName != null and roomName != '' ">
+			addr_detail = province||' '||city || ' '|| area || ' ' || ROAD || ' ' || ROAD_NUM ||'号'|| ' ' || premises|| ' ' || group_name || ' '|| building || ' '||units ||' '||#{roomName}
+		</if>
+		<if test="province != null and province != '' ">
+			,province = #{province}
+		</if>
+		<if test="city != null and city != '' ">
+			,city =#{city}
+		</if>
+		<if test="area != null and area != '' ">
+			,area = #{area}
+		</if>
+		<if test="road != null and road != '' ">
+			,road = #{road} 
+		</if>
+		<if test="roadNum != null and roadNum != '' ">
+			,roadNum = #{roadNum} 
+		</if>
+		<!-- 楼盘 -->
+		<if test="premises != null and premises != '' ">
+			,PREMISES = #{premises} 
+		</if>
+		<if test="groupName != null and groupName!='' ">
+			,GROUP_NAME = #{groupName} 
+			
+		</if>
+		<if test="groupName == ''">
+			,GROUP_ID = 0
+			</if>
+		<if test="building != null and building != '' ">
+			,BUILDING = #{building} 
+		</if>
+		<if test="units != null and units != '' ">
+			,UNITS = #{units} 
+		</if>
+		<if test="roomName != null and roomName != '' ">
+			,ROOM = #{roomName} 
+		</if>
+		<if test="status != null and status != '' ">
+			status = #{status}
+		</if>
+		</set> 
+		where 
+		<!-- 以下必须有，且只有一个参数 -->
+			<if test="uniteId != null  and unitedId != ''">
+				unite_id = #{uniteId}
+			</if>
+			<!-- 如果是要更新省份的名字，则要传入旧的省份名字。 -->
+			<if test="provinceOld != null and provinceOld != '' ">
+				province = #{provinceOld}
+			</if>
+			<!-- 如果是要更新市的名字，则要传入旧的城市名字。 -->
+			<if test="cityOld != null and cityOld != '' ">
+				city =#{cityOld}
+			</if>
+			<!-- 如果是要更新区的名字，则要传入旧的区名字。 -->
+			<if test="areaOld != null and areaOld != '' ">
+				area = #{areaOld}
+			</if>
+			<!-- 如果是要更新道路的名字，则要传入道路Id。或下方的道路名称 -->
+			<if test="roadId != null and roadId != '' ">
+				road_id = #{roadId} 
+			</if>
+			<!-- 如果是要更新道路的名字，则要传入道路Id。或下方的道路名称 -->
+			<if test="roadOld != null and roadOld != '' ">
+				road = #{roadOld} 
+			</if>
+			<!-- 楼盘ID -->
+			<if test="premisesId != null and premisesId != '' ">
+				premises_id = #{premisesId} 
+			</if>
+			<!-- 楼栋分组ID -->
+			<if test="groupId != null and grouspId != '' ">
+				group_id IN (${groupId}) 
+			</if>
+			<!-- 楼栋ID -->
+			<if test="buildingId != null and buildingId != '' ">
+				building_id = #{buildingId} 
+			</if>
+			<!-- 房间ID -->
+			<if test="roomId != null and roomId != '' ">
+				room_id = #{roomId} 
+			</if>
+			<!-- 单元ID -->
+			<if test="unitsId != null and unitsId != '' ">
+				units_id = #{unitsId} 
+			</if>
+				<!-- 区ID -->
+			<if test="areaId != null and areaId != '' ">
+				AREA_ID = #{areaId} 
+			</if>
+	</update>
+	<!-- 删除房间 -->
+	<delete id="deleteHouseAddr" parameterType="map">
+		delete from base_house_addr 
+		where 
+		<if test="roomId != null and roomId != '' ">
+			room_id = #{roomId}
+		</if>
+		<if test="unitsId != null and unitsId != '' ">
+			units_id = #{unitsId}
+		</if>
+	</delete>
+	<!-- 插入道路全地址 -->
+	<insert id="insertRoadAddr" parameterType="java.util.Map" useGeneratedKeys="false">
+		INSERT INTO AREA_ROAD_NUM_ADDR (ID,UNITE_ID,ADDR_DETAIL,PROVINCE,CITY,AREA,ROAD,ROAD_NUM,STATUS,ROAD_ID,AREA_ID) 
+	    	SELECT AREA_ROAD_NUM_ADDR_SEQ.NEXTVAL,a.* from (
+	    <foreach collection="activate" item="item" index="index" separator="UNION ALL" >
+	    	SELECT 
+	         #{roadId}||lpad(#{item},5,'0'),#{addrDetail}||#{item}||'号',#{province},#{city},#{areaName},#{roadName},#{item},#{status},#{roadId},#{areaId}
+	        FROM DUAL
+	    </foreach>)a
+	</insert>
+	<!-- 更新道路号 -->
+	<update id="updateRoadAddr" parameterType="java.util.Map">
+		update AREA_ROAD_NUM_ADDR 
+		 <trim prefix="SET" suffixOverrides=",">     
+		<if test="province != null and province != '' ">
+			addr_detail = #{province}||' '||city || ' '|| area || ' ' || ROAD || ' ' || ROAD_NUM,
+		</if>
+		<if test="city != null and city != '' ">
+			addr_detail = province||' '||#{city} || ' '|| area || ' ' || ROAD || ' ' || ROAD_NUM,
+		</if>
+		<if test="area != null and area != '' ">
+			addr_detail = province||' '||city || ' '|| #{area} || ' ' || ROAD || ' ' || ROAD_NUM,
+		</if>
+		<if test="road != null and road != '' ">
+			addr_detail = province||' '||city || ' '|| area || ' ' || #{road} || ' ' || ROAD_NUM,
+		</if>
+		<if test="roadNum != null and roadNum != '' ">
+			addr_detail = province||' '||city || ' '|| area || ' ' || ROAD || ' ' || #{roadNum},
+		</if>
+		
+		<if test="province != null and province != '' ">
+			province = #{province},
+		</if>
+		<if test="city != null and city != '' ">
+			city =#{city},
+		</if>
+		<if test="area != null and area != '' ">
+			area = #{area},
+		</if>
+		
+		<if test="road != null and road != '' ">
+			road = #{road},
+		</if>
+		<if test="roadNum != null and roadNum != '' ">
+			roadNum = #{roadNum},
+		</if>
+		<if test="status != null and status != '' ">
+			status = #{status}
+		</if>
+		 </trim>
+		where 
+		<!-- 以下必须有，且只有一个参数 -->
+			<if test="uniteId != null  and unitedId != ''">
+				unite_id = #{uniteId}
+			</if>
+			<!-- 如果是要更新省份的名字，则要传入旧的省份名字。 -->
+			<if test="provinceOld != null and provinceOld != '' ">
+				province = #{provinceOld}
+			</if>
+			<!-- 如果是要更新市的名字，则要传入旧的城市名字。 -->
+			<if test="cityOld != null and cityOld != '' ">
+				city =#{cityOld}
+			</if>
+			<!-- 如果是要更新区的名字，则要传入旧的区名字。 -->
+			<if test="areaOld != null and areaOld != '' ">
+				area = #{areaOld}
+			</if>
+			<!-- 如果是要更新道路的名字，则要传入道路Id。或下方的道路名称 -->
+			<if test="roadId != null and roadId != '' ">
+				road_id = #{roadId} 
+			</if>
+			<!-- 如果是要更新道路的名字，则要传入道路Id。或下方的道路名称 -->
+			<if test="roadOld != null and roadOld != '' ">
+				road = #{roadOld} 
+			</if>
+			<!-- 如果是要更新道路的名字，则要传入区Id。 -->
+			<if test="areaId != null and areaId != '' ">
+				AREA_ID = #{areaId}
+			</if>
+	</update>
+	<!-- 删除道路号 -->
+	<delete id="deleteRoadAddr" parameterType="map">
+		delete from AREA_ROAD_NUM_ADDR 
+		where 
+			<if test="province != null and province != '' ">
+				province = #{province}
+			</if>
+			<if test="city != null and city != '' ">
+				city =#{city}
+			</if>
+			<if test="area != null and area != '' ">
+				area = #{area}
+			</if>
+			<if test="roadId != null and roadId != '' ">
+				road_id in (${roadId})
+			</if>
+	</delete>
+	<update id="updatePeremisesRoadNum" parameterType="map">
+		update base_house_addr 
+		set
+				addr_detail = #{PROVINCE}||' '||#{CITY} || ' '|| #{AREA}|| ' ' || #{ROAD}|| ' ' || #{ROAD_NUM} ||'号'|| ' ' || #{premisesName} || ' ' || group_name || ' '|| building || ' '||units ||' '||room
+				,province = #{PROVINCE}
+				,city =#{CITY}
+				,area = #{AREA}
+				,road = #{ROAD} 
+				,ROAD_NUM = #{ROAD_NUM} 
+				,premises = #{premisesName}
+				,ROAD_ID = #{ROAD_ID} 
+				,AREA_ID = #{AREA_ID} 
+		where PREMISES_ID = #{premisesId}
+	</update>
+	<select id="getRoadNumDetail" parameterType="map" resultType="java.util.HashMap">
+		select 
+			UNITE_ID,
+			PROVINCE,
+			CITY,
+			AREA,
+			ROAD,
+			ROAD_NUM,
+			ROAD_ID	,
+			AREA_ID
+		from AREA_ROAD_NUM_ADDR where UNITE_ID = #{uniteId}
+	</select>
+</mapper>

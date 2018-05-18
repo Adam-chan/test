@@ -1,0 +1,134 @@
+<form id="bus_line_Form">
+  <div class="modal-body form-horizontal row" style="padding-right: 40px;">
+    <div class="col-sm-12">
+      <div class=" form-xs form-group row">
+         <label for="addGrade" class="col-xs-2 control-label">线路名称 </label>
+         <div class="col-xs-4">
+         	<input type="hidden" id="id" value="${(line.id)!''}" /> 
+         	<input type="hidden" id="flag" value="1" />
+            <input id="lineName" type="text" class="form-control input-xs" maxlength="20" value="${(line.lineName)!''}" vRequired="true" placeholder="线路名称">
+         </div>
+       </div>
+       <div class=" form-xs form-group row">
+         <label for="addGrade" class="col-xs-2 control-label">起始站</label>
+         <div class="col-xs-4">
+        	<input id="startStation" type="text" class="col-xs-12 input-xs" maxlength="20" value="${(line.startStation)!''}" placeholder="起始站" />
+         </div>
+         <label for="addGrade" class="col-xs-2 control-label">终点站</label>
+         <div class="col-xs-4">
+        	<input id="endStation" type="text" class="col-xs-12 input-xs" maxlength="20" value="${(line.endStation)!''}" placeholder="终点站" />
+       	 </div>
+       </div>
+       <div class=" form-xs form-group row">
+         <label for="addGrade" class="col-xs-2 control-label">首班时间 </label>
+         <div class="col-xs-4">
+        	<input id="firstTime" type="text" class="col-xs-12 5i5jTime input-xs" value="${(line.firstTime)!''}" placeholder="首班时间" />
+         </div>
+         <label for="addGrade" class="col-xs-2 control-label">末班时间 </label>
+         <div class="col-xs-4">
+        	<input id="lastTime" type="text" class="col-xs-12 5i5jTime input-xs" value="${(line.lastTime)!''}" placeholder="末班时间" />
+       	 </div>
+       </div>
+       <div class=" form-xs form-group row">
+         <label for="addGrade" class="col-xs-2 control-label">最低票价 </label>
+         <div class="col-xs-4">
+            <input id="ticketPrice" type="text" class="form-control input-xs checkNum" style="z-index:9999" value="${(line.ticketPrice)!''}" format="8.2" placeholder="最低票价">
+         </div>
+         <div class="col-xs-1">
+         	<span class="col-xs-12" style="left:-23px;">元</span>
+         </div>
+       </div>
+       <div class=" form-xs form-group row">
+         <label for="addGrade" class="col-xs-2 control-label">备注 </label>
+         <div class="col-xs-10">
+            <textarea id="remark" rows="4" cols="25" class="form-control" maxlength="300" placeholder="备注">${(line.remark)!''}</textarea>
+         </div>
+       </div>
+    </div>
+  </div>
+</form>
+<script type="text/javascript">
+    $('.5i5jTime').timepicker({
+    	defaultTime: false,
+	    minuteStep: 1,
+	    showSeconds: false,
+	    showMeridian: false
+    });
+	$("#bus_line_Form").validationEngine('attach',{
+		promptPosition: 'bottomRight',
+	  	validationEventTrigger:"blur"
+	});
+	$("#lineName").blur(function(){
+		var selTabIndex = getSelTabIndex();
+		var lineName = $("#lineName").val();
+		var lineId = $("#id").val();
+		if(lineName!=""){
+			$.ajax({
+	    		url: "${CTX}/aroundLine/getLineByNameIs.do",
+	    		data:{
+	    			lineName:lineName,
+	    			trafficType:selTabIndex,
+	    			lineId:lineId
+	    		},
+	    		type:"post",
+				dataType:"json",
+	    		success:function(data){
+	    			if(data==1){
+	    				alert("该线路名称已存在！");
+	    				$("#lineName").val("");
+	    			}
+	    		}
+	    	});
+		}
+	});
+	$(".checkNum").keyup(function() {
+		var value = $(this).val();
+		var integerResult = "";
+		var decimalResult = "";
+		var integerSize = $(this).attr("format").split(".")[0];
+		var decimalSize = 0;
+		// 小数存在标识
+		var decimalExist = 0;
+		if($(this).attr("format").split(".").length > 1) {
+			decimalSize = $(this).attr("format").split(".")[1];
+			integerSize = integerSize - decimalSize;
+		}
+		if(value.indexOf(".") == -1 || decimalSize == 0) {
+			// 未输入小数点
+			integerResult = value.replace(/\D/g, "");
+			if(integerResult != "") {
+				integerResult = parseInt(integerResult).toString();
+			}
+			if(integerResult.length > integerSize) {
+				integerResult = integerResult.substring(0, integerSize);
+			}
+		} else {
+			// 已输入小数点
+			var splitValue = value.split(".");
+			// 整数部分
+			integerResult = splitValue[0].replace(/\D/g, "");
+			if(integerResult.length > integerSize) {
+				integerResult = integerResult.substring(0, integerSize);
+			}
+			// 小数部分
+			for (var i = 1; i < splitValue.length; i++) {
+				decimalResult += splitValue[i].replace(/\D/g, "");
+			}
+			if(decimalResult.length > decimalSize) {
+				decimalResult = decimalResult.substring(0, decimalSize)
+			}
+			decimalExist = 1;
+		}
+		if(decimalExist == 0) {
+			$(this).val(integerResult);
+		} else {
+			$(this).val(integerResult + "." + decimalResult);
+		}
+		// 数字输入标准 End
+	});
+</script>
+<style>
+	.bootstrap-timepicker-widget.timepicker-orient-bottom{z-index:333333;}
+	.bootstrap-timepicker-widget.timepicker-orient-top{z-index:333333;}
+</style>
+

@@ -1,0 +1,147 @@
+<div class="tableContent" >
+ 	<div class="row">
+ 		<div class="col-md-3 col-sm-3 col-xs-3">
+           <div class=" form-xs form-group row ">
+	          <label for="addClass" class="col-md-4 col-sm-4 col-xs-4 control-label">撒号区域：</label>
+	          <div class="col-md-8 col-sm-8 col-xs-8">
+	           	<select  class="city input-xs form-control searchKey" id="handOutNum">
+					<option value="" selected="selected">请选择撒号区域</option>
+					<#list provinceList as item>
+						<option value="${item.id!}">${item.name!}</option>
+					</#list>
+				</select>
+	          </div>
+	        </div>
+	    </div>
+	      <div class="col-md-3 col-sm-3">
+           <div class="form-xs form-group row">
+	          <label for="addClass" class="col-md-4 col-sm-4 col-xs-4 control-label">道路名称：</label>
+	          <div class="col-md-8 col-sm-8 col-xs-8">
+               	<input type="hidden" id="keyWordName" name="keyWordName" value ="" />
+               	<input class="col-md-8 col-sm-8 col-xs-8 selectInput searchKey "  type="text" id="keyWord" placeholder="输入道路名称" value="">
+	          </div>
+	        </div>
+	    </div>
+	    <div class="col-xs-12 roadChange">
+		    <table id="roadNum_jqGrid">
+				
+			</table>
+		<div id="jqGridPager"></div>
+    	</div>
+  </div> 
+</div>
+<input type=hidden id="tableType" value="${type!}" ></input>   
+<script type="text/javascript">
+var rod_table = {};
+$(function (){
+	init_jqGrid();
+	 /* 查询 */
+	$("#road_query").unbind().click(function(){
+		var param = getSearchParam();
+		var url="${CTX}/road/getRoadNumListForPage.do?"+param;
+		$("#roadNum_jqGrid").setGridParam({url:url,page:1}).trigger('reloadGrid');
+	});
+	 if($("#tableType").val()==1){
+		 $("#top_tools").children().first().siblings().hide();
+	 };
+	
+});
+function init_jqGrid(){
+	$("#roadNum_jqGrid").jqGrid({
+		 url: '${CTX}/road/getRoadNumListForPage.do', 
+         datatype: "json",
+         colModel: [
+             { label: '撒号区域', name: 'name',index:'name',sortable : false,width: 30 },
+             { label: '道路名称', name: 'roadName',index:'name',sortable : false,width: 30 },
+             { label: '号段', name: 'roadNum',index:'NUM',sortable : true,width: 30 },
+             { label: '启动状态', name: 'statusStr',index:'statusStr',sortable : false,width: 30 },
+             { label: '启动状态', name: 'status',index:'status',sortable : false,width: 30, hidden:true},
+             { label: '联合主键', name: 'uniteId',index:'uniteId',sortable : false,width: 30, hidden:true},
+             { label: '操作', name: 'Modify',index:'Modify',sortable : false,width: 30 }
+         ],
+         
+         multiselect: true,
+         multiboxonly: true,
+         onSelectRow: function (rowId, status, e){
+         	 rowDataNames = [];
+             var rowIds = $("#roadNum_jqGrid").jqGrid('getGridParam', 'selarrrow');
+             $(rowIds).each(function(i,rowId){
+                 rowDataNames.push($("#roadNum_jqGrid").jqGrid('getRowData',rowId));
+             });
+         },
+     	gridComplete: function () {
+			var ids = $("#roadNum_jqGrid").jqGrid("getDataIDs");
+			for (var i = 0; i < ids.length; i++) {
+				var id = ids[i];
+				var rowData = $("#roadNum_jqGrid").jqGrid('getRowData',id);
+				var uniteId = rowData.uniteId;
+				var	modify = "";
+				if(rowData.status==1){
+					modify = "<a class=\"\" href=\"javascript:void(0);\" style=\"color:red\" onclick=\"updateStatus(" + uniteId +","+2+ ");\">禁用</a>";
+				}else{
+					modify = "<a class=\"\" href=\"javascript:void(0);\" style=\"color:blue\" onclick=\"updateStatus(" + uniteId +","+1+ ");\">启动</a>";
+				}
+				$("#roadNum_jqGrid").jqGrid("setRowData", id, { Modify:modify});
+			}
+			
+     	},
+         viewrecords: true,
+         autowidth:true,
+         height: $(window).height()-250,
+         rowNum:30,
+	     rowList:[10,20,30,50,100],
+         pager: "#jqGridPager",
+     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+    });
+}
+//更改道路号使用状态
+function updateStatus(uniteId,type){
+	$.ajax({
+		url : "${CTX}/road/updateRoadNumStaus.do",
+		dataType : "json",
+		type : 'post',
+		data : {"roadNumStatus":type,"id":uniteId},
+		success : function(data) {
+			if(data==1){
+				alert("操作成功");
+				$("#roadNum_jqGrid").trigger("reloadGrid");
+			}else if(data==0){
+				alert("当前道路状态下,楼盘已使用此道路号.无法忽略!");
+			}else{
+				alert("操作失败");
+			}
+		}
+	});
+}
+
+/* 模糊搜索*/
+$("#keyWord").autocomplete({
+	source : function(request, response) {
+		$.ajax({
+			url : "${CTX}/road/getAordListByMatch.do",
+			dataType : "json",
+			type : 'post',
+			data : {
+				matchStr : request.term
+			},
+			success : function(data) {
+				var array = new Array(data.length);
+				for (var i = 0; i < data.length; i++) {
+					var temp = {
+						key : data[i].id,
+						value : data[i].roadName
+					};
+					array[i] = temp;
+				}
+				response(array);
+			}
+		});
+	},
+	select : function(event, ui) {
+		$("#keyWordName").val(ui.item.key);
+		$("#keyWord").val(ui.item.value);
+		event.preventDefault();
+	}
+});
+
+</script> 

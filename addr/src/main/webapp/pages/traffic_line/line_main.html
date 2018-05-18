@@ -1,0 +1,195 @@
+<title>公共交通线路管理</title>
+<!-- tools S -->
+<div id="top_tools" class=" btn-group">
+  <button id="line_query" class="btn btn-sm btn-white confirmBtn">
+    <i class="iconfont">&#xe6e4;</i>
+    <span>查询</span>
+  </button>
+  
+  <button id="line_add" class="btn btn-sm btn-white ladda-button">
+    <i class="iconfont">&#xe6e0;</i>
+    <span>新增</span>
+  </button>
+
+  <button id="line_edit" class="btn btn-sm btn-white btn-default">
+    <i class="iconfont">&#xe6dd;</i>
+    <span>修改</span>
+  </button>
+  
+  <button id="line_del" class="btn btn-sm btn-white btn-info">
+    <i class="iconfont">&#xe6e3;</i>
+    <span>删除</span>
+  </button>
+</div>
+<!-- tools E -->
+<!-- row S -->
+<div class="row">
+	<!-- tab S -->
+	<div class="col-xs-12">
+	  <div id="tabs" class="tabbable tabbable-lightBlue">
+	    <ul class="nav nav-tabs" >
+	      <li class="active">
+	        <a data-toggle="tab" tabUrl="${CTX}/aroundLine/getLineTable.do?selTabIndex=1" tabView="#tab-content1">公交</a>
+	      </li>
+	      <li>
+	        <a data-toggle="tab" tabUrl="${CTX}/aroundLine/getLineTable.do?selTabIndex=2" tabView="#tab-content1">地铁</a>
+	      </li>
+	    </ul>
+	    <div class="tab-content" id="tab-content1"></div>
+	  </div>
+	</div> 
+	<!-- tab E -->
+</div> 
+<!-- row S -->
+<div id="line_form" ></div>
+
+<script type="text/javascript">
+	 $('.page-content-area').ace_ajax('loadScripts', [null, null], function () {});
+	 
+	 /* 获取当前选中tab页下标*/
+	 function getSelTabIndex(){
+		 var selTabIndex;
+		 if($("#tabs ul>li").eq(0).attr("class")=="active"){
+			 selTabIndex = 1;
+		 }else if($("#tabs ul>li").eq(1).attr("class")=="active"){
+			 selTabIndex = 2;
+		 }
+		 return selTabIndex;
+	 }
+	 /* 查询 */
+	 $("#line_query").click(function(){
+		var param = getSearchParam();
+		param+="&trafficType="+getSelTabIndex();
+		var url = "${CTX}/aroundLine/getLineListForPage.do?"+param;
+ 		$("#line_jqGrid").setGridParam({url:"${CTX}/aroundLine/getLineListForPage.do?"+param,page:1}).trigger('reloadGrid');
+	 });
+     /* 新增 */
+     $("#line_add").click(function(){
+    	  openDialog("");
+     });
+     /* 修改 */
+	 $("#line_edit").click(function(){
+  	      var rowIds = jQuery("#line_jqGrid").jqGrid('getGridParam', 'selarrrow');
+  		  var selCount=rowIds.length;
+		  if(selCount==0){
+			 alert("没有选中的记录！");
+			 return;
+		  }
+	  	  if(selCount >1){
+	   		 alert("每次只能修改一条站点信息，请重新选择！");
+	   		 return;
+	   	  }
+	  	  openDialog(rowIds);
+     });
+	 /* 站点弹窗 */
+	 function openDialog(rowIds){
+		 oaDialogOpen(
+			   "addLineDialog",{
+				url: "${CTX}/aroundLine/getLineAddDialog.do?id="+rowIds,//调用页面的url
+				closeOnEscpe: true,
+		        autoOpen : false,
+		        width : 550,
+		        height : 400,
+		        modal : true,
+		        title : "线路管理",
+		        buttons : {
+			           "确定" : function() {
+			        	    var selTabIndex =  getSelTabIndex();
+			        	    var lineName = $("#lineName").val();
+			        	    var url = "${CTX}/aroundLine/saveLine.do";
+			        	    var startStation = $("#startStation").val();
+			        	    var endStation = $("#endStation").val();
+			        	    var firstTime = $("#firstTime").val();
+			        	    var lastTime = $("#lastTime").val();
+			        	    var ticketPrice = $("#ticketPrice").val();
+			        	    var remark = $("#remark").val();
+			        	    if(lineName==""){
+			        	    	alert("线路名称不能为空！");
+			        	    }else if(compareTime()){
+			        	    	alert("末班时间应大于首班时间！");
+			        	    }else{
+					       		$.ajax({
+					        		url: url,
+					        		data:{
+					        			id:$("#id").val(),
+					        			lineName:lineName,
+					        			trafficType:selTabIndex,
+					        			startStation:startStation,
+					        			endStation:endStation,
+					        			firstTime:firstTime,
+					        			lastTime:lastTime,
+					        			ticketPrice:ticketPrice,
+					        			remark:remark
+					        		},
+					        		type:"post",
+					    			dataType:"json",
+					        		success:function(data){
+					        			$("#line_jqGrid").trigger("reloadGrid");
+					        			if(data==1){
+					        				alert("保存成功！");
+					        			}else{
+					        				alert("保存失败！");
+					        			}
+					        		}
+					        	}); 
+				       	  		$(this).dialog("close");	
+			        	    }
+			            },
+			            "取消" : function() {
+			                $(this).dialog("close");
+			                $("#line_jqGrid").trigger("reloadGrid");
+			            }
+			       },
+				openCall: function() {
+					
+				},
+				closeCall: function() {
+					$(this).empty();
+				}
+		 });
+	}
+	/* 删除 */
+    $("#line_del").click(function(){
+		var rowIds = jQuery("#line_jqGrid").jqGrid('getGridParam', 'selarrrow');
+  		var selCount=rowIds.length;
+		if (selCount==0){
+			alert("没有选中的记录！");
+			return;
+		}
+		var url = "${CTX}/aroundLine/deleteLines.do";
+		var str = rowIds.join(",");
+		if (confirm("确认删除？")) {
+			$.ajax({
+				url : url,
+				dataType : "json",
+				data : {
+					lineIds : str
+				},
+				success : function(data) {
+					$("#line_jqGrid").trigger('reloadGrid');
+					alert("删除成功！");
+				}
+			});
+		}
+	});
+    /* 比较首班时间和末班时间*/
+    function compareTime(){
+   	 	var firstTime = $("#firstTime").val();
+		var lastTime = $("#lastTime").val(); 
+		var sTimeArray = firstTime.split(":");
+		var eTimeArray = lastTime.split(":");
+		if(lastTime!="0:00"){
+			if(Number(sTimeArray[0])>Number(eTimeArray[0])){
+				return true;
+			}else if(Number(sTimeArray[0])==Number(eTimeArray[0])){
+				if(Number(sTimeArray[1])>=Number(eTimeArray[1])){
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
+		}
+    }
+</script>

@@ -1,0 +1,284 @@
+<div id="top_tools" class=" btn-group">
+	<button  class="btn btn-sm btn-white"
+		onclick="aihome.cleanCustTransfer();">
+		<i class="iconfont">&#xe626;</i> <span>清空</span>
+	</button>
+	<button  class="btn btn-sm btn-white"
+		onclick="aihome.queryCustTransfer();">
+		<i class="iconfont">&#xe626;</i> <span>查询</span>
+	</button>
+	<button  class="btn btn-sm btn-white"
+		onclick="aihome.confirmReceive();">
+		<i class="iconfont">&#xe626;</i> <span>确认接收</span>
+	</button>
+	<button  class="btn btn-sm btn-white"
+		onclick="aihome.refuseReceive();">
+		<i class="iconfont">&#xe6e3;</i> <span>拒绝接收</span>
+	</button>
+</div>
+<div class="row">
+<div class="col-sm-12 col-xs-12 my-group ">
+	<div class="form-horizontal row my-inputs">
+		<div class=" row ">
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="transferType" class="col-xs-4 control-label">转介类型：</label>
+					<div class="col-xs-4">
+						<select id="transferType" class="input-xs form-control">
+							<option value=""></option>
+							<option value="1" selected="selected">我转介给他人</option>
+							<option value="2">他人转介给我</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+
+	</div>
+	<div id="more-input" class="" style="height: 71px;">
+			<div>
+				<i class="iconfont"></i>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-xs-12 my-grid">
+	<table id="custTransferJqGrid"></table>
+	<div id="custTransferJqGridPager"></div>
+	</div>
+	
+</div>
+
+<input id = "currentUser" type="hidden" value="${currentUser !''}">
+<script type="text/javascript">
+var aihome = {};
+	$('.page-content-area').ace_ajax('loadScripts', [ null, "../assets/js/bootbox.js"], function() {
+	});
+	
+	/*初始化分页页面*/
+	aihome.custTransferInit = function () {
+		$("#custTransferJqGrid")
+				.jqGrid(
+						{
+							height : $(window).height() - 189,
+							multiselect : true,
+							multiboxonly : true,
+							viewrecords : true,
+							rownumbers : true,
+							autowidth : true,
+							autoheight : true,
+							async : false,
+							url : "${CTX}/customerSource/getCustTransferPage.do",
+							postData : {
+								
+							},
+							datatype : "json",
+							colNames : ['评价', '客户姓名 客源编号','转介状态','承受价位 首付款/租期','需求面积（m&sup2;）',
+							            '需求户型', '楼层', '紧急程度','看房时间','意向小区', '归属部门 归属人','佣金分成','operateOrg',
+										 'receiveUserId','transferDemandId','transferStatus','transferId','receiveUser'],
+							colModel : [       
+										{name : 'custJudgeStr',sortable : false,width : 1,align : 'center'}, 
+										{name : 'customerNameStr',sortable : false,width : 4,align : 'center',
+											 formatter:function(rowName, options, rowObject){
+												 var html = "";
+												 if(rowObject.userName){
+													 html += rowObject.userName+"<br/>";
+												 }
+												 if(rowObject.demandCode){
+													 html += rowObject.demandCode;
+												 }
+											     return html;
+										     }}, 
+								        {name : 'status',sortable : false,width : 4,align : 'center',
+											 formatter:function(rowName, options, rowObject){
+												 var html = "";
+												 if(rowObject.transferStatus == 1){
+													 html +="未接收";
+												 }else if(rowObject.transferStatus == 2){
+													 html +="已接收";
+												 }else if(rowObject.transferStatus == 3){
+													 html +="拒绝";
+												 }
+											     return html;
+									     	}}, 
+										{name : 'affordPrice',sortable : false,width : 3,align : 'center',
+											 formatter:function(rowName, options, rowObject){
+												 var html = "";
+												 if(rowObject.affordPrice){
+													 html += rowObject.affordPrice+"<br/>";
+												 }
+												 if(rowObject.rentTime){
+													 html += rowObject.rentTime;
+												 }
+												 if(rowObject.firstPay){
+													 html += rowObject.firstPay;
+												 }
+											     return html;
+										     }}, 
+										{name : 'buildArea',sortable : false,width : 3,align : 'center'},  
+										{name : 'floor',sortable : false,width : 3,align : 'center',
+											 formatter:function(rowName, options, rowObject){
+												 var html = "";
+												 if(rowObject.rooms){
+													 html += rowObject.rooms+"室";
+												 }
+												 if(rowObject.office){
+													 html += rowObject.office+"厅";
+												 }
+												 if(rowObject.wc){
+													 html += rowObject.wc+"卫";
+												 }
+											     return html;
+										     }}, 
+										{name : 'buildTypeStr',sortable : false,width : 3,align : 'center'}, 
+										{name : 'demandUrgentStr',sortable : false,width : 3,align : 'center'},  
+										{name : 'takeLookTimeStr',sortable : false,width : 3,align : 'center'},
+										{name : 'demandPremises',sortable : false,width : 4,align : 'center'},  
+										{name : 'orgCode',sortable : false,width : 3,align : 'center',
+											 formatter:function(rowName, options, rowObject){
+												 var html = "";
+												 if(rowObject.operateOrg){
+													 html += rowObject.operateOrg+"<br/>";
+												 }
+												 if(rowObject.operateUser){
+													 html += rowObject.operateUser;
+												 }
+											     return html;
+										     }}, 
+										{name : 'rate',sortable : false,width : 2,align : 'center',  
+											 formatter:function(rowName, options, rowObject){
+												 var html = "";
+												 if(rowObject.rate){
+													 html += rowObject.rate+"%";
+												 }
+											     return html;
+										     }},
+										{name : 'transferDemandId',hidden:true},
+										{name : 'receiveUserId',hidden:true},
+										{name : 'operateOrg',hidden:true},
+										{name : 'transferStatus',hidden:true},
+										{name : 'transferId',hidden:true},
+										{name : 'receiveUser',hidden:true}
+										],
+							rowNum : 30,
+							rowList : [ 10, 20, 30, 50, 100 ],
+							pager : "#custTransferJqGridPager",
+							jsonReader : {
+								root : 'pagerResults',
+								page : 'currentPage',
+								rows : 'rowCount',
+								total : 'pageCount',
+								records : 'totalCount',
+								repeatitems : false
+							}
+						});
+	}
+	
+	/* 查询 */
+	aihome.queryCustTransfer = function () {
+		$("#custTransferJqGrid").setGridParam({
+			postData : {
+				transferType : $("#transferType").val(),
+				currentUser : $("#currentUser").val()
+			}
+		}).trigger("reloadGrid");
+	}
+
+	/* 清空 */
+	aihome.cleanCustTransfer = function () {
+		$("#transferType").val('')
+		
+	}
+	
+	/* 确认接收转介客源*/
+	aihome.confirmReceive = function (){
+		var rowIds = $("#custTransferJqGrid").jqGrid('getGridParam','selarrrow');
+		var selCount=rowIds.length;
+		
+		if (selCount==0){
+			alert("没有选中的记录！");
+			return;
+		}else if(selCount >1){
+			alert("请只选择一个记录！");
+			return;
+		}
+		
+		var rowData = $("#custTransferJqGrid").jqGrid('getRowData',rowIds);
+		var receiveUserId = rowData.receiveUserId;
+		var receiveUser = rowData.receiveUser;
+		var operateOrg = rowData.operateOrg;
+		var demandId = rowData.transferDemandId ;
+		var transferId = rowData.transferId ;
+		
+		if(rowData.transferStatus != 1){
+			alert("只能确认接收未接收的转介！");
+			return;
+		}
+		if(confirm("确定要接收该客源的转介吗？")){
+			$.ajax({
+				url : "${CTX}/customerSource/confirmReceiveTransfer.do",
+				dataType : "json",
+				type : 'post',
+				data : {
+					transferId : transferId,
+					receiveUserId : receiveUserId,
+					receiveUser : receiveUser,
+					operateOrg : operateOrg,
+					demandId : demandId
+				},
+				success : function(data) {
+					alert("成功接收客源转介！");
+					$("#custTransferJqGrid").trigger("reloadGrid");
+					}
+			});
+		}
+		
+	}
+	
+	/* 拒绝接收转介客源*/
+	aihome.refuseReceive = function (){
+		var rowIds = $("#custTransferJqGrid").jqGrid('getGridParam','selarrrow');
+		var selCount=rowIds.length;
+		
+		if (selCount==0){
+			alert("没有选中的记录！");
+			return;
+		}else if(selCount >1){
+			alert("请只选择一个记录！");
+			return;
+		}
+		
+		var rowData = $("#custTransferJqGrid").jqGrid('getRowData',rowIds);
+		var transferId = rowData.transferId ;
+		var receiveUserId = rowData.receiveUserId;
+		var currentUser = $("#currentUser").val();
+		
+		if(rowData.transferStatus != 1){
+			alert("只能拒绝未接收的转介！");
+			return;
+		}else if(currentUser != receiveUserId){
+			alert("只能拒绝他人转介给我的客源！");
+			return;
+		}
+		if(confirm("确认拒绝该客源转介吗？")){
+			$.ajax({
+				url : "${CTX}/customerSource/refuseReceiveTransfer.do",
+				dataType : "json",
+				type : 'post',
+				data : {
+					transferId : transferId
+				},
+				success : function(data) {
+					alert("成功拒绝该客源转介！");
+					$("#custTransferJqGrid").trigger("reloadGrid");
+					}
+			});	
+		}
+		
+	}
+	
+	$(function() {
+		aihome.custTransferInit();
+	});
+</script>

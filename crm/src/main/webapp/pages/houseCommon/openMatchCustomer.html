@@ -1,0 +1,406 @@
+<div id="top_tools" class=" btn-group">
+	<button class="btn btn-xs btn-icon btn-blue" onclick="aihome.queryMatchCustomer();">
+		<span>查询</span>
+	</button>
+	<button class="btn btn-xs btn-icon btn-blue" onclick="aihome.clearSearch();">
+		<span>清空</span>
+	</button>
+</div>
+<div class="row">
+	<div class="col-xs-12 my-group">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">售价：</label>
+					<div class="col-xs-8">
+						<input id="sellPriceFrom" name="sellPriceFrom" type="text" class="input-xs" style="float: left; width: 40%;" />
+						<span style="float: left; width: 5%;">—</span>
+						<input id="sellPriceTo" name="sellPriceTo" type="text" class="input-xs" style="float: left; width: 40%;" />
+						<span style="float: left; width: 13%;">万元</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">建筑面积：</label>
+					<div class="col-xs-8">
+						<input id="coveredAreaFrom" name="coveredAreaFrom" type="text" class="input-xs" style="float: left; width: 40%;" />
+						<span style="float: left; width: 5%;">—</span>
+						<input id="coveredAreaTo" name="coveredAreaTo" type="text" class="input-xs" style="float: left; width: 40%;" />
+						<span style="float: left; width: 13%;">㎡</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">楼层：</label>
+					<div class="col-xs-8">
+						<input id="floorsNum" name="floorsNum" type="text" class="input-xs" value="${floorsNum!}" />
+						<span>层</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">客户类型：</label>
+					<div class="col-xs-8">
+						<select id="customerType" class="input-xs form-control" name="customerType">
+							<option selected="selected" value="">所有</option>
+							<option value="1">私客</option>
+							<option value="2">区公客</option>
+							<option value="3">组公客</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">装修情况：</label>
+					<div class="col-xs-8">
+						<select id="decoradion" class="input-xs form-control" name="decoradion">
+							<option selected="selected" value="">所有</option>
+							<option value="1">毛坯</option>
+							<option value="2">简装</option>
+							<option value="3">精装</option>
+							<option value="4">豪装</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="form-xs form-group row">
+					<label class="col-xs-2 control-label">户型：</label>
+					<div class="col-xs-10" style="padding-left: 12px;">
+						<div class="row">
+							<div class="col-xs-3">
+								<select id="rooms" class="input-xs form-control" name="rooms" style="float: left; width: 85%;">
+									<option selected="selected" value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+								</select>
+								<span style="float: left; width: 10%; margin-left: 5px;">室</span>
+							</div>
+							<div class="col-xs-3">
+								<select id="office" class="input-xs form-control" name="office" style="float: left; width: 85%;">
+									<option selected="selected" value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+								</select>
+								<span style="float: left; width: 10%; margin-left: 5px;">厅</span>
+							</div>
+							<div class="col-xs-3">
+								<select id="kitchen" class="input-xs form-control" name="kitchen" style="float: left; width: 85%;">
+									<option selected="selected" value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+								</select>
+								<span style="float: left; width: 10%; margin-left: 5px;">厨</span>
+							</div>
+							<div class="col-xs-3">
+								<select id="wc" class="input-xs form-control" name="wc" style="float: left; width: 85%;">
+									<option selected="selected" value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+								</select>
+								<span style="float: left; width: 10%; margin-left: 5px;">卫</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="form-xs form-group row">
+					<label class="col-xs-2 control-label">楼盘名称：</label>
+					<div class="col-xs-10">
+						<input id="premisesName" name="premisesName" type="text" class="input-xs" style="width: 100%;" value="${premisesName!}" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<input id="demandType" name="demandType" type="hidden" value="${demandType!}" />
+		<input id="propertyType" name="propertyType" type="hidden" value="${propertyType!}" />
+		<input id="houseInfoId" name="houseInfoId" type="hidden" value="${houseInfoId!}" />
+		<input id="sellPrice" name="sellPrice" type="hidden" value="${sellPrice!}" />
+		<input id="coveredArea" name="coveredArea" type="hidden" value="${coveredArea!}" />
+		<input id="initDecoradion" name="initDecoradion" type="hidden" value="${decoradion!}" />
+		<input id="initRooms" name="initRooms" type="hidden" value="${rooms!}" />
+		<input id="initOffice" name="initOffice" type="hidden" value="${office!}" />
+		<input id="initKitchen" name="initKitchen" type="hidden" value="${kitchen!}" />
+		<input id="initWc" name="initWc" type="hidden" value="${wc!}" />
+	</div>
+	<div class="col-xs-12 my-grid" style="margin-top: 10px;">
+		<!-- PAGE CONTENT BEGINS -->
+		<table id="openMatchCustomerJqGrid">
+		</table>
+		<div id="openMatchCustomerJqGridPager"></div>
+		<!-- PAGE CONTENT ENDS -->
+	</div>
+</div>
+<script type="text/javascript">
+aihome.matchCustomerInit = function() {
+	$("#openMatchCustomerJqGrid").jqGrid({
+		height: $(window).height() - 219,
+		rownumbers: true,
+		viewrecords: true,
+		autowidth: true,
+		async: false,
+		url: "${CTX}/commonSearch/getMatchCustomerListForPage.do",
+		postData: {
+			demandType: $("#openMatchCustomer #demandType").val(),
+			propertyType: $("#openMatchCustomer #propertyType").val(),
+			sellPriceFrom: $("#openMatchCustomer #sellPriceFrom").val(),
+			sellPriceTo: $("#openMatchCustomer #sellPriceTo").val(),
+			coveredAreaFrom: $("#openMatchCustomer #coveredAreaFrom").val(),
+			coveredAreaTo: $("#openMatchCustomer #coveredAreaTo").val(),
+			floorsNum: $("#openMatchCustomer #floorsNum").val(),
+			decoradion: $("#openMatchCustomer #decoradion").val(),
+			rooms: $("#openMatchCustomer #rooms").val(),
+			office: $("#openMatchCustomer #office").val(),
+			kitchen: $("#openMatchCustomer #kitchen").val(),
+			wc: $("#openMatchCustomer #wc").val(),
+			premisesName: $("#openMatchCustomer #premisesName").val()
+		},
+		datatype: "json",
+		colNames : ['ID', '客户ID', '客源编号', '姓名', '客源编号/姓名', '意向楼盘', '售价', '建筑面积',
+					'室', '厅', '厨', '卫', '户型', '楼层要求start', '楼层要求end', '朝向', '楼层', '装修', '操作'],
+		colModel: [
+			{ name: 'id', index: 'id', hidden: true},
+			{ name: 'customerId', index: 'customerId', hidden: true},
+			{ name: 'demandCode', index: 'demandCode', hidden: true},
+			{ name: 'userName', index: 'userName', hidden: true},
+			{ name: 'Modify1', sortable: false, width: 32, align: 'center'},
+			{ name: 'demandPremises', index: 'demandPremises', sortable: false, width: 32, align: 'center'},
+			{ name: 'affordPrice', index: 'affordPrice', sortable: false, width: 32, align: 'center',
+				formatter: function(cellvalue, options, rowObject){
+					return cellvalue + "万";
+				}
+			},
+			{ name: 'buildArea', index: 'buildArea', sortable: false, width: 32, align: 'center',
+				formatter: function(cellvalue, options, rowObject){
+					return cellvalue + "㎡";
+				}
+			},
+			{ name: 'rooms', index: 'rooms', hidden: true},
+			{ name: 'office', index: 'office', hidden: true},
+			{ name: 'balcony', index: 'balcony', hidden: true},
+			{ name: 'wc', index: 'wc', hidden: true},
+			{ name: 'Modify2', sortable: false, width: 32, align: 'center'},
+			{ name: 'needFloorStart', index: 'needFloorStart', hidden: true},
+			{ name: 'needFloorEnd', index: 'needFloorEnd', hidden: true},
+			{ name: 'orientation', index: 'orientation', hidden: true,
+				formatter: function(cellvalue, options, rowObject){
+					if(cellvalue == 1) {
+						return "东";
+					} else if(cellvalue == 2) {
+						return "南";
+					} else if(cellvalue == 3) {
+						return "西";
+					} else if(cellvalue == 4) {
+						return "北";
+					} else {
+						return "均可";
+					}
+				}
+			},
+			{ name: 'Modify3', sortable: false, width: 32, align: 'center'},
+			{ name: 'decoration', index: 'decoration', sortable: false, width: 32, align: 'center',
+				formatter: function(cellvalue, options, rowObject){
+					if(cellvalue == 1) {
+						return "毛坯";
+					} else if(cellvalue == 2) {
+						return "简装";
+					} else if(cellvalue == 3) {
+						return "精装";
+					} else if(cellvalue == 4) {
+						return "豪装";
+					} else if(cellvalue == 5) {
+						return "所有";
+					} else {
+						return "";
+					}
+				}
+			},
+			{ name: 'Modify4', sortable: false, width: 32, align: 'center'}
+		],
+		onSelectRow: function (rowId, status, e) {
+			var rowIds = jQuery("#openMatchCustomerJqGrid").jqGrid('getGridParam', 'selarrrow');
+			var rowData = $("#openMatchCustomerJqGrid").jqGrid('getRowData',rowId);
+		},
+		gridComplete: function () {
+			var ids = $("#openMatchCustomerJqGrid").jqGrid("getDataIDs");
+			for (var i = 0; i < ids.length; i++) {
+				var id = ids[i];
+				var rowData = $("#openMatchCustomerJqGrid").jqGrid('getRowData',id);
+				var modify1 = "<div><a onclick=\"aihome.showDetails("+rowData.id+");\" style=\"color: blue;\">" + rowData.demandCode + "/" + rowData.userName + "</a></div>";
+				var modify2 = (rowData.rooms == null ? "" : rowData.rooms + "室") + (rowData.office == null ? "" : rowData.office + "厅") + (rowData.balcony == null ? "" : rowData.balcony + "厨") + (rowData.wc == null ? "" : rowData.wc + "卫");
+				var needFloor = "";
+				if(rowData.needFloorStart != null) {
+					needFloor += rowData.needFloorStart;
+					if(rowData.needFloorEnd != null) {
+						needFloor += ("～" + rowData.needFloorEnd);
+					}
+				} else {
+					if(rowData.needFloorEnd != null) {
+						needFloor += rowData.needFloorEnd;
+					}
+				}
+				var modify3 = (needFloor == "" ? "" : needFloor + "层") + (rowData.orientation == null ? "" : "(" + rowData.orientation + ")");
+				var modify4 = "<div><a onclick=\"aihome.toAppointTakeLook("+rowData.id+", '"+rowData.userName+"', "+rowData.demandCode+");\" style=\"color: blue;\">约带看</a></div>";
+				$("#openMatchCustomerJqGrid").jqGrid("setRowData", id, { Modify1: modify1 });
+				$("#openMatchCustomerJqGrid").jqGrid("setRowData", id, { Modify2: modify2 });
+				$("#openMatchCustomerJqGrid").jqGrid("setRowData", id, { Modify3: modify3 });
+				$("#openMatchCustomerJqGrid").jqGrid("setRowData", id, { Modify4: modify4 });
+			}
+			$("#openMatchCustomer .ui-jqgrid-bdiv").css("height", $("#openMatchCustomer").height() - 200);
+		},
+		rowNum:30, 
+		rowList:[10,20,30,50,100],
+		pager: "#openMatchCustomerJqGridPager",
+		jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false}
+	});
+}
+/* 查询按钮 */
+aihome.queryMatchCustomer = function() {
+	$("#openMatchCustomerJqGrid").setGridParam({postData:{
+		demandType: $("#openMatchCustomer #demandType").val(),
+		propertyType: $("#openMatchCustomer #propertyType").val(),
+		sellPriceFrom: $("#openMatchCustomer #sellPriceFrom").val(),
+		sellPriceTo: $("#openMatchCustomer #sellPriceTo").val(),
+		coveredAreaFrom: $("#openMatchCustomer #coveredAreaFrom").val(),
+		coveredAreaTo: $("#openMatchCustomer #coveredAreaTo").val(),
+		floorsNum: $("#openMatchCustomer #floorsNum").val(),
+		decoradion: $("#openMatchCustomer #decoradion").val(),
+		rooms: $("#openMatchCustomer #rooms").val(),
+		office: $("#openMatchCustomer #office").val(),
+		kitchen: $("#openMatchCustomer #kitchen").val(),
+		wc: $("#openMatchCustomer #wc").val(),
+		premisesName: $("#openMatchCustomer #premisesName").val()
+	}}).trigger("reloadGrid");
+}
+/* 清空按钮 */
+aihome.clearSearch = function() {
+	$("#openMatchCustomer #sellPriceFrom").val("");
+	$("#openMatchCustomer #sellPriceTo").val("");
+	$("#openMatchCustomer #coveredAreaFrom").val("");
+	$("#openMatchCustomer #coveredAreaTo").val("");
+	$("#openMatchCustomer #floorsNum").val("");
+	$("#openMatchCustomer #decoradion").val("");
+	$("#openMatchCustomer #rooms").val("1");
+	$("#openMatchCustomer #office").val("1");
+	$("#openMatchCustomer #kitchen").val("1");
+	$("#openMatchCustomer #wc").val("1");
+	$("#openMatchCustomer #premisesName").val("");
+}
+/* 客源详情 */
+aihome.showDetails = function(id) {
+	oaDialogOpen(
+		"customerSourceDetail",//对话框ID，必填，且不能与当前页面的ID重复
+		{
+			url: "${CTX}/customerSource/customerSourceDetail.do?id="+id,//调用页面的url
+			title: "客源详情",//弹框的title
+			closeOnEscpe: true,//是否通过esc关闭弹框
+			closeBtn: true,//是否显示关闭按钮
+			width: $(window).width()*0.45,//弹框的宽度
+			height: $(window).height()*0.7,//弹框的高度
+			buttons: {
+				"取消" : function() {
+					$(this).dialog("close");
+				}
+			},
+			openCall: function() {
+				//弹框打开后的回调函数
+				$("#customerSourceDetail").parent().css("cssText", "position: absolute; width: "+$(window).width()*0.45+"px; height: "+$(window).height()*0.7+"px; left: "+$(window).width()*0.275+"px; top: "+$(window).height()*0.15+"px; display: block; z-index: 1042 !important;");
+				$("#customerSourceDetail").parent().next().css("cssText", "z-index: 1041 !important;");
+			},
+			closeCall: function() {
+				//弹框关闭后的回调函数
+				$("#openMatchCustomer .ui-jqgrid-bdiv").css("height", $("#openMatchCustomer").height() - 200);
+			}
+		}
+	)
+}
+/* 约带看 */
+aihome.toAppointTakeLook = function(id, userName, demandCode) {
+	oaDialogOpen(
+		"toAppointTakeLook",//对话框ID，必填，且不能与当前页面的ID重复
+		{
+			url : "${CTX}/customerSource/addAppointTakeLook.do?userName="+userName+
+				"&demandCode="+demandCode+"&addCustomerId="+id,//调用页面的url
+			title: "添加约带看",//弹框的title
+			closeOnEscpe: true,//是否通过esc关闭弹框
+			closeBtn: true,//是否显示关闭按钮
+			width: $(window).width()*0.45,//弹框的宽度
+			height: $(window).height()*0.7,//弹框的高度
+			buttons: {
+				"添加" : function() {
+					aihome.addDemandHouse();
+				},
+				"保存" : function() {
+					var takeType = $("#takeType").val();
+					if(takeType == 1){
+						aihome.saveCustTakeLook();
+					}else{
+						aihome.savePremisesTakeLook();
+					}
+					$(this).dialog("close");
+				},
+				"取消" : function() {
+					$(this).dialog("close");
+				}
+			},
+			openCall: function() {
+				//弹框打开后的回调函数
+				$("#toAppointTakeLook").parent().css("cssText", "position: absolute; width: "+$(window).width()*0.45+"px; height: "+$(window).height()*0.7+"px; left: "+$(window).width()*0.275+"px; top: "+$(window).height()*0.15+"px; display: block; z-index: 1042 !important;");
+				$("#toAppointTakeLook").parent().next().css("cssText", "z-index: 1041 !important;");
+			},
+			closeCall: function() {
+				//弹框关闭后的回调函数
+				$("#openMatchCustomer .ui-jqgrid-bdiv").css("height", $("#openMatchCustomer").height() - 200);
+			}
+		}
+	)
+}
+$(function () {
+	// 售价
+	if($("#openMatchCustomer #sellPrice").val() != "") {
+		$("#openMatchCustomer #sellPriceFrom").val($("#openMatchCustomer #sellPrice").val() * 0.8);
+		$("#openMatchCustomer #sellPriceTo").val($("#openMatchCustomer #sellPrice").val() * 1.2);
+	}
+	// 建筑面积
+	if($("#openMatchCustomer #coveredArea").val() != "") {
+		$("#openMatchCustomer #coveredAreaFrom").val($("#openMatchCustomer #coveredArea").val() * 0.8);
+		$("#openMatchCustomer #coveredAreaTo").val($("#openMatchCustomer #coveredArea").val() * 1.2);
+	}
+	// 装修情况
+	if($("#openMatchCustomer #initDecoradion").val() != "") {
+		$("#openMatchCustomer #decoradion").find("[value='" + $("#openMatchCustomer #initDecoradion").val() + "']").prop("selected", "selected");
+	}
+	// 室
+	if($("#openMatchCustomer #initRooms").val() != "") {
+		$("#openMatchCustomer #rooms").find("[value='" + $("#openMatchCustomer #initRooms").val() + "']").prop("selected", "selected");
+	}
+	// 厅
+	if($("#openMatchCustomer #initOffice").val() != "") {
+		$("#openMatchCustomer #office").find("[value='" + $("#openMatchCustomer #initOffice").val() + "']").prop("selected", "selected");
+	}
+	// 厨
+	if($("#openMatchCustomer #initKitchen").val() != "") {
+		$("#openMatchCustomer #kitchen").find("[value='" + $("#openMatchCustomer #initKitchen").val() + "']").prop("selected", "selected");
+	}
+	// 卫
+	if($("#openMatchCustomer #initWc").val() != "") {
+		$("#openMatchCustomer #wc").find("[value='" + $("#openMatchCustomer #initWc").val() + "']").prop("selected", "selected");
+	}
+	// 明细列表 Start
+	aihome.matchCustomerInit();
+	// 明细列表 End
+})
+</script>

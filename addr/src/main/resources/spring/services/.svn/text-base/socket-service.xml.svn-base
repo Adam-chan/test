@@ -1,0 +1,16 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+	
+	<bean id="addrService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+		<property name="serviceUrl" value="rmi:${remote.url}/service"></property>
+		<property name="serviceInterface" value="com.golden.port.framework.stores.IServiceStore"></property>
+		<property name="lookupStubOnStartup"><value>false</value></property>
+		<property name="cacheStub"><value>false</value></property>
+    </bean>
+</beans>

@@ -1,0 +1,296 @@
+<div class="col-sm-12 form-xs form-group row">
+        <label for="addGrade" class="col-xs-1 control-label"><strong>基本信息</strong></label>
+</div>
+<div class="col-sm-12 form-xs form-group row">
+   <label for="addGrade" class="col-xs-2 control-label">具体地址：</label>
+   <div class="col-xs-10">
+      <input id="addrDetail" type="text" class="form-control selectInput" vRequired="true" value="${(houseSaleResult.addressDetail)!''}">
+   </div>
+</div>
+<div class="col-sm-12 form-xs form-group row">
+    <label for="addGrade" class="col-xs-2 control-label">证载地址：</label>
+    <div class="col-xs-10">
+       <input id="zzdz" type="text" class="form-control input-xs" maxlength="80" name="zzdz" value="${(houseSaleResult.zzdzDetail)!''}">
+    </div>
+</div>
+<div class="col-sm-12 form-xs form-group row">
+    <label for="addGrade" class="col-xs-2 control-label">楼盘名称： </label>
+    <div class="col-xs-4">
+       <input id="premisesName" type="text" class="form-control input-xs" readonly="true" value="${(houseSaleResult.premisesName)!''}">
+    </div>
+    <label for="addGrade" class="col-xs-2 control-label">商圈：</label>
+    <div class="col-xs-2">
+       <input id="ba1" type="text" class="form-control input-xs" readonly="true" value="${(houseSaleResult.ba1Name)!''}">
+    </div>
+    <div class="col-xs-2">
+       <input id="ba2" type="text" class="form-control input-xs" readonly="true" value="${(houseSaleResult.ba2Name)!''}">
+    </div>
+</div>
+<div class="col-sm-12 form-xs form-group row">
+     <label for="addGrade" class="col-xs-2 control-label">楼栋分组：</label>
+     <div class="col-xs-1">
+        <input id="groupName" type="text" class="form-control input-xs" readonly="true" style="width:160%" value="${(houseSaleResult.groupName)!''}">
+     </div>
+     <label for="addGrade" class="col-xs-1 control-label">栋座：</label>
+     <div class="col-xs-1">
+        <input id="buildingName" type="text" class="form-control input-xs" readonly="true" style="width:160%" value="${(houseSaleResult.buildingName)!''}">
+     </div>
+     <label for="addGrade" class="col-xs-1 control-label">单元：</label>
+     <div class="col-xs-1">
+        <input id="unitName" type="text" class="form-control input-xs" readonly="true" style="width:160%" value="${(houseSaleResult.unitCode)!''}"> 
+     </div>
+     <label for="addGrade" class="col-xs-1 control-label">楼层：</label>
+     <div class="col-xs-1">
+        <input id="floor" type="text" class="form-control input-xs" readonly="true" style="width:160%" value="${(houseSaleResult.floor)!''}">
+     </div>
+     <label for="addGrade" class="col-xs-1 control-label">房间号：</label>
+     <div class="col-xs-1">
+        <input id="roomName" type="text" class="form-control input-xs" readonly="true" style="width:160%" value="${(houseSaleResult.roomName)!''}">
+     </div>
+</div>
+<div class="col-sm-12 form-xs form-group row">
+	<label class="col-xs-2 control-label"></label> 
+	<#if !houseSaleResult?exists>
+		<div class="col-xs-9">
+			<table class="col-xs-12 table-input">
+	         <tr>
+	             <th style="width:5%">序号</th>
+	             <th style="width:30%">联系人类别</th>
+	             <th style="width:30%">联系人</th>
+	             <th style="width:30%">联系方式</th>
+	         </tr>
+	         <tbody id="lm_tbody">
+	           <tr id="lm_tr0" class="hasDelete">
+	              <td class="cloneList">
+	               1
+	              </td>
+		          <td>
+		              <select id="type" class='form-control input-xs' name="type"  readonly="true">
+		                  <option value="1">产权人</option>
+		                  <option value="2">父母</option>
+		                  <option value="3">丈夫</option>
+		                  <option value="4">妻子</option>
+		                  <option value="5">子女</option>
+		                  <option value="6">亲戚</option>
+		                  <option value="7">其他</option>
+		              </select>
+		          </td>
+		          <td>
+		             <input id="name" class="form-control input-xs" type="text" name="name" maxlength="10"> 
+		          </td>
+		          <td>
+		             <input id="contactType" class="form-control input-xs" type="text" name="contactType" onblur="aihome.validateTel(this);">
+		          </td>
+	           </tr>
+	      </tbody>
+	     </table>
+		</div>
+	</#if>
+	<#if houseSaleResult?exists>
+		<div class="col-xs-9">
+			<table class="col-xs-12 table-input">
+	         <tr>
+	             <th style="width:5%">序号</th>
+	             <th style="width:30%">联系人类别</th>
+	             <th style="width:30%">联系人</th>
+	             <th style="width:30%">联系方式</th>
+	         </tr>
+	         <tbody id="lm_tbody">
+	         	<#assign n = 1 />
+	            <#list houseSaleResult.linkManList as item>
+		           	<tr id="lm_tr0" class="hasDelete">
+		              <td class="cloneList">
+		               ${n}
+		              </td>
+			          <td>
+			              <select id="type" class='form-control input-xs' name="type">
+			                  <option value="1" <#if item.type==1>selected="selected"</#if>>产权人</option>
+			                  <option value="2" <#if item.type==2>selected="selected"</#if>>父母</option>
+			                  <option value="3" <#if item.type==3>selected="selected"</#if>>丈夫</option>
+			                  <option value="4" <#if item.type==4>selected="selected"</#if>>妻子</option>
+			                  <option value="5" <#if item.type==5>selected="selected"</#if>>子女</option>
+			                  <option value="6" <#if item.type==6>selected="selected"</#if>>亲戚</option>
+			                  <option value="7" <#if item.type==7>selected="selected"</#if>>其他</option>
+			              </select>
+			          </td>
+			          <td>
+			             <input id="name" class="form-control input-xs" type="text" name="name" value="${(item.name!'')}" >
+			          </td>
+			          <td>
+			             <input id="contactType" class="form-control input-xs" type="text" name="contactType" value="${(item.contactType!'')}">
+			          </td>
+		           </tr>
+		           <#assign n = n+1 /> 
+	           </#list>
+	      </tbody>
+	     </table>
+		</div>
+	</#if>
+	<div class="col-xs-1">
+		<input type="button" id="addBut" value="+" class="btn btn-blue btn-white"/>
+	</div>
+</div>
+<!-- 隐藏域 S -->
+<input id="roomId" type="hidden" value="${(houseSaleResult.roomId)!''}">
+<!-- 隐藏域 E -->
+<script type="text/javascript">
+
+	$(function(){
+		
+		$("#addBut").click(function(){
+			var flag = true;
+			$("#lm_tbody tr").each(function(){
+				var name = $(this).find("input[name='name']").val();
+				var contactType = $(this).find("input[name='contactType']").val();
+				if(name=="" || contactType==""){
+					flag = false;
+				}
+			});
+			if(flag){
+				cloneDom({
+				    dom:$("#lm_tr0"),//克隆对象
+				    target:$("#lm_tbody"),//克隆位置
+				    loadBefore: null,
+				    callBack: function(a){
+				    	$("#lm_tbody tr:first td:last").hide();
+				    	$("#lm_tbody select").each(function(i){
+				    		if(i!=0){
+				    			$(this).attr("disabled",false);
+				    		}
+				    	}); 
+				    	//序号排序
+				    	for(var i=1; i<$(".cloneList").length;i++){
+				    		$(this).html(i);
+				    	}
+				    },//克隆后的回调函数，a为克隆完成后的html对象
+				    willDelete: function(a){console.log(a)},//删除前回调函数
+				    deleteBack: function(){
+				    	//序号排序
+				    	for(var i=1; i<$(".cloneList").length;i++){
+				    		$(this).html(i);
+				    	}
+				    },//删除后回调函数
+				    deleteNoId: false,//行对象是否有ID
+				    allDelete:true//是否允许全部删除
+				});
+			}else{
+				alert("请完善联系人和联系方式！");
+			}
+		});	
+		//详细地址模糊查询
+	    $("#addrDetail").autocomplete({
+			source : function(request, response) {
+				var useType =  $("#house_useType").val();//租赁
+				$.ajax({
+					url : "${CTX}/houseManage/getAddrDetail.do",
+					dataType : "json",
+					type : 'post',
+					data : {
+						matchStr : request.term,
+						useType : useType
+					},
+					success : function(data) {
+						var array = [];
+						for (var i = 0; i < data.length; i++) {
+							var temp = {
+								key : data[i].roomId,//房间id
+								value : data[i].addrDetail,//详细地址
+								premisesName : data[i].premisesName,//楼盘名称
+								groupName : data[i].groupName!=undefined ? data[i].groupName:"",//楼栋分组
+								buildingName : data[i].buildingName!=undefined ? data[i].buildingName:"",//楼栋
+								unitName : data[i].unitName!=undefined ? data[i].unitName:"",//单元
+								floor : data[i].floor!=undefined ? data[i].floor:"",//楼层
+								roomName : data[i].roomName,//房间号
+								ba1Name : data[i].ba1Name!=undefined ? data[i].ba1Name:"",//大商圈
+								ba2Name : data[i].ba2Name!=undefined ? data[i].ba2Name:""//小商圈
+							};
+							array.push(temp);
+						}
+						response(array);
+					}
+				});
+			},
+			select : function(event, ui) {
+				//校验房源是否存在
+				$.ajax({
+					url : "${CTX}/houseManage/isExistWithHouseSale.do",
+					dataType : "json",
+					type : "post",
+					data : {
+						demandType : 1,
+						roomId : ui.item.key
+					},
+					success : function(data) {
+						if(data>0){
+							alert("该房源已存在！");
+							$("#addrDetail").val("");
+						}else{
+							$("#roomId").val(ui.item.key);
+							$("#addrDetail").val(ui.item.value);
+							$("#premisesName").val(ui.item.premisesName);
+							$("#groupName").val(ui.item.groupName);
+							$("#buildingName").val(ui.item.buildingName);
+							$("#unitName").val(ui.item.unitName);
+							$("#floor").val(ui.item.floor);
+							$("#roomName").val(ui.item.roomName);
+							$("#ba1Name").val(ui.item.ba1Name);
+							$("#ba2Name").val(ui.item.ba2Name);
+							event.preventDefault();
+						}
+					}
+				});
+			}
+		});
+		
+		//修改时-初始化操作
+		$("#lm_tbody select").eq(0).attr("disabled",true);
+		$(".delete").eq(0).hide();
+		
+	    $(".checkNum").keyup(function() {
+			var value = $(this).val();
+			var integerResult = "";
+			var decimalResult = "";
+			var integerSize = $(this).attr("format").split(".")[0];
+			var decimalSize = 0;
+			// 小数存在标识
+			var decimalExist = 0;
+			if($(this).attr("format").split(".").length > 1) {
+				decimalSize = $(this).attr("format").split(".")[1];
+				integerSize = integerSize - decimalSize;
+			}
+			if(value.indexOf(".") == -1 || decimalSize == 0) {
+				// 未输入小数点
+				integerResult = value.replace(/\D/g, "");
+				if(integerResult != "") {
+					integerResult = parseInt(integerResult).toString();
+				}
+				if(integerResult.length > integerSize) {
+					integerResult = integerResult.substring(0, integerSize);
+				}
+			} else {
+				// 已输入小数点
+				var splitValue = value.split(".");
+				// 整数部分
+				integerResult = splitValue[0].replace(/\D/g, "");
+				if(integerResult.length > integerSize) {
+					integerResult = integerResult.substring(0, integerSize);
+				}
+				// 小数部分
+				for (var i = 1; i < splitValue.length; i++) {
+					decimalResult += splitValue[i].replace(/\D/g, "");
+				}
+				if(decimalResult.length > decimalSize) {
+					decimalResult = decimalResult.substring(0, decimalSize)
+				}
+				decimalExist = 1;
+			}
+			if(decimalExist == 0) {
+				$(this).val(integerResult);
+			} else {
+				$(this).val(integerResult + "." + decimalResult);
+			}
+			// 数字输入标准 End
+		});
+	});
+    
+</script>

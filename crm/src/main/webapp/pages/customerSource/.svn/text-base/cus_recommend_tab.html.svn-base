@@ -1,0 +1,198 @@
+<div class="widget-header widget-header-small">
+	<div class="widget-toolbar pull-left" >
+	    <a href="javaScript:void(0);" onclick="aihome.toAddRecommend();" >
+	      <i class="">添加</i>
+	    </a>
+	     <a href="javaScript:void(0);" onclick="aihome.deleteRecommend();" class="orange">
+	      <i class="">删除</i>
+	    </a>
+	</div>
+</div>
+<table id="recommendJqGrid"></table>
+<div id="recommendJqGridPager"></div>
+<input type="hidden" id="custDemandId" value ="${(custDemandId)!''}" />
+<script type="text/javascript">
+	
+	/*初始化分页页面*/
+	aihome.recommendInit = function () {
+		$("#recommendJqGrid")
+				.jqGrid(
+						{
+							height : $(window).height() - 279,
+							multiselect : true,
+							multiboxonly : true,
+							viewrecords : true,
+							rownumbers : true,
+							autowidth : true,
+							autoheight : true,
+							async : false,
+							url : "${CTX}/customerSource/getCustomerRecommendPage.do",
+							postData : {
+								custDemandId:$("#custDemandId").val(),
+								demandType :$("#demandType").val(),//取自Detail页
+								propertyType :$("#propertyType").val()
+							},
+							datatype : "json",
+							fitColumns :true,
+							colNames : [ 'houseInfoId', '房源编号', '楼盘', '房源地址', '车位类型', '楼层', '面积' 
+							             , '价格(万)', '价格(元)', '钥匙情况' , '添加时间'],
+							colModel : [   
+										{name: 'houseInfoId', hidden: true, key: true},
+										{name : 'code',sortable : false,width : 4,align : 'center',
+											formatter:function(rowName, options, rowObject){
+												 var html = "";
+												 if(rowObject.code){
+													 var demandType = $("#demandType").val();
+													 var propertyType = $("#propertyType").val();
+													 html += "<a style='color: blue;' onclick='aihome.houseDetail(" + rowObject.houseInfoId +","+demandType+","+propertyType + ");'>"+rowObject.code +"<a/>";
+												 }
+							            	     return html;
+								             }},      
+										{name : 'premisesName',sortable : false,width : 4,align : 'center'}, 
+										{name : 'addressDetail',sortable : false,width : 3,align : 'center',
+											 formatter:function(rowName, options, rowObject){
+												 var html = "";
+												 if(rowObject.addressDetail){
+													 html += "<a href=\"javascript:aihome.alertAddress('"+rowObject.addressDetail+"')\" style='text-decoration:underline;color:blue'>查看</a>";
+												 }
+							            	     return html;
+								             }
+										}, 
+										{name : 'carPortType',sortable : false,width : 3,align : 'center',							
+											formatter:function(rowName, options, rowObject){
+							            		 var carPortType = rowObject.carPortType;
+												 var html = "";
+												 if(carPortType){
+													 if(carPortType == 1){
+														 html += "车位";
+													 }else if(carPortType == 2){
+														 html += "车库";
+													 }
+												 }
+							            	     return html;
+								             }
+										}, 
+										{name : 'carFloor',sortable : false,width : 3,align : 'center',							
+											formatter:function(rowName, options, rowObject){
+							            		 var carFloor = rowObject.carFloor;
+												 var html = "";
+												 if(carFloor){
+													 if(carFloor == 1){
+														 html += "地上";
+													 }else if(carFloor == 2){
+														 html += "地下";
+													 }
+												 }
+							            	     return html;
+								             }
+										},
+										{name : 'coveredArea',sortable : false,width : 3,align : 'center'},
+										{name : 'totalPrice',sortable : false,width : 3,align : 'center'},
+										{name : 'totalPrice2',sortable : false,width : 3,align : 'center',							
+											formatter:function(rowName, options, rowObject){
+							            	     return rowObject.totalPrice;
+								             }
+										},
+										{name : 'keyPosition',sortable : false,width : 3,align : 'center'},
+										{name : 'createTimeStr',sortable : false,width : 4,align : 'center'}
+										],
+							rowNum : 30,
+							rowList : [ 10, 20, 30, 50, 100 ],
+							pager : "#recommendJqGridPager",
+							jsonReader : {
+								root : 'pagerResults',
+								page : 'currentPage',
+								rows : 'rowCount',
+								total : 'pageCount',
+								records : 'totalCount',
+								repeatitems : false
+							},
+							gridComplete: function(){
+								if($("#propertyType").val()==4){//车位不显示地址 朝向
+									$("#recommendJqGrid").setGridParam().hideCol("addressDetail").trigger("reloadGrid");
+									$("#recommendJqGrid").setGridParam().hideCol("chaoXiang").trigger("reloadGrid");
+									$("#recommendJqGrid").setGridWidth(950);
+								}else{
+									$("#recommendJqGrid").setGridParam().hideCol("carPortType").trigger("reloadGrid");
+									$("#recommendJqGrid").setGridParam().hideCol("carFloor").trigger("reloadGrid");
+									$("#recommendJqGrid").setGridWidth(950);
+								}
+								if($("#demandType").val()==2){//租赁价 元
+									$("#recommendJqGrid").setGridParam().hideCol("totalPrice").trigger("reloadGrid");
+									$("#recommendJqGrid").setGridWidth(950);
+								}else{
+									$("#recommendJqGrid").setGridParam().hideCol("totalPrice2").trigger("reloadGrid");
+									$("#recommendJqGrid").setGridWidth(950);
+								}
+							}
+						});
+	}
+	aihome.alertAddress = function(address) {
+		bootbox.dialog({
+			title:"具体地址:",
+			message: "<div style=\"margin-left:auto;margin-right: auto;\"class=\"row form-xs\">"+address+"</div>",
+		});
+	};
+	
+	/* 添加推荐房源 */
+	aihome.toAddRecommend = function(){
+		oaDialogOpen("toAddRecommend",//对话框ID，必填，且不能与当前页面的ID重复
+				 {url:"${CTX}/customerSource/toAddRecommend.do?demandType="+$("#demandType").val()+"&propertyType="+$("#propertyType").val(),
+				      title:"添加推荐房源",//弹框的title
+				      closeOnEscpe:true,//是否通过escpe关闭弹框
+				      closeBtn:true,//是否显示关闭按钮
+				      width: $(window).width()*0.6,//弹框的宽度
+					  height: $(window).height()*0.8,
+						buttons : {
+							"设为推荐" : function() {
+								var result = aihome.recommend();
+								if(result){
+									$(this).dialog("close");
+								}
+					           	$("#recommendJqGrid").trigger('reloadGrid');
+							}
+						}
+				  })
+		};
+	
+	/* 房源详情 */
+	aihome.showHouseInfo = function(houseId,type,num){
+		oaDialogOpen("lookUpHouse",//对话框ID，必填，且不能与当前页面的ID重复
+				 {url:"${CTX}/houseManage/lookUpDetail.do?houseInfoId="+houseId+"&type="+type+"&num="+num,
+				      title:"查看详细信息",//弹框的title
+				      closeOnEscpe:true,//是否通过escpe关闭弹框
+				      closeBtn:true,//是否显示关闭按钮
+				      width: $(window).width()*0.8,//弹框的宽度
+					  height: $(window).height()*0.9,
+				  })
+		};
+	
+	aihome.deleteRecommend = function (){//删除推荐
+		var rowIds = $("#recommendJqGrid").jqGrid('getGridParam', 'selarrrow').join(",");
+		var selCount = rowIds.length;
+		if (selCount == 0) {
+			alert("请至少选择一个房源");
+			return;
+		}
+		if (confirm("确认删除？")) {
+			$.ajax({
+			       type: "POST",
+			       url: "${CTX}/customerSource/deleteRecommend.do",
+			       async:false,
+			       dataType:"JSON",
+			       data: {
+						houseInfoIds : rowIds,
+						custDemandId : $("#custDemandId").val(),
+			    		   },
+			       success: function(data){
+				    	alert("删除成功");
+			           	$("#recommendJqGrid").trigger('reloadGrid');
+			       }
+			});
+		}
+	}
+	
+	$(function() {
+		aihome.recommendInit();
+	});
+</script>

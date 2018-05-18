@@ -1,0 +1,142 @@
+<div class="row">
+	<div class="col-xs-12 my-group">
+		<div id="keyLend" class="form-horizontal row">
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">借钥匙人：</label>
+					<div class="col-xs-8">
+						<input id="lendKeyPerson" class="form-control input-xs"/>
+						<input id="lendKeyPersonId" hidden="hidden"/>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">联系电话：</label>
+					<div class="col-xs-8">
+						<input id="personTel" type="text" class="input-xs" style="width: 100%; background-color: #FFFFFF !important; color: #424242 !important;" disabled="disabled"/>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">借钥匙区：</label>
+					<div class="col-xs-8">
+						<input id="lendArea" type="text" class="input-xs" style="width: 100%; background-color: #FFFFFF !important; color: #424242 !important;" class="input-xs" disabled="disabled"/>
+						<input id="lendAreaId" hidden="hidden">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">借钥匙组：</label>
+					<div class="col-xs-8">
+						<input id="lendGroup" type="text" class="input-xs" style="width: 100%; background-color: #FFFFFF !important; color: #424242 !important;" disabled="disabled"/>
+						<input id="lendGroup" hidden="hidden">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">借出时间：</label>
+					<div class="col-xs-8">
+						<div class="input-group" style="" >
+							<input id="lendStart" class="form-control 5i5jdate input-xs"  type="text" placeholder="选择时间"/>
+							<span class="input-group-addon addon-xs">
+								<i class="fa fa-calendar bigger-110"></i>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">预计归还时间：</label>
+					<div class="col-xs-8">
+						<div class="input-group" style="" >
+							<input id="lendEnd" class="form-control 5i5jdate input-xs"  type="text" placeholder="选择时间"/>
+							<span class="input-group-addon addon-xs">
+								<i class="fa fa-calendar bigger-110"></i>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12 col-sm-12">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-2 control-label">借出人：</label>
+					<div class="col-xs-4">
+						<#if lendObj.user??>
+						<span id="lendPerson">${lendObj.user!}</span>
+						</#if>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12 col-sm-12">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-2 control-label">备注：</label>
+					<div class="col-xs-8">
+						<textarea id ="remarks" rows="3" cols="60" style="width: 100%"></textarea>
+					</div>
+				</div>
+			</div>
+			<input type="text" hidden="hidden" id="keyId" value="${lendObj.keyId!}">
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	/* 借钥匙人模糊匹配*/
+	$("#keyLend input[id='lendKeyPerson']").autocomplete({
+		source : function(request, response) {
+			$.ajax({
+				url : "${CTX}/keysManage/personnelInfoList.do",
+				dataType : "json",
+				type : 'post',
+				data : {
+					matchStr : request.term
+				},
+				success : function(data) {
+					var array = new Array(data.length);
+					for (var i = 0; i < data.length; i++) {
+						var temp = {
+							key : data[i].userId,
+							value : data[i].userName,
+							colelectContact : data[i].userContact,
+							colelectZoneCode : data[i].areaCode,
+							colelectZone : data[i].area,
+							colelectOrgCode : data[i].groupCode,
+							colelectOrg : data[i].group
+						};
+						array[i] = temp;
+					}
+					response(array);
+				}
+			});
+		},
+		select : function(event, ui) {
+			$("#keyLend input[id='lendKeyPersonId']").val(ui.item.key);
+			$("#keyLend input[id='lendKeyPerson']").val(ui.item.value);
+			$("#keyLend input[id='personTel']").val(ui.item.colelectContact);
+			$("#keyLend input[id='lendAreaId']").val(ui.item.colelectZoneCode);
+			$("#keyLend input[id='lendArea']").val(ui.item.colelectZone);
+			$("#keyLend input[id='lendGroupId']").val(ui.item.colelectOrgCode);
+			$("#keyLend input[id='lendGroup']").val(ui.item.colelectOrg);
+			event.preventDefault();
+		}
+	});
+	$("#keyLend input[id='lendKeyPerson']").blur(function() {
+		if($("#keyLend input[id='lendKeyPerson']").val() == "") {
+			$("#keyLend input[id='lendKeyPersonId']").val("");
+			$("#keyLend input[id='personTel']").val("");
+			$("#keyLend input[id='lendAreaId']").val("");
+			$("#keyLend input[id='lendArea']").val("");
+			$("#keyLend input[id='lendGroupId']").val("");
+			$("#keyLend input[id='lendGroup']").val("");
+		}
+		$(this).attr("placeholder", "");
+	});
+})
+
+</script>

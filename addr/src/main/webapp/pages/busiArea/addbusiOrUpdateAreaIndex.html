@@ -1,0 +1,535 @@
+
+<div class="row" style="margin:0">
+<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+ <div id="element_id">
+		<div class="form-horizontal row my-inputs">
+		<#if busiArea??>
+			  <#if busiArea.busiAreaName??>
+				<div class="col-md-12 col-sm-12">
+						<div class=" form-xs form-group row" style="margin:0">
+							<label for="roleName" class="col-xs-2 control-label">大商圈：</label>
+							<div class="col-xs-4">
+								<select id="busiZoning" class="city input-xs form-control hiddens" data-value="">
+									<option value="">请选择行大商圈</option>
+									    <#list busiZoninglist as item>
+											<#if busiArea.busiZoningId == item.id > 
+			 								<option selected="selected" lat="${item.lat!}" lng="${item.lng!}" value="${item.id!}">${item.busiAreaName!}</option>
+											<#else> 
+											<option value="${item.id!}" lat="${item.lat!}" lng="${item.lng!}">${item.busiAreaName!}</option>
+											</#if> 
+									    </#list>
+									</if>
+								</select>
+							</div> 
+						</div>
+		         </div>
+	           </#if> 
+        <#else>
+	           	<div class="col-md-12 col-sm-12">
+						<div class=" form-xs form-group row" style="margin:0">
+							<label for="roleName" class="col-xs-2 control-label">大商圈：</label>
+							<div class="col-xs-4">
+								<select id="busiZoning" class="city input-xs form-control hiddens"  data-value="">
+									<option value="">请选择大商圈</option>
+									    <#list busiZoninglist as item>
+											<option value="${item.id!}" lat="${item.lat!}" lng="${item.lng!}">${item.busiAreaName!}</option>
+									    </#list>
+									</if>
+								</select>
+							</div> 
+						</div>
+		         </div>
+        </#if>   
+           
+           	
+           	<div class="  col-md-12 col-sm-12">
+                <div class=" form-xs form-group row" style="margin:0;margin-top: 15px">
+                    <label for="powerName" class="col-xs-2 control-label">商圈名称：</label>
+                    <div class="col-xs-4">
+                     <#if busiArea??>
+                    <#if busiArea.busiAreaName??>
+                    	<input class="form-control input-xs searchKey hiddens" name="busiNames" id="busiNames" value="${busiArea.busiAreaName!}" placeholder="输入商圈名称" vRequired="true"/>
+	                    <input type="hidden" id="busiAreaId" value="${busiArea.id!}"/>
+	                  	<#else>
+	                  	<input class="form-control input-xs searchKey hiddens"  name="busiNames" maxlength="10" busiZoningName ="1" id="busiNames" value="${busiArea.busiZoningName!}" placeholder="输入大商圈名称" vRequired="true"/>
+	                    <input type="hidden" id="busiAreaId" value="${busiArea.id!}"/>
+                    </#if>
+                     </#if>
+                    <#if !busiArea??>
+                     <input class="form-control input-xs searchKey" name="busiNames"  id="busiNames" maxlength="10" placeholder="输入商圈名称" vRequired="true"/>
+                    </#if>
+                    </div>
+                     <label for="powerName" class="col-xs-2 control-label">排序号：</label>
+                    <div class="col-xs-4">
+                       <#if busiArea??>
+                             <input class="form-control input-xs searchKey hiddens" name="sort" id="sort" placeholder="输入排序号" maxlength="3" value="${busiArea.sort!}"/>
+                       <#else>
+                       		<input class="form-control input-xs searchKey" name="sort" id="sort" placeholder="输入排序号" maxlength="3" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+                      </#if> 
+                    </div>
+                </div>
+            </div>
+    	
+			<div class="col-md-12 col-sm-12">
+					<div class="input-group blueTags  row" style="margin:0;border:0 ;margin-top: 15px">
+						<label for="roleName" class="col-xs-2 control-label"  style="margin:0;border:0 ;padding: 0px;">关联行政区：</label>
+						<div class='col-xs-10'>
+							<div class="tags col-xs-9 delete" style="margin:0;border:0;width: 75%;">
+							<#if busiArea??>
+								<#list busiArea.list as item>
+								<span class=tag>${item.name!} <button type="button" class="close hiddens" onclick="closeSpan($(this))" >×</button></span>
+								<input type="hidden" name="areaIds"  value="${item.adminId!}" />
+								</#list>
+	                        </#if> 
+							</div>
+						</div>
+					</div>
+			</div>
+			<#if isFlag!="look">
+			<div class="col-md-12 col-sm-12">
+				<div class=" form-xs form-group row " style="margin:0;margin-top: 15px">
+					<label for="roleName" class="col-xs-2 control-label">行政区：</label>
+					<div class="col-xs-4 " id="cloneTarget">
+						<select id="areaWindow" class="city input-xs form-control hiddens" vRequired="true">
+							<option value="" class="areaWindow">请选择行政区</option>
+							<!-- 判断是否是编辑 -->
+							<#if busiArea??>
+									<#if busiArea.busiAreaName??>
+										<#list BusiAreajudge.list as item>
+												<option value="${item.adminId!}" class="areaWindow">${item.name!}</option>
+										</#list>
+										<#else>
+										 <#list provinceList as items>
+											<option value="${items.id!}" class="areaWindow">${items.name!}</option>
+										</#list>
+									</#if>
+							<#else>
+									<#list provinceList as item>
+											<option value="${item.id!}" class="areaWindow">${item.name!}</option>
+									</#list>
+							</#if>
+						</select>
+					</div>
+				</div>
+           	</div>
+           	</#if>
+           	<div class="col-md-12 col-sm-12">
+				<div class=" form-xs form-group row " style="margin:0;margin-top: 15px">
+					<label for="roleName" class="col-xs-2 control-label">商圈描述：</label>
+					<div class="col-xs-10 " id="cloneTarget">
+						<#if busiArea??>
+						<textarea id ="rmk" rows="3" cols="60" maxlength="150" class="hiddens" style="width: 100%">${busiArea.remark!}</textarea>
+                        <#else>
+                        <textarea id ="rmk" rows="3" cols="60" maxlength="150" style="width: 100%" ></textarea>
+                        </#if> 
+					</div>
+				</div>
+           	</div>
+           	
+           	<div class="col-md-12 col-sm-12">
+				<div class=" form-xs form-group row "  style="margin:0;margin-top: 15px">
+					<label for="roleName" class="col-xs-2 control-label" >中心点：</label>
+					<div class="col-xs-4 " id="cloneTarget">
+						<#if busiArea??>
+					   	<input   id="coordinate" value="${busiArea.lng!},${busiArea.lat!}" class="input-xs hiddens" readonly="readonly" />
+                        <#else>
+                        	<input   id="coordinate" class="input-xs" value="" readonly="readonly"/>
+                        </#if> 
+					</div>
+				</div>
+           	</div>
+           
+           	<#if busiArea??> 
+           		<#if busiArea.busiAreaName??>
+          			<input type="hidden"  id="parentIds" value="${busiArea.busiZoningId}" class="hiddens  " />
+  				</#if>  
+           <#else>
+                <input type="hidden"  id="parentIds" value="" />
+           </#if>
+           <!-- 判断是否查看 -->
+           <input type="hidden" id ="ishidden" value="${isFlag!}">
+		</div>
+		
+	</div>
+	
+		
+</div>
+
+<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+<div class="col-md-12 col-sm-12"  >
+         <!--   	<div class=" form-xs form-group row " style="margin:0;margin-top: 15px">
+           	<label for="roleName" class="col-xs-2 control-label"></label> -->
+			<div id="allmap" style="height:400px;width: 100%"></div>
+           	</div>
+</div>
+    
+  
+        
+</div>
+<script type="text/javascript">
+var map;
+$(function (){
+	var isFlag = $("#ishidden").val();
+	if(isFlag=="look"){
+		$(".hiddens").attr("disabled","disabled");
+	}
+ var coordinate = $("#coordinate").val();
+ var lng="";
+ var lat="";
+ 		if(coordinate == ","){
+ 		$("#coordinate").val("");
+ 			coordinate ="";
+ 		}
+		if(coordinate != "" && coordinate != null && coordinate != undefined){
+			var coordinateArray = new Array();
+			coordinateArray = coordinate.split(',')
+			lng=coordinateArray[0];
+			lat=coordinateArray[1];
+		}
+		if(lat!=null&&lat!=""&&lng!=null&&lng!=""){
+			map = new BMap.Map("allmap",{minZoom:11,maxZoom:15});
+			map.setDefaultCursor("crosshair");  
+			busiZoningCoordinate(lng,lat);
+			//marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+			if(isFlag!="look"){
+				map.addEventListener("click", showInfo);
+			}
+		}else{
+			var lng=$("#lng").val();
+			var lat=$("#lat").val();
+			map = new BMap.Map("allmap",{minZoom:11,maxZoom:15});
+			map.setDefaultCursor("crosshair");  
+			busiZoningCoordinate(lng, lat)
+			if(isFlag!="look"){
+				map.addEventListener("click", showInfo);
+			}
+		}
+		<#if premisesCount?? >
+		   var num = new Number(${premisesCount});
+		   if(num>0){
+			   $(".close").remove();
+		   }
+		</#if>
+})
+// 百度地图API功能
+function busiZoningCoordinate(lat,lng){
+	map.clearOverlays();
+	var point = new BMap.Point(lat,lng);
+	map.centerAndZoom(point, 15);
+	map.enableScrollWheelZoom();
+	var marker = new BMap.Marker(point);  // 创建标注
+	map.addOverlay(marker);               // 将标注添加到地图中 */
+}
+
+function showInfo(e){
+	$("#coordinate").val(e.point.lng+","+e.point.lat);
+    map.clearOverlays();
+	var point = new BMap.Point(e.point.lng,e.point.lat);
+	map.centerAndZoom(point, 15);
+	var marker = new BMap.Marker(point);  // 创建标注
+	map.addOverlay(marker);               // 将标注添加到地图中
+	//marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+} 
+//验证商圈名
+$("#busiNames").blur(function(){
+	
+	 var busiName = $(this).val();
+	 var local = new BMap.LocalSearch(map, {
+			renderOptions:{map: map}
+	});
+	local.search(busiName);
+	 if($(this).val()!=null&&$(this).val()!=""){
+		 var busiAreaId = "";
+		 busiAreaId = $("#busiAreaId").val();
+		 busiAreaId = $.trim(busiAreaId);
+		 if(busiAreaId!="" && busiAreaId != undefined){
+			 $.ajax({
+					type : "POST",
+					url : '${CTX}/busiArea/getBusiName.do',
+					dataType : "json",
+					data : {
+						"updataBusiName" : busiName,"busiAreaId" : busiAreaId
+					},
+					success : function(data) {
+						if(data!=null && data!=""){
+							alert("商圈名称已存在");
+							judge = 1;
+						}
+					}
+			});
+		 }else{
+			 $.ajax({
+					type : "POST",
+					url : '${CTX}/busiArea/getBusiName.do',
+					dataType : "json",
+					data : {
+						"busiName" : busiName
+					},
+					success : function(data) {
+						if(data!=null && data!=""){
+							alert("商圈名称已存在");
+							judge = 1;
+						}
+					}
+			});
+		 }
+		 
+	 }
+});	
+// 下拉框改变填加选中的input标签 
+$("#areaWindow").change(function (){
+	var areakey = $(this).val();
+	var areaVal = jQuery("#areaWindow  option:selected").text();
+	if(areaVal!="请选择行政区"){
+		$(".tags").append("<span class=\"tag\">"+areaVal+"<button type=\"button\" class=\"close\" onclick=\"closeSpan($(this));\">×</button></span>"+
+				 "<input type=\"hidden\" name=\"areaIds\"  value=\""+areakey+"\" class=\"\"/>");
+	}
+});
+//大商圈id赋值到inpu标签里
+$("#busiZoning").change(function (){	
+	var areakey = "";
+	
+	areakey = $(this).val();
+	$(".delete").html("");
+	//赋值
+	$("#parentIds").val(areakey);
+	//清空行政区下拉框的内容
+	$(".areaWindow").nextAll().remove();
+	 lng = jQuery("#busiZoning  option:selected").attr("lng");
+	 lat = jQuery("#busiZoning  option:selected").attr("lat");
+	 if(lat!=null&&lat!=""&&lng!=null&&lng!=""&&lat!='undefined'&&lng!='undefined'){
+		 $("#coordinate").val(lng+","+lat);
+		 busiZoningCoordinate(lng,lat);
+	 }
+	//显示所有行政区
+	if(areakey==""){
+		$.ajax({
+			type : "POST",
+			url : '${CTX}/busiArea/getAdminAreaList.do',
+			dataType : "json",
+			data : {
+				"busiAreaId" : areakey
+			},
+			success : function(data) {
+				if(data!=null && data != ""){
+					for(var i= 0;i<data.length;i++){
+						$("#areaWindow").append(jointOptionAll(data[i]));
+					}
+				}
+			}
+		});
+	}else{//显示大商圈下的行政区
+		
+		$(".areaWindow").nextAll().remove();
+		$.ajax({
+				type : "POST",
+				url : '${CTX}/busiArea/getbuisAdminList.do',
+				data : {
+					"busiAreaId" : areakey
+				},
+				dataType : "json",
+				success : function(data) {
+					if(data!=null && data != ""){
+						for(var i= 0;i<data.list.length;i++){
+							$("#areaWindow").append(jointOption(data.list[i]));
+						}
+					}
+				}
+			});
+			
+		}
+
+});
+//拼接标签字符串
+  //大商圈下拉框拼接标签函数
+function jointOption(data){
+	return '<option value="'+data.adminId+'">'+data.name+'</option>';
+}
+function jointOptionAll(data){
+	return '<option value="'+data.id+'">'+data.name+'</option>';
+}
+//删除选中标签 
+function closeSpan(obj) {
+	obj.parent().next().remove();
+	obj.parent().remove();
+}
+
+var busiName="";//商圈名称字
+var parentId = "";//大商圈id
+var sort="";//序号
+var rmk="";//备注
+var coordinate ="";
+var lng = "";//精度
+var lat = "";//维度
+var busiAreaId = "";//商圈id
+
+
+//获取参数
+
+
+function addBusi() {
+	var adminIds = "" //行政区id结合
+	var judge = 0;
+	//获取input标签那么为areaIds的值集合
+	$("input[name='areaIds']").each(function(i) {
+		adminIds = adminIds + $(this).val() + ",";
+
+	});
+	
+	if(judge==1){
+		return judge;
+	}
+	busiName = $("#busiNames").val();	//获取商圈名称
+	parentId = $("#parentIds").val();//获取大商圈id
+	busiName = $("#busiNames").val();	//获取商圈名称
+	sort = $("#sort").val();//获取序号
+	rmk = $("#rmk").val();//获取备注
+	adminIds = adminIds.substring(0, adminIds.length - 1);//获取大商圈id集合
+	coordinate = $("#coordinate").val();//获取经纬度
+ 	busiAreaId = $("#busiAreaId").val();//获取商圈id
+	//判断商圈是否可添加
+	if (busiName.trim() == "") {
+		judge = 1;
+		alert("请添加商圈名称");
+
+	}else if(adminIds === ""){
+		alert("请关联行政区");
+		judge = 1;
+	}else{
+		//判断是否有重复值
+		var areaIdArray = new Array();
+		areaIdArray = adminIds.split(',')
+		for (var i = 0; i < areaIdArray.length; i++) {
+			// 将数组元素依次与后面的数组元素比较  
+			for (var j = i + 1; j < areaIdArray.length; j++) {
+				if (areaIdArray[i] == areaIdArray[j]) {
+					alert("行政区关联重复");
+					judge = 1;
+					return false;
+				}
+			}
+		}
+	}
+	if (judge == 1) {
+		return judge;
+	}
+	if(parentId==""){
+		judge = 3;
+	}
+	//截取精度维度
+	var arrays = coordinate.split(",");
+	lng = arrays[0];
+	lat = arrays[1];	
+		if (judge != 1) {
+			$.ajax({
+				type : "POST",
+				url : '${CTX}/busiArea/addBusiArea.do',
+				data : {
+					"busiName" : busiName,
+					"adminIds" : adminIds,
+					"parentId" : parentId,
+					"sort" : sort,
+					"remark" : rmk,
+					"lng" : lng,
+					"lat" : lat
+				},
+				async:false,
+				dataType : "json",
+				success : function(data) {
+					if(data>0){
+						judge=2;
+					}else if(data==-1){
+						judge=data;
+					}
+				}
+			});
+			return judge;
+		}
+		
+}
+
+
+function update() {
+	var adminIds = "" //行政区id结合
+	var judge = 0;
+	busiName = $("#busiNames").val();	//获取商圈名称
+	//获取input标签那么为areaIds的值集合
+	$("input[name='areaIds']").each(function(i) {
+		adminIds = adminIds + $(this).val() + ",";
+
+	});
+	//判断商圈是否可添加
+	if (busiName == "") {
+		judge = 1;
+		alert("请添加商圈名称");
+
+	}
+	if (judge == 1) {
+		return judge;
+	}
+	
+	//判断行政区id是否为空
+	if (adminIds === "") {
+		alert("请关联行政区");
+		judge = 1;
+		return judge;
+	}
+	//判断是否有重复值
+	var areaIdArray = new Array();
+	areaIdArray = adminIds.split(',')
+
+	for (var i = 0; i < areaIdArray.length; i++) {
+		// 将数组元素依次与后面的数组元素比较  
+		for (var j = i + 1; j < areaIdArray.length; j++) {
+			if (areaIdArray[i] == areaIdArray[j]) {
+				alert("行政区关联重复");
+				judge = 1;
+				break;
+			}
+		}
+	}
+	if (judge == 1) {
+		return judge;
+	}
+	parentId = $("#parentIds").val();//获取大商圈id
+	sort = $("#sort").val();//获取序号
+	rmk = $("#rmk").val();//获取备注
+	adminIds = adminIds.substring(0, adminIds.length - 1);//获取大商圈id集合
+	coordinate = $("#coordinate").val();//获取经纬度
+ 	busiAreaId = $("#busiAreaId").val();//获取商圈id
+
+	
+	var busiZoningName = $("#busiNames").attr("busiZoningName");
+	if(busiZoningName==1){
+		judge = 3;
+	}
+	
+	//截取精度维度
+	var arrays = coordinate.split(",");
+	lng = arrays[0];
+	lat = arrays[1];	
+	if (judge != 1) {
+		$.ajax({
+			type: "POST",
+			url: '${CTX}/busiArea/updateBusiArea.do',
+			data: {
+				"busiName": busiName,"adminIds":adminIds,"parentId":parentId,"sort":sort,"remark":rmk,"lng":lng,"lat":lat,"busiAreaId":busiAreaId
+			},
+			dataType: "json",
+			async:false,
+			success: function(data) {
+				if(data>0){
+					return data;
+				}else if(data==-1){
+					judge=data;
+				}else{
+					judge=1;
+				}
+			}
+		});
+		return judge;
+	}
+		
+}
+
+</script>

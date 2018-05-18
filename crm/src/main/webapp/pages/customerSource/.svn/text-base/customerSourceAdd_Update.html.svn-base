@@ -1,0 +1,4404 @@
+<div id="addPage">
+<div class="panel-heading" style="background-color: #A8C9F4;">
+	<h5 class="panel-title">
+		<a class="accordion-toggle">基本信息</a>
+	</h5>
+</div>
+<div class="panel-collapse">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-xs-12 my-group">
+				<div class="form-horizontal row my-inputs">
+					<!-- 第一行 -->
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-5 control-label">联系电话： </label>
+								<div class="col-xs-7">
+									<div class="col-xs-12">
+										<input id="tel" class="form-control input-xs" name="tell" type="text" value="${(source.tell)!''}" onBlur="aihome.customerCheck()">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-5 control-label">客户姓名： </label>
+								<div class="col-xs-7">
+									<div class="col-xs-12">
+										<input id=customerName class="form-control input-xs customer" name="customerName" type="text" value="${(source.userName)!''}">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<div class="col-xs-10">
+									&nbsp;&nbsp;&nbsp;&nbsp;<input id="isStaff" value="1" name="isStaff" class="customer"
+										type="checkbox">是我爱我家员工
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-6 control-label">类型：</label> 
+								<label class="col-xs-2 control-label"><input name="userType" id="userType" value="1" class="customer" type="radio" checked />个人</label>
+								<label class="col-xs-2 control-label"><input name="userType" id="userType" value="2" class="customer" type="radio" />企业</label>
+							</div>
+						</div>
+					</div>
+					<!-- 第二行 -->
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-5 control-label">备用电话： </label>
+								<div class="col-xs-7">
+									<div class="col-xs-12">
+										<input id="spareTell" class="form-control input-xs customer" name="spareTell" type="text" value="${(source.spareTell)!''}">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-6 control-label">性别：</label> 
+								<label class="col-xs-2 control-label"><input name="sex" id="sex" value="1" class="customer" type="radio" checked />男&nbsp;</label>
+								<label class="col-xs-2 control-label"><input name="sex" id="sex" value="2" class="customer" type="radio" />女</label>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-6 control-label">证件类型： </label>
+								<div class="col-xs-6">
+									<div class="col-xs-12">
+										<select id="idType" class="input-xs form-control customer" name="idType">
+											<option selected="selected" value="1">身份证</option>
+											<option value="2">军官证</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-5 control-label">证件号码： </label>
+								<div class="col-xs-7">
+									<div class="col-xs-12">
+										<input id="identityCode" class="form-control input-xs customer" name="identityCode"
+											type="text" value="${(source.idCode)!''}">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 第三行 -->
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-5 control-label">国籍： </label>
+								<div class="col-xs-7">
+									<div class="col-xs-12">
+										<select id="country" class="input-xs form-control customer"
+											name="country">
+											<option selected="selected" value="1">中国</option>
+											<option value="2">美国</option>
+											<option value="3">英国</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-5 control-label">户籍： </label>
+								<div class="col-xs-7">
+									<div class="col-xs-12">
+										<input id="huji" class="form-control input-xs customer"
+											name="huji" type="text"
+											value="${(source.censusRegister)!''}">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-6 control-label">公积金余额： </label>
+								<div class="col-xs-5">
+									<div class="col-xs-12">
+										<input id="pubFundsBlance" class="form-control input-xs customer"
+											name="pubFundsBlance" type="text"
+											value="${(source.pubFundsBlance)!''}">
+									</div>
+								</div>
+								<div class="col-xs-1">
+									<label>元</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-6 control-label">公积金月缴额： </label>
+								<div class="col-xs-5">
+									<div class="col-xs-12">
+										<input id="pubFundsMonth" class="form-control input-xs customer"
+											name="pubFundsMonth" type="text"
+											value="${(source.pubFundsMonth)!''}">
+									</div>
+								</div>
+								<div class="col-xs-1 ">
+									<label>元</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 第四行 -->
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-6 control-label">购房经验： </label> 
+								<div class="col-xs-4">
+									<div class="col-xs-12">
+										<select id="buyExperience" class="input-xs form-control customer" name="buyExperience">
+											<option selected="selected" value="1">是</option>
+											<option value="2">否</option>
+										</select>
+									</div>
+								</div>
+<!-- 								<label class="col-xs-2 control-label"><input name="buyExperience" id="buyExperience" value="1" class="customer" type="radio" checked />是</label> 
+								<label class="col-xs-2 control-label"><input name="buyExperience" id="buyExperience" value="2" class="customer" type="radio" />否</label> -->
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-6 control-label">贷款记录： </label>
+								<div class="col-xs-4">
+									<div class="col-xs-12">
+										<select id="loanRecord" class="input-xs form-control customer" name="loanRecord">
+											<option selected="selected" value="1">是</option>
+											<option value="2">否</option>
+										</select>
+									</div>
+								</div>	
+<!-- 								<label class="col-xs-2 control-label"><input name="loanRecord" id="loanRecord" value="1" class="customer" type="radio" checked />是</label> 
+								<label class="col-xs-2 control-label"><input name="loanRecord" id="loanRecord" value="2" class="customer" type="radio" />否</label> -->
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-6 control-label">开收入证明： </label> <label
+									class="col-xs-2 control-label"><input name="kaiShou"
+									id="kaiShou" value="1" class="customer" type="radio" checked />是</label> <label
+									class="col-xs-2 control-label"><input name="kaiShou"
+									id="kaiShou" value="2" class="customer" type="radio" />否</label>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-6 control-label">看房经历： </label>
+								<label class="col-xs-2 control-label"><input name="cust_viewHome" id="cust_viewHome" value="1" class="customer" type="radio" checked />是</label>
+								<label class="col-xs-2 control-label"><input name="cust_viewHome" id="cust_viewHome" value="2" class="customer" type="radio" />否</label>
+							</div>
+						</div>
+						<!-- <div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-3 control-label">年龄： </label>
+								<div class="col-xs-3">
+									<div class="col-xs-12">
+										<input id="userAge" class="form-control input-xs"
+											name="userAge" type="text"
+											value="${(source.userAge)!''}">
+									</div>
+								</div>
+							</div>
+						</div> -->
+					</div>
+					<!-- 第五行 -->
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-xs form-group row">
+								<label class="col-xs-3 control-label">现住址： </label>
+								<div class="col-xs-9">
+									<div class="col-xs-12">
+										<input id="presentAddress" class="form-control input-xs customer" name="presentAddress"
+											type="text" value="${(source.presentAddress)!''}">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-xs form-group row">
+								<label class="col-xs-2 control-label">户籍地址： </label>
+								<div class="col-xs-10">
+									<div class="col-xs-12">
+										<input id="censusRegisterAddress" class="form-control input-xs customer" name="censusRegisterAddress"
+											type="text" value="${(source.censusRegisterAddress)!''}">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 第六行 -->
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-xs form-group row">
+								<label class="col-xs-3 control-label">工作单位： </label>
+								<div class="col-xs-9">
+									<div class="col-xs-12">
+										<input id="company" class="form-control input-xs customer" name="company"
+											type="text" value="${(source.company)!''}">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-xs form-group row">
+								<label class="col-xs-2 control-label">单位地址： </label>
+								<div class="col-xs-10">
+									<div class="col-xs-12">
+										<input id="companyAddress" class="form-control input-xs customer" name="companyAddress"
+											type="text" value="${(source.companyAddress)!''}">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="panel-heading" style="background-color: #A8C9F4;">
+	<h5 class="panel-title">
+		<a class="accordion-toggle">需求信息</a>
+	</h5>
+</div>
+<div class="panel-collapse">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-xs-12 my-group">
+				<div class="form-horizontal row my-inputs">
+					<!-- 所有第一行 -->
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-4 control-label">业务类型： </label>
+								<div class="col-xs-7">
+									<div class="col-xs-12">
+										<select id="demandType" class="input-xs form-control">
+											<option selected="selected" value="2">求租</option>
+											<option value="1">求购</option>
+											<option value="3">代办</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-4 control-label">物业类型： </label>
+								<div class="col-xs-7">
+									<div class="col-xs-12">
+										<select id="propertyType" class="input-xs form-control">
+											<option selected="selected" value="1">住宅</option>
+											<option value="2">商铺</option>
+											<option value="3">写字楼</option>
+											<option value="4">车位/车库</option>
+											<option value="5">金融代办</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<!-- <div class="form-xs form-group row">
+								<label class="col-xs-5 control-label">紧急度： </label>
+								<div class="col-xs-7">
+									<div class="col-xs-12">
+										<select id="demandUrgent" class="input-xs form-control">
+											<option selected="selected" value="1">1个月以内</option>
+											<option value="2">1~3个月</option>
+											<option value="3">3个月以上</option>
+										</select>
+									</div>
+								</div>
+							</div> --><!-- 已废 -->
+						</div>
+						<div class="col-md-3">
+							<div class="form-xs form-group row">
+								<label class="col-xs-6 control-label">看房经历： </label>
+								<label class="col-xs-2 control-label">
+								<input name="viewHome" id="viewHome" value="1" type="radio" checked />是</label>
+								<label class="col-xs-2 control-label">
+								<input name="viewHome" id="viewHome" value="2" type="radio" />否</label>
+							</div>
+						</div>
+					</div>
+<!-- Start of zuzhuzhai  Start of zuzhuzhai  Start of zuzhuzhai  Start of zuzhuzhai  Start of zuzhuzhai  Start of zuzhuzhai -->
+					<div id="zuzhuzhai">
+						<!-- zuzhuzhai第二行 -->
+						<div class="row" >
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">承受价位：</label>
+									<div class="col-xs-3">
+										<input class="input-xs form-control"
+											value="${(source.affordPrice)!''}" id="affordPrice"></input>
+									</div>
+									<div class="col-xs-3 ">
+										<label>元/月</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">建筑面积：</label>
+									<div class="col-xs-3">
+										<input class="input-xs form-control"
+											value="${(source.buildArea)!''}" id="buildArea"></input>
+									</div>
+									<div class="col-xs-1 ">
+										<label>㎡</label>
+									</div>
+								</div>
+							</div>	
+							<div class="col-xs-6 ">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-2 control-label">户型：</label>
+									<div class="col-xs-1">
+										<select id="rooms" class="input-xs form-control">
+											<option value=""></option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+										</select>
+									</div>
+									<div class="col-xs-1">
+										<label>室</label>
+									</div>
+									<div class="col-xs-1">
+										<select id="office" class="input-xs form-control">
+											<option value=""></option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+										</select>
+									</div>
+									<div class="col-xs-1">
+										<label>厅</label>
+									</div>
+									<div class="col-xs-1">
+										<select id="wc" class="input-xs form-control">
+											<option value=""></option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+										</select>
+									</div>
+									<div class="col-xs-1">
+										<label>卫</label>
+									</div>
+									<div class="col-xs-1">
+										<select id="balcony" class="input-xs form-control">
+											<option value=""></option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+										</select>
+									</div>
+									<div class="col-xs-1">
+										<label>厨</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zuzhuzhai第三行 -->
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-5 control-label">第一需求区域： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<input id="firstDemandRegion" class="form-control input-xs" type="text" >
+											<input id="firstDemandRegionId" type="hidden" >
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-xs form-group row blueTags">
+									<label class="col-xs-2 control-label">其它需求区域： </label>
+									<div class="col-xs-2">
+										<div class="col-xs-12">
+											<input id="otherDemandRegion" class="form-control input-xs" type="text" value="${(source.demandRegionIds)!''}">
+										</div>
+									</div>
+									<div class="col-xs-2">
+										<div>
+											<a id="demandRegionLink" style="color: blue;">添加区域</a>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-xs form-group row">
+											<div id="otherDemandRegionLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+												<#if otherDemandRegionList??>
+												<#list otherDemandRegionList as item>
+												<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+												<input type="hidden" id="otherDemandRegionId" value="${item.ID!}" />
+												</#list>
+												</#if>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zuzhuzhai第四行 -->
+						<div class="row">
+							<div class="form-xs form-group row blueTags">
+								<label class="col-xs-1 control-label">意向小区： </label>
+								<div class="col-xs-2">
+									<input id="demandPremises" class="form-control input-xs" type="text">
+								</div>
+								<div class="col-xs-1">
+									<div>
+										<a id="demandPremisesLink" style="color: blue;">添加小区</a>
+									</div>
+								</div>
+								<div class="col-md-7" >
+									<div class="form-xs form-group row">
+										<div id="demandPremisesLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+											<#if demandPremisesList??>
+											<#list demandPremisesList as item>
+											<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+											<input type="hidden" id="demandPremisesId" value="${item.ID!}" />
+											</#list>
+											</#if>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zuzhuzhai第五行 -->
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-4 control-label">入住时间： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<input id="checkInTime" class="5i5jdate form-control input-xs" type="text" value="${(source.checkInTime)!''}">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">租期： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-9">
+											<input id=rentTime class="form-control input-xs" type="text" value="${(source.rentTime)!''}">
+										</div>
+										<div class="col-xs-1 ">
+											<label>月</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">合租意向： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="joinRent" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">均可</option>
+												<option value="2">可合租</option>
+												<option value="3">不愿合租</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">付租方式： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="rentWay" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">季付</option>
+												<option value="2">月付</option>
+												<option value="3">年付</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zuzhuzhai第六行 -->
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">所需楼型：</label>
+									<div class="col-xs-10">
+										<div class="col-xs-2">
+											<label>
+												<input id="buildType" type="checkbox" class="ace" value="1">
+												<span class="lbl">高层</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="buildType" type="checkbox" class="ace" value="2">
+												<span class="lbl">多层</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="buildType" type="checkbox" class="ace" value="3">
+												<span class="lbl">平房</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="buildType" type="checkbox" class="ace" value="4">
+												<span class="lbl">别墅</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="buildType" type="checkbox" class="ace" value="5">
+												<span class="lbl">其它</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="buildType" type="checkbox" class="ace" value="6">
+												<span class="lbl">均可</span>
+											</label>							
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">押金： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="deposit" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">一个月</option>
+												<option value="2">三个月</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">中介费： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="serviceCharge" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">了解</option>
+												<option value="2">不了解</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>	
+						</div>
+						<!-- zuzhuzhai第七行 -->
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">家电：</label>
+									<div class="col-xs-10">
+										<div class="col-xs-2">
+											<label>
+												<input id="houseHold" name="houseHold" type="checkbox" class="ace" value="1">
+												<span class="lbl">电视</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="houseHold" name="houseHold" type="checkbox" class="ace" value="2">
+												<span class="lbl">冰箱</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="houseHold" name="houseHold" type="checkbox" class="ace" value="3">
+												<span class="lbl">电话</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="houseHold" name="houseHold" type="checkbox" class="ace" value="4">
+												<span class="lbl">空调</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="houseHold" name="houseHold" type="checkbox" class="ace" value="5">
+												<span class="lbl">洗衣机</span>
+											</label>							
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">家具：</label>
+									<div class="col-xs-9">
+										<div class="col-xs-2">
+											<label>
+												<input id="furniture" name="furniture" type="checkbox" class="ace" value="1">
+												<span class="lbl">床</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="furniture" name="furniture" type="checkbox" class="ace" value="2">
+												<span class="lbl">沙发</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="furniture" name="furniture" type="checkbox" class="ace" value="3">
+												<span class="lbl">桌子</span>
+											</label>							
+										</div>
+										<div class="col-xs-3">
+											<label>
+												<input id="furniture" name="furniture" type="checkbox" class="ace" value="4">
+												<span class="lbl">电视柜</span>
+											</label>							
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zuzhuzhai第八行 -->
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">方便看房时间：</label>
+									<div class="col-xs-10">
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="1">
+												<span class="lbl">下班后</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="2">
+												<span class="lbl">休息日</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="3">
+												<span class="lbl">随时</span>
+											</label>							
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">其它需求： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="otherDemand" class="input-xs form-control" >
+												<option selected="selected" value="">请选择</option>
+												<option value="1">开发票</option>
+												<option value="2">不开发票</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3" id="invoiceType">
+								<div class="form-xs form-group row">
+									<div class="col-xs-4">
+										<label>
+											<input id="invoiceType1" type="checkbox" class="ace" value="1">
+											<span class="lbl">佣金发票</span>
+										</label>							
+									</div>
+									<div class="col-xs-4">
+										<label>
+											<input id="invoiceType2" type="checkbox" class="ace" value="1">
+											<span class="lbl">房租发票</span>
+										</label>							
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zuzhuzhai第九行 -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户来源： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusFrom" class="input-xs form-control">
+											<#if parentSourceList?exists>
+												<#list parentSourceList as source>
+													<option value="${source.id!''}">${source.source!''}</option>
+												</#list>
+											</#if>
+											</select>
+										</div>
+										<div class="col-xs-5">
+											<select id="cusFrom1" class="input-xs form-control"
+												name="cusFrom">
+												<option selected="selected" value="1">5i5j网站</option>
+											</select>											
+											<select id="cusFrom2" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">我要屋热线(4008)</option>
+											</select>
+											<select id="cusFrom3" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">店面LED展板</option>
+												<option value="2">店面滚动条</option>
+												<option value="3">店面灯箱</option>
+												<option value="4">其它</option>
+											</select>											
+											<select id="cusFrom4" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">洗盘</option>
+											</select>
+											<select id="cusFrom5" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">老客户再委托</option>
+												<option value="2">老客户推荐</option>
+											</select>											
+											<select id="cusFrom6" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">社区活动</option>
+												<option value="2">社区驻守</option>
+												<option value="3">社区贴单</option>
+												<option value="4">社区海报</option>
+												<option value="5">切客</option>
+												<option value="6">其它</option>
+											</select>
+											<select id="cusFrom7" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">安居客</option>
+												<option value="2">新浪</option>
+												<option value="3">焦点</option>
+												<option value="4">58同城</option>
+												<option value="5">赶集</option>
+												<option value="6">其它</option>
+											</select>											
+											<select id="cusFrom8" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">官方微博</option>
+												<option value="2">官方微信</option>
+												<option value="3">个人微信</option>
+												<option value="4">个人微博</option>
+												<option value="5">找房吧APP</option>
+												<option value="6">其它APP</option>
+											</select>	
+											<select id="cusFrom9" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">企事业单位合作</option>
+												<option value="2">房展会</option>
+												<option value="3">外场讲座、活动</option>
+												<option value="4">朋友、同事介绍</option>
+												<option value="5">其它</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">发票抬头： </label>
+									<div class="col-xs-9">
+										<div class="col-xs-12">
+											<input id="invoiceHeader" class="form-control input-xs" type="text" value="${(source.invoiceHeader)!''}">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zuzhuzhai第十行 -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户评价： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusJudge" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<#if sysHouseKHPJList?exists>
+													<#list sysHouseKHPJList as source>
+														<option value="${source.sysCoustomerSort!''}">${source.sysCoustomerDescribe!''}</option>
+													</#list>
+												</#if>
+											</select>
+										</div>			
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zuzhuzhai第十一行 -->
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-xs form-group row">
+									<label class="col-xs-1 control-label">备注：</label>
+									<div class="col-xs-11">
+										<textarea id="remark" name="remark" rows="3" cols="166" maxlength="83" style="resize: none;" >${(source.remark)!''}</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+<!-- End of zuzhuzhai  End of zuzhuzhai  End of zuzhuzhai  End of zuzhuzhai  End of zuzhuzhai  End of zuzhuzhai -->
+<!-- Start of gouzhuzhai  Start of gouzhuzhai  Start of gouzhuzhai  Start of gouzhuzhai  Start of gouzhuzhai  Start of gouzhuzhai -->
+					<div id="gouzhuzhai" style="display:none;">
+						<!-- gouzhuzhai第二行 -->
+						<div class="row">
+							<div class="col-xs-2">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-6 control-label">承受价位：</label>
+									<div class="col-xs-4">
+										<input class="input-xs form-control" value="${(source.affordPrice)!''}" id="affordPrice"></input>
+									</div>
+									<div class="col-xs-2 ">
+										<label>万</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-2">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-5 control-label">建筑面积：</label>
+									<div class="col-xs-4">
+										<input class="input-xs form-control"
+											value="${(source.buildArea)!''}" id="buildArea"></input>
+									</div>
+									<div class="col-xs-1 ">
+										<label>㎡</label>
+									</div>
+								</div>
+							</div>	
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">房间数：</label>
+									<div class="col-xs-2">
+										<input id="roomAmountStart" class="form-control input-xs" type="text" value="${(source.roomAmountStart)!''}">
+									</div>
+									<div class="col-xs-1">
+										<label>-</label>
+									</div>					
+									<div class="col-xs-2">
+										<input id="roomAmountEnd" class="form-control input-xs" type="text" value="${(source.roomAmountEnd)!''}">
+									</div>
+								</div>
+							</div>							
+							<div class="col-xs-5 ">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-2 control-label">户型：</label>
+									<div class="col-xs-1">
+										<select id="rooms" class="input-xs form-control">
+											<option value=""></option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+										</select>
+									</div>
+									<div class="col-xs-1">
+										<label>室</label>
+									</div>
+									<div class="col-xs-1">
+										<select id="office" class="input-xs form-control">
+											<option value=""></option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+										</select>
+									</div>
+									<div class="col-xs-1">
+										<label>厅</label>
+									</div>
+									<div class="col-xs-1">
+										<select id="wc" class="input-xs form-control">
+											<option value=""></option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+										</select>
+									</div>
+									<div class="col-xs-1">
+										<label>卫</label>
+									</div>
+									<div class="col-xs-1">
+										<select id="balcony" class="input-xs form-control">
+											<option value=""></option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+										</select>
+									</div>
+									<div class="col-xs-1">
+										<label>厨</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- gouzhuzhai第三行 -->
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-5 control-label">第一需求区域： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<input id="firstDemandRegion" class="form-control input-xs" type="text" >
+											<input id="firstDemandRegionId" type="hidden" >
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-xs form-group row blueTags">
+									<label class="col-xs-2 control-label">其它需求区域： </label>
+									<div class="col-xs-2">
+										<div class="col-xs-12">
+											<input id="otherDemandRegion" class="form-control input-xs" type="text" value="${(source.demandRegionIds)!''}">
+										</div>
+									</div>
+									<div class="col-xs-2">
+										<div>
+											<a id="demandRegionLink" style="color: blue;">添加区域</a>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-xs form-group row">
+											<div id="otherDemandRegionLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+												<#if otherDemandRegionList??>
+												<#list otherDemandRegionList as item>
+												<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+												<input type="hidden" id="otherDemandRegionId" value="${item.ID!}" />
+												</#list>
+												</#if>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- gouzhuzhai第四行 -->
+						<div class="row">
+							<div class="form-xs form-group row blueTags">
+								<label class="col-xs-1 control-label">意向小区： </label>
+								<div class="col-xs-2">
+									<input id="demandPremises" class="form-control input-xs" type="text">
+								</div>
+								<div class="col-xs-1">
+									<div>
+										<a id="demandPremisesLink" style="color: blue;">添加小区</a>
+									</div>
+								</div>
+								<div class="col-md-8" >
+									<div class="form-xs form-group row">
+										<div id="demandPremisesLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+											<#if demandPremisesList??>
+											<#list demandPremisesList as item>
+											<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+											<input type="hidden" id="demandPremisesId" value="${item.ID!}" />
+											</#list>
+											</#if>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- gouzhuzhai第五行 -->
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-4 control-label">楼层要求： </label>
+									<div class="col-xs-3">
+										<input id="needFloorStart" class="form-control input-xs" type="text" value="${(source.needFloorStart)!''}">
+									</div>
+									<div class="col-xs-1">
+										<label>-</label>
+									</div>					
+									<div class="col-xs-3">
+										<input id="needFloorEnd" class="form-control input-xs" type="text" value="${(source.needFloorEnd)!''}">
+									</div>
+									<div class="col-xs-1">
+										<label>层</label>
+									</div>										
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">装修： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="decoration" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">均可</option>
+												<option value="2">毛坯</option>
+												<option value="3">精装</option>
+												<option value="4">简装</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- <div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">朝向： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="orientation" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">东</option>
+												<option value="2">南</option>
+												<option value="3">西</option>
+												<option value="3">北</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>	
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">房屋性质： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="houseProperty" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">已购公房</option>
+												<option value="2">商品房</option>
+												<option value="3">使用权房</option>
+												<option value="4">经济适用房</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div> -->
+						</div>
+						<!-- gouzhuzhai第六行 -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">购房资格： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-3">
+											<select id="buyQualification" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">本地</option>
+												<option value="2">外地</option>
+											</select>
+										</div>
+										<div class="col-xs-4">
+											<select id="buyQualification2" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">首套</option>
+												<option value="2">二套</option>
+												<option value="3">二套以上</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>	
+						<!-- gouzhuzhai第七行 -->
+						<div class="row">
+							<div class="form-xs form-group row">
+								<label class="col-xs-1 control-label">购房动机：</label>
+								<div class="col-xs-10">
+									<div class="col-xs-1">
+										<label>
+											<input id="buyMotivation" type="checkbox" class="ace" value="1">
+											<span class="lbl">拆迁</span>
+										</label>							
+									</div>
+									<div class="col-xs-1">
+										<label>
+											<input id="buyMotivation" type="checkbox" class="ace" value="2">
+											<span class="lbl">投资</span>
+										</label>							
+									</div>
+									<div class="col-xs-1">
+										<label>
+											<input id="buyMotivation" type="checkbox" class="ace" value="3">
+											<span class="lbl">自住</span>
+										</label>							
+									</div>
+									<div class="col-xs-1">
+										<label>
+											<input id="buyMotivation" type="checkbox" class="ace" value="4">
+											<span class="lbl">上学</span>
+										</label>							
+									</div>
+									<div class="col-xs-1">
+										<label>
+											<input id="buyMotivation" type="checkbox" class="ace" value="5">
+											<span class="lbl">上班</span>
+										</label>							
+									</div>
+									<div class="col-xs-1">
+										<label>
+											<input id="buyMotivation" type="checkbox" class="ace" value="6">
+											<span class="lbl">就医</span>
+										</label>							
+									</div>
+									<div class="col-xs-1">
+										<label>
+											<input id="buyMotivation" type="checkbox" class="ace" value="7">
+											<span class="lbl">改善</span>
+										</label>							
+									</div>
+									<div class="col-xs-1">
+										<label>
+											<input id="buyMotivation" type="checkbox" class="ace" value="8">
+											<span class="lbl">结婚</span>
+										</label>							
+									</div>
+									<div class="col-xs-1">
+										<label>
+											<input id="buyMotivation" type="checkbox" class="ace" value="9">
+											<span class="lbl">养老</span>
+										</label>							
+									</div>
+									<div class="col-xs-2">
+										<label>
+											<input id="buyMotivation" type="checkbox" class="ace" value="10">
+											<span class="lbl">照顾父母</span>
+										</label>							
+									</div>
+									<div class="col-xs-1">
+										<label>
+											<input id="buyMotivation" type="checkbox" class="ace" value="11">
+											<span class="lbl">其它</span>
+										</label>							
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- gouzhuzhai第八行 -->
+						<!-- <div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-5 control-label">看房经历： </label>
+									<div class="col-xs-4">
+										<select id="demandUrgent" class="input-xs form-control"
+											name="demandUrgent">
+											<option selected="selected" value="1">有</option>
+											<option value="2">无</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-5 control-label">购房紧迫度： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<select id="demandUrgent" class="input-xs form-control"
+												name="demandUrgent">
+												<option selected="selected" value="1">1个月以内</option>
+												<option value="2">2~3个月</option>
+												<option value="3">3个月以后</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div> -->
+						<!-- gouzhuzhai第九行 -->
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">所需楼型：</label>
+									<div class="col-xs-10">
+										<div class="col-xs-2">
+											<label>
+												<input id="buildType" type="checkbox" class="ace" value="1">
+												<span class="lbl">高层</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="buildType" type="checkbox" class="ace" value="2">
+												<span class="lbl">多层</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="buildType" type="checkbox" class="ace" value="3">
+												<span class="lbl">平房</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="buildType" type="checkbox" class="ace" value="4">
+												<span class="lbl">别墅</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="buildType" type="checkbox" class="ace" value="5">
+												<span class="lbl">其它</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="buildType" type="checkbox" class="ace" value="6">
+												<span class="lbl">均可</span>
+											</label>							
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- gouzhuzhai第十行 -->
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">方便看房时间：</label>
+									<div class="col-xs-10">
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="1">
+												<span class="lbl">下班后</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="2">
+												<span class="lbl">休息日</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="3">
+												<span class="lbl">随时</span>
+											</label>							
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">付款方式： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="payment" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">商业贷款</option>
+												<option value="2">公积金贷款</option>
+												<option value="3">公积金+商业贷款</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">首付： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-9">
+											<input id="firstPay" class="form-control input-xs"type="text" value="${(source.rentTime)!''}">
+										</div>
+										<div class="col-xs-1 ">
+											<label>万</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- gouzhuzhai第十一行 -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户来源： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusFrom" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">5i5j网站</option>
+												<option value="2">呼叫中心</option>
+												<option value="3">店面宣传</option>
+												<option value="4">ERP外拓</option>
+												<option value="5">老客户</option>
+												<option value="6">社区外拓</option>
+												<option value="7">外网端口</option>
+												<option value="8">移动平台</option>
+												<option value="9">其他</option>
+											</select>
+										</div>
+										<div class="col-xs-5">
+											<select id="cusFrom1" class="input-xs form-control"
+												name="cusFrom">
+												<option selected="selected" value="1">5i5j网站</option>
+											</select>											
+											<select id="cusFrom2" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">我要屋热线(4008)</option>
+											</select>
+											<select id="cusFrom3" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">店面LED展板</option>
+												<option value="2">店面滚动条</option>
+												<option value="3">店面灯箱</option>
+												<option value="4">其它</option>
+											</select>											
+											<select id="cusFrom4" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">洗盘</option>
+											</select>
+											<select id="cusFrom5" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">老客户再委托</option>
+												<option value="2">老客户推荐</option>
+											</select>											
+											<select id="cusFrom6" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">社区活动</option>
+												<option value="2">社区驻守</option>
+												<option value="3">社区贴单</option>
+												<option value="4">社区海报</option>
+												<option value="5">切客</option>
+												<option value="6">其它</option>
+											</select>
+											<select id="cusFrom7" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">安居客</option>
+												<option value="2">新浪</option>
+												<option value="3">焦点</option>
+												<option value="4">58同城</option>
+												<option value="5">赶集</option>
+												<option value="6">其它</option>
+											</select>											
+											<select id="cusFrom8" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">官方微博</option>
+												<option value="2">官方微信</option>
+												<option value="3">个人微信</option>
+												<option value="4">个人微博</option>
+												<option value="5">找房吧APP</option>
+												<option value="6">其它APP</option>
+											</select>	
+											<select id="cusFrom9" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">企事业单位合作</option>
+												<option value="2">房展会</option>
+												<option value="3">外场讲座、活动</option>
+												<option value="4">朋友、同事介绍</option>
+												<option value="5">其它</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户评价： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusJudge" class="input-xs form-control">
+												<option selected="selected" value="">暂不评价</option>
+												<#if sysHouseKHPJList?exists>
+													<#list sysHouseKHPJList as source>
+														<option value="${source.sysCoustomerSort!''}">${source.sysCoustomerDescribe!''}</option>
+													</#list>
+												</#if>
+											</select>
+										</div>			
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- gouzhuzhai第十二行 -->
+<!-- 						<div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">是否为卖旧买新业务： </label>
+									<label class="col-xs-2 control-label">
+									<input id="sellOldBuyNew" name="sellOldBuyNew" value="1" type="radio" checked />是</label>
+									<label class="col-xs-2 control-label">
+									<input id="sellOldBuyNew" name="sellOldBuyNew" value="2" type="radio" />否</label>
+								</div>
+							</div>
+						</div> -->
+						<!-- gouzhuzhai第十三行 -->
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-xs form-group row">
+									<label class="col-xs-1 control-label">备注：</label>
+									<div class="col-xs-11">
+										<textarea id="remark" name="remark" rows="3" cols="166" maxlength="83" style="resize: none;" >${(source.remark)!''}</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+<!-- End of gouzhuzhai  End of gouzhuzhai  End of gouzhuzhai  End of gouzhuzhai  End of gouzhuzhai  End of gouzhuzhai -->
+<!-- Start of zushangpu  Start of zushangpu  Start of zushangpu  Start of zushangpu  Start of zushangpu  Start of zushangpu -->
+					<div id="zushangpu" style="display:none;">
+						<!-- zushangpu第二行 -->
+						<div class="row">
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">承受价位：</label>
+									<div class="col-xs-3">
+										<input class="input-xs form-control"
+											value="${(source.affordPrice)!''}" id="affordPrice"></input>
+									</div>
+									<div class="col-xs-3 ">
+										<label>元/月</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">建筑面积：</label>
+									<div class="col-xs-3">
+										<input class="input-xs form-control"
+											value="${(source.buildArea)!''}" id="buildArea"></input>
+									</div>
+									<div class="col-xs-1 ">
+										<label>㎡</label>
+									</div>
+								</div>
+							</div>	
+							<div class="col-xs-6 ">
+								<div class="form-xs form-group row ">
+									<label for="" class="col-xs-2 control-label">门宽：</label>
+									<div class="col-xs-1">
+										<input id="doorWidthStart" class="form-control input-xs" type="text" value="${(source.doorWidthStart)!''}">
+									</div>
+									<div class="col-xs-1">
+										<label>-</label>
+									</div>					
+									<div class="col-xs-1">
+										<input id="doorWidthEnd" class="form-control input-xs" type="text" value="${(source.doorWidthEnd)!''}">
+									</div>
+									<div class="col-xs-1">
+										<label>m</label>
+									</div>	
+								</div>
+							</div>
+						</div>
+						<!-- zushangpu第三行 -->
+						<div class="row">
+							<div class="col-xs-5">
+								<div class="form-xs form-group row ">
+									<label for="" class="col-xs-2 control-label">房高：</label>
+										<div class="col-xs-2">
+										<input id="houseHeightStart" class="form-control input-xs" type="text" value="${(source.houseHeightStart)!''}">
+									</div>
+									<div class="col-xs-1">
+										<label>-</label>
+									</div>					
+									<div class="col-xs-2">
+										<input id="houseHeightEnd" class="form-control input-xs" type="text" value="${(source.houseHeightEnd)!''}">
+									</div>
+									<div class="col-xs-1">
+										<label>m</label>
+									</div>		
+								</div>
+							</div>
+							<div class="col-xs-5">
+								<div class="form-xs form-group row ">
+									<label for="" class="col-xs-3 control-label">物管费：</label>
+									<div class="col-xs-2">
+									<input id="propertyFeeStart" class="form-control input-xs" type="text" value="${(source.propertyFeeStart)!''}">
+									</div>
+									<div class="col-xs-1">
+										<label>-</label>
+									</div>					
+									<div class="col-xs-2">
+										<input id="propertyFeeEnd" class="form-control input-xs" type="text" value="${(source.propertyFeeEnd)!''}">
+									</div>
+									<div class="col-xs-3">
+										<label>元/㎡/月</label>
+									</div>		
+								</div>
+							</div>
+						</div>
+						<!-- zushangpu第四行 -->
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-5 control-label">第一需求区域： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<input id="firstDemandRegion" class="form-control input-xs" type="text" >
+											<input id="firstDemandRegionId" type="hidden" >
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-xs form-group row blueTags">
+									<label class="col-xs-2 control-label">其它需求区域： </label>
+									<div class="col-xs-2">
+										<div class="col-xs-12">
+											<input id="otherDemandRegion" class="form-control input-xs" type="text" value="${(source.demandRegionIds)!''}">
+										</div>
+									</div>
+									<div class="col-xs-2">
+										<div>
+											<a id="demandRegionLink" style="color: blue;">添加区域</a>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-xs form-group row">
+											<div id="otherDemandRegionLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+												<#if otherDemandRegionList??>
+												<#list otherDemandRegionList as item>
+												<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+												<input type="hidden" id="otherDemandRegionId" value="${item.ID!}" />
+												</#list>
+												</#if>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zushangpu第五行 -->
+						<div class="row">
+							<div class="form-xs form-group row blueTags">
+								<label class="col-xs-1 control-label">意向小区： </label>
+								<div class="col-xs-2">
+									<input id="demandPremises" class="form-control input-xs" type="text">
+								</div>
+								<div class="col-xs-1">
+									<div>
+										<a id="demandPremisesLink" style="color: blue;">添加小区</a>
+									</div>
+								</div>
+								<div class="col-md-8" >
+									<div class="form-xs form-group row">
+										<div id="demandPremisesLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+											<#if demandPremisesList??>
+											<#list demandPremisesList as item>
+											<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+											<input type="hidden" id="demandPremisesId" value="${item.ID!}" />
+											</#list>
+											</#if>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zushangpu第六行 -->
+						<div class="row">
+							<div class="col-xs-10">
+								<div class="form-xs form-group row">
+									<label class="col-xs-1 control-label">位置类型：</label>
+									<div class="col-xs-11">
+										<div class="col-xs-2">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="1">
+												<span class="lbl">商业街临街</span>
+											</label>							
+										</div>
+										<div class="col-xs-1">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="2">
+												<span class="lbl">市场</span>
+											</label>							
+										</div>
+										<div class="col-xs-1">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="3">
+												<span class="lbl">社区</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="4">
+												<span class="lbl">建筑底层</span>
+											</label>							
+										</div>
+										<div class="col-xs-1">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="5">
+												<span class="lbl">商城</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="6">
+												<span class="lbl">交通设施</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="7">
+												<span class="lbl">可做餐饮</span>
+											</label>							
+										</div>
+										<div class="col-xs-1">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="8">
+												<span class="lbl">可明火</span>
+											</label>							
+										</div>																				
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-2">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">装修状况： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="decoration" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">均可</option>
+												<option value="2">毛坯</option>
+												<option value="3">精装</option>
+												<option value="4">简装</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zushangpu第七行 -->
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">方便看房时间：</label>
+									<div class="col-xs-10">
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="1">
+												<span class="lbl">下班后</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="2">
+												<span class="lbl">休息日</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="3">
+												<span class="lbl">随时</span>
+											</label>							
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">其它需求： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="otherDemand" class="input-xs form-control" >
+												<option selected="selected" value="">请选择</option>
+												<option value="1">开发票</option>
+												<option value="2">不开发票</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3" id="invoiceType">
+								<div class="form-xs form-group row">
+									<div class="col-xs-4">
+										<label>
+											<input id="invoiceType1" type="checkbox" class="ace" value="1">
+											<span class="lbl">佣金发票</span>
+										</label>							
+									</div>
+									<div class="col-xs-4">
+										<label>
+											<input id="invoiceType2" type="checkbox" class="ace" value="1">
+											<span class="lbl">房租发票</span>
+										</label>							
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zushangpu第八行 -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户来源： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusFrom" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">5i5j网站</option>
+												<option value="2">呼叫中心</option>
+												<option value="3">店面宣传</option>
+												<option value="4">ERP外拓</option>
+												<option value="5">老客户</option>
+												<option value="6">社区外拓</option>
+												<option value="7">外网端口</option>
+												<option value="8">移动平台</option>
+												<option value="9">其他</option>
+											</select>
+										</div>
+										<div class="col-xs-5">
+											<select id="cusFrom1" class="input-xs form-control"
+												name="cusFrom">
+												<option selected="selected" value="1">5i5j网站</option>
+											</select>											
+											<select id="cusFrom2" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">我要屋热线(4008)</option>
+											</select>
+											<select id="cusFrom3" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">店面LED展板</option>
+												<option value="2">店面滚动条</option>
+												<option value="3">店面灯箱</option>
+												<option value="4">其它</option>
+											</select>											
+											<select id="cusFrom4" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">洗盘</option>
+											</select>
+											<select id="cusFrom5" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">老客户再委托</option>
+												<option value="2">老客户推荐</option>
+											</select>											
+											<select id="cusFrom6" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">社区活动</option>
+												<option value="2">社区驻守</option>
+												<option value="3">社区贴单</option>
+												<option value="4">社区海报</option>
+												<option value="5">切客</option>
+												<option value="6">其它</option>
+											</select>
+											<select id="cusFrom7" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">安居客</option>
+												<option value="2">新浪</option>
+												<option value="3">焦点</option>
+												<option value="4">58同城</option>
+												<option value="5">赶集</option>
+												<option value="6">其它</option>
+											</select>											
+											<select id="cusFrom8" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">官方微博</option>
+												<option value="2">官方微信</option>
+												<option value="3">个人微信</option>
+												<option value="4">个人微博</option>
+												<option value="5">找房吧APP</option>
+												<option value="6">其它APP</option>
+											</select>	
+											<select id="cusFrom9" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">企事业单位合作</option>
+												<option value="2">房展会</option>
+												<option value="3">外场讲座、活动</option>
+												<option value="4">朋友、同事介绍</option>
+												<option value="5">其它</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">发票抬头： </label>
+									<div class="col-xs-9">
+										<div class="col-xs-12">
+											<input id="invoiceHeader" class="form-control input-xs" type="text" value="${(source.invoiceHeader)!''}">
+										</div>
+									</div>
+								</div>
+							</div>							
+						</div>
+						<!-- zushangpu第九行 -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户评价： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusJudge" class="input-xs form-control">
+												<option selected="selected" value="">暂不评价</option>
+												<#if sysHouseKHPJList?exists>
+													<#list sysHouseKHPJList as source>
+														<option value="${source.sysCoustomerSort!''}">${source.sysCoustomerDescribe!''}</option>
+													</#list>
+												</#if>
+											</select>
+										</div>			
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zushangpu第十行 -->
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-xs form-group row">
+									<label class="col-xs-1 control-label">备注：</label>
+									<div class="col-xs-11">
+										<textarea id="remark" name="remark" rows="3" cols="166" maxlength="83" style="resize: none;" >${(source.remark)!''}</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+<!-- End of zushangpu  End of zushangpu  End of zushangpu  End of zushangpu  End of zushangpu  End of zushangpu -->
+<!-- Start of goushangpu  Start of goushangpu  Start of goushangpu  Start of goushangpu  Start of goushangpu  Start of goushangpu -->
+					<div id="goushangpu" style="display:none;">
+						<!-- goushangpu第二行 -->
+						<div class="row">
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">承受价位：</label>
+									<div class="col-xs-3">
+										<input class="input-xs form-control"
+											value="${(source.affordPrice)!''}" id="affordPrice"></input>
+									</div>
+									<div class="col-xs-3 ">
+										<label>元/月</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">建筑面积：</label>
+									<div class="col-xs-3">
+										<input class="input-xs form-control"
+											value="${(source.buildArea)!''}" id="buildArea"></input>
+									</div>
+									<div class="col-xs-1 ">
+										<label>㎡</label>
+									</div>
+								</div>
+							</div>	
+							<div class="col-xs-6 ">
+								<div class="form-xs form-group row ">
+									<label for="" class="col-xs-2 control-label">门宽：</label>
+									<div class="col-xs-1">
+										<input id="doorWidthStart" class="form-control input-xs" type="text" value="${(source.doorWidthStart)!''}">
+									</div>
+									<div class="col-xs-1">
+										<label>-</label>
+									</div>					
+									<div class="col-xs-1">
+										<input id="doorWidthEnd" class="form-control input-xs" type="text" value="${(source.doorWidthEnd)!''}">
+									</div>
+									<div class="col-xs-1">
+										<label>m</label>
+									</div>	
+								</div>
+							</div>
+						</div>
+						<!-- goushangpu第三行 -->
+						<div class="row">
+							<div class="col-xs-5">
+								<div class="form-xs form-group row ">
+									<label for="" class="col-xs-2 control-label">房高：</label>
+										<div class="col-xs-2">
+										<input id="houseHeightStart" class="form-control input-xs" type="text" value="${(source.houseHeightStart)!''}">
+									</div>
+									<div class="col-xs-1">
+										<label>-</label>
+									</div>					
+									<div class="col-xs-2">
+										<input id="houseHeightEnd" class="form-control input-xs" type="text" value="${(source.houseHeightEnd)!''}">
+									</div>
+									<div class="col-xs-1">
+										<label>m</label>
+									</div>		
+								</div>
+							</div>
+							<div class="col-xs-5">
+								<div class="form-xs form-group row ">
+									<label for="" class="col-xs-3 control-label">物管费：</label>
+									<div class="col-xs-2">
+									<input id="propertyFeeStart" class="form-control input-xs" type="text" value="${(source.propertyFeeStart)!''}">
+									</div>
+									<div class="col-xs-1">
+										<label>-</label>
+									</div>					
+									<div class="col-xs-2">
+										<input id="propertyFeeEnd" class="form-control input-xs" type="text" value="${(source.propertyFeeEnd)!''}">
+									</div>
+									<div class="col-xs-3">
+										<label>元/m/月</label>
+									</div>		
+								</div>
+							</div>
+						</div>
+						<!-- goushangpu第四行 -->
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-5 control-label">第一需求区域： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<input id="firstDemandRegion" class="form-control input-xs" type="text" >
+											<input id="firstDemandRegionId" type="hidden" >
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-xs form-group row blueTags">
+									<label class="col-xs-2 control-label">其它需求区域： </label>
+									<div class="col-xs-2">
+										<div class="col-xs-12">
+											<input id="otherDemandRegion" class="form-control input-xs" type="text" value="${(source.demandRegionIds)!''}">
+										</div>
+									</div>
+									<div class="col-xs-2">
+										<div>
+											<a id="demandRegionLink" style="color: blue;">添加区域</a>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-xs form-group row">
+											<div id="otherDemandRegionLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+												<#if otherDemandRegionList??>
+												<#list otherDemandRegionList as item>
+												<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+												<input type="hidden" id="otherDemandRegionId" value="${item.ID!}" />
+												</#list>
+												</#if>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- goushangpu第五行 -->
+						<div class="row">
+							<div class="form-xs form-group row blueTags">
+								<label class="col-xs-1 control-label">意向小区： </label>
+								<div class="col-xs-2">
+									<input id="demandPremises" class="form-control input-xs" type="text">
+								</div>
+								<div class="col-xs-1">
+									<div>
+										<a id="demandPremisesLink" style="color: blue;">添加小区</a>
+									</div>
+								</div>
+								<div class="col-md-8" >
+									<div class="form-xs form-group row">
+										<div id="demandPremisesLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+											<#if demandPremisesList??>
+											<#list demandPremisesList as item>
+											<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+											<input type="hidden" id="demandPremisesId" value="${item.ID!}" />
+											</#list>
+											</#if>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户来源： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusFrom" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">5i5j网站</option>
+												<option value="2">呼叫中心</option>
+												<option value="3">店面宣传</option>
+												<option value="4">ERP外拓</option>
+												<option value="5">老客户</option>
+												<option value="6">社区外拓</option>
+												<option value="7">外网端口</option>
+												<option value="8">移动平台</option>
+												<option value="9">其他</option>
+											</select>
+										</div>
+										<div class="col-xs-5">
+											<select id="cusFrom1" class="input-xs form-control"
+												name="cusFrom">
+												<option selected="selected" value="1">5i5j网站</option>
+											</select>											
+											<select id="cusFrom2" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">我要屋热线(4008)</option>
+											</select>
+											<select id="cusFrom3" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">店面LED展板</option>
+												<option value="2">店面滚动条</option>
+												<option value="3">店面灯箱</option>
+												<option value="4">其它</option>
+											</select>											
+											<select id="cusFrom4" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">洗盘</option>
+											</select>
+											<select id="cusFrom5" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">老客户再委托</option>
+												<option value="2">老客户推荐</option>
+											</select>											
+											<select id="cusFrom6" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">社区活动</option>
+												<option value="2">社区驻守</option>
+												<option value="3">社区贴单</option>
+												<option value="4">社区海报</option>
+												<option value="5">切客</option>
+												<option value="6">其它</option>
+											</select>
+											<select id="cusFrom7" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">安居客</option>
+												<option value="2">新浪</option>
+												<option value="3">焦点</option>
+												<option value="4">58同城</option>
+												<option value="5">赶集</option>
+												<option value="6">其它</option>
+											</select>											
+											<select id="cusFrom8" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">官方微博</option>
+												<option value="2">官方微信</option>
+												<option value="3">个人微信</option>
+												<option value="4">个人微博</option>
+												<option value="5">找房吧APP</option>
+												<option value="6">其它APP</option>
+											</select>	
+											<select id="cusFrom9" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">企事业单位合作</option>
+												<option value="2">房展会</option>
+												<option value="3">外场讲座、活动</option>
+												<option value="4">朋友、同事介绍</option>
+												<option value="5">其它</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>							
+						</div>	
+						<!-- goushangpu第六行 -->
+						<div class="row">
+							<div class="col-xs-10">
+								<div class="form-xs form-group row">
+									<label class="col-xs-1 control-label">位置类型：</label>
+									<div class="col-xs-11">
+										<div class="col-xs-2">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="1">
+												<span class="lbl">商业街临街</span>
+											</label>							
+										</div>
+										<div class="col-xs-1">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="2">
+												<span class="lbl">市场</span>
+											</label>							
+										</div>
+										<div class="col-xs-1">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="3">
+												<span class="lbl">社区</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="4">
+												<span class="lbl">建筑底层</span>
+											</label>							
+										</div>
+										<div class="col-xs-1">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="5">
+												<span class="lbl">商城</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="6">
+												<span class="lbl">交通设施</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="7">
+												<span class="lbl">可做餐饮</span>
+											</label>							
+										</div>
+										<div class="col-xs-1">
+											<label>
+												<input id="locationType" type="checkbox" class="ace" value="8">
+												<span class="lbl">可明火</span>
+											</label>							
+										</div>																				
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-2">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">装修状况： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="decoration" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">均可</option>
+												<option value="2">毛坯</option>
+												<option value="3">精装</option>
+												<option value="4">简装</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- goushangpu第七行 -->
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">方便看房时间：</label>
+									<div class="col-xs-10">
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="1">
+												<span class="lbl">下班后</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="2">
+												<span class="lbl">休息日</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="3">
+												<span class="lbl">随时</span>
+											</label>							
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">付款方式： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="payment" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">商业贷款</option>
+												<option value="2">公积金贷款</option>
+												<option value="3">公积金+商业贷款</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">首付： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-9">
+											<input id="firstPay" class="form-control input-xs"type="text" value="${(source.firstPay)!''}">
+										</div>
+										<div class="col-xs-1 ">
+											<label>万</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- goushangpu第八行 -->
+						<div class="row">
+<!-- 							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">是否为卖旧买新业务： </label>
+									<label class="col-xs-1 control-label">
+									<input id="sellOldBuyNew" name="sellOldBuyNew" value="1" type="radio" checked />是</label>
+									<label class="col-xs-2 control-label">
+									<input id="sellOldBuyNew" name="sellOldBuyNew" value="2" type="radio" />否</label>
+								</div>
+							</div> -->
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户评价： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusJudge" class="input-xs form-control">
+												<option selected="selected" value="">暂不评价</option>
+												<#if sysHouseKHPJList?exists>
+													<#list sysHouseKHPJList as source>
+														<option value="${source.sysCoustomerSort!''}">${source.sysCoustomerDescribe!''}</option>
+													</#list>
+												</#if>
+											</select>
+										</div>			
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- goushangpu第九行 -->
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-xs form-group row">
+									<label class="col-xs-1 control-label">备注：</label>
+									<div class="col-xs-11">
+										<textarea id="remark" name="remark" rows="3" cols="166" maxlength="83" style="resize: none;" >${(source.remark)!''}</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+<!-- End of goushangpu  End of goushangpu  End of goushangpu  End of goushangpu  End of goushangpu  End of goushangpu -->
+<!-- Start of zuzuxiezilou  Start of zuzuxiezilou  Start of zuzuxiezilou  Start of zuzuxiezilou  Start of zuzuxiezilou  Start of zuzuxiezilou -->
+					<div id="zuxiezilou" style="display:none;">
+						<!-- zuxiezilou第二行 -->
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-2 control-label">承受价位：</label>
+									<div class="col-xs-2">
+										<input class="input-xs form-control"
+											value="${(source.affordPrice)!''}" id="affordPrice"></input>
+									</div>
+									<div class="col-xs-2">
+										<select id="country" class="input-xs form-control"
+											name="country">
+											<option selected="selected" value="1">元/月</option>
+											<option value="2">元/平/天</option>
+										</select>
+										
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">建筑面积：</label>
+									<div class="col-xs-3">
+										<input class="input-xs form-control"
+											value="${(source.buildArea)!''}" id="buildArea"></input>
+									</div>
+									<div class="col-xs-1 ">
+										<label>㎡</label>
+									</div>
+								</div>
+							</div>	
+						</div>
+						<!-- zuxiezilou第三行 -->
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-5 control-label">第一需求区域： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<input id="firstDemandRegion" class="form-control input-xs" type="text" >
+											<input id="firstDemandRegionId" type="hidden" >
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-xs form-group row blueTags">
+									<label class="col-xs-2 control-label">其它需求区域： </label>
+									<div class="col-xs-2">
+										<div class="col-xs-12">
+											<input id="otherDemandRegion" class="form-control input-xs" type="text" value="${(source.demandRegionIds)!''}">
+										</div>
+									</div>
+									<div class="col-xs-2">
+										<div>
+											<a id="demandRegionLink" style="color: blue;">添加区域</a>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-xs form-group row">
+											<div id="otherDemandRegionLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+												<#if otherDemandRegionList??>
+												<#list otherDemandRegionList as item>
+												<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+												<input type="hidden" id="otherDemandRegionId" value="${item.ID!}" />
+												</#list>
+												</#if>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zuxiezilou第四行 -->
+						<div class="row">
+							<div class="form-xs form-group row blueTags">
+								<label class="col-xs-1 control-label">意向小区： </label>
+								<div class="col-xs-2">
+									<input id="demandPremises" class="form-control input-xs" type="text">
+								</div>
+								<div class="col-xs-1">
+									<div>
+										<a id="demandPremisesLink" style="color: blue;">添加小区</a>
+									</div>
+								</div>
+								<div class="col-md-8" >
+									<div class="form-xs form-group row">
+										<div id="demandPremisesLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+											<#if demandPremisesList??>
+											<#list demandPremisesList as item>
+											<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+											<input type="hidden" id="demandPremisesId" value="${item.ID!}" />
+											</#list>
+											</#if>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zuxiezilou第五行 -->
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">方便看房时间：</label>
+									<div class="col-xs-10">
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="1">
+												<span class="lbl">下班后</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="2">
+												<span class="lbl">休息日</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="3">
+												<span class="lbl">随时</span>
+											</label>							
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">其它需求： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="otherDemand" class="input-xs form-control" >
+												<option selected="selected" value="">请选择</option>
+												<option value="1">开发票</option>
+												<option value="2">不开发票</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3" id="invoiceType">
+								<div class="form-xs form-group row">
+									<div class="col-xs-4">
+										<label>
+											<input id="invoiceType1" type="checkbox" class="ace" value="1">
+											<span class="lbl">佣金发票</span>
+										</label>							
+									</div>
+									<div class="col-xs-4">
+										<label>
+											<input id="invoiceType2" type="checkbox" class="ace" value="1">
+											<span class="lbl">房租发票</span>
+										</label>							
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zuxiezilou第六行 -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户来源： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusFrom" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">5i5j网站</option>
+												<option value="2">呼叫中心</option>
+												<option value="3">店面宣传</option>
+												<option value="4">ERP外拓</option>
+												<option value="5">老客户</option>
+												<option value="6">社区外拓</option>
+												<option value="7">外网端口</option>
+												<option value="8">移动平台</option>
+												<option value="9">其他</option>
+											</select>
+										</div>
+										<div class="col-xs-5">
+											<select id="cusFrom1" class="input-xs form-control"
+												name="cusFrom">
+												<option selected="selected" value="1">5i5j网站</option>
+											</select>											
+											<select id="cusFrom2" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">我要屋热线(4008)</option>
+											</select>
+											<select id="cusFrom3" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">店面LED展板</option>
+												<option value="2">店面滚动条</option>
+												<option value="3">店面灯箱</option>
+												<option value="4">其它</option>
+											</select>											
+											<select id="cusFrom4" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">洗盘</option>
+											</select>
+											<select id="cusFrom5" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">老客户再委托</option>
+												<option value="2">老客户推荐</option>
+											</select>											
+											<select id="cusFrom6" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">社区活动</option>
+												<option value="2">社区驻守</option>
+												<option value="3">社区贴单</option>
+												<option value="4">社区海报</option>
+												<option value="5">切客</option>
+												<option value="6">其它</option>
+											</select>
+											<select id="cusFrom7" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">安居客</option>
+												<option value="2">新浪</option>
+												<option value="3">焦点</option>
+												<option value="4">58同城</option>
+												<option value="5">赶集</option>
+												<option value="6">其它</option>
+											</select>											
+											<select id="cusFrom8" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">官方微博</option>
+												<option value="2">官方微信</option>
+												<option value="3">个人微信</option>
+												<option value="4">个人微博</option>
+												<option value="5">找房吧APP</option>
+												<option value="6">其它APP</option>
+											</select>	
+											<select id="cusFrom9" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">企事业单位合作</option>
+												<option value="2">房展会</option>
+												<option value="3">外场讲座、活动</option>
+												<option value="4">朋友、同事介绍</option>
+												<option value="5">其它</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">发票抬头： </label>
+									<div class="col-xs-9">
+										<div class="col-xs-12">
+											<input id="invoiceHeader" class="form-control input-xs" type="text" value="${(source.invoiceHeader)!''}">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zuxiezilou第七行 -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户评价： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusJudge" class="input-xs form-control">
+												<option selected="selected" value="">暂不评价</option>
+												<#if sysHouseKHPJList?exists>
+													<#list sysHouseKHPJList as source>
+														<option value="${source.sysCoustomerSort!''}">${source.sysCoustomerDescribe!''}</option>
+													</#list>
+												</#if>
+											</select>
+										</div>			
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zuxiezilou第八行 -->
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-xs form-group row">
+									<label class="col-xs-1 control-label">备注：</label>
+									<div class="col-xs-11">
+										<textarea id="remark" name="remark" rows="3" cols="166" maxlength="83" style="resize: none;" >${(source.remark)!''}</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+<!-- End of zuxiezilou  End of zuxiezilou  End of zuxiezilou  End of zuxiezilou  End of zuxiezilou  End of zuxiezilou -->
+<!-- Start of gouxiezilou  Start of gouxiezilou  Start of gouxiezilou  Start of gouxiezilou  Start of gouxiezilou  Start of gouxiezilou -->
+					<div id="gouxiezilou" style="display:none;">
+						<!-- gouxiezilou第二行 -->
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-2 control-label">承受价位：</label>
+									<div class="col-xs-2">
+										<input class="input-xs form-control"
+											value="${(source.affordPrice)!''}" id="affordPrice"></input>
+									</div>
+									<div class="col-xs-2">万
+										<!-- <select id="affordPriceUnit" class="input-xs form-control">
+											<option selected="selected" value="1">元/月</option>
+											<option value="2">元/平/天</option>
+										</select> --><!-- 去掉了 -->
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">建筑面积：</label>
+									<div class="col-xs-3">
+										<input class="input-xs form-control"
+											value="${(source.buildArea)!''}" id="buildArea"></input>
+									</div>
+									<div class="col-xs-1 ">
+										<label>㎡</label>
+									</div>
+								</div>
+							</div>	
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">楼层要求： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<div class="col-xs-3">
+												<input id="needFloorStart" class="form-control input-xs" type="text" value="${(source.needFloorStart)!''}">
+											</div>
+											<div class="col-xs-1">
+												<label>-</label>
+											</div>					
+											<div class="col-xs-3">
+												<input id="needFloorEnd" class="form-control input-xs" type="text" value="${(source.needFloorEnd)!''}">
+											</div>
+											<div class="col-xs-1">
+												<label>层</label>
+											</div>		
+										</div>
+									</div>				
+								</div>
+							</div>							
+						</div>
+						<!-- gouxiezilou第三行 -->
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-5 control-label">第一需求区域： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<input id="firstDemandRegion" class="form-control input-xs" type="text" >
+											<input id="firstDemandRegionId" type="hidden" >
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-xs form-group row blueTags">
+									<label class="col-xs-2 control-label">其它需求区域： </label>
+									<div class="col-xs-2">
+										<div class="col-xs-12">
+											<input id="otherDemandRegion" class="form-control input-xs" type="text" value="${(source.demandRegionIds)!''}">
+										</div>
+									</div>
+									<div class="col-xs-2">
+										<div>
+											<a id="demandRegionLink" style="color: blue;">添加区域</a>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-xs form-group row">
+											<div id="otherDemandRegionLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+												<#if otherDemandRegionList??>
+												<#list otherDemandRegionList as item>
+												<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+												<input type="hidden" id="otherDemandRegionId" value="${item.ID!}" />
+												</#list>
+												</#if>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- gouxiezilou第四行 -->
+						<div class="row">
+							<div class="form-xs form-group row blueTags">
+								<label class="col-xs-1 control-label">意向小区： </label>
+								<div class="col-xs-2">
+									<input id="demandPremises" class="form-control input-xs" type="text">
+								</div>
+								<div class="col-xs-1">
+									<div>
+										<a id="demandPremisesLink" style="color: blue;">添加小区</a>
+									</div>
+								</div>
+								<div class="col-md-8" >
+									<div class="form-xs form-group row">
+										<div id="demandPremisesLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+											<#if demandPremisesList??>
+											<#list demandPremisesList as item>
+											<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+											<input type="hidden" id="demandPremisesId" value="${item.ID!}" />
+											</#list>
+											</#if>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- gouxiezilou第五行 -->
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">方便看房时间：</label>
+									<div class="col-xs-10">
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="1">
+												<span class="lbl">下班后</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="2">
+												<span class="lbl">休息日</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="3">
+												<span class="lbl">随时</span>
+											</label>							
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">其它需求： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="otherDemand" class="input-xs form-control" >
+												<option selected="selected" value="">请选择</option>
+												<option value="1">开发票</option>
+												<option value="2">不开发票</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3" id="invoiceType">
+								<div class="form-xs form-group row">
+									<div class="col-xs-4">
+										<label>
+											<input id="invoiceType1" type="checkbox" class="ace" value="1">
+											<span class="lbl">佣金发票</span>
+										</label>							
+									</div>
+									<div class="col-xs-4">
+										<label>
+											<input id="invoiceType2" type="checkbox" class="ace" value="1">
+											<span class="lbl">房租发票</span>
+										</label>							
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- gouxiezilou第六行 -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户来源： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusFrom" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">5i5j网站</option>
+												<option value="2">呼叫中心</option>
+												<option value="3">店面宣传</option>
+												<option value="4">ERP外拓</option>
+												<option value="5">老客户</option>
+												<option value="6">社区外拓</option>
+												<option value="7">外网端口</option>
+												<option value="8">移动平台</option>
+												<option value="9">其他</option>
+											</select>
+										</div>
+										<div class="col-xs-5">
+											<select id="cusFrom1" class="input-xs form-control"
+												name="cusFrom">
+												<option selected="selected" value="1">5i5j网站</option>
+											</select>											
+											<select id="cusFrom2" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">我要屋热线(4008)</option>
+											</select>
+											<select id="cusFrom3" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">店面LED展板</option>
+												<option value="2">店面滚动条</option>
+												<option value="3">店面灯箱</option>
+												<option value="4">其它</option>
+											</select>											
+											<select id="cusFrom4" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">洗盘</option>
+											</select>
+											<select id="cusFrom5" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">老客户再委托</option>
+												<option value="2">老客户推荐</option>
+											</select>											
+											<select id="cusFrom6" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">社区活动</option>
+												<option value="2">社区驻守</option>
+												<option value="3">社区贴单</option>
+												<option value="4">社区海报</option>
+												<option value="5">切客</option>
+												<option value="6">其它</option>
+											</select>
+											<select id="cusFrom7" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">安居客</option>
+												<option value="2">新浪</option>
+												<option value="3">焦点</option>
+												<option value="4">58同城</option>
+												<option value="5">赶集</option>
+												<option value="6">其它</option>
+											</select>											
+											<select id="cusFrom8" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">官方微博</option>
+												<option value="2">官方微信</option>
+												<option value="3">个人微信</option>
+												<option value="4">个人微博</option>
+												<option value="5">找房吧APP</option>
+												<option value="6">其它APP</option>
+											</select>	
+											<select id="cusFrom9" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">企事业单位合作</option>
+												<option value="2">房展会</option>
+												<option value="3">外场讲座、活动</option>
+												<option value="4">朋友、同事介绍</option>
+												<option value="5">其它</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户评价： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusJudge" class="input-xs form-control">
+												<option selected="selected" value="">暂不评价</option>
+												<#if sysHouseKHPJList?exists>
+													<#list sysHouseKHPJList as source>
+														<option value="${source.sysCoustomerSort!''}">${source.sysCoustomerDescribe!''}</option>
+													</#list>
+												</#if>
+											</select>
+										</div>			
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- gouxiezilou第七行 -->
+<!-- 						<div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">是否为卖旧买新业务： </label>
+									<label class="col-xs-2 control-label">
+									<input id="sellOldBuyNew" name="sellOldBuyNew" value="1" type="radio" checked />是</label>
+									<label class="col-xs-2 control-label">
+									<input id="sellOldBuyNew" name="sellOldBuyNew" value="2" type="radio" />否</label>
+								</div>
+							</div>
+						</div> -->
+						<!-- gouxiezilou第八行 -->
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-xs form-group row">
+									<label class="col-xs-1 control-label">备注：</label>
+									<div class="col-xs-11">
+										<textarea id="remark" name="remark" rows="3" cols="166" maxlength="83" style="resize: none;" >${(source.remark)!''}</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+<!-- End of zuxiezilou  End of zuxiezilou  End of zuxiezilou  End of zuxiezilou  End of zuxiezilou  End of zuxiezilou -->
+<!-- Start of zucheku  Start of zucheku  Start of zucheku  Start of zucheku  Start of zucheku  Start of zucheku -->
+					<div id="zucheku" style="display:none;">
+						<!-- zucheku第二行 -->
+						<div class="row">
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">承受价位：</label>
+									<div class="col-xs-3">
+										<input class="input-xs form-control"
+											value="${(source.affordPrice)!''}" id="affordPrice"></input>
+									</div>
+									<div class="col-xs-3 ">
+										<label>元/月</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-5 control-label">楼层： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<div class="col-xs-3">
+												<input id="needFloorStart" class="form-control input-xs" type="text" value="${(source.needFloorStart)!''}">
+											</div>
+											<div class="col-xs-1">
+												<label>-</label>
+											</div>					
+											<div class="col-xs-3">
+												<input id="needFloorEnd" class="form-control input-xs" type="text" value="${(source.needFloorEnd)!''}">
+											</div>
+											<div class="col-xs-1">
+												<label>层</label>
+											</div>		
+										</div>
+									</div>
+								</div>
+							</div>	
+						</div>
+						<!-- zucheku第三行 -->
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-5 control-label">第一需求区域： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<input id="firstDemandRegion" class="form-control input-xs" type="text" >
+											<input id="firstDemandRegionId" type="hidden" >
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-xs form-group row blueTags">
+									<label class="col-xs-2 control-label">其它需求区域： </label>
+									<div class="col-xs-2">
+										<div class="col-xs-12">
+											<input id="otherDemandRegion" class="form-control input-xs" type="text" value="${(source.demandRegionIds)!''}">
+										</div>
+									</div>
+									<div class="col-xs-2">
+										<div>
+											<a id="demandRegionLink" style="color: blue;">添加区域</a>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-xs form-group row">
+											<div id="otherDemandRegionLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+												<#if otherDemandRegionList??>
+												<#list otherDemandRegionList as item>
+												<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+												<input type="hidden" id="otherDemandRegionId" value="${item.ID!}" />
+												</#list>
+												</#if>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zucheku第四行 -->
+						<div class="row">
+							<div class="form-xs form-group row blueTags">
+								<label class="col-xs-1 control-label">意向小区： </label>
+								<div class="col-xs-2">
+									<input id="demandPremises" class="form-control input-xs" type="text">
+								</div>
+								<div class="col-xs-1">
+									<div>
+										<a id="demandPremisesLink" style="color: blue;">添加小区</a>
+									</div>
+								</div>
+								<div class="col-md-8" >
+									<div class="form-xs form-group row">
+										<div id="demandPremisesLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+											<#if demandPremisesList??>
+											<#list demandPremisesList as item>
+											<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+											<input type="hidden" id="demandPremisesId" value="${item.ID!}" />
+											</#list>
+											</#if>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zucheku第五行 -->
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">方便看房时间：</label>
+									<div class="col-xs-10">
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="1">
+												<span class="lbl">下班后</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="2">
+												<span class="lbl">休息日</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="3">
+												<span class="lbl">随时</span>
+											</label>							
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">其它需求： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="otherDemand" class="input-xs form-control" >
+												<option selected="selected" value="">请选择</option>
+												<option value="1">开发票</option>
+												<option value="2">不开发票</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3" id="invoiceType">
+								<div class="form-xs form-group row">
+									<div class="col-xs-4">
+										<label>
+											<input id="invoiceType1" type="checkbox" class="ace" value="1">
+											<span class="lbl">佣金发票</span>
+										</label>							
+									</div>
+									<div class="col-xs-4">
+										<label>
+											<input id="invoiceType2" type="checkbox" class="ace" value="1">
+											<span class="lbl">房租发票</span>
+										</label>							
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zucheku第六行 -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户来源： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusFrom" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">5i5j网站</option>
+												<option value="2">呼叫中心</option>
+												<option value="3">店面宣传</option>
+												<option value="4">ERP外拓</option>
+												<option value="5">老客户</option>
+												<option value="6">社区外拓</option>
+												<option value="7">外网端口</option>
+												<option value="8">移动平台</option>
+												<option value="9">其他</option>
+											</select>
+										</div>
+										<div class="col-xs-5">
+											<select id="cusFrom1" class="input-xs form-control"
+												name="cusFrom">
+												<option selected="selected" value="1">5i5j网站</option>
+											</select>											
+											<select id="cusFrom2" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">我要屋热线(4008)</option>
+											</select>
+											<select id="cusFrom3" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">店面LED展板</option>
+												<option value="2">店面滚动条</option>
+												<option value="3">店面灯箱</option>
+												<option value="4">其它</option>
+											</select>											
+											<select id="cusFrom4" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">洗盘</option>
+											</select>
+											<select id="cusFrom5" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">老客户再委托</option>
+												<option value="2">老客户推荐</option>
+											</select>											
+											<select id="cusFrom6" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">社区活动</option>
+												<option value="2">社区驻守</option>
+												<option value="3">社区贴单</option>
+												<option value="4">社区海报</option>
+												<option value="5">切客</option>
+												<option value="6">其它</option>
+											</select>
+											<select id="cusFrom7" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">安居客</option>
+												<option value="2">新浪</option>
+												<option value="3">焦点</option>
+												<option value="4">58同城</option>
+												<option value="5">赶集</option>
+												<option value="6">其它</option>
+											</select>											
+											<select id="cusFrom8" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">官方微博</option>
+												<option value="2">官方微信</option>
+												<option value="3">个人微信</option>
+												<option value="4">个人微博</option>
+												<option value="5">找房吧APP</option>
+												<option value="6">其它APP</option>
+											</select>	
+											<select id="cusFrom9" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">企事业单位合作</option>
+												<option value="2">房展会</option>
+												<option value="3">外场讲座、活动</option>
+												<option value="4">朋友、同事介绍</option>
+												<option value="5">其它</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">发票抬头： </label>
+									<div class="col-xs-9">
+										<div class="col-xs-12">
+											<input id="invoiceHeader" class="form-control input-xs" type="text" value="${(source.invoiceHeader)!''}">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zucheku第七行 -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户评价： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusJudge" class="input-xs form-control">
+												<option selected="selected" value="">暂不评价</option>
+												<#if sysHouseKHPJList?exists>
+													<#list sysHouseKHPJList as source>
+														<option value="${source.sysCoustomerSort!''}">${source.sysCoustomerDescribe!''}</option>
+													</#list>
+												</#if>
+											</select>
+										</div>			
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zucheku第八行 -->
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-xs form-group row">
+									<label class="col-xs-1 control-label">备注：</label>
+									<div class="col-xs-11">
+										<textarea id="remark" name="remark" rows="3" cols="166" maxlength="83" style="resize: none;" >${(source.remark)!''}</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+<!-- End of zucheku  End of zucheku  End of zucheku  End of zucheku  End of zucheku  End of zucheku -->
+<!-- Start of goucheku  Start of goucheku  Start of goucheku  Start of goucheku  Start of goucheku  Start of goucheku -->
+					<div id="goucheku" style="display:none;">
+						<!-- goucheku第二行 -->
+						<div class="row">
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">承受价位：</label>
+									<div class="col-xs-3">
+										<input class="input-xs form-control"
+											value="${(source.affordPrice)!''}" id="affordPrice"></input>
+									</div>
+									<div class="col-xs-3 ">
+										<label>元/月</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-5 control-label">楼层： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<div class="col-xs-3">
+												<input id="needFloorStart" class="form-control input-xs" type="text" value="${(source.needFloorStart)!''}">
+											</div>
+											<div class="col-xs-1">
+												<label>-</label>
+											</div>					
+											<div class="col-xs-3">
+												<input id="needFloorEnd" class="form-control input-xs" type="text" value="${(source.needFloorEnd)!''}">
+											</div>
+											<div class="col-xs-1">
+												<label>层</label>
+											</div>		
+										</div>
+									</div>
+								</div>
+							</div>	
+						</div>
+						<!-- goucheku第三行 -->
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-5 control-label">第一需求区域： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<input id="firstDemandRegion" class="form-control input-xs" type="text" >
+											<input id="firstDemandRegionId" type="hidden" >
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-xs form-group row blueTags">
+									<label class="col-xs-2 control-label">其它需求区域： </label>
+									<div class="col-xs-2">
+										<div class="col-xs-12">
+											<input id="otherDemandRegion" class="form-control input-xs" type="text" value="${(source.demandRegionIds)!''}">
+										</div>
+									</div>
+									<div class="col-xs-2">
+										<div>
+											<a id="demandRegionLink" style="color: blue;">添加区域</a>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-xs form-group row">
+											<div id="otherDemandRegionLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+												<#if otherDemandRegionList??>
+												<#list otherDemandRegionList as item>
+												<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+												<input type="hidden" id="otherDemandRegionId" value="${item.ID!}" />
+												</#list>
+												</#if>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- goucheku第四行 -->
+						<div class="row">
+							<div class="form-xs form-group row blueTags">
+								<label class="col-xs-1 control-label">意向小区： </label>
+								<div class="col-xs-2">
+									<input id="demandPremises" class="form-control input-xs" type="text">
+								</div>
+								<div class="col-xs-1">
+									<div>
+										<a id="demandPremisesLink" style="color: blue;">添加小区</a>
+									</div>
+								</div>
+								<div class="col-md-8" >
+									<div class="form-xs form-group row">
+										<div id="demandPremisesLabel" class="col-xs-12 tags" style="margin: 0; border: 0;">
+											<#if demandPremisesList??>
+											<#list demandPremisesList as item>
+											<span class=tag><button type="button" class="close" onclick="closeSpan(this)">×</button></span>
+											<input type="hidden" id="demandPremisesId" value="${item.ID!}" />
+											</#list>
+											</#if>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- goucheku第五行 -->
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">方便看房时间：</label>
+									<div class="col-xs-10">
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="1">
+												<span class="lbl">下班后</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="2">
+												<span class="lbl">休息日</span>
+											</label>							
+										</div>
+										<div class="col-xs-2">
+											<label>
+												<input id="takeLookTime" type="checkbox" class="ace" value="3">
+												<span class="lbl">随时</span>
+											</label>							
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">付款方式： </label>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<select id="payment" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">商业贷款</option>
+												<option value="2">公积金贷款</option>
+												<option value="3">公积金+商业贷款</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">首付： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-9">
+											<input id="firstPay" class="form-control input-xs"type="text" value="${(source.rentTime)!''}">
+										</div>
+										<div class="col-xs-1 ">
+											<label>万</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- goucheku第六行 -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户来源： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusFrom" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">5i5j网站</option>
+												<option value="2">呼叫中心</option>
+												<option value="3">店面宣传</option>
+												<option value="4">ERP外拓</option>
+												<option value="5">老客户</option>
+												<option value="6">社区外拓</option>
+												<option value="7">外网端口</option>
+												<option value="8">移动平台</option>
+												<option value="9">其他</option>
+											</select>
+										</div>
+										<div class="col-xs-5">
+											<select id="cusFrom1" class="input-xs form-control"
+												name="cusFrom">
+												<option selected="selected" value="1">5i5j网站</option>
+											</select>											
+											<select id="cusFrom2" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">我要屋热线(4008)</option>
+											</select>
+											<select id="cusFrom3" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">店面LED展板</option>
+												<option value="2">店面滚动条</option>
+												<option value="3">店面灯箱</option>
+												<option value="4">其它</option>
+											</select>											
+											<select id="cusFrom4" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">洗盘</option>
+											</select>
+											<select id="cusFrom5" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">老客户再委托</option>
+												<option value="2">老客户推荐</option>
+											</select>											
+											<select id="cusFrom6" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">社区活动</option>
+												<option value="2">社区驻守</option>
+												<option value="3">社区贴单</option>
+												<option value="4">社区海报</option>
+												<option value="5">切客</option>
+												<option value="6">其它</option>
+											</select>
+											<select id="cusFrom7" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">安居客</option>
+												<option value="2">新浪</option>
+												<option value="3">焦点</option>
+												<option value="4">58同城</option>
+												<option value="5">赶集</option>
+												<option value="6">其它</option>
+											</select>											
+											<select id="cusFrom8" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">官方微博</option>
+												<option value="2">官方微信</option>
+												<option value="3">个人微信</option>
+												<option value="4">个人微博</option>
+												<option value="5">找房吧APP</option>
+												<option value="6">其它APP</option>
+											</select>	
+											<select id="cusFrom9" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">企事业单位合作</option>
+												<option value="2">房展会</option>
+												<option value="3">外场讲座、活动</option>
+												<option value="4">朋友、同事介绍</option>
+												<option value="5">其它</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户评价： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusJudge" class="input-xs form-control">
+												<option selected="selected" value="">暂不评价</option>
+												<#if sysHouseKHPJList?exists>
+													<#list sysHouseKHPJList as source>
+														<option value="${source.sysCoustomerSort!''}">${source.sysCoustomerDescribe!''}</option>
+													</#list>
+												</#if>
+											</select>
+										</div>			
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- goucheku第七行 -->
+<!-- 						<div class="row">
+							<div class="col-md-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-6 control-label">是否为卖旧买新业务： </label>
+									<label class="col-xs-2 control-label">
+									<input id="sellOldBuyNew" name="sellOldBuyNew" value="1" type="radio" checked />是</label>
+									<label class="col-xs-2 control-label">
+									<input id="sellOldBuyNew" name="sellOldBuyNew" value="2" type="radio" />否</label>
+								</div>
+							</div>
+						</div> -->
+						<!-- goucheku第八行 -->
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-xs form-group row">
+									<label class="col-xs-1 control-label">备注：</label>
+									<div class="col-xs-11">
+										<textarea id="remark" name="remark" rows="3" cols="166" maxlength="83" style="resize: none;" >${(source.remark)!''}</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+<!-- End of goucheku  End of goucheku  End of goucheku  End of goucheku  End of goucheku  End of goucheku -->
+<!-- Start of jinrong  Start of jinrong  Start of jinrong  Start of jinrong  Start of jinrong  Start of jinrong -->
+					<div id="jinrong" style="display:none;">
+						<!-- jinrong第二行 -->
+						<div class="row">
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">贷款金额：</label>
+									<div class="col-xs-3">
+										<input class="input-xs form-control"
+											value="${(source.loanMoney)!''}" id="loanMoney"></input>
+									</div>
+									<div class="col-xs-3 ">
+										<label>万</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">贷款时长：</label>
+									<div class="col-xs-3">
+										<input class="input-xs form-control"
+											value="${(source.loanTerm)!''}" id="loanTerm"></input>
+									</div>
+									<div class="col-xs-3 ">
+										<label>年</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label class="col-xs-5 control-label">业务类型： </label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<select id="financeType" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">房屋抵押业务</option>
+												<option value="2">企业贷款业务</option>
+												<option value="3">金融垫资业务</option>
+												<option value="4">客户理财咨询</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>	
+						</div>
+						<!-- jinrong第三行 -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-xs form-group row">
+									<label class="col-xs-2 control-label">客户来源： </label>
+									<div class="col-xs-8">
+										<div class="col-xs-4">
+											<select id="cusFrom" class="input-xs form-control">
+												<option selected="selected" value="">请选择</option>
+												<option value="1">5i5j网站</option>
+												<option value="2">呼叫中心</option>
+												<option value="3">店面宣传</option>
+												<option value="4">ERP外拓</option>
+												<option value="5">老客户</option>
+												<option value="6">社区外拓</option>
+												<option value="7">外网端口</option>
+												<option value="8">移动平台</option>
+												<option value="9">其他</option>
+											</select>
+										</div>
+										<div class="col-xs-5">
+											<select id="cusFrom1" class="input-xs form-control"
+												name="cusFrom">
+												<option selected="selected" value="1">5i5j网站</option>
+											</select>											
+											<select id="cusFrom2" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">我要屋热线(4008)</option>
+											</select>
+											<select id="cusFrom3" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">店面LED展板</option>
+												<option value="2">店面滚动条</option>
+												<option value="3">店面灯箱</option>
+												<option value="4">其它</option>
+											</select>											
+											<select id="cusFrom4" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">洗盘</option>
+											</select>
+											<select id="cusFrom5" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">老客户再委托</option>
+												<option value="2">老客户推荐</option>
+											</select>											
+											<select id="cusFrom6" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">社区活动</option>
+												<option value="2">社区驻守</option>
+												<option value="3">社区贴单</option>
+												<option value="4">社区海报</option>
+												<option value="5">切客</option>
+												<option value="6">其它</option>
+											</select>
+											<select id="cusFrom7" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">安居客</option>
+												<option value="2">新浪</option>
+												<option value="3">焦点</option>
+												<option value="4">58同城</option>
+												<option value="5">赶集</option>
+												<option value="6">其它</option>
+											</select>											
+											<select id="cusFrom8" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">官方微博</option>
+												<option value="2">官方微信</option>
+												<option value="3">个人微信</option>
+												<option value="4">个人微博</option>
+												<option value="5">找房吧APP</option>
+												<option value="6">其它APP</option>
+											</select>	
+											<select id="cusFrom9" class="input-xs form-control"
+												name="cusFrom" style="display:none;">
+												<option selected="selected" value="1">企事业单位合作</option>
+												<option value="2">房展会</option>
+												<option value="3">外场讲座、活动</option>
+												<option value="4">朋友、同事介绍</option>
+												<option value="5">其它</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-3">
+								<div class="form-xs form-group row">
+									<label for="" class="col-xs-4 control-label">每期还款金额：</label>
+									<div class="col-xs-3">
+										<input class="input-xs form-control"
+											value="${(source.repayment)!''}" id="repayment"></input>
+									</div>
+									<div class="col-xs-3 ">
+										<label>元</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- jinrong第四行 -->
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-xs form-group row">
+									<label class="col-xs-1 control-label">备注：</label>
+									<div class="col-xs-11">
+										<textarea id="remark" name="remark" rows="3" cols="166" maxlength="83" style="resize: none;" >${(source.remark)!''}</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+<!-- End of jinrong  End of jinrong  End of jinrong  End of jinrong  End of jinrong  End of jinrong -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<input type="hidden" id="customerId" value="" /> 
+<input id="isStaff_Check"  type="hidden" value="${(customerModel.isStaff)!''}"/>
+<input id="userType_Radio"  type="hidden" value="${(customerModel.userType)!''}"/>
+<input id="sex_Radio"  type="hidden" value="${(customerModel.sex)!''}"/>
+<input id="buyExperience_Sel"  type="hidden" value="${(customerModel.buyExperience)!''}"/>
+<input id="loanRecord_Sel"  type="hidden" value="${(customerModel.loanRecord)!''}"/>
+<input id="kaiShou_Radio"  type="hidden" value="${(customerModel.kaiShou)!''}"/>
+<input id="cust_viewHome_Radio"  type="hidden" value="${(customerModel.viewHome)!''}"/>
+<input id="idType_Sel"  type="hidden" value="${(customerModel.idType)!''}"/>
+<input id="country_Sel"  type="hidden" value="${(customerModel.country)!''}"/>
+
+<script type="text/javascript">
+
+aihome.fillAddForm = function(){
+	//修改默认选中框
+	$(":radio[name='userType'][value='" + $("#userType_Radio").val() + "']").prop("checked", "checked");
+	$(":radio[name='sex'][value='" + $("#sex_Radio").val() + "']").prop("checked", "checked");
+	$(":radio[name='kaiShou'][value='" + $("#kaiShou_Radio").val() + "']").prop("checked", "checked");
+	$(":radio[name='cust_viewHome'][value='" + $("#cust_viewHome_Radio").val() + "']").prop("checked", "checked");
+	$("#buyExperience").val($("#buyExperience_Sel").val());
+	$("#loanRecord").val($("#loanRecord_Sel").val());
+	$("#idType").val($("#idType_Sel").val());
+	$("#country").val($("#country_Sel").val());
+	if($("#isStaff_Check").val()==1){
+		$(":checkbox[name='isStaff']").prop("checked", "");
+	}else if($("#isStaff_Check").val()==2){
+		$(":checkbox[name='isStaff']").prop("checked", "checked");
+	}
+}
+
+aihome.isStaff = $("#isStaff_Check").val();
+$("[id^='isStaff']").click(function() {
+	if($(this).prop("checked")) {
+		aihome.isStaff = 2;
+	}else{
+		aihome.isStaff = 1;
+	}
+});
+
+
+/* 业务类型change页面 */
+$("#addPage").find("#demandType").change(function() {
+	aihome.otherDemandRegionIdsStr = "";
+	aihome.otherDemandRegionNamesStr = "";
+	var demandType = $(this).val();
+	var propertyType = $("#addPage").find("#propertyType").val();
+	if(demandType == 2 && propertyType == 1) {//租住宅
+		$("#zuzhuzhai").show();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 2 && propertyType == 2) {//租商铺
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").show();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 2 && propertyType == 3) {//租写字楼
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").show();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 2 && propertyType == 4) {//租车库
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").show();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 1 && propertyType == 1) {//购住宅
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").show();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 1 && propertyType == 2) {//购商铺
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").show();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 1 && propertyType == 3) {//购写字楼
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").show();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 1 && propertyType == 4) {//购车库
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").show();
+		$("#jinrong").hide();
+	} else if(demandType == 3) {//金融
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").show();
+		$("#addPage").find("#propertyType").val(5);
+	} else if(demandType == 2 && propertyType == 5) {//金融跳出 默认跳住宅
+		$("#zuzhuzhai").show();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+		$("#addPage").find("#propertyType").val(1);
+	} else if(demandType == 1 && propertyType == 5) {//金融跳出 默认跳住宅
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").show();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+		$("#addPage").find("#propertyType").val(1);
+	}
+});
+/* 物业类型change页面 */
+$("#addPage").find("#propertyType").change(function() {
+	aihome.otherDemandRegionIdsStr = "";
+	aihome.otherDemandRegionNamesStr = "";
+	var demandType = $("#addPage").find("#demandType").val();
+	var propertyType = $(this).val();
+	if(demandType == 2 && propertyType == 1) {//租住宅
+		$("#zuzhuzhai").show();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 2 && propertyType == 2) {//租商铺
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").show();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 2 && propertyType == 3) {//租写字楼
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").show();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 2 && propertyType == 4) {//租车库
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").show();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 1 && propertyType == 1) {//购住宅
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").show();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 1 && propertyType == 2) {//购商铺
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").show();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 1 && propertyType == 3) {//购写字楼
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").show();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+	} else if(demandType == 1 && propertyType == 4) {//购车库
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").show();
+		$("#jinrong").hide();
+	}  else if(propertyType == 5) {//金融
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").show();
+		$("#addPage").find("#demandType").val(3)
+	} else if(demandType == 3 && propertyType == 1) {//金融跳出 默认跳租
+		$("#zuzhuzhai").show();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+		$("#addPage").find("#demandType").val(1);
+	} else if(demandType == 3 && propertyType == 2) {//金融跳出 默认跳住租
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").show();
+		$("#zuxiezilou").hide();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+		$("#addPage").find("#demandType").val(1);
+	} else if(demandType == 3 && propertyType == 3) {//金融跳出 默认跳住租
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").show();
+		$("#zucheku").hide();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+		$("#addPage").find("#demandType").val(1);
+	} else if(demandType == 3 && propertyType == 4) {//金融跳出 默认跳租
+		$("#zuzhuzhai").hide();
+		$("#zushangpu").hide();
+		$("#zuxiezilou").hide();
+		$("#zucheku").show();
+		$("#gouzhuzhai").hide();
+		$("#goushangpu").hide();
+		$("#gouxiezilou").hide();
+		$("#goucheku").hide();
+		$("#jinrong").hide();
+		$("#addPage").find("#demandType").val(1);
+	}
+});
+
+
+/* 客户来源change页面 */
+$("#zuzhuzhai").find("[id='cusFrom']").change(function() {
+	var cusFrom = $(this).val();
+	$("#zuzhuzhai").find("select[name='cusFrom']").hide();
+	$("#zuzhuzhai").find("#cusFrom"+cusFrom).show();
+});
+$("#zushangpu").find("[id='cusFrom']").change(function() {
+	var cusFrom = $(this).val();
+	$("#zushangpu").find("select[name='cusFrom']").hide();
+	$("#zushangpu").find("#cusFrom"+cusFrom).show();
+});
+$("#zuxiezilou").find("[id='cusFrom']").change(function() {
+	var cusFrom = $(this).val();
+	$("#zuxiezilou").find("select[name='cusFrom']").hide();
+	$("#zuxiezilou").find("#cusFrom"+cusFrom).show();
+});
+$("#zucheku").find("[id='cusFrom']").change(function() {
+	var cusFrom = $(this).val();
+	$("#zucheku").find("select[name='cusFrom']").hide();
+	$("#zucheku").find("#cusFrom"+cusFrom).show();
+});
+$("#gouzhuzhai").find("[id='cusFrom']").change(function() {
+	var cusFrom = $(this).val();
+	$("#gouzhuzhai").find("select[name='cusFrom']").hide();
+	$("#gouzhuzhai").find("#cusFrom"+cusFrom).show();
+});
+$("#goushangpu").find("[id='cusFrom']").change(function() {
+	var cusFrom = $(this).val();
+	$("#goushangpu").find("select[name='cusFrom']").hide();
+	$("#goushangpu").find("#cusFrom"+cusFrom).show();
+});
+$("#gouxiezilou").find("[id='cusFrom']").change(function() {
+	var cusFrom = $(this).val();
+	$("#gouxiezilou").find("select[name='cusFrom']").hide();
+	$("#gouxiezilou").find("#cusFrom"+cusFrom).show();
+});
+$("#goucheku").find("[id='cusFrom']").change(function() {
+	var cusFrom = $(this).val();
+	$("#goucheku").find("select[name='cusFrom']").hide();
+	$("#goucheku").find("#cusFrom"+cusFrom).show();
+});
+
+aihome.customerCheck = function(){
+	$.ajax({
+		type : "post",
+		url : "${CTX}/customerManage/customerCheck.do",
+		async :false,
+		dataType :'JSON',
+		data : {
+			"tell" : $("#tel").val()
+		},
+		success : function(data){
+			$("#customerId").val(data.id);
+			$("#customerName").val(data.userName);
+			$("#isStaff_Check").val(data.isStaff);
+			$("#userType_Radio").val(data.userType);
+			$("#spareTell").val(data.spareTell);
+			$("#sex_Radio").val(data.sex);
+			$("#idType_Sel").val(data.idType);
+			$("#identityCode").val(data.idCode);
+			$("#country_Sel").val(data.country);
+			$("#huji").val(data.censusRegister);
+			$("#pubFundsBlance").val(data.pubFundsBlance);
+			$("#pubFundsMonth").val(data.pubFundsMonth);
+			$("#userAge").val(data.userAge);
+			$("#buyExperience_Sel").val(data.buyExperience);
+			$("#loanRecord_Sel").val(data.loanRecord);
+			$("#kaiShou_Radio").val(data.kaiShou);
+			$("#cust_viewHome_Radio").val(data.viewHome);
+			$("#presentAddress").val(data.presentAddress);
+			$("#censusRegisterAddress").val(data.censusRegisterAddress);
+			$("#company").val(data.company);
+			$("#companyAddress").val(data.companyAddress);
+//			$("#remark").val(data.remark);
+			$(".customer").attr("disabled","disabled");
+			aihome.fillAddForm();
+		},
+		error:function(data){
+			$("#customerId").val("");
+			$("#customerName").val("");
+			$("#isStaff_Check").val("");
+			$("#userType_Radio").val("");
+			$("#spareTell").val("");
+			$("#sex_Radio").val("");
+			$("#idType_Sel").val("");
+			$("#identityCode").val("");
+			$("#country_Sel").val("");
+			$("#huji").val("");
+			$("#pubFundsBlance").val("");
+			$("#pubFundsMonth").val("");
+			$("#userAge").val("");
+			$("#buyExperience_Sel").val("");
+			$("#loanRecord_Sel").val("");
+			$("#kaiShou_Radio").val("");
+			$("#cust_viewHome_Radio").val("");
+			$("#presentAddress").val("");
+			$("#censusRegisterAddress").val("");
+			$("#company").val("");
+			$("#companyAddress").val("");
+//			$("#remark").val(data.remark);
+			$(".customer").removeAttr("disabled"); 
+			aihome.fillAddForm();
+			aihome.isStaff = 1;
+		}
+	 });
+}
+
+aihome.saveCustomer = function(){
+	if($("#customerId").val() != null && $("#customerId").val() != ""){
+		return $("#customerId").val();
+	}
+	var lastId = "";
+	$.ajax({
+		type : "post",
+		url : "${CTX}/customerManage/addCustomer.do",
+		async :false,
+		dataType :'json',
+		data : {
+			"id" : $("#customerId").val(),
+			"tell" : $("#tel").val(),
+			"userName" : $("#customerName").val(),
+			"isStaff" : aihome.isStaff, 
+			"userType" : $("[id^='userType']:checked").val(),
+			"spareTell" : $("#spareTell").val(),
+			"sex" : $("[id^='sex']:checked").val(),
+			"idType" : $("#idType").val(),
+			"idCode" : $("#identityCode").val(),
+			"country" : $("#country").val(),
+			"censusRegister" : $("#huji").val(),
+			"pubFundsBlance" : $("#pubFundsBlance").val(),
+			"pubFundsMonth" : $("#pubFundsMonth").val(),
+			"userAge" : $("#userAge").val(),
+			"buyExperience" : $("#buyExperience").val(),
+			"loanRecord" : $("#loanRecord").val(),
+			"kaiShou" : $("[id^='kaiShou']:checked").val(),
+			"viewHome" : $("[id^='viewHome']:checked").val(),
+			"presentAddress" : $("#presentAddress").val(),
+			"censusRegisterAddress" : $("#censusRegisterAddress").val(),
+			"company" : $("#company").val(),
+			"companyAddress" : $("#companyAddress").val(),
+			"remark" : $("#remark").val()
+			},
+		success : function(data){
+			if(data == 1) {
+				alert("保存成功");
+			}else {
+				alert("保存失败");
+			}
+		},
+	 });
+	$.ajax({
+		type : "post",
+		url : "${CTX}/customerManage/getLastInsertCustomerId.do",
+		async :false,
+		dataType :'json',
+		success : function(data){
+			lastId = data;
+		},
+	 });
+	return lastId;
+}
+
+aihome.saveCustomerSource = function(type){
+	var lastId = aihome.saveCustomer();
+	// 所需楼型
+	var buildType = $("#addPage").find("[id='buildType']:visible:checked");
+	var buildTypeStr = "";
+	for(var i = 0; i < buildType.length; i++) {
+	  buildTypeStr += buildType[i].value + ",";
+	}
+	buildTypeStr = buildTypeStr.substring(0,buildTypeStr.length-1);
+
+	// 家电
+	var houseHold = $("#addPage").find("[id='houseHold']:visible:checked");
+	var houseHoldStr = "";
+	for(var i = 0; i < houseHold.length; i++) {
+	  houseHoldStr += houseHold[i].value + ",";
+	}
+	houseHoldStr = houseHoldStr.substring(0,houseHoldStr.length-1);
+
+	// 家具
+	var furniture = $("#addPage").find("[id='furniture']:visible:checked");
+	var furnitureStr = "";
+	for(var i = 0; i < furniture.length; i++) {
+		furnitureStr += furniture[i].value + ",";
+	}
+	furnitureStr = furnitureStr.substring(0,furnitureStr.length-1);
+
+	// 方便看房时间
+	var takeLookTime = $("#addPage").find("[id='takeLookTime']:visible:checked");
+	var takeLookTimeStr = "";
+	for(var i = 0; i < takeLookTime.length; i++) {
+	  takeLookTimeStr += takeLookTime[i].value + ",";
+	}
+	takeLookTimeStr = takeLookTimeStr.substring(0,takeLookTimeStr.length-1);
+
+	// 购房动机
+	var buyMotivation = $("#addPage").find("[id='buyMotivation']:visible:checked");
+	var buyMotivationStr = "";
+	for(var i = 0; i < buyMotivation.length; i++) {
+	  buyMotivationStr += buyMotivation[i].value + ",";
+	}
+	buyMotivationStr = buyMotivationStr.substring(0,buyMotivationStr.length-1);
+
+	// 位置类型
+	var locationType = $("#addPage").find("[id='locationType']:visible:checked");
+	var locationTypeStr = "";
+	for(var i = 0; i < locationType.length; i++) {
+	  locationTypeStr += locationType[i].value + ",";
+	}
+	locationTypeStr = locationTypeStr.substring(0,locationTypeStr.length-1);
+
+	
+	var url = "${CTX}/customerSource/addCustomerSource.do";
+	if(type == 2) {//修改
+		url = "${CTX}/customerSource/updateCustomerSource.do?id="+$("#customerId").val();
+	}
+	var demandRegionIds="";
+	if(aihome.firstDemandRegionIdStr==""||aihome.otherDemandRegionIdsStr==""){
+		demandRegionIds = aihome.otherDemandRegionIdsStr + aihome.firstDemandRegionIdStr;
+	}else{
+		demandRegionIds = aihome.firstDemandRegionIdStr + "," + aihome.otherDemandRegionIdsStr;
+	}
+	var demandRegion="";
+	if(aihome.firstDemandRegionNameStr==""||aihome.otherDemandRegionNamesStr==""){
+		demandRegion = aihome.otherDemandRegionNamesStr + aihome.firstDemandRegionNameStr;
+	}else{
+		demandRegion = aihome.firstDemandRegionNameStr + "," + aihome.otherDemandRegionNamesStr;
+	}
+	$.ajax({
+		type : "post",
+		url : url,
+		async :false,
+		dataType :'json',
+		data : {
+			"customerId":lastId,
+			"demandType" : $("#addPage").find("[id='demandType']").val(),
+			"propertyType" : $("#addPage").find("[id='propertyType']").val(),
+			"demandUrgent" : $("#addPage").find("[id='demandUrgent']").val(),
+			"viewHome" : $("#addPage").find("[id='viewHome']:checked").val(),
+			
+			"affordPrice" : $("#addPage").find("[id='affordPrice']:visible").val(),
+			"buildArea" : $("#addPage").find("[id='buildArea']:visible").val(),
+			"rooms" : $("#addPage").find("[id='rooms']:visible").val(),
+			"office" : $("#addPage").find("[id='office']:visible").val(),
+			"wc" : $("#addPage").find("[id='wc']:visible").val(),
+			"balcony" : $("#addPage").find("[id='balcony']:visible").val(),
+			"demandRegionIds" : demandRegionIds,
+			"demandRegion" : demandRegion,
+			"demandPremisesIds" : aihome.demandPremisesIdsStr,
+			"demandPremises" : aihome.demandPremisesNamesStr,
+			"checkInTime" : $("#addPage").find("[id='checkInTime']:visible").val(),
+			"rentTime" : $("#addPage").find("[id='rentTime']:visible").val(),
+			"joinRent" : $("#addPage").find("[id='joinRent']:visible").val(),
+			"rentWay" : $("#addPage").find("[id='rentWay']:visible").val(),
+			"buildType" : buildTypeStr,//
+			"deposit" : $("#addPage").find("[id='deposit']:visible").val(),
+			"serviceCharge" : $("#addPage").find("[id='serviceCharge']:visible").val(),
+			"houseHold" : houseHoldStr,//
+			"furniture" : furnitureStr,//
+			"takeLookTime" : takeLookTimeStr,//
+			"otherDemand" : $("#addPage").find("[id='otherDemand']:visible").val(),
+			"invoiceType1" : $("#addPage").find("[id='invoiceType1']:visible:checked").val(),
+			"invoiceType2" : $("#addPage").find("[id='invoiceType2']:visible:checked").val(),
+			"cusFrom" : $("#addPage").find("[id='cusFrom']:visible").val(),
+			"cusFrom2" : $("#addPage").find("[name='cusFrom']:visible").val(),
+			"invoiceHeader" : $("#addPage").find("[id='invoiceHeader']:visible").val(),
+			"cusJudge" : $("#addPage").find("[id='cusJudge']:visible").val(),
+			"remark" : $("#addPage").find("[id='remark']:visible").val(),
+			
+			"roomAmountStart" : $("#addPage").find("[id='roomAmountStart']:visible").val(),
+			"roomAmountEnd" : $("#addPage").find("[id='roomAmountEnd']:visible").val(),
+			"needFloorStart" : $("#addPage").find("[id='needFloorStart']:visible").val(),
+			"needFloorEnd" : $("#addPage").find("[id='needFloorEnd']:visible").val(),
+			"decoration" : $("#addPage").find("[id='decoration']:visible").val(),
+			"orientation" : $("#addPage").find("[id='orientation']:visible").val(),
+			"houseProperty" : $("#addPage").find("[id='houseProperty']:visible").val(),
+			"buyQualification" : $("#addPage").find("[id='buyQualification']:visible").val(),
+			"buyQualification2" : $("#addPage").find("[id='buyQualification2']:visible").val(),
+			"buyMotivation" : buyMotivationStr,//
+			"payment" : $("#addPage").find("[id='payment']:visible").val(),
+			"firstPay" : $("#addPage").find("[id='firstPay']:visible").val(),
+			
+			"doorWidthStart" : $("#addPage").find("[id='doorWidthStart']:visible").val(),
+			"doorWidthEnd" : $("#addPage").find("[id='doorWidthEnd']:visible").val(),
+			"houseHeightStart" : $("#addPage").find("[id='houseHeightStart']:visible").val(),
+			"houseHeightEnd" : $("#addPage").find("[id='houseHeightEnd']:visible").val(),
+			"propertyFeeStart" : $("#addPage").find("[id='propertyFeeStart']:visible").val(),
+			"propertyFeeEnd" : $("#addPage").find("[id='propertyFeeEnd']:visible").val(),
+			"locationType" : locationTypeStr,//
+			/* "affordPriceUnit" : $("#addPage").find("[id='affordPriceUnit']:visible").val(), *//* 去掉了 */
+			"needFloor" : $("#addPage").find("[id='needFloor']:visible").val(),
+			"needFloorStart" : $("#addPage").find("[id='needFloorStart']:visible").val(),
+			"needFloorEnd" : $("#addPage").find("[id='needFloorEnd']:visible").val(),
+
+			"loanMoney" : $("#addPage").find("[id='loanMoney']:visible").val(),
+			"loanTerm" : $("#addPage").find("[id='loanTerm']:visible").val(),
+			"financeType" : $("#addPage").find("[id='financeType']:visible").val(),
+			"repayment" : $("#addPage").find("[id='repayment']:visible").val()
+			},
+		success : function(data){
+			if(data == 1) {
+				alert("保存成功");
+			}else {
+				alert("保存失败");
+			}
+		},
+	 });
+}
+
+//区域 Start
+aihome.firstDemandRegionIdStr = "";
+aihome.firstDemandRegionNameStr = "";
+aihome.otherDemandRegionIdsStr = "";
+aihome.otherDemandRegionNamesStr = "";
+aihome.otherDemandRegionId = "";
+aihome.otherDemandRegionName = "";
+$("[id='firstDemandRegion']").autocomplete({
+	source : function(request, response) {
+		$.ajax({
+			url:'${CTX}/customerSource/getBusiNameList.do',
+			dataType : "json",
+			type : 'post',
+			data : {
+				'busiAreaName' : request.term
+			},
+			success : function(data) {
+				var arr = new Array(data.length);
+				for (var i = 0; i < data.length; i++) {
+					var s = {
+						value : data[i].busiAreaName,
+						key : data[i].id
+					};
+					arr[i] = s;
+				}
+				response(arr); 
+			}
+	});
+	},
+	select : function(event, ui) {
+		aihome.firstDemandRegionIdStr = ui.item.key;
+		aihome.firstDemandRegionNameStr = ui.item.value;
+		$("[id='firstDemandRegion']").val(ui.item.value);
+		$("[id='firstDemandRegionId']").val(ui.item.key);
+		event.preventDefault();
+	}
+});
+$("[id='otherDemandRegion']").autocomplete({
+	source : function(request, response) {
+		$.ajax({
+			url:'${CTX}/customerSource/getBusiNameList.do',
+			dataType : "json",
+			type : 'post',
+			data : {
+				'busiAreaName' : request.term,
+				'noIds': aihome.otherDemandRegionIdsStr
+			},
+			success : function(data) {
+				var arr = new Array(data.length);
+				for (var i = 0; i < data.length; i++) {
+					var s = {
+						value : data[i].busiAreaName,
+						key : data[i].id
+					};
+					arr[i] = s;
+				}
+				response(arr); 
+			}
+	});
+	},
+	select : function(event, ui) {
+		aihome.otherDemandRegionId = ui.item.key;
+		aihome.otherDemandRegionName = ui.item.value;
+		$("[id='otherDemandRegion']").val(ui.item.value);
+		event.preventDefault();
+	}
+});
+
+
+$("[id='demandRegionLink']").click(function (){
+	if($("[id='otherDemandRegion']").val() == "") {
+		return;
+	}
+	$("[id='otherDemandRegion']").val("");
+	$("[id='otherDemandRegionLabel']:visible").append("<span class=\"tag\">" + aihome.otherDemandRegionName + 
+			 "<button type=\"button\" class=\"close\" onclick=\"closeSpan(this);\">×</button></span>" +
+			 "<input type=\"hidden\" id=\"otherDemandRegionIds\" value=\"" + aihome.otherDemandRegionId + "\" />"+
+			 "<input type=\"hidden\" id=\"otherDemandRegionNames\" value=\"" + aihome.otherDemandRegionName + "\" />");
+	aihome.countOtherDemandRegion();
+});
+// 区域 End
+/* 关闭SPAN按钮 */
+closeSpan = function(obj) {
+	var id = $(obj).parent().parent().attr("id");
+	var objs = $("[id^='" + $(obj).parent().next().attr("id") + "'][value='" + $(obj).parent().next().val() +"']");
+	objs.prev().remove();
+	objs.next().remove();
+	objs.remove();
+	if(id.indexOf("demandPremisesLabel") != -1) {
+		aihome.countDemandPremises();
+	} else if(id.indexOf("otherDemandRegionLabel") != -1) {
+		aihome.countOtherDemandRegion();
+	} 
+}
+
+aihome.countOtherDemandRegion = function() {
+	aihome.otherDemandRegionIdsStr = "";
+	var otherDemandRegionIds = $("#addPage").find("[id='otherDemandRegionLabel']:visible").find("[id='otherDemandRegionIds']");
+	for(var i = 0; i < otherDemandRegionIds.length; i++) {
+		aihome.otherDemandRegionIdsStr += otherDemandRegionIds[i].value + ",";
+	}
+	aihome.otherDemandRegionIdsStr = aihome.otherDemandRegionIdsStr.substring(0,aihome.otherDemandRegionIdsStr.length-1);
+	aihome.otherDemandRegionNamesStr = "";
+	var otherDemandRegionNames = $("#addPage").find("[id='otherDemandRegionLabel']:visible").find("[id='otherDemandRegionNames']");
+	for(var i = 0; i < otherDemandRegionNames.length; i++) {
+		aihome.otherDemandRegionNamesStr += otherDemandRegionNames[i].value + ",";
+	}
+	aihome.otherDemandRegionNamesStr = aihome.otherDemandRegionNamesStr.substring(0,aihome.otherDemandRegionNamesStr.length-1);
+}
+
+//小区 Start
+aihome.demandPremisesIdsStr = "";
+aihome.demandPremisesNamesStr = "";
+aihome.demandPremisesId = "";
+aihome.demandPremisesName = "";
+$("[id='demandPremises']").autocomplete({
+	source : function(request, response) {
+		$.ajax({
+			url:'${CTX}/customerSource/getPremisesListByMatch.do',
+			dataType : "json",
+			type : 'post',
+			data : {
+				'name' : request.term,
+				'noIds': aihome.demandPremisesIdsStr
+			},
+			success : function(data) {
+				var arr = new Array(data.length);
+				for (var i = 0; i < data.length; i++) {
+					var s = {
+						value : data[i].name,
+						key : data[i].id
+					};
+					arr[i] = s;
+				}
+				response(arr); 
+			}
+	});
+	},
+	select : function(event, ui) {
+		aihome.demandPremisesId = ui.item.key;
+		aihome.demandPremisesName = ui.item.value;
+		$("[id='demandPremises']").val(ui.item.value);
+		event.preventDefault();
+	}
+});
+
+
+$("[id='demandPremisesLink']").click(function (){
+	if($("[id='demandPremises']").val() == "") {
+		return;
+	}
+	$("[id='demandPremises']").val("");
+	$("[id='demandPremisesLabel']:visible").append("<span class=\"tag\">" + aihome.demandPremisesName + 
+			"<button type=\"button\" class=\"close\" onclick=\"closeSpan(this);\">×</button></span>" +
+			 "<input type=\"hidden\" id=\"demandPremisesIds\" value=\"" + aihome.demandPremisesId + "\" />"+
+			 "<input type=\"hidden\" id=\"demandPremisesNames\" value=\"" + aihome.demandPremisesName + "\" />");
+	aihome.countDemandPremises();
+});
+// 小区End
+
+aihome.countDemandPremises = function() {
+	aihome.demandPremisesIdsStr = "";
+	var demandPremisesIds = $("#addPage").find("[id='demandPremisesLabel']:visible").find("[id='demandPremisesIds']");
+	for(var i = 0; i < demandPremisesIds.length; i++) {
+		aihome.demandPremisesIdsStr += demandPremisesIds[i].value + ",";
+	}
+	aihome.demandPremisesIdsStr = aihome.demandPremisesIdsStr.substring(0,aihome.demandPremisesIdsStr.length-1);
+	aihome.demandPremisesNamesStr = "";
+	var demandPremisesNames = $("#addPage").find("[id='demandPremisesLabel']:visible").find("[id='demandPremisesNames']");
+	for(var i = 0; i < demandPremisesNames.length; i++) {
+		aihome.demandPremisesNamesStr += demandPremisesNames[i].value + ",";
+	}
+	aihome.demandPremisesNamesStr = aihome.demandPremisesNamesStr.substring(0,aihome.demandPremisesNamesStr.length-1);
+}
+/* 其它需求change */
+$("#addPage").find("[id='otherDemand']").change(function() {
+	var otherDemand = $("#addPage").find("[id='otherDemand']:visible").val();
+	if(otherDemand == 1){
+		$("#addPage").find("[id='invoiceType']").show();
+	}else if(otherDemand == 2){
+		$("#addPage").find("[id='invoiceType']:visible").hide();
+	}
+});
+$(function() {
+	aihome.fillAddForm();
+});
+</script>

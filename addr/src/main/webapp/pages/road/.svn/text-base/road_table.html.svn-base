@@ -1,0 +1,179 @@
+<div class="tableContent" >
+ 	<div class="row">
+ 		<div class=" col-md-3 col-sm-3 col-xs-3">
+	        <div class=" form-xs form-group row">
+	          <label for="addClass" class="col-md-4 col-sm-4 col-xs-4 control-label">道路名称</label>
+	          <div class="col-md-8 col-sm-8 col-xs-8">
+	          		<input type="hidden" id="road_Id" name="roadId" value ="" />
+	          		<input class="col-md-12 selectInput" maxlength="16" type="text" id="road_input" placeholder="道路名称" value="">
+		      </div>
+	        </div>
+	    </div>
+	    <div class="col-xs-12 roadChange">
+		    <table id="road_jqGrid">
+				
+			</table>
+		<div id="jqGridPager"></div>
+    </div>
+  </div> 
+</div>  
+<input type=hidden id="tableType2" value="${type!}" ></input>
+<input type=hidden id="scatterType" value="" ></input>      
+<script type="text/javascript">
+$(window).on("resize.roadChange", function () {
+	$(".roadChange .ui-jqgrid-bdiv").jqGrid("setGridHeight", $(".page-content").height() - 255);
+	$(".roadChange .ui-jqgrid-btable").jqGrid("setGridWidth", $(".page-content").width() - 28);
+});
+$(function (){
+	 init_jqGrid();
+	 
+	 /* 查询 */
+	 $("#road_query").unbind().click(function(){
+		var url="${CTX}/road/roadListForPage.do?id="+$("#road_Id").val();
+		$("#road_jqGrid").setGridParam({url:url,page:1}).trigger('reloadGrid');
+	 });
+	 
+	 if($("#tableType2").val()==2){
+		 $("#top_tools").children().first().siblings().show();
+	 };
+});
+
+$("#road_input").blur(function(){
+	if($("#road_input").val()==""){
+		$("#road_Id").val("");
+	}
+});
+
+$("#road_input").autocomplete({
+	source : function(request, response) {
+		$.ajax({
+			url : "${CTX}/road/getRoadListByMatch.do",
+			dataType : "json",
+			type : 'post',
+			data : {
+				matchStr : request.term
+			},
+			success : function(data) {
+				var array = new Array(data.length);
+				for (var i = 0; i < data.length; i++) {
+					var temp = {
+						key : data[i].id,
+						value : data[i].roadName
+					};
+					array[i] = temp;
+				}
+				response(array);
+			}
+		});
+	},
+	select : function(event, ui) {
+		$("#road_Id").val(ui.item.key);
+		$("#road_input").val(ui.item.value);
+		event.preventDefault();
+	}
+}); 
+
+function init_jqGrid(){
+	$("#road_jqGrid").jqGrid({
+		 url: '${CTX}/road/roadListForPage.do', 
+         datatype: "json",
+         colModel: [
+			 { label: 'id', name: 'id',index:'id',hidden:true},
+             { label: '道路名称', name: 'roadName',index:'name',sortable : true,width: 30 }
+         ],
+         multiselect: true,
+         multiboxonly: true,
+         
+         onSelectRow: function (rowId, status, e) {
+         	 rowDataNames = [];
+             var rowIds = $("#road_jqGrid").jqGrid('getGridParam', 'selarrrow');
+             var selCount=rowIds.length;
+             if(selCount==1){
+           		var url = "${CTX}/road/getRoadNumLogCount.do";
+       			$.ajax({
+       				url : url,
+       				dataType : "json",
+       				data : {
+       					roadId : rowIds
+       				},
+       				success : function(data) {
+       					if(data==2){
+       						$("#scatterType").val("1");//日志中存在使用中号段，点击重新撒号关闭窗口给出提示
+       					}else{
+       						$("#scatterType").val("2");//没有使用中的号段。点击重新撒号后，让其点击撒号。
+       					}
+       				}
+       			});
+             }
+             $(rowIds).each(function(i,rowId){
+                 rowDataNames.push($("#road_jqGrid").jqGrid('getRowData',rowId));
+             });
+         },
+         viewrecords: true, 
+         autowidth:true,
+         height: $(window).height()-300,
+         rowNum:30, 
+	     rowList:[10,20,30,50,100],
+         pager: "#jqGridPager",
+     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+    });
+}
+/* 撒号 */
+function scatterRoadNum (Type){ //1撒号 2重新撒号
+	var rowIds = $("#road_jqGrid").jqGrid('getGridParam','selarrrow');//获取选中行的ID 是拼接的字符串
+	var selCount=rowIds.length;
+	if (selCount==0){
+		alert("请先选择一条道路!");
+		return;
+	}
+	if (selCount>1){
+		alert("撒号或重新撒号时只能选中一条道路进行操作!");
+		return;
+	}
+	var result = false;
+	if($("#scatterType").val()==2){ //没有使用中的号段。
+		if(Type==2){
+			alert("该道路暂不存在有效道路号，请点击撒号按钮进行道路撒号!");
+		}
+	}else{  //有使用中的号段
+		if(Type==2){
+			var confirmResult = confirm("重新撒号必须删除之前生成的所有道路号，请慎重！");
+			  if (confirmResult==true){
+				  result = true;
+			    }else{
+				  result = false;
+			    }
+		}
+	}
+	if(Type==1){
+		result = true;
+	}
+	if(!result){
+		return result;
+	}
+	oaDialogOpen("addRoadNum",//对话框ID，必填，且不能与当前页面的ID重复
+		{url:"${CTX}/road/roadNumIndex.do?id="+rowIds,
+		title:"道路撒号管理",//弹框的title
+		closeOnEscpe:true,//是否通过escpe关闭弹框
+		closeBtn:true,//是否显示关闭按钮
+		width:500,//弹框的宽度
+		height:400,
+		buttons:{
+		 "确定" : function() {
+			 if(addRoadNum(Type)){
+   			  $(this).dialog("close");
+   		  }
+		 },
+		    "取消" : function() {
+		       	$(this).dialog("close");
+		    }
+		},
+		openCall:function(){
+		},//弹框打开后的回调函数
+		closeCall:function(){
+		 $("#area_jqGrid").trigger("reloadGrid");
+		}//弹框关闭后的回调函数
+	})
+};
+
+</script> 

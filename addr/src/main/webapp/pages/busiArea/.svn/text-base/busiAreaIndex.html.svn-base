@@ -1,0 +1,456 @@
+<div id="top_tools" class=" btn-group">
+  <button id="busi_query" class="btn btn-sm btn-white  confirmBtn" id="confirm">
+    <i class="iconfont">&#xe6e4;</i>
+    <span>查询</span>
+  </button>
+
+  <button id="busi_add" class="btn btn-sm btn-white ladda-button" >
+    <i class="iconfont">&#xe6e0;</i>
+    <span>新增</span>
+  </button>
+
+ <button id="busi_edit" class="btn btn-sm btn-white btn-default">
+    <i class="iconfont">&#xe6dd;</i>
+    <span>修改</span>
+  </button>
+  
+  <button id="busi_del" class="btn btn-sm btn-white btn-info">
+    <i class="iconfont">&#xe6e3;</i>
+    <span>删除</span>
+  </button>
+
+</div>
+<div class="row">
+<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+ <div id="element_id">
+		<div class="form-horizontal row my-inputs">
+		<!-- 省事下拉	 -->
+		<div class="col-md-3 col-sm-3 col-xs-3" style="display: none;">
+				<div class=" form-xs form-group row">
+					<label for="userName" class="col-md-4 col-sm-4 col-xs-4 control-label">省份：</label>
+					<div class="col-md-8 col-sm-8 col-xs-8">
+						<select id="province" class="province input-xs " data-value="浙江省">
+							<option value="">请选择省</option>
+							<#list provinceList as item>
+								<option value="${item.id!}">${item.name!}</option>
+								
+							</#list>
+						</select>
+					</div>
+				</div>
+           	</div>
+          <!--  	 市下拉 -->
+		<div class="col-md-2 col-sm-6" style="display:none ;">
+				<div class=" form-xs form-group row">
+					<label for="roleName" class="col-xs-4 control-label">市：</label>
+					<div class="col-xs-8">
+						<select id="city" class="city input-xs ">
+						<option value="">请选择市</option>
+						</select>
+					</div>
+				</div>
+           	</div>
+			
+           	<div class=" col-md-3 col-sm-3 col-xs-3">
+                <div class=" form-xs form-group row">
+                    	<label for="powerName" class="col-md-4 col-sm-4 col-xs-4 control-label">商圈名称：</label>
+                    <div class="col-md-8 col-sm-8 col-xs-8">
+                    	<input class="selectInput" type="text" id="userId_input"  type="email"  placeholder="请输入商圈名称">
+						<input type="hidden"  name="busiAreaId" id=busiAreaId value ="" class="form-control input-xs searchKey" />	
+                    </div>
+                </div>
+            </div>
+            <!--  区下拉   -->
+         <div class="col-md-3 col-sm-3 col-xs-3">
+				<div class=" form-xs form-group row">
+					<label for="roleName" class="col-md-4 col-sm-4 col-xs-4 control-label">关联行政区域：</label>
+					<div class="col-md-8 col-sm-8 col-xs-8">
+						<select id="area" class="city input-xs form-control">
+						<option value="">请选择关联行政区域</option>
+						</select>
+					</div>
+				</div>
+           	</div>
+            
+           	<div class="col-md-4 col-sm-4 col-xs-4">
+				<div class=" form-xs form-group row">
+					<label for="roleName" class="col-md-4 col-sm-4 col-xs-4 control-label">大商圈/小商圈：</label>
+					<div class="col-md-8 col-sm-8 col-xs-8">
+						<select id="type" class="city input-xs form-control" data-value="大商圈/小商圈">
+							<option value="">请选择</option>
+							<option value="busiZoning">大商圈</option>
+							<option value="busiarea">小商圈</option>
+						</select>
+					</div>
+				</div>
+           	</div>
+               <input type="hidden" name="areaId" id="areaId" value="" class="form-control searchKey"/>
+               <input type="hidden" name="genre" id="genre" value="" class="form-control searchKey"/>
+               <input type="hidden" name="lng" id="lng" value="" />
+               <input type="hidden" name="lat" id="lat" value="" />
+		</div>
+	</div>
+	
+</div>
+
+			<div class="col-xs-12 my-grid " >
+				<!-- PAGE CONTENT BEGINS -->
+				<table id="jqGrid">
+				
+				</table>
+				<div id="jqGridPager"></div>
+				<!-- PAGE CONTENT ENDS -->
+			</div>
+</div>
+<script type="text/javascript">
+$('.page-content-area').ace_ajax('loadScripts', [null,null], function () {});
+/* 区下拉给input赋值，并获取数据 */
+
+$(function (){
+	$("#userId_input").blur(function(){
+		  if($(this).val()==""){
+			  $("#busiAreaId").val("");
+		  };
+	});
+	
+	$("#userId_input").autocomplete({
+		source : function(request, response) {
+			$.ajax({
+				url:'${CTX}/busiArea/getBusiNameList.do',
+				dataType : "json",
+				type : 'post',
+				data : {
+					'busiAreaName' : request.term
+				},
+				success : function(data) {
+					var arr = new Array(data.length);
+					for (var i = 0; i < data.length; i++) {
+						var s = {
+							label : data[i].busiAreaName,
+							value : data[i].id
+						};
+						arr[i] = s;
+					}
+					response(arr); 
+				}
+		});
+		},
+		select : function(event, ui) {
+			
+			$("#userId_input").val(ui.item.label);
+			$("#busiAreaId").val(ui.item.value);
+			event.preventDefault();
+		}
+	});
+	
+	$("#area").change(function (){
+		var areaId = $(this).val();
+		$("#areaId").val(areaId);
+    });
+	//设置类型搜索条件
+	$("#type").change(function (){
+		var type = $(this).val();
+		$("#genre").val(type);
+    });
+	//条件查询
+	 $("#busi_query").click(function(){
+		 var param = getSearchParam();
+		 var url = "${CTX}/busiArea/getBusiAreaQCPage.do?"+param;
+		 jQuery("#jqGrid").setGridParam({datatype:'json',url:url,page:1}).trigger("reloadGrid");
+	});
+	 /* 修改 */
+	 $("#busi_edit").click(function(){
+	 	  var rowId=jQuery("#jqGrid").jqGrid('getGridParam', 'selarrrow');
+	 	  if(rowId==''){
+	 		 alert("没有选中的记录！");
+	 		 return false;
+	 	  }
+	 	  if(rowId.length>1){
+	 		 alert("请选择一条数据！");
+	 		return false;
+	 	  }
+	       var rowData = $("#jqGrid").jqGrid('getRowData',rowId);
+	       var busiAreaId =rowData.id;
+	       var isFlag = "update";
+		   OpenDialogOa(busiAreaId,isFlag);
+	 });
+		
+	 /* 添加 */
+	 $("#busi_add").click(function (){
+		      var busiAreaId = "";
+		      var isFlag = "add";
+		      OpenDialogOa(busiAreaId,isFlag);
+	});
+	 /* 删除 */
+	 $("#busi_del").click(function(){
+		 var ispan = true;
+		 var  str="";
+		 var rowIds =$("#jqGrid").jqGrid('getGridParam', 'selarrrow');
+		 var dataArray=[];
+		 for(var i=0;i<rowIds.length;i++){
+			 var rowData = $("#jqGrid").jqGrid('getRowData',rowIds[i]);
+			if(rowData.statistics!=""&&rowData.statistics>0){
+				alert("删除数据中有关联小商圈");
+			 	return false;
+			};
+			if(rowData.hoursNum>0){
+				ispan=false
+			}
+		 } 
+		var buisId = rowIds.join(",");
+		if(ispan){
+			 if (confirm("是否要删除数据？")){
+				 $.ajax({
+						type: "POST",
+						url: '${CTX}/busiArea/deleteBusiArea.do',
+						data: {
+							"ids": buisId
+						},
+						dataType: "json",
+						success: function(data) {
+							if(data!=0){
+						      $("#jqGrid").trigger('reloadGrid');
+							}
+						}
+					});
+				}
+		}else{
+			 if(confirm("商圈已和楼盘关联！确定要删除吗？")){
+				 $.ajax({
+						type: "POST",
+						url: '${CTX}/busiArea/deleteBusiArea.do',
+						data: {
+							"ids": buisId
+						},
+						dataType: "json",
+						success: function(data) {
+							if(data!=0){
+						      $("#jqGrid").trigger('reloadGrid');
+							}
+						}
+					});
+			}
+		}
+	 });
+	//初始化，但不执行
+	 initList();
+	
+});
+
+
+//商圈详细查询
+function lookBusi(val) {
+	var isFlag = "look";
+	OpenDialogOa(val,isFlag);
+}
+
+//弹出窗口
+function OpenDialogOa(busiAreaId,isFlag){
+	var cityId= jQuery("#city option:selected").val();
+	var heights = $(window).height()*0.7;
+    var widths = $(window).width()*0.45;
+    var but;
+    var str ="";
+    if(isFlag!="look"){
+    	if(isFlag=="add"){
+    		str="添加商圈" ;
+    	}
+    	if(isFlag=="update"){
+    		str="修改商圈";
+    	}
+    	 but = {"确定" : function() {//按钮和执行函数
+			 var isFlg =0;
+     			 if(busiAreaId==""){
+     				isFlg = addBusi();
+	      			if(isFlg!=1&&isFlg!=-1&&isFlg!=false){
+	 					alert("添加成功");
+	 					$("#jqGrid").setGridParam({url:'${CTX}/busiArea/getBusiAreaQCPage.do'}).trigger("reloadGrid");
+    	 				$(".form-control").val("");
+    	 				$(this).dialog("close");
+	 				}else if(isFlg==-1&&isFlg!=false){
+						alert("保存失败,商圈名称已存在");
+					}else if(isFlg<0){
+						alert("添加失败");
+					}
+     			 }else{
+   					isFlg = update();
+   					if(isFlg!=1&&isFlg!=-1){
+	 					alert("修改成功");
+	 					$("#jqGrid").setGridParam({url:'${CTX}/busiArea/getBusiAreaQCPage.do'}).trigger("reloadGrid");
+		 				$(".form-control").val("");
+		 				$(this).dialog("close");
+	 				}else if(isFlg==-1){
+						alert("保存失败,商圈名称已存在");
+					}else{
+						alert("修改失败");
+					}
+   			 }
+		  }, "取消" : function() {
+			 
+    			$(this).dialog("close");
+       		  }
+		};
+    }else{
+    	str="查看商圈";
+    	but ={
+      		  "取消" : function() {
+      			$(this).dialog("close");
+            	}
+  		};
+    }
+	 oaDialogOpen("ees",//对话框ID，必填，且不能与当前页面的ID重复
+			{url:"${CTX}/busiArea/updateBusiIndex.do?busiAreaId="+busiAreaId+"&eareId="+cityId+"&isFlag="+isFlag,//调用页面的url
+   		      title:str,//弹框的title
+   		      closeOnEscpe:true,//是否通过escpe关闭弹框
+   		      closeBtn:true,//是否显示关闭按钮
+   		      width:widths,//弹框的宽度
+   		      height:heights,
+   		      buttons:but
+		  })
+}
+/* 分页初始化 */
+function initList(){
+	$("#jqGrid").jqGrid({
+		autowidth:true,
+		autoheight:true,
+	    multiselect: true,
+	    multiboxonly: true,
+	    viewrecords: true,
+	    autowidth:true,
+	    rownumbers:true,
+       	url: '${CTX}/busiArea/getBusiAreaQCPage.do',
+       	datatype: "json", //,'楼盘数','操作'
+       	colNames : ['id','所在地区','所在区域', '商圈名称','关联行政区域','楼盘数','排序','大商圈关联的小商圈数量'],
+       	postData:{
+       		genre:""
+       	},
+       	colModel: [
+       	    {  name: 'id',index:'id',sortable : false, width: 40,hidden:true},
+       		{  name: 'itsArea',index:'itsArea',sortable : false, width: 40},
+          	{  name: 'busiZoningName',index:'busiZoningName',sortable : false, width: 40,asortable:false,formatter:function(rowName, options, rowObject){
+        	    return "<a onclick=\"lookBusi('"+rowObject.id+"')\" style='text-decoration:underline;color:blue'>"+rowName+"</a>";}
+      	   },
+         	{  name: 'busiAreaName',index:'busiAreaName',sortable : false, width: 40,asortable:false,
+      		   formatter:function(rowName, options, rowObject){
+      			 var busiAreaName="";
+      			   if(rowName){
+      				 busiAreaName = rowName;
+      			   }
+        	    return "<a onclick=\"lookBusi('"+rowObject.id+"')\" style='text-decoration:underline;color:blue'>"+busiAreaName+"</a>";
+        	    }
+         	},
+          	{  name: 'adminName',index:'adminName',sortable : false, width: 40},
+         	{  name: 'hoursNum',index:'hoursNum',sortable : false, width: 40},
+        	{  name: 'sort',index:'sort',sortable : true, width: 40},
+        	{  name: 'statistics',index:'statistics',sortable : false, width: 40,hidden:true}
+       	],
+       	onSelectRow: function (rowId, status, e){
+           var rowIds = jQuery("#jqGrid").jqGrid('getGridParam', 'selarrrow');
+           $(rowIds).each(function(i,rowId){
+        	   var rowData = $("#jqGrid").jqGrid('getRowData',rowId);
+        	   $("#busiAreaId").val(rowData.id);
+           });
+       },
+       autowidth:true,
+       height:$(window).height()-200,
+       rowNum:30, 
+	   rowList:[10,20,30,50,100],
+       pager: "#jqGridPager",
+       /* 在数据初始化前进行数据编辑 */
+   	   jsonReader: { root:function (obj){
+		   		var row = null;
+		   		var sunData = null;
+		   	 	var itsArea = null;//省市
+              	var adminName = "";//区
+			 	for(var i=0;i<obj.pagerResults.length;i++){
+			 		row= obj.pagerResults[i];//获取返回值得行数据
+			 		itsArea = "";
+			 		adminName = "";
+			 		for(var j=0;j<row.list.length;j++){
+			 			sunData = row.list[j].mergerName.split(" ");
+			 			if(itsArea ==""){
+			 				itsArea = sunData[0]+"、"+sunData[1];
+			 				row.itsArea= itsArea;
+			 			}
+			 			adminName += sunData[2]+",";
+			 		}
+			 		row.adminName = adminName.substring(0,adminName.length-1) ;
+	 			}
+ 				return obj.pagerResults;
+ 		}, page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false}
+   	});
+}
+
+
+function getAddress(val, objId) {
+	$.ajax({
+		type : "post",
+		url : "${CTX}/area/getAreaList.do",
+		async : false,
+		dataType : 'json',
+		async:false,
+		data : {
+			"eareId" : val
+		},
+		success : function(data) {
+			changeAddress(data, objId);
+		},
+	});
+}
+
+function changeAddress(data, objId) {
+	$("#" + objId).children().first().siblings().remove();
+	var str = "";
+	for (var i = 0; i < data.length; i++) {
+		var areaName = data[i].name;
+		var areaId = data[i].id
+		var areaShow = $("#" + objId);
+		str = '<option lng="'+ data[i].lng+'" lat="'+data[i].lat+'" value="'+areaId+'">'
+				+ areaName + '</option>';
+		areaShow.append(str);
+	}
+}
+
+$("#city").change(function() {
+	var cityId = $(this).val();
+	$("#cityId").val(cityId);
+	jQuery("#jqGrid").setGridParam({
+		datatype : 'json',
+		url : '${CTX}/busiArea/getBusiAreaQCPage.do?cityId=' + cityId
+	}).trigger("reloadGrid");
+	getAddress(cityId, "area");
+	$("#area option").each(function() {
+		if ($(this).text() == "杭州市") {
+
+			$(this).attr("selected", true);
+			$("#area").setGridParam({
+				dataType : 'json'
+			}).trigger("change");
+		}
+	});
+	var lng = jQuery("#city  option:selected").attr("lng");
+	var lat = jQuery("#city  option:selected").attr("lat");
+	$("#lng").val(lng);
+	$("#lat").val(lat);
+});
+
+$("#province").change(function() {
+	$("#cityId").val("");
+	var provinceId = $(this).val();
+	getAddress(provinceId, "city");
+	/**市默认选中*/
+	$("#city option").each(function() {
+		if ($(this).text() == "杭州市") {
+			$(this).attr("selected", true);
+			$("#city").trigger("change");
+		}
+	});
+});
+/**省默认选中*/
+$("#province option").each(function() {
+	if ($(this).text() == "浙江省") {
+		$(this).attr("selected", true);
+		$("#province").trigger("change");
+	}
+});
+</script>

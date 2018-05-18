@@ -1,0 +1,170 @@
+<div class="tableContent" >
+ 	<div class="row">
+	    <div class="col-md-3 col-sm-3">
+           <div class="form-xs form-group row">
+	          <label for="addClass" class="col-md-4 col-sm-4 col-xs-4 control-label">具体地址：</label>
+	          <div class="col-md-8 col-sm-8 col-xs-8">
+               	<input type="hidden" id="keyWordName" class="searchKey"  value ="" />
+               	<input class="col-md-8 col-sm-8 col-xs-8 selectInput searchKey "  type="text" id="keyWord" placeholder="输入具体地址" value="">
+	          </div>
+	        </div>
+	    </div>
+	    <div class="col-md-3 col-sm-3">
+           <div class="form-xs form-group row">
+	          <label for="addClass" class="col-md-4 col-sm-4 col-xs-4 control-label">审核状态：</label>
+	          <div class="col-md-8 col-sm-8 col-xs-8">
+               		<select  class="city input-xs form-control searchKey" id="checkStatus">
+					<option value="" selected="selected">全部</option>
+					<option value="1">待审核</option>
+					<option value="2">通过</option>
+					<option value="3">拒绝</option>
+				</select>
+	          </div>
+	        </div>
+	    </div>
+	    
+    	 <div class="col-xs-12 addrChange">
+		    <table id="temporaryAddrBase_jqGrid">
+				
+			</table>
+			<div id="jqGridPager"></div>
+    	</div>
+  </div> 
+</div>
+<input type=hidden id="tableType2" value="${type!}" ></input>   
+<script type="text/javascript">
+var rod_table = {};
+var aihome ={
+	/* 新增和修改 */
+	addrBase_audit : function() {
+		var rowId ="";
+		rowId = $("#temporaryAddrBase_jqGrid").jqGrid('getGridParam','selarrrow');
+		var rowData = $("#temporaryAddrBase_jqGrid").jqGrid('getRowData',rowId);
+		var temAddrName="";
+		temAddrName = rowData.temporaryAddtr;
+		var houseInfoId="";
+		houseInfoId = rowData.houseInfoId;
+		var bizType="";
+		bizType = rowData.bizType;
+		var selCount=rowId.length;
+		if(selCount==0){
+			alert("没有选中的记录！");
+			return;	
+		}else if(selCount>1){
+			alert("请选单条审核！");
+			return;
+		}
+		oaDialogOpen("addArea",//对话框ID，必填，且不能与当前页面的ID重复
+			      {url:"${CTX}/addrBaseManage/temporaryAddrBaseAudits.do?rowId="+rowId+"&temAddrName="+encodeURI(encodeURI(temAddrName))+"&houseInfoId="+houseInfoId+"&bizType="+bizType,//调用页面的url
+			      title:"修改地址库",//弹框的title
+			      closeOnEscpe:true,//是否通过escpe关闭弹框
+			      closeBtn:true,//是否显示关闭按钮
+			      width: $(window).width()*0.3,//弹框的宽度
+				  height: $(window).height()*0.5,//弹框的高度
+			      buttons:{
+			    	  "审核" : function() {
+			    		  if(aihome.checkSucceed(rowId,houseInfoId,bizType,1)){
+				    			$(this).dialog("close");
+				    		}
+			    	  },
+			          "拒绝" : function() {
+			        	  if(aihome.checkSucceed(rowId,houseInfoId,bizType,2)){
+				    			$(this).dialog("close");
+				    		}
+			          }
+			      },
+			      closeCall:function(){//弹框关闭后的回调函数
+			    	  $("#temporaryAddrBase_jqGrid").trigger("reloadGrid");//刷新分页
+			      }
+			  })
+	},
+	init_jqGrid : function() {
+		$("#temporaryAddrBase_jqGrid").jqGrid({
+			 url: '${CTX}/addrBaseManage/getTemporaryAddrBasePage.do', 
+	         datatype: "json",
+	         colModel: [
+	             { label: '业务类型', name: 'bizTypeStr',index:'bizType',sortable : true,width:10},
+	             { label: '业务类型', name: 'bizType',index:'bizType',sortable : true,width: 30,hidden:true },
+	             { label: '临时地址', name: 'temporaryAddtr',index:'temporaryAddtr',sortable : true,width: 30 },
+	             { label: '提交人', name: 'submitter',index:'submitter',sortable : true,width:10 },
+	             { label: '提交时间', name: 'submitterTimeStr',index:'submitterTimeStr',sortable : true,width: 30 },
+	             { label: '审核状态', name: 'checkStatus',index:'checkStatus',sortable : true,width: 10,
+	            	 formatter : function(rowValue, options, rowObject){
+	 					if(rowValue == 1){
+	 						return "<span >待审核</span>";
+	 					}else if(rowValue == 2){
+	 						return "<span >通过</span>";
+	 					}else{
+	 						return "<span >拒绝</span>";
+	 					}
+	 				 }
+	             },
+	             { label: '审核人', name: 'checkMan',index:'checkMan',sortable : true,width: 10 },
+	             { label: '审核时间', name: 'checkTimeStr',index:'checkTimeStr',sortable : true,width: 30 },
+	             { label: '拒绝理由', name: 'refuseReson',index:'refuseReson',sortable : true,width: 30},
+	             { label: '地址库地址', name: 'houseAddr',index:'houseAddr',sortable : true,width: 40 },
+	             { label: '房间ID', name: 'houseInfoId',index:'houseInfoId',sortable : true,width: 30,hidden:true }
+	         ],
+	         multiselect: true,
+	         multiboxonly: true,
+	         viewrecords: true,
+	         autowidth:true,
+	         height: $(window).height()-300,
+	         rowNum:30,
+		     rowList:[10,20,30,50,100],
+	         pager: "#jqGridPager",
+	     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+	    });
+	}
+};
+$(function (){
+	aihome.init_jqGrid();
+	 /* 查询 */
+	$("#addrBase_query").unbind().click(function(){
+		if($("#keyWord").val()==""){
+			$("#keyWordName").val("");
+		}
+		var param = getSearchParam();
+		var url="${CTX}/addrBaseManage/getTemporaryAddrBasePage.do?"+param;
+		$("#temporaryAddrBase_jqGrid").setGridParam({url:url,page:1}).trigger('reloadGrid');
+	});
+	 if($("#tableType2").val()==2){
+		 $("#addrBase_audit").show();
+		 $("#addrBase_query").show();
+		 $("#addrBase_edit").hide();
+		 $("#addrBase_Use").hide();
+		 $("#addrBase_enUse").hide();
+	 };
+});
+/* 模糊搜索*/
+$("#keyWord").autocomplete({
+	source : function(request, response) {
+		$.ajax({
+			url : "${CTX}/addrBaseManage/getTemAddrkeyWordByMatch.do",
+			dataType : "json",
+			type : 'post',
+			data : {
+				matchStr : request.term
+			},
+			success : function(data) {
+				var array = new Array(data.length);
+				for (var i = 0; i < data.length; i++) {
+					var temp = {
+						key : data[i].id,
+						temporaryAddtr : data[i].temporaryAddtr,
+						type : data[i].bizType,
+						value : data[i].adllTemporaryAddtr
+					};
+					array[i] = temp;
+				}
+				response(array);
+			}
+		});
+	},
+	select : function(event, ui){
+		$("#keyWordName").val(ui.item.type);
+		$("#keyWord").val(ui.item.temporaryAddtr);
+		event.preventDefault();
+	}
+});
+</script> 

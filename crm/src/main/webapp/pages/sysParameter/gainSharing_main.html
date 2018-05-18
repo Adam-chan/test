@@ -1,0 +1,153 @@
+<title>收益分成</title>
+<div id="top_tools" class=" btn-group">
+  <button class="btn btn-sm btn-white  confirmBtn" onclick="aihome.queryGainSharing();">
+    <i class="iconfont">&#xe6e4;</i>
+    <span>查询</span>
+  </button>
+  <button  class="btn btn-sm btn-white ladda-button" onclick="aihome.editGainSharing(1);"> 
+    <i class="iconfont">&#xe6e0;</i>
+    <span>新增</span>
+  </button>
+ <button  class="btn btn-sm btn-white btn-default" onclick="aihome.editGainSharing(2);">
+    <i class="iconfont">&#xe6dd;</i>
+    <span>修改</span>
+  </button>
+   <button class="btn btn-sm btn-white btn-info" onclick="aihome.deteleGainSharing();">
+    <i class="iconfont">&#xe6e3;</i>
+    <span>删除</span>
+  </button>
+</div>
+<div class="row">
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+	<form id="clearForm">
+		<div class="form-horizontal row my-inputs">
+		     <div class="col-md-3 col-sm-3 col-xs-3" style="margin-left: 50px;">
+		          <div class="form-xs form-group row">
+			          <div class="input-daterange input-group 5i5jdate">
+						<input id="startTime" name="startTime" type="text" class="form-control input-xs searchKey" placeholder="开始时间" value="">
+						<span class="input-group-addon addon-xs">～</span>
+						<input id="endTime" name="endTime" type="text" class="form-control input-xs searchKey" placeholder="结束时间" value="">
+					</div>
+		        </div>
+		   	</div>
+		   	<div class="col-md-3 col-sm-3 col-xs-3" style="margin-left: 50px;">
+			     <a class="btn btn-xs btn-blue ladda-button" onclick="aihome.cleanBtn();">清空</a>
+		   	</div>
+		</div>
+	</form>
+	</div>
+	<div class="col-xs-12 my-grid " >
+		<table id="gainSharing_jqGrid">
+		</table>
+		<div id="jqGridPager"></div>
+	</div>
+</div>
+<script type="text/javascript">
+$('.page-content-area').ace_ajax('loadScripts', [null,null], function () {});
+var aihome ={
+	cleanBtn:function(){
+		document.getElementById("clearForm").reset();
+	},
+	deteleGainSharing:function(){
+		var rowIds = $("#gainSharing_jqGrid").jqGrid('getGridParam','selarrrow');
+		var selCount = rowIds.length;
+		var gainSharingIds = "";
+		if (selCount==0){
+			alert("没有选中的记录!");
+			return;
+		}
+		if (confirm("确认删除？")){
+			$.ajax({
+				url : "${CTX}/sys/deleteGainSharing.do",
+				dataType : "json",
+				data : {gainSharingId : rowIds.join(",")},
+				success : function(data) {
+					if(data!=0){
+						alert("删除成功!");
+						$("#gainSharing_jqGrid").trigger('reloadGrid');
+					}
+				}		
+			})
+		}
+	},
+	/* open */
+	editGainSharing : function(num) {
+		var rowId= "";
+		var rowData = "";
+		var gainSharingId = "";
+		var title = "新增收益成份比例";
+		if(num==2){
+			rowId = $("#gainSharing_jqGrid").jqGrid('getGridParam','selarrrow');
+			rowData = $("#gainSharing_jqGrid").jqGrid('getRowData',rowId);
+			var selCount = rowId.length;
+			if (selCount==0){
+				alert("没有选中的记录！");
+				return;
+			}else if(selCount>1){
+				alert("请选单条修改！");
+				return;
+			}
+			gainSharingId = rowData.gainSharingId;
+			title = "修改收益成份比例";
+		}
+		oaDialogOpen(
+			"editGainSharing",
+			{
+				url: "${CTX}/sys/gainSharingEdit.do?gainSharingId="+gainSharingId,
+				title: title,
+				closeOnEscpe: true,
+				closeBtn: true,
+				width: $(window).width()*0.3,
+				height: $(window).height()*0.4,
+				buttons: {
+					"保存" : function() {
+					 	if(aihome.judgeEdit(num,gainSharingId)){//确定前的判定
+			    			$(this).dialog("close");
+						}
+					},
+					"返回" : function() {
+						$(this).dialog("close");
+					}
+				},
+				closeCall: function() {
+					$("#gainSharing_jqGrid").trigger('reloadGrid');
+				}
+			}
+		)
+	},
+	queryGainSharing : function() {
+		var param = getSearchParam();
+		var url="${CTX}/sys/getGainSharingPage.do?"+param;
+		$("#gainSharing_jqGrid").setGridParam({url:url,page:1}).trigger('reloadGrid');
+	},
+	//分页方法
+	init_jqGrid : function() {
+		$("#gainSharing_jqGrid").jqGrid({
+			url: '${CTX}/sys/getGainSharingPage.do', 
+	         datatype: "json",
+	         colModel: [
+   	            { label: '开始时间', name: 'startTimeStr',index:'startTimeStr',sortable : true,width: 30 },
+   	            { label: '结束时间', name: 'endTimeStr',index:'endTimeStr',sortable : true,width: 30 },
+   	            { label: '房源录入比例%', name: 'houseEnter',index:'houseEnter',sortable : true,width: 30 },
+   	            { label: '成交人比例%', name: 'dealMan',index:'dealMan',sortable : true,width: 40 },
+   	            { label: '收钥匙人比例%', name: 'collKeysMan',index:'collKeysMan',sortable : true,width: 40},
+   	            { label: '收房人比例%', name: 'collRoomMan',index:'collRoomMan',sortable : true,width: 30 },
+   	            { label: '实勘人比例%', name: 'realProMan',index:'realProMan',sortable : true,width: 30 },
+   	         	{ label: '主键', name: 'gainSharingId',index:'gainSharingId',hidden:true,key:true}
+	    	 ],
+	         multiselect: true,
+	         multiboxonly: true,
+	         viewrecords: true, 
+	         autowidth:true,
+	         height: $(window).height()-300,
+	         rowNum:30, 
+		     rowList:[10,20,30,50,100],
+	         pager: "#jqGridPager",
+	     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+	    });
+	}
+};
+$(function (){
+	aihome.init_jqGrid();
+});
+</script> 

@@ -1,0 +1,398 @@
+<div class="modal-body form-horizontal row">
+	<div class="col-xs-12 form-xs form-group row">
+		<label class="col-xs-2 control-label">分配方式：</label>
+		<div class="col-xs-10">
+			<div class="radio-inline input-xs">
+			    <label>
+			      <input name="disWays" type="radio" class="disWays ace" checked="checked" value="1">
+			      <span class="lbl"> 按商圈分</span>
+			    </label>
+		    </div>
+		    <div class="radio-inline input-xs" class="addWays" value="2">
+			    <label>
+			      <input name="disWays" type="radio" class="disWays ace" value="2">
+			      <span class="lbl"> 按楼盘分</span>
+			    </label>
+		    </div>
+		</div>
+	</div>
+	<form id="baForm">
+		<div class="ba_div col-xs-12 form-xs form-group row">
+			<label class="col-xs-2 control-label">行政区域：</label>
+			<div class="col-xs-2" style="width:20%">
+				<select id="d_baseArea" class="input-xs form-control">
+					<option value="">请选择</option>
+					<#if (areaList?size>0)>
+						<#list areaList as item>
+							<option value="${(item.id)!''}">${(item.name)!''}</option>
+						</#list>
+					<#else>
+					    <option value="">请选择</option>
+					</#if>
+				</select>
+			</div>
+			<label class="col-xs-1 control-label">商圈：</label>
+			<div class="col-xs-2" style="width:20%">
+				<select id="d_ba1" class="input-xs form-control">
+					<option value="">请选择</option>
+				</select>
+			</div>
+			<div class="col-xs-2" style="width:20.5%">
+				<select id="d_ba2" class="input-xs form-control">
+					<option value="">请选择</option>
+				</select>
+			</div>
+			<div class="col-xs-1" onclick="aihome.addBusiArea();">
+				<input type="button" value="添加" class="btn btn-xs btn-blue"/>
+			</div>
+		</div>
+		<div class="col-xs-12 form-xs form-group row">
+	    	<label class="col-xs-2 control-label">分配给：</label>
+	    	<div class="col-xs-9">
+		       <table id="d_clone_table" class="col-xs-11">
+		         	<tr id="d_clone_tr" class="hasDelete" class="col-xs-12">
+			            <td style="width:30%">
+			            	<select class="daQuOrg input-xs form-control searchKey" name="" onchange="aihome.daQu_getQu(this);">
+								<option value="">经营大区</option>
+								<#list daQuOrgList as item>
+									<option value="${(item.orgCode)!''}">${(item.name)!''}</option>
+								</#list>
+							</select>
+			            </td>
+			            <td style="width:30%">
+			              	<select class="input-xs form-control searchKey" onchange="aihome.qu_getZu(this);">
+								<option value="">经营区</option>
+							</select>
+			            </td>
+			            <td style="width:30%">
+			            	<select class="input-xs form-control searchKey">
+								<option value="">经营组</option>
+							</select>
+			            </td>
+		         	</tr>
+		       </table>
+	   		</div>
+	      	<div class="addBut col-xs-1" style="left:-6%">
+	  			<span><i class="glyphicon glyphicon-plus"></i></span>
+			</div> 
+	   </div>
+	</form>
+	<form id="premisesForm" hidden>
+		<div class="p_div col-xs-12 form-xs form-group row">
+			<div class="col-xs-1" style="left:16.5%" onclick="aihome.addPremises();">
+				<input type="button" value="添加楼盘" class="btn btn-xs btn-blue"/>
+			</div>
+		</div>
+		<div class="col-xs-12 form-xs form-group row">
+	    	<label class="col-xs-2 control-label">分配给：</label>
+	    	<div class="col-xs-9">
+		       <table id="p_clone_table" class="col-xs-11">
+		         	<tr id="p_clone_tr" class="hasDelete" class="col-xs-12">
+			            <td style="width:30%">
+			            	<select class="daQuOrg input-xs form-control searchKey" onchange="aihome.daQu_getQu(this);">
+								<option value="">经营大区</option>
+								<#list daQuOrgList as item>
+									<option value="${(item.orgCode)!''}">${(item.name)!''}</option>
+								</#list>
+							</select>
+			            </td>
+			            <td style="width:30%">
+			              	<select class="input-xs form-control searchKey" onchange="aihome.qu_getZu(this);">
+								<option value="">经营区</option>
+							</select>
+			            </td>
+			            <td style="width:30%">
+			            	<select class="input-xs form-control searchKey">
+								<option value="">经营组</option>
+							</select>
+			            </td>
+		         	</tr>
+		       </table>
+	   		</div>
+	      	<div class="addBut col-xs-1" style="left:-6%">
+	  			<span><i class="glyphicon glyphicon-plus"></i></span>
+			</div> 
+	   </div>
+	</form>
+</div>
+<!-- 隐藏域 S -->
+<!-- 隐藏域 E -->
+
+<script type="text/javascript">
+	
+	$(".addBut").click(function(){
+		var flag = true;
+		var clone_dom;
+		var clone_target;
+		var disWays = $(".disWays:checked").val();
+		if(disWays==1){
+			clone_dom = "d_clone_tr";
+			clone_target = "d_clone_table";
+		}else{
+			clone_dom = "p_clone_tr";
+			clone_target = "p_clone_table";
+		}
+		$("#"+clone_target+" .daQuOrg").each(function(){
+			var daQu = $(this).val();
+			if(daQu==""){
+				flag = false;
+			}
+		});
+		if(flag){
+			cloneDom({
+			    dom:$("#"+clone_dom),//克隆对象
+			    target:$("#"+clone_target),//克隆位置
+			    callBack: function(a){
+			    	$("#"+clone_target+" tr:first td:last").hide();
+			    }
+			});
+		}else{
+			alert("请选择分区！");
+		}
+	});	
+
+	/**change行政区划*/
+	aihome.changeArea = function(areaId){
+		$("#d_ba1").children().remove();
+		$("#d_ba2").children().remove();
+		$("#d_ba2").append("<option value=''>请选择</option>");
+		if(areaId==""){
+			$("#d_ba1").append("<option value=''>请选择</option>");
+		}else{
+			$.ajax({
+				url : "${CTX}/operate/getBa1List.do",
+				dataType : "json",
+				type : "post",
+				async:false,
+				data : {
+					"areaId" : areaId
+				},
+				success : function(data) {
+					var html = "";
+					if(data.length>0){
+						for(var i=0;i<data.length;i++){
+							html+="<option value='"+data[i].id+"'>"+data[i].busiAreaName+"</option>";
+						}
+						$("#d_ba1").append(html);
+						//小商圈
+						aihome.changeBa1(data[0].id);
+					}else{
+						$("#d_ba1").append("<option value=''>请选择</option>");
+						$("#d_ba2").append("<option value=''>请选择</option>");
+					}
+				}
+			});
+		}
+	}
+	/**change大商圈*/
+	aihome.changeBa1 = function(ba1Id){
+		$("#d_ba2").children().remove();
+		$("#d_ba2").append("<option value=''>请选择</option>");
+		if(ba1Id!=""){
+			$.ajax({
+				url : "${CTX}/operate/getBa2List.do",
+				dataType : "json",
+				type : "post",
+				async:false,
+				data : {
+					"busiAreaParentId" : ba1Id
+				},
+				success : function(data) {
+					var html = "";
+					if(data.length>0){
+						for(var i=0;i<data.length;i++){
+							html+="<option value='"+data[i].id+"'>"+data[i].busiAreaName+"</option>";
+						}
+						$("#d_ba2").append(html);
+					}
+				}
+			});
+		}
+	}
+	/**大区-区/组 级联*/
+	aihome.daQu_getQu = function(element){
+		var orgCode = $(element).val();
+		var qu_dom = $(element).parent().next().children();
+		var zu_dom = $(element).parent().next().next().children();
+		$(qu_dom).children().remove();
+		$(zu_dom).children().remove();
+		$(qu_dom).append("<option value=''>经营区</option>");
+		$(zu_dom).append("<option value=''>经营组</option>");
+		if(orgCode!=""){
+			$.ajax({
+				type : "post",
+				url : "${CTX}/org/orgList.do",
+				dataType : "json",
+				async:false,
+				data : {
+					"orgCode" : orgCode
+				},
+				success : function(data) {
+					var html = "";
+					if(data.length>0){
+						for(var i=0;i<data.length;i++){
+							html+="<option value='"+data[i].orgCode+"'>"+data[i].name+"</option>";
+						}
+					}
+					$(qu_dom).append(html);
+				}
+			});
+		}
+	}
+	/**区-组 级联*/
+	aihome.qu_getZu = function(element){
+		var orgCode = $(element).val();
+		var zu_dom = $(element).parent().next().children();
+		$(zu_dom).children().remove();
+		$(zu_dom).append("<option value=''>经营组</option>");
+		if(orgCode!=""){
+			$.ajax({
+				type : "post",
+				url : "${CTX}/org/orgList.do",
+				dataType : "json",
+				async:false,
+				data : {
+					"orgCode" : orgCode
+				},
+				success : function(data) {
+					var html = "";
+					if(data.length>0){
+						for(var i=0;i<data.length;i++){
+							html+="<option value='"+data[i].orgCode+"'>"+data[i].name+"</option>";
+						}
+					}
+					$(zu_dom).append(html);
+				}
+			});
+		}
+	}
+	/**添加商圈*/
+	aihome.addBusiArea = function(){
+		var id = "";
+		var name = "";
+		var html = "";
+		var areaId = $("#d_baseArea").val();//行政区划id
+		var ba1Id = $("#d_ba1").val();//大商圈id
+		var ba1 = $("#d_ba1 option:selected").html();
+		var ba2Id = $("#d_ba2").val();//小商圈id
+		var ba2 = $("#d_ba2 option:selected").html();
+		if(areaId==""){
+			alert("请选择行政区域！");
+			return;
+		}
+		if(ba1Id==""){
+			alert("请选择商圈！");
+			return;
+		}
+		if(ba1Id!="" && ba2Id!=""){
+			id = ba2Id;
+			name=ba1+"-"+ba2;
+		}else if(ba1Id!="" && ba2Id==""){
+			id = ba1Id
+			name=ba1;
+		}
+		if($("#d_tags_div .tags").length>0){
+			html += "<span class='tag' value="+id+">"+name+"<button type='button' class='close' onclick='aihome.closeSpan($(this));''>×</button></span>";
+			$("#d_tags_div .tags").append(html);
+		}else{
+			html+="<div id='d_tags_div' class='col-xs-12 form-xs form-group row'>";
+			html+="<label class='col-xs-2 control-label'>已分配：</label>";
+			html+="<div class='tags col-xs-10' style='margin:0;border:0;width: 75%;'>";
+			html+="<span class='tag' value="+id+">"+name+"<button type='button' class='close' onclick='aihome.closeSpan($(this));''>×</button></span>";
+			html+="</div>";
+			html+="</div>";	
+			$(".ba_div").after(html);
+		}
+	}
+	/**删除选中标签*/ 
+	aihome.closeSpan = function(obj) {
+		var tagArray = $(".tag");
+		if(tagArray.length>1){
+			obj.parent().remove();
+		}else{
+			obj.parent().parent().parent().remove();
+		}
+	}
+	/**权限调配*/
+	aihome.addPremises = function(){
+		 oaDialogOpen(
+			   "addPremisesDialog",{
+				url: "${CTX}/operate/getAddPremisesDialog.do",
+				closeOnEscpe: true,
+		        autoOpen : false,
+		        modal : true,
+		        title : "楼盘选择",
+		        width : $(window).width()*0.5,
+		        height: $(window).height()*0.65,
+		        buttons : {
+		           "确定" : function() {
+		        	   debugger
+		        	   var premisesData = [];
+		        	   var rowId=jQuery("#p_jqGrid").jqGrid('getGridParam', 'selarrrow');
+		        	   if(rowId.length==0){
+		        		   alert("请至少选择一个楼盘！");
+		        		   return;
+		        	   }
+		        	   for(var i=0;i<rowId.length;i++){
+		        		   var rowData = $("#p_jqGrid").jqGrid('getRowData',rowId[i]);
+		        		   premisesData.push(rowData);
+		        	   }
+		        	   // 气泡：楼盘
+		        	   for(var i=0;i<premisesData.length;i++){
+		        		   var html = "";
+		        		   var premisesId = premisesData[i].premisesId;
+		        		   var premisesName = premisesData[i].premisesName;
+		        		   if($("#p_tags_div .tags").length>0){
+				       			html += "<span class='tag' value="+premisesId+">"+premisesName+"<button type='button' class='close' onclick='aihome.closeSpan($(this));''>×</button></span>";
+				       			$("#p_tags_div .tags").append(html);
+				       	   }else{
+				       			html+="<div id='p_tags_div' class='col-xs-12 form-xs form-group row'>";
+				       			html+="<label class='col-xs-2 control-label'>已选择楼盘：</label>";
+				       			html+="<div class='tags col-xs-10' style='margin:0;border:0;width: 75%;'>";
+				       			html+="<span class='tag' value="+premisesId+">"+premisesName+"<button type='button' class='close' onclick='aihome.closeSpan($(this));''>×</button></span>";
+				       			html+="</div>";
+				       			html+="</div>";	
+				       			$(".p_div").after(html);
+				       	   }
+		        	   }
+		       	  	   $(this).dialog("close");	
+		            },
+		            "取消" : function() {
+		                $(this).dialog("close");
+		            }
+			    },
+				closeCall: function() {
+					$(this).empty();
+				}
+		 });
+	 }
+	
+	$(function(){
+		
+		/**change行政区划*/
+		$("#d_baseArea").change(function(){
+			var areaId = $(this).val();
+			aihome.changeArea(areaId);
+		});
+		
+		/**change大商圈*/
+		$("#d_ba1").change(function(){
+			var ba1Id = $(this).val();
+			aihome.changeBa1(ba1Id);
+		});
+		
+		/**分配方式*/
+		$(".disWays").change(function(){
+			var disWays = $(".disWays:checked").val();
+			if(disWays==1){
+				$("#baForm").show();
+				$("#premisesForm").hide();
+			}else{
+				$("#baForm").hide();
+				$("#premisesForm").show();
+			}
+		});
+		
+	});
+	
+</script>

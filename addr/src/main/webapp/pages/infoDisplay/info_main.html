@@ -1,0 +1,52 @@
+<title>信息展示</title>
+
+<div class="row">
+    <div class="col-xs-12">
+	  <br/>
+	  <div class="tabbable tabbable-lightBlue">
+	    <ul class="nav nav-tabs" >
+	      <li id="info_tab" class="active">
+	        <a data-toggle="tab" tabUrl="${CTX}/infoDisplay/getInfo.do?id=${id!''}" tabView="#tab-content1">信息展示</a>
+	      </li>
+	      <!-- <li>
+	        <a data-toggle="tab" tabUrl="${CTX}/premisesManage/premisesInfo.do?premisesId=${id!''}&tableContent=true" tabView="#tab-content1">基本信息</a>
+	      </li> -->
+	      <li>
+	        <a data-toggle="tab" tabUrl="${CTX}/premisesPictures/pictureIndex.do?id=${id!''}"  tabView="#tab-content1">楼盘图片</a>
+	      </li>
+	      <li>
+	        <a data-toggle="tab" tabUrl="${CTX}/infoDisplay/aroundMap.do?id=${id!''}" tabView="#tab-content1">地图配置</a>
+	      </li>
+	      <li>
+	        <a data-toggle="tab" tabUrl="${CTX}/infoDisplay/priceInfo.do" tabView="#tab-content1">价格信息</a>
+	      </li>
+	      <li>
+	        <a data-toggle="tab" tabUrl="${CTX}/baseBuilding/index.do?premisesId=${id!''}&areaId=${areaId!''}" tabView="#tab-content1">栋座单元</a>
+	      </li>
+	      <li>
+	        <a data-toggle="tab" tabUrl="${CTX}/carPort/getCarInfo.do?id=${id!''}"  tabView="#tab-content1">车位信息</a>
+	      </li>
+	      <li>
+	        <a data-toggle="tab" tabUrl="${CTX}/layoutInfo/index.do?id=${id!''}" tabView="#tab-content1">户型信息</a>
+	      </li>
+	      <li>
+		    <a data-toggle="tab" tabUrl="${CTX}/premisesDetail/fileIndex.do?id=${id!''}" tabView="#tab-content1">资料下载</a>
+		  </li>
+		  <li>
+		    <a data-toggle="tab" tabUrl="${CTX}/premisesDetail/getSalesGuide.do?id=${id!''}" tabView="#tab-content1">销售指南</a>
+		  </li>
+	    </ul>
+	    <div class="tab-content" id="tab-content1"></div>
+	 
+	  </div>
+		<input type="hidden" id="addBuilding" value="${addBuilding!''}" />
+	</div> 
+	
+</div> 
+<script type="text/javascript">
+	$('.page-content-area').ace_ajax('loadScripts', [null,"../assets/js/bootbox.js"], function () {});
+	if($("#addBuilding").val() != "") {
+		$(".nav-tabs a")[4].click();
+	}
+</script>
+

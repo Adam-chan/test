@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="manageProspect" >
+  <select id="getProspectPage" resultType="manageProspectModel">
+	SELECT MPI.ID AS id,
+	MPI.HOUSE_INFO_ID AS houseInfoId,
+	MPI.HOUSE_CODE AS houseCode,
+	HI.DEMAND_TYPE AS demandType,
+	BP.NAME AS name,
+	MPI.CREATE_TIME AS createTime,
+	MPI.STATUS AS status,
+	MPI.EXAMINE_USER AS examineUser,
+	MPI.EXAMINE_USER_ID AS examineUserId,
+	(CASE WHEN HI.DEMAND_TYPE = 1 THEN HS.USE_TYPE WHEN HI.DEMAND_TYPE = 2 THEN HL.USE_TYPE END) AS useType
+	FROM MANAGE_PROSPECT_INFO MPI
+	LEFT JOIN HOUSE_INFO HI
+	ON HI.ID = MPI.HOUSE_INFO_ID
+	LEFT JOIN BASE_HOUSE BH
+	ON BH.ID = HI.ROOM_ID
+	LEFT JOIN BASE_PREMISES BP
+	ON BH.PREMISES_ID = BP.ID
+	LEFT JOIN HOUSE_SALE HS
+	ON HI.ID = HS.HOUSE_INFO_ID
+	LEFT JOIN HOUSE_LEASE HL
+	ON HI.ID = HL.HOUSE_INFO_ID
+	where MPI.PROSPECT_USER = #{prospectUser}
+	<if test="houseNumber!=''and houseNumber!=null">
+		and MPI.HOUSE_CODE = #{houseNumber}
+	</if>
+	<if test="businessType!=''and businessType!=null">
+		and HI.DEMAND_TYPE = #{businessType}
+	</if>
+	<if test="useType!=''and useType!=null">
+		and (CASE WHEN HI.DEMAND_TYPE = 1 THEN HS.USE_TYPE WHEN HI.DEMAND_TYPE = 2 THEN HL.USE_TYPE END) = #{useType}
+	</if>
+	<if test="premisesName!=''and premisesName!=null">
+		and BP.NAME = #{premisesName}
+	</if>
+	<if test="subTimeStart!=null and subTimeStart!='' and subTimeEnd!=null and subTimeEnd!=''">
+		and MPI.CREATE_TIME between #{subTimeStart} and #{subTimeEnd}
+	</if>
+	<if test="reviewStatus!=null and reviewStatus!=''">
+		and MPI.STATUS = #{reviewStatus}
+	</if>
+  </select>
+  
+  <select id="getFakeProspectPage" resultType="manageProspectModel">
+	SELECT MPI.ID AS id,
+	MPI.HOUSE_INFO_ID AS houseInfoId,
+	MPI.HOUSE_CODE AS houseCode,
+	HI.DEMAND_TYPE AS demandType,
+	BP.NAME AS name,
+	MF.CREATE_TIME as fakeTime,
+	MF.PROPOSER_USER as proposerUser,
+	MF.REASON as reason,
+	(CASE WHEN HI.DEMAND_TYPE = 1 THEN HS.USE_TYPE WHEN HI.DEMAND_TYPE = 2 THEN HL.USE_TYPE END) AS useType
+	FROM MANAGE_PROSPECT_INFO MPI
+	LEFT JOIN
+	HOUSE_INFO HI
+	ON HI.ID = MPI.HOUSE_INFO_ID
+	LEFT JOIN BASE_HOUSE BH
+	ON BH.ID = HI.ROOM_ID
+	LEFT JOIN BASE_PREMISES BP
+	ON BH.PREMISES_ID = BP.ID
+	LEFT JOIN HOUSE_SALE HS
+	ON HI.ID = HS.HOUSE_INFO_ID
+	LEFT JOIN HOUSE_LEASE HL
+	ON HI.ID = HL.HOUSE_INFO_ID
+	INNER JOIN MANAGE_FAKE MF ON MF.HOUSE_INFO_ID = MPI.HOUSE_INFO_ID
+	WHERE MF.TYPE = 2 AND MPI.PROSPECT_USER = #{prospectUser}
+	<if test="houseNumber!=''and houseNumber!=null">
+		and MPI.HOUSE_CODE = #{houseNumber}
+	</if>
+	<if test="businessType!=''and businessType!=null">
+		and HI.DEMAND_TYPE = #{businessType}
+	</if>
+	<if test="useType!=''and useType!=null">
+		and (CASE WHEN HI.DEMAND_TYPE = 1 THEN HS.USE_TYPE WHEN HI.DEMAND_TYPE = 2 THEN HL.USE_TYPE END) = #{useType}
+	</if>
+	<if test="premisesName!=''and premisesName!=null">
+		and BP.NAME = #{premisesName}
+	</if>
+	<if test="fakeTimeStart!=null and fakeTimeStart!='' and fakeTimeEnd!=null and fakeTimeEnd!=''">
+		and MF.CREATE_TIME between #{fakeTimeStart} and #{fakeTimeEnd}
+	</if>
+  </select>
+</mapper>

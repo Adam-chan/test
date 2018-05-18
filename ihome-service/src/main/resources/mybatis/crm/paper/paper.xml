@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="paper" >
+	<select id="getPaperForPage" parameterType="map" resultType="paperModel">
+		select 
+			pt.ID paperId,
+			pt.TEMP_NAME tempName,
+			pt.CREATE_TIME createTime,
+			pt.CONTENT content,
+			pt.sort,
+			pt.type,
+			pt.HOUSE_NUM houseNum,
+			pt.status
+		from PAPER_TEMPLATE  pt
+		<where>
+			<if test="tempName != null and tempName != ''">
+				pt.TEMP_NAME = #{tempName}
+			</if>
+			<if test="type != null and type != ''">
+				and pt.TYPE = #{type}
+			</if>
+			<if test="houseNum != null and houseNum != ''">
+				and pt.HOUSE_NUM = #{houseNum}
+			</if>
+			<if test="status != null and status != ''">
+				and pt.status = #{status}
+			</if>
+		</where>
+	</select>
+	<insert id="insertPaperTemp" parameterType="map">
+		insert into PAPER_TEMPLATE(ID,TEMP_NAME,CONTENT,SORT,TYPE,HOUSE_NUM)
+		values(PAPER_TEMPLATE_SEQ.NEXTVAL,#{tempName},#{content},#{sort},#{type},#{houseNum})
+	</insert>
+	<update id="updatePaperTemp" parameterType="map">
+		update PAPER_TEMPLATE
+		<set>
+			<if test="tempName != null and tempName != ''">
+				TEMP_NAME = #{tempName},
+			</if>
+			<if test="content != null and content != ''">
+				CONTENT = #{content},
+			</if>
+			<if test="sort != null and sort != ''">
+				SORT = #{sort},
+			</if>
+			<if test="type != null and type != ''">
+				TYPE = #{type},
+			</if>
+			<if test="houseNum != null and houseNum != ''">
+				HOUSE_NUM = #{houseNum},
+			</if>
+			<if test="stauts != null and stauts != ''">
+				STATUS = #{stauts}
+			</if>
+		</set>
+		where id=#{paperId}
+	</update>
+	<select id="getPaperTemp" parameterType="map" resultType="paperModel">
+		select 
+			pt.ID paperId,
+			pt.TEMP_NAME tempName,
+			pt.CREATE_TIME createTime,
+			pt.CONTENT content,
+			pt.sort,
+			pt.type,
+			pt.HOUSE_NUM houseNum,
+			pt.status
+		from PAPER_TEMPLATE  pt
+		<where>
+			<if test="paperId != null and paperId != ''">
+				pt.id = #{paperId}
+			</if>
+			<if test="tempName != null and tempName != ''">
+				and TEMP_NAME = #{tempName}
+			</if>
+		</where>
+	</select>
+	<select id="getPaperCountOfName" parameterType="map" resultType="java.lang.Integer">
+		select 
+			count(pt.ID)
+		from PAPER_TEMPLATE  pt
+		where pt.id != #{paperId} and TEMP_NAME = #{tempName}
+	</select>
+	<update id="updatePaperStatus" parameterType="map">
+		update PAPER_TEMPLATE set STATUS = #{status} where id=#{paperId}
+	</update>
+</mapper>

@@ -1,0 +1,196 @@
+<form id="addMatchForm">
+	<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<div class="col-md-5 col-sm-5 col-xs-5" style="text-align:right">
+				赛事名称：
+			</div>
+			<div class="col-md-7 col-sm-7 col-xs-7">
+				<input class="col-md-12 col-sm-12 col-xs-12 selectInput" type="text" name="name" id="nameAdd" placeholder="输入赛事名称" >
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<div class="col-md-5 col-sm-5 col-xs-5" style="text-align:right">
+				赛区类别：
+			</div>
+			<div class="col-md-7 col-sm-7 col-xs-7">
+				<select id="categoryIdAdd" name="categoryId" class="area input-xs form-control col-md-12 col-sm-12 col-xs-12" >
+					<option >请选择</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row top" style="margin: 5px;"></div>
+	<div class="row">
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<div class="col-md-5 col-sm-5 col-xs-5" style="text-align:right" >
+				开始时间：
+			</div>
+			<div class="col-md-7 col-sm-7 col-xs-7">
+				<div class="input-group" >
+					<input class="form-control 5i5jdate input-xs" name="startTime" id="startTimeAdd" type="text" placeholder="选择时间"/>
+					<span class="input-group-addon addon-xs">
+						<i class="fa fa-calendar bigger-110"></i>
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-6 col-xs-6">
+			<div class="col-md-5 col-sm-5 col-xs-5" style="text-align:right" >
+				结束时间：
+			</div>
+			<div class="col-md-7 col-sm-7 col-xs-7">
+				<div class="input-group" >
+					<input class="form-control 5i5jdate input-xs" name="endTime" id="endTimeAdd" type="text" placeholder="选择时间"/>
+					<span class="input-group-addon addon-xs">
+						<i class="fa fa-calendar bigger-110"></i>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row top" style="margin: 5px;"></div>
+	<div class="row">
+		<div class="col-md-3 col-sm-3 col-xs-3" style="text-align:center" >
+			&nbsp;&nbsp;赛事规则：
+		</div>
+		<div class="col-md-9 col-sm-9 col-xs-9" style="text-align:left" >
+			<textarea id="ruleAdd" name="rule" rows="4" cols="50"></textarea>
+		</div>
+	</div>
+	
+	<div class="row top" style="margin: 5px;"></div>
+	<div class="row" >
+		<div class="col-md-11" style="float: none; display: block; margin-left: auto; margin-right: auto;" >
+			<fieldset id="a" style="border-radius:10px;font-size：10px;border: 1 none;">
+<!-- 				<legend id="b" style="font-size：10px;border-width: 0 0 0px;margin-bottom: 0px;">&nbsp;&nbsp;达成目标&nbsp;&nbsp;</legend> -->
+					<div style="border-bottom:1px solid #ccc; font-size:15px;">
+						达成目标
+					</div>
+				<div class="row top" style="margin: 5px;"></div>
+				<div class="col-md-12" id="matchZoneAppend" >
+				
+					<div class="row" >
+						<div class="col-md-3" style="text-align: center;" >
+							<b>赛区名称</b>
+						</div>
+						<div class="col-md-4" style="text-align: center;" >
+							<b>租赁目标(万元)</b>
+						</div>
+						<div class="col-md-4" style="text-align: center;" >
+							<b>买卖目标（万元）</b>
+						</div>
+					</div>
+					
+				</div>
+			</fieldset>
+		</div>
+		
+		<div class="col-md-11" style="margin: 15px;">
+			<div style="border-bottom:1px solid #ccc; font-size:15px;"> </div>
+		</div>
+	</div>
+	
+	<div class="row top" style="margin: 5px;"></div>
+	<div class="row">
+		<div class="col-md-3 col-sm-3 col-xs-3" style="text-align:center" >
+			&nbsp;&nbsp;备注：
+		</div>
+		<div class="col-md-9 col-sm-9 col-xs-9" style="text-align:left" >
+			<textarea id="remarkAdd" name="remark" rows="4" cols="50"></textarea>
+		</div>
+	</div>
+<input type="hidden" id="id" name="id"/>
+</form>
+<script>
+$('.page-content-area').ace_ajax('loadScripts', [null, null], function () {});
+var aihome = {
+	// 修改赋值
+	setInputValue : function(){
+		var matchId = ${matchId!};
+		if(matchId != 0){
+			$.ajax({
+		        type : "POST",
+		        url : '${CTX}/match/selectByPrimaryKey.do',
+		        dataType : 'json',
+				data:{"matchId" : matchId},
+		        error : function(request) {
+		            alert("Error");
+		        },
+		        success : function(data) {
+		        	$("#id").val(data[0].id);
+		        	$("#startTimeAdd").val(data[0].startTime);
+		        	$("#endTimeAdd").val(data[0].endTime);
+		        	$("#ruleAdd").val(data[0].rule);
+		        	$("#remarkAdd").val(data[0].remark);
+		        	$("#nameAdd").val(data[0].name);
+		        	$("#categoryIdAdd").val(data[0].categoryId);
+		        }
+		    });
+		}
+	},
+	
+	// 获取赛区
+	getMatchZone : function(){
+		var matchId = ${matchId!};
+		$.ajax({
+	        type : "POST",
+	        url : '${CTX}/match/getMatchZone.do',
+	        dataType : 'json',
+			data:{"matchId" : matchId},
+	        error : function(request) {
+	            alert("Error");
+	        },
+	        success : function(data) {
+	        	var i = 0;
+	        	while(i < data[0].length){
+	        		$("#matchZoneAppend").append("<div class='row top' style='margin: 5px;'></div> <div class='row' > <div class='col-md-3' style='text-align: center;' >" + data[0][i].zoneName + "</div> <div class='col-md-4' style='text-align: center;' > <input class='col-md-12 selectInput' type='text' name='matchTarget_Deal_" + data[0][i].zoneId + "' id='matchTarget_Deal_" + data[0][i].zoneId + "' > </div> <div class='col-md-4' style='text-align: center;' > <input class='col-md-12 selectInput' type='text' name='matchTarget_Rent_" + data[0][i].zoneId + "' id='matchTarget_Rent_" + data[0][i].zoneId + "' > </div> </div>");
+	        		if(data[0][i].zoneType == 1){
+	        			$("#matchTarget_Deal_" + data[0][i].zoneId).attr("disabled", true);
+	        			$("#matchTarget_Deal_" + data[0][i].zoneId).attr("name", "");
+	        		}else if(data[0][i].zoneType == 2){
+	        			$("#matchTarget_Rent_" + data[0][i].zoneId).attr("disabled", true);
+	        			$("#matchTarget_Rent_" + data[0][i].zoneId).attr("name", "");
+	        		}
+	        		$("#matchTarget_Deal_" + data[0][i].zoneId).val(data[0][i].deal);
+	        		$("#matchTarget_Rent_" + data[0][i].zoneId).val(data[0][i].rent);
+	        		i ++;
+	        	}
+	        	
+	        }
+	    });
+	},
+	
+	// 设置赛事类别下拉列表
+	setSelectValue : function(){
+	
+		$.ajax({
+	        type : "POST",
+	        url : '${CTX}/match/getSelectList.do',
+	        dataType : 'json',
+	        error : function(request) {
+	            alert("Error");
+	            
+	        },
+	        success : function(data) {
+	//             alert("Success");
+	        	var modelList = data.categoryList;
+	    		var categoryId = document.getElementById("categoryIdAdd");
+	    		var i = 0;
+	    		while(i <= modelList.length - 1){
+	    	 		var option = new Option(modelList[i].categoryName, modelList[i].categoryId);
+	    	 		categoryId.options.add(option);
+	    			i++;
+	    		}
+	        }
+	    });
+	}
+};
+
+$(function (){
+	aihome.setSelectValue();
+	aihome.getMatchZone();
+	aihome.setInputValue();
+});
+</script>

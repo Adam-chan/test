@@ -1,0 +1,82 @@
+<div class="row">
+	<div class="col-md-9 col-sm-9 col-xs-9">
+	<div class="col-md-2 col-sm-2 col-xs-2">
+			<a onclick="followInit(0);" id="fId_0">汇总 </a>
+	</div>	
+	<div class="col-md-2 col-sm-2 col-xs-2">
+			<a onclick="followInit(1);" id="fId_1">跟进记录 </a>
+	</div>		
+	<div class="col-md-2 col-sm-2 col-xs-2">
+			<a onclick="followInit(2);" id="fId_2">价格变动 </a>
+	</div>		
+	</div>
+	<div class="col-xs-12 my-grid">
+		<table id="followJqGrid">
+		</table>
+		<div id="fJqGridPager"></div>
+		<input id="HouseInfoId" value="${HouseInfoId}" type="hidden">
+	</div>
+
+<script type="text/javascript">
+	$(function() {
+		followInit();
+	});
+
+	function followInit(fData) {
+		jQuery('#followJqGrid').GridUnload();//卸载Grid再进行重绘  
+		$("#followJqGrid").jqGrid({
+			height : $(window).height()*0.3,
+			multiselect : true,
+			multiboxonly : true,
+			viewrecords : true,
+			rownumbers : true,
+			autowidth : true,
+			autoheight : true,
+			async : false,
+			url : "${CTX}/customerSource/getFollowRecordsPage.do",
+			postData : {
+				HouseInfoId : $("#HouseInfoId").val(),
+				followData : fData
+			},
+			datatype : "json",
+			colNames : [ '跟进组', '跟进组人', '跟进时间', '跟进方式', '跟进内容' ],
+			colModel : [ {
+				name : '',
+				sortable : false,
+				width : 2,
+				align : 'center'
+			}, {
+				name : 'operateUser',
+				sortable : false,
+				width : 5,
+				align : 'center'
+			}, {
+				name : 'followTimeStr',
+				sortable : false,
+				width : 3,
+				align : 'center'
+			}, {
+				name : 'followWayStr',
+				sortable : false,
+				width : 5,
+				align : 'center'
+			}, {
+				name : 'followContent',
+				sortable : false,
+				width : 3,
+				align : 'center'
+			}, ],
+			rowNum : 30,
+			rowList : [ 10, 20, 30, 50, 100 ],
+			pager : "#fJqGridPager",
+			jsonReader : {
+				root : 'pagerResults',
+				page : 'currentPage',
+				rows : 'rowCount',
+				total : 'pageCount',
+				records : 'totalCount',
+				repeatitems : false
+			}
+		});
+	}
+</script>

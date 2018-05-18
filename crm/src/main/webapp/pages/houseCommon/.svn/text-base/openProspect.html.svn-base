@@ -1,0 +1,325 @@
+<div class="row">
+	<div class="col-xs-12 my-group">
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">房源编号：</label>
+					<label class="col-xs-4 control-label">${houseCode}</label>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">户型：</label>
+					<label class="col-xs-5 control-label">${(rooms)!''}室${(office)!''}厅${(kitchen)!''}厨${(wc)!''}卫</label>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">面积：</label>
+					<label class="col-xs-3 control-label">${(coveredArea)!''}㎡</label>
+				</div>
+			</div>
+			<div class="col-md-3">				
+				<button class="btn btn-xs btn-icon btn-blue" onclick="aihome.openProspectAdd();" id="uploadButton">
+					<span>上传图片</span>
+				</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">实勘人：</label>
+					<label id="prospectUser" class="col-xs-4 control-label">无</label>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">录入时间：</label>
+					<label id="createTime" class="col-xs-7 control-label">无</label>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">实勘状态：</label>
+					<label id="status" class="col-xs-3 control-label">无</label>
+				</div>
+			</div>
+			<div class="col-md-3">
+			</div>
+		</div>
+		
+		<div id="database">
+			<div class="row" style="text-align:center;font-size:16px;" >
+				<div class="col-md-2" >
+					<a onclick="aihome.typeChange(1)">户型图</a>
+				</div>
+				<div class="col-md-2">
+					<a onclick="aihome.typeChange(2)">室</a>
+				</div>
+				<div class="col-md-2">
+					<a onclick="aihome.typeChange(3)">厅</a>
+				</div>
+				<div class="col-md-2">
+					<a onclick="aihome.typeChange(4)">厨</a>
+				</div>
+				<div class="col-md-2">
+					<a onclick="aihome.typeChange(5)">卫</a>
+				</div>
+				<div class="col-md-2">
+				</div>
+			</div>
+			<div class="col-md-12 col-sm-12 col-xs-12" id="picOption">
+				<input id="selectAll" type="checkbox"  onchange="aihome.selectAll()"/><strong style="margin-right: 10px;">全选</strong>
+				<button class="btn btn-xs btn-icon btn-blue"
+					onclick="aihome.deletePicture();">
+					<span>删除图片</span>
+				</button>
+			</div>
+			<div class="dataList col-md-12 col-sm-12 col-xs-12" style="height:240px">
+				<div style="display:none;text-align:center;margin-top: 5px;" class="example col-md-3 col-sm-3 col-xs-3">
+					<img style="width: 180px;height: 180px;" />
+					<b style="display:block;text-align:center;bold" class="picShowName">
+					<input name="checkIds" lang="id" type="checkbox" value="">
+					<span id="typeStr"></span>&nbsp;<strong></strong></b>	
+				</div>
+			</div>	
+		</div>
+		<input id="houseInfoId" name="houseInfoId" type="hidden" value="${houseInfoId}" />
+		<input id="houseCodes" name="houseCode" type="hidden" value="${houseCode}" />
+		<form class="searchForm">
+			<input id="prospectId" name="prospectId" type="hidden" value="${(prospectInfo.id)!''}" />
+			<input id="type" name="type" type="hidden" value="1" />
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+//初始化实勘信息
+aihome.initProspectInfo = function() {
+	$.ajax({
+		type : "POST",
+		url : "${CTX}/commonSearch/getManageProspectInfo.do",
+		async : false,
+		dataType : "JSON",
+		data : {
+			"houseInfoId" : $("#houseInfoId").val()
+		},
+		success : function(data) {debugger
+			$("#prospectId").val(data.id);
+			$("#prospectUser").html(data.prospectUser);
+			$("#createTime").html(data.createTime);
+			$("#status").html(aihome.statusStr(data.status));
+			if(data.status==2){
+				$("#uploadButton").hide();
+				$("#picOption").hide();
+				$("span:contains('提交')").parent().hide();
+			}
+		}
+	});
+};
+//初始化实勘图片
+aihome.initProspectPic = function(){
+	var opts = new PtsObject();
+	opts.dataList = ".dataList";
+	opts.searchForm = ".searchForm";
+	opts.pagination = ".pagination";
+	opts.example = "example";
+	opts.showCount = 6;
+	opts.formAction = "${CTX}/commonSearch/getManageProspectImagePage.do";
+	opts.detailFunction = function(obj, data) {
+		obj.find("#typeStr").html(aihome.typeStr(data.type));
+		obj.find("img").attr("src", "${IMAGE_URL}" + data.folderName + "/" + data.fileName);
+	}
+	GDPaging.initDataList(opts);
+};
+//标签切换
+aihome.typeChange = function(type){
+	$("#type").val(type);
+	aihome.initProspectPic();
+};
+
+/* 全选 */
+aihome.selectAll = function() {
+	var isCheck = $("#selectAll").is(':checked');
+	$("input[name='checkIds']").prop("checked",isCheck);
+};
+
+aihome.typeStr = function(type){
+	if(type==1){
+		return "户型图";
+	}else if(type==2){
+		return "室";
+	}else if(type==3){
+		return "厅";
+	}else if(type==4){
+		return "厨";
+	}else if(type==5){
+		return "卫";
+	}
+};
+
+aihome.statusStr = function(status){
+	if(status==1){
+		return "未提交";
+	}else if(status==2){
+		return "待审核";
+	}else if(status==3){
+		return "合格";
+	}else if(status==4){
+		return "不合格";
+	}else if(status==5){
+		return "不合格但显示";
+	}
+};
+
+aihome.openProspectAdd = function(){
+	oaDialogOpen(
+		"openProspectAdd",//对话框ID，必填，且不能与当前页面的ID重复
+		{
+			url: "${CTX}/commonSearch/openProspectAdd.do",//调用页面的url
+			title: "上传图片",//弹框的title
+			closeOnEscpe: true,//是否通过esc关闭弹框
+			closeBtn: true,//是否显示关闭按钮
+			width: $(window).width()*0.4,//弹框的宽度
+			height: $(window).height()*0.5,//弹框的高度
+			buttons : {
+				"确定上传" : function() {
+					aihome.saveProspectPicture();
+					$(this).dialog("close");
+				}
+			}
+		}
+	)
+};
+
+//保存新实勘信息
+aihome.saveProspectInfo = function() {
+	$.ajax({
+		type : "POST",
+		url : "${CTX}/commonSearch/saveProspectInfo.do",
+		async : false,
+		dataType : "JSON",
+		data : {
+			"houseInfoId" : $("#houseInfoId").val(),
+			"houseCode" :$("#houseCodes").val()
+		},
+		success : function(data) {
+			if (data >= 1) {
+				alert("实勘信息保存成功");
+			} else {
+				alert("实勘信息保存失败");
+			}
+		}
+	});
+};
+//返回新实勘Id
+aihome.getLastInsertProspectId = function(){
+	var lastId = "";
+	$.ajax({
+		type : "post",
+		url : "${CTX}/commonSearch/getLastInsertProspectId.do",
+		async :false,
+		dataType :'json',
+		success : function(data){
+			lastId = data;
+		}
+	 });
+	return lastId;
+}
+//保存上传的图片路径
+aihome.saveProspectPicture = function() {
+	var prospectId = $("#prospectId").val();
+	var status = $("#status").text();debugger
+	if(status!="未提交"){debugger
+		aihome.saveProspectInfo();
+		prospectId = aihome.getLastInsertProspectId();
+		$("#prospectId").val(prospectId);
+	}
+	var picType = $("#picTypes").val();
+	var dataStr = "[";
+	var list = $("#prospectUploaded").find(".dataFiles");
+	list.each(function(i) {
+		var folderName = $(this).attr("data-folderName");
+		var fileName = $(this).attr("data-fileName");
+		dataStr += '{"folderName":"' + folderName + '","fileName":"'
+				+ fileName + '","picType":"' + picType + '"}';
+		if (i != list.length - 1) {
+			dataStr += ',';
+		}
+	});
+	dataStr += "]";
+	
+	//保存图片到数据库
+	$.ajax({
+		type : "POST",
+		url : "${CTX}/commonSearch/saveProspectPicture.do",
+		async : false,
+		dataType : "JSON",
+		data : {
+			"dataStr" : dataStr,
+			"prospectId":prospectId
+		},
+		success : function(data) {
+			if (data >= 1) {
+				alert("实勘图片保存成功");
+			} else {
+				alert("实勘图片保存失败");
+			}
+		}
+	});
+	//刷新实勘页
+	aihome.initProspectInfo();
+	aihome.initProspectPic();
+}
+
+/*删除图片*/
+aihome.deletePicture = function() {
+	var idList = new Array();
+	$('input:checkbox[name=checkIds]:checked').each(function() {
+		var checkId = $(this).text();
+		if(checkId != ''){
+			idList.push(checkId);
+		}
+		
+	})
+	if (idList == null || idList == '') {
+		alert("没有选中的图片！");
+		return;
+	}
+	var url = "${CTX}/commonSearch/deletePicture.do";
+	if (confirm("确认删除？")) {
+		$.ajax({
+			url : url,
+			dataType : "json",
+			data : {
+				"idList" : idList
+			},
+			success : function(data) {
+				alert("删除成功！");
+				aihome.initProspectPic();
+			}
+		});
+	}
+};
+//提交实勘
+aihome.submitProspect = function(){
+	$.ajax({
+		url : "${CTX}/commonSearch/submitProspect.do",
+		dataType : "json",
+		data : {
+			"prospectId":$("#prospectId").val()
+		},
+		success : function(data) {
+			alert("提交成功！");
+		}
+	});
+};
+$(function () {
+	aihome.initProspectInfo();
+	if($("#prospectId").val()){
+		aihome.initProspectPic();
+	}
+});
+</script>
+

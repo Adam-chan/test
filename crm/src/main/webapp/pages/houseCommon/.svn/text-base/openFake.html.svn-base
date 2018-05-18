@@ -1,0 +1,38 @@
+<div class="row" style="margin-top: 5px;">
+	<label class="col-xs-2 control-label" style="text-align: right;">打假类型:</label>
+	<div class="col-xs-6" style="padding-left: 0px;">
+   		<input name="fakeType"  type="radio" value="1" checked  />房源打假
+		<input name="fakeType"  type="radio" value="2"/>实勘打假
+		<input name="fakeType"  type="radio" value="3"/>钥匙打假
+		<input name="fakeType"  type="radio" value="4"/>委托书打假
+	</div>
+</div>
+<div class="row" id="fake_house">
+	<#include "../houseCommon/openFake_house.html">
+</div>
+<div class="row" id="key_house" hidden>
+	<#include "../houseCommon/openFake_key.html">
+</div>
+<div class="row" id="porxy_house" hidden>
+	<#include "../houseCommon/openFake_porxy.html">
+</div>
+<script type="text/javascript">
+$(":input[name='fakeType']").change(function (){
+	aihome.fakeType = $('input[name="fakeType"]:checked').val();
+	if($(this).val()==1){
+		$("#key_house").hide();
+		$("#porxy_house").hide();
+		$("#fake_house").show();
+	}else if($(this).val()==2){
+		
+	}else if($(this).val()==3){
+		$("#fake_house").hide();
+		$("#porxy_house").hide();
+		$("#key_house").show();
+	}else{
+		$("#porxy_house").show();
+		$("#key_house").hide();
+		$("#fake_house").hide();
+	}
+});
+</script>

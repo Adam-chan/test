@@ -1,0 +1,108 @@
+<div class="row" id="editCategory">
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+		<div id="element_id">
+			<div class="col-md-12">
+				<div class="form-xs form-group row">
+					<label class="col-xs-2 control-label">类别名称：</label>
+					<div class="col-xs-5">
+						<#if categoryObj??>
+							<input id="editName" class="form-control input-xs" name="name" type="text" value="${categoryObj.name!}" maxlength="16">
+						<#else>
+							<input id="editName" class="form-control input-xs" name="name" type="text" value="" maxlength="16" >
+						</#if>
+					</div>
+					<label class="col-xs-2 control-label">排序号：</label>
+					<div class="col-xs-2">
+						<#if categoryObj??>
+							<input id="editSort" class="form-control input-xs" name="name" type="text" value="${categoryObj.sort!}" maxlength="16">
+						<#else>
+							<input id="editSort" class="form-control input-xs" name="name" type="text" value="" maxlength="16">
+						</#if>
+					</div>
+				</div>
+			</div>
+
+			
+			
+			<div class="col-md-12 col-sm-12">
+				<div class=" form-xs form-group row">
+					<label class="col-xs-2 control-label">参赛层级：</label>
+				  	<div class="radio-inline ">
+				    	<#if categoryObj?? && categoryObj.layer == "1">
+				    		<input name="radio1" type="radio"  value="1" checked="checked">
+				    	<#else>
+				    		<input name="radio1" type="radio"  value="1">
+				    	</#if>
+				     	
+				      		<span>大区</span>
+				  	</div>
+					<div class="radio-inline">
+						<#if categoryObj?? && categoryObj.layer == "2">
+							<input name="radio1" type="radio"  value="2" checked="checked">
+						<#else>
+							<input name="radio1" type="radio"  value="2">
+						</#if>
+							<span>区</span>
+					</div>
+					<div class="radio-inline">
+						<#if categoryObj?? && categoryObj.layer == "3">
+							<input name="radio1" type="radio"  value="3" checked="checked">
+						<#else>
+							<input name="radio1" type="radio"  value="3">
+						</#if>
+							<span>组</span>
+					</div>
+				 </div>
+			</div>
+			
+			<div class="col-md-12 col-sm-12">
+				<div class=" form-xs form-group row">
+					<label class="col-xs-2 control-label">启用状态：</label>
+				  	<div class="radio-inline">
+				    	<#if categoryObj?? && categoryObj.status == "1">
+				     		<input name="radio2" type="radio"  value="1" checked="checked" >
+				     	<#else>	
+				     		<input name="radio2" type="radio"  value="1">
+				     	</#if>
+				      		<span>启用</span>
+				  	</div>
+					<div class="radio-inline">
+						<#if categoryObj?? && categoryObj.status == "2">
+							<input name="radio2" type="radio"  value="2" checked="checked">
+						<#else>
+							<input name="radio2" type="radio"  value="2">
+						</#if>	
+							<span>禁用</span>
+					</div>
+				 </div>
+			</div>
+			
+			<div class="col-md-12 col-sm-12">
+				<div class="form-xs form-group row">
+				<label class="col-xs-2 control-label">备注：</label>
+					<div class="col-xs-10 " id="cloneTarget">
+					<#if categoryObj??>
+                    	<textarea id ="remarks" rows="3" cols="60" style="width: 100%">${categoryObj.remark!}</textarea>
+                    <#else>
+                    	<textarea id ="remarks" rows="3" cols="60" style="width: 100%"></textarea>
+                    </#if>
+					</div>
+				</div>
+			</div>
+			
+			<#if readType??>
+				<input value="${readType!}" id="readType" style="display: none;">
+			<#else>
+				<input id="readType" style="display: none;" value="">
+			</#if>
+			
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+if($("#readType").val() == "readOnly"){
+	$("input").attr("disabled" , true);
+	$("textarea").attr("disabled" , true);
+}
+</script>

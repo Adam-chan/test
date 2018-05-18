@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 行政区域表 -->
+<mapper namespace="baseArea" >
+
+  <sql id="Base_Column_List" >
+    id, AREA_CODE areaCode, pid, SHORT_NAME shortName, name, MERGER_NAME mergerName, AREA_LEVEL areaLevel, pinyin, TEL_CODE telCode, 
+    ZIP_CODE zipCode, FRIST_CHAR fristChar, lng, lat,STATUS,REMARK,SORT,SHOW_STATUS showStatus
+  </sql>
+  <!-- 省市区分页列表 -->
+  <select id="getAreaPage" resultType="baseAreaModel" parameterType="map" >
+  		select 
+    		<include refid="Base_Column_List" />
+    	from BASE_AREA
+    	where STATUS = 1
+	    	<if test="areaId != null">
+	    	    and pid = #{areaId}
+	    	</if>
+	    	<if test="areaLevel != null">
+	    		and AREA_LEVEL = #{areaLevel}
+	    	</if>
+	    	<if test="name != null and name != ''">
+	    		and NAME = #{name}
+	    	</if>
+	    	<if test ="sidx == '' or sord == ''">
+	        	order by id desc
+    		</if>
+	    	<if test ="sidx != ''and sord != ''">
+				order by ${sidx} ${sord}
+    		</if>
+  </select>
+      	
+  	<!-- 街道分页列表 -->
+	<select id="getSubdistrictPage" parameterType="map"  resultType="subdistrictModel">
+		select  a.id ,
+				a.NAME as name,
+				a.BASE_AREA_ID as baseAreaId,
+				a.STATUS,
+				b.AREA_CODE as areaCode,
+				a.REMARK,
+				a.SORT,
+				a.SHOW_STATUS showStatus
+		from  area_subdistrict a 
+		left join BASE_AREA b on a.BASE_AREA_ID = b.id
+		where a.STATUS = 1
+	         <if test="areaId != null and areaId != ''">
+	           and	a.BASE_AREA_ID = #{areaId}
+	        </if>
+	        <if test="name != null and name != ''">
+	         	and a.NAME = #{name}
+	        </if>
+	        <if test ="sidx == '' or sord == ''">
+	        	order by a.id desc
+    		</if>
+	        <if test ="sidx != ''and sord != ''">
+				order by a.${sidx} ${sord}
+    		</if>
+	</select>
+	
+   <!-- 社区分页列表 -->
+	<select id="getCommunityPage" parameterType="map"  resultType="communityModel">
+		select  a.id,
+				a.NAME,
+				a.SUBDISTRICT_ID as subdistrictId,
+				a.STATUS,
+				c.AREA_CODE as areaCode,
+				a.REMARK,
+				a.SORT,
+				a.SHOW_STATUS showStatus
+		from  AREA_COMMUNITY a
+		left join area_subdistrict b on a.SUBDISTRICT_ID = b.id
+		left join BASE_AREA c on b.BASE_AREA_ID = c.id
+		where a.STATUS = 1
+	    	<if test="areaId != null">
+	    	    and a.SUBDISTRICT_ID = #{areaId}
+	    	</if>
+	    	<if test="name != null and name != ''">
+	    		and a.NAME = #{name}
+	    	</if>
+	    	<if test ="sidx == '' or sord == ''">
+	        	order by a.id desc
+    		</if>
+	        <if test ="sidx != ''and sord != ''">
+				order by a.${sidx} ${sord}
+    		</if>
+	</select>
+	  <!-- 省市区列表list -->
+    <select id="getAreaList" resultType="baseAreaModel" parameterType="map" >
+  		select 
+    		<include refid="Base_Column_List" />
+    	from BASE_AREA
+    	where STATUS = 1
+	    	<if test="eareId != null">
+	    		and	pid = #{eareId}
+	    	</if>
+	    	<if test="areaLevel != null">
+	    		and AREA_LEVEL = #{areaLevel}
+	    	</if>
+   </select>
+   
+  	<!-- 根据区ID查询街道列表数据 -->
+	<select id="getSubdistrictList" parameterType="java.lang.String"  resultType="subdistrictModel">
+		select  id,
+				NAME,
+				BASE_AREA_ID as baseAreaId
+		  from 	area_subdistrict
+		where  STATUS = 1
+			and	BASE_AREA_ID = #{_prarmeter}
+	</select>
+    <!-- 根据查询base_area表信息 验证区是否存在 -->
+    <select id="getAreaInfo" resultType="baseAreaModel" parameterType="map" >
+  		select 
+    		<include refid="Base_Column_List" />
+    	from BASE_AREA
+    	where status = 1
+	    	<if test="baseAreaPId != null and baseAreaPId != ''">
+	    	    and	pid = #{baseAreaPId}
+	    	</if>
+	    	<if test="baseAreaId != null and baseAreaId != ''">
+	    	    and id = #{baseAreaId}
+	    	</if>
+	    	<if test="areaName != null and areaName !='' ">
+	    		and name = #{areaName}
+	    	</if>
+   </select>
+   
+      <!-- 根据查询base_area表信息 验证区是否存在 -->
+    <select id="getAreaCodeInfo" resultType="baseAreaModel" parameterType="map" >
+  		select 
+    		<include refid="Base_Column_List" />
+    	from BASE_AREA
+    	where status = 1
+	    	<if test="baseAreaPId != null and baseAreaPId != ''">
+	    	    and	pid = #{baseAreaPId}
+	    	</if>
+	    	<if test="areaCode != null and areaCode !='' ">
+	    		and AREA_CODE = #{areaCode}
+	    	</if>
+   </select>
+		<!-- 查询area_subdistrict表信息 -->
+	<select id="getSubdistrict" parameterType="map"  resultType="subdistrictModel">
+		select  a.id ,
+				a.NAME,
+				a.BASE_AREA_ID as baseAreaId,
+				b.name as baseAreaName,
+				a.REMARK as remark,
+				a.status,
+				a.sort,
+				a.SHOW_STATUS as showStatus
+		  from 	area_subdistrict  a 
+				left join base_area b on a.BASE_AREA_ID = b.id
+		where a.status = 1
+	         <if test="subdistrictId != null and subdistrictId != ''">
+	         	and a.id = #{subdistrictId}
+	        </if>
+	</select>
+		<!--  查询AREA_COMMUNITY表  验证社区名是否存在 -->
+	<select id="getCommunityName" parameterType="map"  resultType="communityModel">
+		select  id ,
+				NAME,
+				SHOW_STATUS as showStatus ,
+				SORT,
+				REMARK,
+				STATUS
+		  from 	AREA_COMMUNITY 
+		 where status = 1
+	         <if test="baseAreaPId != null and baseAreaPId != ''">
+	            and SUBDISTRICT_ID = #{baseAreaPId}
+	        </if>
+	        <if test="areaName != null and areaName != ''">
+	         	and NAME = #{areaName}
+	        </if>
+	        <if test="communityId != null and communityId != ''">
+	         	and id = #{communityId}
+	        </if>
+	</select>
+  <!-- 批量插入区表数据 -->
+  <insert id="insertAreaBorough"  parameterType="map" >
+    	insert into BASE_AREA (ID,PID,NAME,FRIST_CHAR,PINYIN,
+    	<if test="areaLng != null and areaLng!=''" >
+		   			LNG,
+      	</if>
+    	<if test="areaLng != null and areaLng!=''" >
+		   			LAT,
+      	</if>
+    	SORT,SHOW_STATUS,REMARK,STATUS,AREA_LEVEL,MERGER_NAME,AREA_CODE)
+    	values(BASE_AREA_SEQ.NEXTVAL,
+    			#{pId},
+		   		#{areaName},
+		   		#{cn2FirstSpell},
+		   		#{cn2Spell},
+		   		<if test="areaLng != null and areaLng!=''" >
+		   			#{areaLng},
+      			</if>
+		   		<if test="areaLat != null and areaLat!=''" >
+		   			#{areaLat},
+      			</if>
+		   		#{sort},
+		   		#{showStatus},
+		   		#{remarkText},
+		   		#{status},
+		   		#{areaLevel},
+		   		#{mergerName},
+		   		#{areaCode}
+   			)
+ </insert>
+   <!-- 批量插入街道表数据 -->
+  <insert id="insertSubdistrict"  parameterType="map" >
+    	insert into area_subdistrict (id,NAME,BASE_AREA_ID,SHOW_STATUS,SORT,REMARK,STATUS) 
+   		values(AREA_SUBDISTRICT_SEQ.NEXTVAL,
+		   		#{areaName},
+		   		#{baseAreaPid},
+		   		#{showStatus},
+		   		#{sort},
+		   		#{remarkText},
+		   		#{status}
+   			)
+ </insert> 
+  <!-- 批量插入社区表数据 -->
+  <insert id="insertCommunity"  parameterType="map"  useGeneratedKeys="false">
+    	insert into AREA_COMMUNITY (id,NAME,SUBDISTRICT_ID,SHOW_STATUS,SORT,REMARK,STATUS) 
+    	values(AREA_COMMUNITY_SEQ.NEXTVAL,
+		    	#{areaName},
+		    	#{baseAreaPid},
+		    	#{showStatus},
+		    	#{sort},
+		    	#{remarkText},
+		    	#{status}
+    		)
+ </insert>
+  <!-- 有选择插入一条条行政区域表数据 -->
+  <insert id="insertArea" parameterType="map" >
+    insert into BASE_AREA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        "ID",
+      </if>
+      <if test="areaCode != null" >
+        AREA_CODE,
+      </if>
+      <if test="pid != null" >
+        PID,
+      </if>
+      <if test="shortName != null" >
+        SHORT_NAME,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="mergerName != null" >
+        MERGER_NAME,
+      </if>
+      <if test="areaLevel != null" >
+        AREA_LEVEL,
+      </if>
+      <if test="pinyin != null" >
+        PINYIN,
+      </if>
+      <if test="telCode != null" >
+        TEL_CODE,
+      </if>
+      <if test="zipCode != null" >
+        ZIP_CODE,
+      </if>
+      <if test="fristChar != null" >
+        FRIST_CHAR,
+      </if>
+      <if test="lng != null" >
+        LNG,
+      </if>
+      <if test="lat != null" >
+        LAT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=DECIMAL},
+      </if>
+      <if test="shortName != null" >
+        #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mergerName != null" >
+        #{mergerName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaLevel != null" >
+        #{areaLevel,jdbcType=DECIMAL},
+      </if>
+      <if test="pinyin != null" >
+        #{pinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="telCode != null" >
+        #{telCode,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fristChar != null" >
+        #{fristChar,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null" >
+        #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null" >
+        #{lat,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 根据id有选择的跟新一条行政区域表数据 -->
+  <update id="updateArea" parameterType="map" >
+    update BASE_AREA
+    <set >
+      <if test="areaCode != null and areaCode !='' " >
+        AREA_CODE = #{areaCode},
+      </if>
+      <if test="pid != null " >
+        PID = #{pid},
+      </if>
+      <if test="shortName != null" >
+        SHORT_NAME = #{shortName},
+      </if>
+      <if test="name != null" >
+        NAME = #{name},
+      </if>
+      <if test="mergerName != null" >
+        MERGER_NAME = #{mergerName},
+      </if>
+      <if test="areaLevel != null" >
+        AREA_LEVEL = #{areaLevel},
+      </if>
+      <if test="pinyin != null" >
+        PINYIN = #{pinyin},
+      </if>
+      <if test="telCode != null" >
+        TEL_CODE = #{telCode},
+      </if>
+      <if test="zipCode != null" >
+        ZIP_CODE = #{zipCode},
+      </if>
+      <if test="fristChar != null" >
+        FRIST_CHAR = #{fristChar},
+      </if>
+      <if test="lng != null" >
+        LNG = #{lng},
+      </if>
+      <if test="lat != null" >
+        LAT = #{lat},
+      </if>
+      <if test="status!= null and status != ''">
+        STATUS = #{status}  
+      </if>
+       <if test="remark != null" >
+        REMARK = #{remark},
+      </if>
+       <if test="sort != null" >
+        SORT = #{sort},
+      </if>
+       <if test="showStatus != null" >
+        SHOW_STATUS = #{showStatus}
+      </if>
+    </set>
+    <where> 
+	    <if test="areaId!=null and areaId != ''">
+	     	 ID in (${areaId})
+	    </if>
+	    <if test="areaName != null and areaName != '' ">
+	     	and instr(#{areaName},short_name) > 0
+	    </if>
+	      <if test="parentName != null and parentName != '' ">
+	     	and MERGER_NAME like '%' || #{parentName} || '%'
+	     </if>
+     </where> 
+  </update>
+  
+	   <!-- 更新街道信息 -->
+  <update id="updateSubdistrict" parameterType="map">
+    update area_subdistrict
+    <set >
+      <if test="subdistrictName!= null and subdistrictName != ''">
+        NAME = #{subdistrictName},
+      </if>
+      <if test="showStatus!= null and showStatus != ''">
+        SHOW_STATUS = #{showStatus},
+      </if>
+      <if test="sort!= null">
+        SORT = #{sort},
+      </if>
+      <if test="remark!= null">
+        REMARK = #{remark},
+      </if>
+        <if test="status!= null and status != ''">
+        STATUS = #{status}
+      </if>
+    </set>
+    <where>
+        <if test="subdistrictId != null and subdistrictId != ''">
+        	ID  in (${subdistrictId})
+       </if>
+       <if test="areaId != null and areaId != ''">
+        	and BASE_AREA_ID in (${areaId})
+       </if>
+    </where>
+  </update>
+  
+	  <!-- 更新社区信息 -->
+  <update id="updateCommunity" parameterType="map">
+    update AREA_COMMUNITY
+    <set >
+      <if test="communityName!= null and communityName != ''">
+        NAME = #{communityName},
+      </if>
+       <if test="showStatus!= null and showStatus != ''">
+        SHOW_STATUS = #{showStatus},
+      </if>
+      <if test="sort!= null">
+        SORT = #{sort},
+      </if>
+      <if test="remark!= null">
+        REMARK = #{remark},
+      </if>
+       <if test="status!= null and status != ''">
+        STATUS = #{status}
+      </if>
+    </set>
+    <where>
+        <if test="communityId != null and communityId != ''">
+        	 ID in (${communityId})
+       </if>
+       <if test="subdistrictId != null and subdistrictId != ''">
+        	and SUBDISTRICT_ID in (${subdistrictId})
+       </if>
+    </where>
+  </update>
+    <!-- 模糊查询社区信息 -->
+	<select id="getCommunityByMatch" resultType="communityModel">
+		SELECT
+			id,
+			NAME
+		FROM
+			AREA_COMMUNITY 
+		where status = 1  
+			<if test="pId != null  and pId !=''"> 
+		        and SUBDISTRICT_ID = #{pId}
+		    </if>
+			<if test="matchStr != null  and matchStr !=''"> 
+		     	and INSTR(NAME, #{matchStr}) > 0
+		    </if>
+		ORDER BY id 
+   	</select>
+   	  <!-- 模糊查询街道信息 -->
+	<select id="getSubdistrictByMatch" resultType="subdistrictModel">
+		SELECT
+			id,
+			NAME
+		FROM
+			AREA_SUBDISTRICT
+		where status = 1 
+			<if test="pId != null  and pId !=''"> 
+		     	and BASE_AREA_ID = #{pId}
+		    </if>
+			<if test="matchStr != null  and matchStr !=''"> 
+		     	and INSTR(NAME, #{matchStr}) > 0
+		    </if>
+		ORDER BY id 
+   	</select>
+   	
+   		  <!-- 模糊查询区信息 -->
+	<select id="getAreaByMatch" resultType="baseAreaModel">
+		SELECT
+			id,
+			NAME
+		FROM
+			BASE_AREA
+		where status = 1 
+			<if test="pId != null  and pId !=''"> 
+		        and PID = #{pId}
+		    </if>
+			<if test="matchStr != null  and matchStr !=''"> 
+		     	and INSTR(NAME, #{matchStr}) > 0
+		    </if>
+		
+		ORDER BY id 
+   	</select>
+
+		<!--  验证街道名是否存在 -->
+	<select id="getSubdistrictName" parameterType="map"  resultType="subdistrictModel">
+		select  id ,
+				NAME as name,
+				BASE_AREA_ID as baseAreaId
+		  from 	area_subdistrict   
+		 where status = 1
+	         <if test="baseAreaPId != null and baseAreaPId != ''">
+	         	and BASE_AREA_ID = #{baseAreaPId}
+	        </if>
+	        <if test="areaName != null and areaName != ''">
+	         	and NAME = #{areaName}
+	        </if>
+	</select>
+		<!--  查询街道数量 -->
+	<select id="getSubdistrictCount" parameterType="map"  resultType="subdistrictModel">
+		select  count(0) as conunt
+		  from 	area_subdistrict
+		 where	BASE_AREA_ID in(${rowIds})
+	</select>
+	
+		<!--  查询社区数量 -->
+	<select id="getCommunityCount" parameterType="map"  resultType="communityModel">
+		select  count(0) as conunt
+		  from 	AREA_COMMUNITY
+		 where	SUBDISTRICT_ID in (${rowIds})
+	</select>
+	
+	<!-- 模糊查询区信息 -->
+	<select id="getAreaByMatchOfLevel3" resultType="baseAreaModel">
+		SELECT
+			ID,
+			NAME
+		FROM
+			BASE_AREA
+		WHERE
+			AREA_LEVEL = 3
+			AND STATUS = 1
+		<if test="pid != null  and pid !=''"> 
+			AND PID = #{pid}
+		</if>
+		<if test="matchStr != null  and matchStr !=''"> 
+			AND INSTR(NAME, #{matchStr}) > 0
+		</if>
+		ORDER BY
+			ID
+	</select>
+	<!-- 社区列表 -->
+	<select id="getCommunityList" parameterType="map" resultType="communityModel">
+		SELECT
+			AC.ID,
+			AC.NAME
+		FROM 
+			AREA_COMMUNITY AC
+		INNER JOIN
+			AREA_SUBDISTRICT ASS
+		ON
+			AC.SUBDISTRICT_ID = ASS.ID
+		WHERE AC.STATUS = 1
+		<if test="subdistrictId != null"> 
+			AND AC.SUBDISTRICT_ID = #{subdistrictId}
+		</if>
+	</select>
+	
+  	<!-- 根据区ID查询所有街道ID -->
+	<select id="getSubdistrictIdByAreaId" resultType="subdistrictModel">
+		SELECT id,name FROM
+			AREA_SUBDISTRICT
+		where status = 1 
+			<if test="areaId != null  and areaId !=''"> 
+		     	and BASE_AREA_ID = #{areaId}
+		    </if>
+   	</select>
+   	
+</mapper>

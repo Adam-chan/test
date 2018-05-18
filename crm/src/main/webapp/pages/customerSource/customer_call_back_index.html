@@ -1,0 +1,352 @@
+<div id="top_tools" class=" btn-group">
+	<button  class="btn btn-sm btn-white"
+		onclick="aihome.cleanCustCallBack();">
+		<i class="iconfont">&#xe626;</i> <span>清空</span>
+	</button>
+	<button  class="btn btn-sm btn-white"
+		onclick="aihome.queryCustCallBack();">
+		<i class="iconfont">&#xe626;</i> <span>查询</span>
+	</button>
+	<button  class="btn btn-sm btn-white"
+		onclick="aihome.toCustCallBack();">
+		<i class="iconfont">&#xe6e3;</i> <span>回访</span>
+	</button>
+</div>
+<div class="row">
+<div class="col-sm-12 col-xs-12 my-group ">
+	<div class="form-horizontal row my-inputs">
+		<div class=" row ">
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="demandCode" class="col-xs-4 control-label">客源编号：</label>
+					<div class="col-xs-6">
+						<input id = "demandCode" type="text" class="form-control input-xs" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="isCallBack" class="col-xs-4 control-label">回访状态：</label>
+					<div class="col-xs-6">
+						<select id="isCallBack" class="input-xs form-control dateRange">
+							<option value="">请选择</option>
+							<option value="1">已回访</option>
+							<option value="2">未回访</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="callBackTime" class="col-xs-4 control-label">回访时间：</label>
+					<div class="col-xs-6">
+						<div class=" input-daterange input-group 5i5jdate" style="">
+							<input type="text" class="form-control input-xs"
+								id="callBackTimeStart" placeholder="开始时间" name="timeStart"> <span
+								class="input-group-addon addon-xs"> <i
+								class="fa fa-exchange"></i>
+							</span> <input type="text" class="form-control input-xs"
+								id="callBackTimeEnd" placeholder="结束时间" name="timeEnd">
+						</div>
+					</div>
+				</div>
+			</div>		
+		</div>
+		
+		<div class=" row ">
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">录入时间：</label>
+					<div class="col-xs-6">
+						<div class=" input-daterange input-group 5i5jdate" style="">
+							<input type="text" class="form-control input-xs"
+								id="entryDateStart" placeholder="开始时间" name="timeStart"> <span
+								class="input-group-addon addon-xs"> <i
+								class="fa fa-exchange"></i>
+							</span> <input type="text" class="form-control input-xs"
+								id="entryDateEnd" placeholder="结束时间" name="timeEnd">
+					    </div>
+					 </div>
+				  </div>
+			 </div>		
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="takeDate" class="col-xs-4 control-label">带看时间：</label>
+					<div class="col-xs-6">
+						<div class=" input-daterange input-group 5i5jdate" style="">
+							<input type="text" class="form-control input-xs"
+								id="takeDateStart" placeholder="开始时间" name="timeStart"> <span
+								class="input-group-addon addon-xs"> <i
+								class="fa fa-exchange"></i>
+							</span> <input type="text" class="form-control input-xs"
+								id="takeDateEnd" placeholder="结束时间" name="timeEnd">
+						</div>
+					</div>
+				</div>
+			</div>		
+		<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="entryPerson" class="col-xs-4 control-label">录入人：</label>
+					<div class="col-xs-6">
+						<input type="text" class="form-control input-xs" id="entryPerson" >
+					</div>
+				</div>
+			</div>
+		</div>	
+		
+		<div class=" row ">
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="takeUser" class="col-xs-4 control-label">带看人：</label>
+					<div class="col-xs-6">
+						<input type="text" class="form-control input-xs" id="takeUser" >
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="accompany" class="col-xs-4 control-label">陪看人：</label>
+					<div class="col-xs-6">
+						<input type="text" class="form-control input-xs" id="accompany" >
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4">
+				<div class="form-xs form-group row">
+					<label for="operateUser" class="col-xs-4 control-label">回访人：</label>
+					<div class="col-xs-6">
+						<input type="text" class="form-control input-xs" id="operateUser" >
+					</div>
+				</div>
+			</div>
+		</div>	
+		
+	</div>
+	<div id="more-input" class="" style="height: 71px;">
+			<div>
+				<i class="iconfont"></i>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-xs-12 my-grid">
+		<table id="custCallBackJqGrid"></table>
+		<div id="custCallBackJqGridPager"></div>
+	</div>
+	
+</div>
+<input id = "demandType" type="hidden">
+<script type="text/javascript">
+var aihome = {};
+	$('.page-content-area').ace_ajax('loadScripts', [ null, "../assets/js/bootbox.js"], function() {
+	});
+	
+	/*初始化分页页面*/
+	aihome.custCallBackInit = function () {
+		$("#custCallBackJqGrid").jqGrid({
+							height : $(window).height() - 279,
+							multiselect : true,
+							multiboxonly : true,
+							viewrecords : true,
+							rownumbers : true,
+							autowidth : true,
+							autoheight : true,
+							async : false,
+							url : "${CTX}/customerSource/getCustCallBackPage.do",
+							postData : {
+								
+							},
+							datatype : "json",
+							colNames : ['客源编号', '约带看日期', '带看次数','回访状态', '回访时间' 
+							             , '回访人' , '回访内容' ,'demandId'],
+					            
+							colModel : [
+										{name : 'demandCode',sortable : false,width : 5,align : 'center',
+											 formatter:function(rowName, options, rowObject){
+												 var html = "";
+												 if(rowObject.demandCode){
+													 html += "<a style='color: blue;' onclick='aihome.showDetails("+rowObject.demandId+");'>"+rowObject.demandCode+"</a>";
+												 }
+												 if(rowObject.customerName){
+													 html += "（"+rowObject.customerName+"）";
+												 }
+							            	     return html;
+								             }}, 
+								        {name : 'takeDateStr',sortable : false,width : 5,align : 'center'},  
+										{name : 'promiseCount',sortable : false,width : 6,align : 'center',
+											 formatter:function(rowName, options, rowObject){
+												 var html = "";
+												 if(rowObject.promiseCount){
+													 html += "<a style='color: blue;' onclick='aihome.showPromise("+rowObject.demandId+","+rowObject.takeDate+");'>"+rowObject.promiseCount+"</a>";
+												 }
+							            	     return html;
+								             }},
+										{name : 'isCallBack',sortable : false,width : 6,align : 'center',
+											 formatter:function(rowName, options, rowObject){
+												 var html = "";
+												 if(rowObject.isCallBack == 1){
+													 html += "已回访";
+												 }else if(rowObject.isCallBack == 2){
+													 html += "未回访";
+												 }
+							            	     return html;
+								             }},
+										{name : 'callBackTimeStr',sortable : false,width : 6,align : 'center'},
+										{name : 'operateUser',sortable : false,width : 6,align : 'center'},
+										{name : 'remark',sortable : false,width : 6,align : 'center'},
+										{name : 'demandId',hidden:true}
+										],
+							rowNum : 30,
+							rowList : [ 10, 20, 30, 50, 100 ],
+							pager : "#custCallBackJqGridPager",
+							jsonReader : {
+								root : 'pagerResults',
+								page : 'currentPage',
+								rows : 'rowCount',
+								total : 'pageCount',
+								records : 'totalCount',
+								repeatitems : false
+							}
+				});
+	}
+	
+	/* 查询 */
+	aihome.queryCustCallBack = function () {
+		$("#custCallBackJqGrid").setGridParam({
+			postData : {
+				demandCode : $("#demandCode").val(),
+				isCallBack : $("#isCallBack").val(),
+				callBackTimeStart : $("#callBackTimeStart").val(),
+				callBackTimeEnd : $("#callBackTimeEnd").val(),
+				entryDateStart : $("#entryDateStart").val(),
+				entryDateEnd : $("#entryDateEnd").val(),
+				takeDateStart : $("#takeDateStart").val(),
+				takeDateEnd : $("#takeDateEnd").val(),
+				entryPerson : $("#entryPerson").val(),
+				takeUser : $("#takeUser").val(),
+				accompany : $("#accompany").val(),
+				operateUser : $("#operateUser").val()
+			}
+		}).trigger("reloadGrid");
+	}
+
+	/* 清空 */
+	aihome.cleanCustCallBack = function () {
+		 $("#demandCode").val(''),
+		 $("#isCallBack").val(''),
+		 $("#callBackTimeStart").val(''),
+		 $("#callBackTimeEnd").val(''),
+		 $("#entryDateStart").val(''),
+		 $("#entryDateEnd").val(''),
+		 $("#takeDateStart").val(''),
+		 $("#takeDateEnd").val(''),
+		 $("#entryPerson").val(''),
+		 $("#takeUser").val(''),
+		 $("#accompany").val(''),
+		 $("#operateUser").val('')
+	}
+	
+	/* 客源详情 */
+	aihome.showDetails = function(id) {		
+		oaDialogOpen("customerSourceDetail",//对话框ID，必填，且不能与当前页面的ID重复
+			{
+		url : "${CTX}/customerSource/customerSourceDetail.do?id="+id,//调用页面的url
+		title : "客源详情",//弹框的title
+		closeOnEscpe : true,//是否通过escpe关闭弹框
+		closeBtn : true,//是否显示关闭按钮
+		width : 1000,//弹框的宽度
+		height : 800,
+		buttons : {
+			"取消" : function() {
+				$(this).dialog("close");
+			}
+		}
+	});
+	}
+	
+	/* 客源回访约带看详情 */
+	aihome.showPromise = function(id,takeDate) {	
+		var heights = $(window).height()*0.7;
+		var widths = $(window).width()*0.5;
+		oaDialogOpen("showPromiseDetail",//对话框ID，必填，且不能与当前页面的ID重复
+		{
+		url : "${CTX}/customerSource/getCallBackPromiseIndex.do?demandId="+id+"&takeDate="+takeDate,//调用页面的url
+		title : "客源回访约带看详情",//弹框的title
+		closeOnEscpe : true,//是否通过escpe关闭弹框
+		closeBtn : true,//是否显示关闭按钮
+		width : widths,//弹框的宽度
+		height : heights,
+		buttons : {
+			"取消" : function() {
+				$(this).dialog("close");
+			}
+		}
+	});
+	}
+	
+	function addDate(dd,dadd){
+		var a = new Date(dd)
+		a = a.valueOf()
+		a = a + dadd * 24 * 60 * 60 * 1000
+		a = new Date(a)
+		return a;
+		}
+	
+	/* 客源回访 */
+	aihome.toCustCallBack = function() {
+		var rowIds = $("#custCallBackJqGrid").jqGrid('getGridParam','selarrrow');
+		
+		var selCount=rowIds.length;
+		if (selCount == 0){
+			alert("没有选中的客源！");
+			return null;
+		}
+		if (selCount > 1){
+			alert("请只选择一个客源！");
+			return null;
+		}
+		
+		var rowData = $("#custCallBackJqGrid").jqGrid('getRowData',rowIds);
+		var demandId = rowData.demandId;
+		
+		var mydate = new Date();
+		nextNow = addDate((mydate.getMonth()+1)+"/"+mydate.getDate()+"/"+mydate.getFullYear(),-1);
+		var dateStr = "" + nextNow.getFullYear() + "-";
+		dateStr += (nextNow.getMonth()+1) + "-";
+		dateStr += nextNow.getDate()< 10 ? "0"+nextNow.getDate() : nextNow.getDate();
+		
+		if(rowData.isCallBack == '未回访' && dateStr ==  rowData.takeDateStr){
+					var heights = $(window).height() * 0.8;
+					var widths = $(window).width() * 0.9;
+					oaDialogOpen("callBackCustomer",//对话框ID，必填，且不能与当前页面的ID重复
+							{
+								url : "${CTX}/customerSource/callBackCustomer.do?id="+demandId,//调用页面的url
+								title : "客源回访",//弹框的title
+								closeOnEscpe : true,//是否通过escpe关闭弹框
+								closeBtn : true,//是否显示关闭按钮
+								width : widths,//弹框的宽度
+								height : heights,
+								buttons : {
+									"保存" : function() {
+										aihome.saveCustCallBack();
+										$(this).dialog("close");
+										$("#custCallBackJqGrid").trigger('reloadGrid');
+									},
+									"取消" : function() {
+										$(this).dialog("close");
+									}
+							}
+					});
+			
+		}else {
+			alert("该客源不可以回访！");
+			return
+		}
+		
+	}
+	
+	$(function(){
+		aihome.custCallBackInit(); 
+	});
+	
+</script>

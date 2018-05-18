@@ -1,0 +1,610 @@
+    <div class="col-sm-12 form-xs form-group row">
+        <label for="addGrade" class="col-xs-1 control-label"><strong>基本信息</strong></label>
+	</div>
+    <div class="col-sm-12 form-xs form-group row">
+        <label class="col-xs-2 control-label">具体地址：</label>
+        <div class="col-xs-10">
+            <input id="addrDetail" type="text" class="form-control selectInput" value="${(houseSaleResult.addressDetail)!''}" vRequired="true">
+        </div>
+    </div>
+    <div class="col-sm-12 form-xs form-group row">
+        <label class="col-xs-2 control-label">证载地址：</label>
+        <div class="col-xs-10">
+        	<input id="zzdz" type="text" class="form-control input-xs" value="${(houseSaleResult.zzdzDetail)!''}" maxlength="80" name="zzdz">
+        </div>
+    </div>
+    <div class="col-sm-12 form-xs form-group row" style="width:90%;left:9%">
+			<label class="col-xs-1 control-label">楼盘名称：</label>
+	        <div class="col-xs-2">
+	        	<input id="premisesName" type="text" class="form-control input-xs" disabled="true" value="${(houseSaleResult.premisesName)!''}">
+	        </div>
+			<label class="col-xs-1 control-label">临近栋座：</label>
+	        <div class="col-xs-2">
+				<select id="closeBuilding" class="input-xs form-control" name="closeBuilding">
+					<option value="">请选择</option>
+				</select>
+			</div>
+			<label class="col-xs-1 control-label">车位类型：</label>
+	        <div class="col-xs-2">
+				<select id="carPortType" class="input-xs form-control">
+					<option value="1">车位</option>
+					<option value="2">车库</option>
+				</select>
+			</div> 
+			<label class="col-xs-1 control-label">楼层：</label>
+	      	<div class="col-xs-2">
+	        	<select id="carPortFloor" class="input-xs form-control">
+	            	<option value="1">地上</option>
+	            	<option value="2">地下</option>
+	            </select>
+	      	</div>
+		</div>
+    <div class="col-sm-12 form-xs form-group row">
+    	<label class="col-xs-2 control-label">车位号：</label>
+	    <div class="col-xs-2">
+	        <input id="parkNum" type="text" class="form-control selectInput" value="${(houseSaleResult.parkNum)!''}" name="parkNum" vRequired="true">
+	    </div>
+	    <div class="col-xs-4">
+	    	<strong class="contactHouseSale"></strong>
+	    </div>
+    </div>
+     <!-- 联系人 S -->
+	<div class="col-sm-12 form-xs form-group row" style="left:10.8%">
+		<#if !houseSaleResult?exists>
+			<div class="col-xs-9">
+				<table class="col-xs-12 table-input">
+		         <tr>
+		             <th style="width:5%">序号</th>
+		             <th style="width:30%">联系人类别</th>
+		             <th style="width:30%">联系人</th>
+		             <th style="width:30%">联系方式</th>
+		         </tr>
+		         <tbody id="lm_tbody">
+		           <tr id="lm_tr0" class="hasDelete">
+		              <td class="cloneList">
+		               1
+		              </td>
+			          <td>
+			              <select id="type" class='form-control input-xs' name="type" readonly="true">
+			                  <option value="1">产权人</option>
+			                  <option value="2">父母</option>
+			                  <option value="3">丈夫</option>
+			                  <option value="4">妻子</option>
+			                  <option value="5">子女</option>
+			                  <option value="6">亲戚</option>
+			                  <option value="7">其他</option>
+			              </select>
+			          </td>
+			          <td>
+			             <input id="name" class="form-control input-xs" type="text" name="name" maxlength="10">
+			          </td>
+			          <td>
+			             <input id="contactType" class="form-control input-xs" type="text" name="contactType">
+			          </td>
+		           </tr>
+		      </tbody>
+		     </table>
+			</div>
+		</#if>
+		<#if houseSaleResult?exists>
+			<div class="col-xs-9">
+				<table class="col-xs-12 table-input">
+		         <tr>
+		             <th style="width:5%">序号</th>
+		             <th style="width:30%">联系人类别</th>
+		             <th style="width:30%">联系人</th>
+		             <th style="width:30%">联系方式</th>
+		         </tr>
+		         <tbody id="lm_tbody">
+		         	<#assign n = 1 />
+		            <#list houseSaleResult.linkManList as item>
+			           	<tr id="lm_tr0" class="hasDelete">
+			              <td id="lm_tr_cell1" class="cloneList">
+			               ${n}
+			              </td>
+				          <td>
+				              <select id="type" class='form-control input-xs' name="type">
+				                  <option value="1" <#if item.type==1>selected="selected"</#if>>产权人</option>
+				                  <option value="2" <#if item.type==2>selected="selected"</#if>>父母</option>
+				                  <option value="3" <#if item.type==3>selected="selected"</#if>>丈夫</option>
+				                  <option value="4" <#if item.type==4>selected="selected"</#if>>妻子</option>
+				                  <option value="5" <#if item.type==5>selected="selected"</#if>>子女</option>
+				                  <option value="6" <#if item.type==6>selected="selected"</#if>>亲戚</option>
+				                  <option value="7" <#if item.type==7>selected="selected"</#if>>其他</option>
+				              </select>
+				          </td>
+				          <td>
+				             <input id="name" class="form-control input-xs" type="text" name="name" value="${(item.name!'')}">
+				          </td>
+				          <td>
+				             <input id="contactType" class="form-control input-xs" type="text" name="contactType" value="${(item.contactType!'')}" onblur="aihome.validateTel(this);">
+				          </td>
+			           </tr>
+			           <#assign n = n+1 /> 
+		           </#list>
+		      </tbody>
+		     </table>
+			</div>
+		</#if>
+		<div class="col-xs-1">
+			<input type="button" id="addBut" value="+" class="btn btn-blue btn-white"/>
+		</div>
+	</div>
+	<!-- 联系人 E -->
+	<div class="col-xs-2" style="display:none;">
+         <select id="form_useType" class="input-xs form-control">
+              <option value="1">住宅</option>
+			  <option value="2">商铺</option>
+			  <option value="3">写字楼</option>
+			  <option value="4" selected="selected">车位</option>
+          </select>
+    </div>
+    <div class="col-sm-12 form-xs form-group row">
+         <label for="addGrade" class="col-xs-2 control-label">产权性质：</label>
+         <div class="col-xs-2">
+             <select id="carPropertyRightType" class="input-xs form-control" name="carPropertyRightType">
+             	  <option value="">请选择</option>
+                  <option value="1">有产权</option>
+				  <option value="2">无产权</option>
+              </select>
+         </div>
+        <label for="addGrade" class="col-xs-2 control-label">房产证签发日期： </label>
+        <div class="col-xs-2">
+			<input type="text" class="5i5jdate form-control input-xs" id="fckDate" name="fckDate"  value="${(houseSaleResult.fckDate)!''}"/>
+		</div>
+		<label for="addGrade" class="col-xs-2 control-label">车位售价：</label>
+        <div class="col-xs-1">
+			<input id="carPortSellPrice" name="carPortSellPrice" type="text" class="form-control input-xs checkNum" format="10.2"  value="${(houseSaleResult.carportSellPrice)!''}" style="width: 190px;"> 
+		</div> 
+		<div class="col-xs-1" style="left: 8%;">万元</div>
+	</div>
+    
+    <div class="col-sm-12 form-xs form-group row">
+		<label for="addGrade" class="col-xs-2 control-label">底价：</label>
+        <div class="col-xs-2">
+			<input id="entrustPrice" name="entrustPrice" type="text" class="form-control input-xs checkNum" format="10.2" value="${(houseSaleResult.entrustPrice)!''}" > 
+		</div> 
+		<div class="col-xs-1">万元</div>
+    	<label for="addGrade" class="col-xs-1 control-label">物业费：</label>
+        <div class="col-xs-2">
+			<input id="propertyFee" name="propertyFee" type="text" class="form-control input-xs checkNum" format="8.2" value="${(houseSaleResult.propertyFee)!''}"> 
+		</div> 
+		<div class="col-xs-1">元/㎡/月</div>
+		<label for="addGrade" class="col-xs-1 control-label">使用现状：</label>
+        <div class="col-xs-2">
+			<select id="useStatus" name="useStatus"  class="input-xs form-control">
+				<option value="">请选择</option>
+				<option value="1">空置</option>
+				<option value="2">出租</option>
+				<option value="3">自住</option>
+			</select>
+		</div> 
+	</div>
+	
+	<div class="col-sm-12 form-xs form-group row">
+		<label for="addGrade" class="col-xs-2 control-label">房产证号：</label>
+        <div class="col-xs-2">
+			<input id="fckCode" type="text" class="form-control input-xs" name="fckCode" value="${(houseSaleResult.fckCode)!''}"> 
+		</div>
+	</div>
+	<div class="col-sm-12 form-xs form-group row">
+        <label for="addGrade" class="col-xs-1 control-label"><strong>其他信息</strong></label>
+	</div>
+	<div class="col-sm-12 form-xs form-group row">
+        <label for="addGrade" class="col-xs-2 control-label">来源：</label>
+        <div class="col-xs-2">
+			<select id="parentSource" class="input-xs form-control" name="ownerSource">
+				<option value="">请选择</option>
+				<#if parentSourceList?exists>
+					<#list parentSourceList as source>
+						<option value="${source.id!''}">${source.source!''}</option>
+					</#list>
+				</#if>
+				</select>
+			</select>
+		</div>
+		<div class="col-xs-2">
+			<select id="childSource" class="input-xs form-control" name="childSource">
+				<option value="">请选择</option>
+			</select>
+		</div>
+	</div>
+	<div class="col-sm-12 form-xs form-group row">
+		<label for="addGrade" class="col-xs-2 control-label">房源等级：</label>
+        <div class="col-xs-2">
+			<select id="houseLevel"class="input-xs form-control" name="houseLevel">
+				<option value="1" selected="selected">普通房源</option>
+				<option value="2">诚盘</option>
+				<option value="3">必卖盘</option>
+			</select>
+		</div> 
+	</div>
+	<!-- 房源标签 s -->
+	<div class="col-sm-12 form-xs form-group row">
+		<label for="addGrade" class="col-xs-2 control-label">房源标签：</label>
+		<#if (sysParamMap.MMFYBQ)?? >
+		    <#list sysParamMap.MMFYBQ as item>  
+		        <div class="col-xs-2 checkbox-inline input-xs">
+					<label>
+						<input type="checkbox" class="tags ace" value="${item.id!''}">
+						<span class="lbl">
+							${item.sysHouseDescribe!''}
+						</span>
+					</label>
+				</div>
+				<#if (item_index+1)%10==0>
+					<label class="col-xs-2 control-label"></label>
+				</#if> 
+		    </#list>  
+		</#if>
+	</div>
+	<!-- 房源标签 e -->
+	<!-- 房源状态 s -->
+	<div class="col-sm-12 form-xs form-group row">
+		<label for="addGrade" class="col-xs-2 control-label">房源状态：</label>
+        <div class="col-xs-2">
+			<select id="status" class="input-xs form-control" name="status"  disabled="true" data-value="">
+				<option value="1" selected="selected">待售</option>
+				<option value="2">暂不售</option>
+			</select>
+		</div> 
+	</div>
+	<!-- 房源状态 e-->
+	<div class="col-sm-12 form-xs form-group row">
+         <label for="addGrade" class="col-xs-2 control-label">备注： </label>
+         <div class="col-xs-10">
+            <textarea id="remark" rows="5" cols="25" name="remark" class="form-control" maxlength="300">${(houseSaleResult.remark)!''}</textarea>
+         </div>
+    </div>
+  <!-- 隐藏域 S -->
+  <input id="preId" type="hidden" />
+  <input id="carPortId" type="hidden" name="carPortId">
+  <!-- 隐藏域 E -->
+  <!-- 隐藏域 S -->
+  <input type="hidden" name="houseInfoId" value="${(houseSaleResult.houseInfoId)!''}">
+  <!-- 隐藏域 E -->
+<script type="text/javascript">
+    
+	
+	aihome.isContactHouseSale = function(){
+		$.ajax({
+			url: "${CTX}/houseManage/isContactHouseSale.do",
+			data:{
+				carPortId:$("#carPortId").val()
+			},
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				if(data.length>0){
+					$(".contactHouseSale").html("关联房源："+data[0].code);
+				}else{
+					$(".contactHouseSale").html("");
+				}
+			}
+		});
+	};
+	aihome.getChildrenSource = function(parentId){
+		$("#childSource").empty();//每次重新选择父类时清空一下子类
+		$("#childSource").append("<option value=''>请选择</option>");
+		$.ajax({
+			url: "${CTX}/houseManage/getSourcesByParentId.do",
+			data:{
+				parentId:parentId
+			},
+			type:"post",
+			dataType:"json",
+			async:false,
+			success:function(data){
+				var html = "";
+				if(data.length>0){
+					for(var i=0;i<data.length;i++){
+						html += "<option value='"+data[i].id+"'>"+data[i].source+"</option>";
+					}
+				}
+				$("#childSource").append(html);
+			}
+		});
+	};
+	aihome.getCloseBuilding = function(){
+		$("#closeBuilding").empty();
+		$("#closeBuilding").append("<option value=''>请选择</option>");
+		$.ajax({
+			url : "${CTX}/houseManage/getBuildingsList.do",
+			dataType : "json",
+			type : "post",
+			async:false,
+			data : {
+				premisesId : $("#preId").val()
+			},
+			success : function(data) {
+				var html = "";
+				if(data.length>0){
+					for(var i = 0;i<data.length;i++){
+						html+="<option value='"+data[i].id+"'>"+data[i].buildingName+"</option>"
+					}
+				}
+				$("#closeBuilding").append(html);
+			}
+		});
+	};
+	$(function(){
+		$("#addBut").click(function(){
+			var flag = true;
+			$("#lm_tbody tr").each(function(){
+				var name = $(this).find("input[name='name']").val();
+				var contactType = $(this).find("input[name='contactType']").val();
+				if(name=="" || contactType==""){
+					flag = false;
+				}
+			});
+			if(flag){
+				cloneDom({
+				    dom:$("#lm_tr0"),//克隆对象
+				    target:$("#lm_tbody"),//克隆位置
+				    loadBefore: null,
+				    callBack: function(a){
+				    	$("#lm_tbody tr:first td:last").hide();
+				    	$("#lm_tbody select").each(function(i){
+				    		if(i!=0){
+				    			$(this).attr("disabled",false);
+				    		}
+				    	}); 
+				    	//序号排序
+				    	for(var i=1; i<$(".cloneList").length;i++){
+				    		$(this).html(i);
+				    	}
+				    },//克隆后的回调函数，a为克隆完成后的html对象
+				    willDelete: function(a){console.log(a)},//删除前回调函数
+				    deleteBack: function(){
+				    	//序号排序
+				    	for(var i=1; i<$(".cloneList").length;i++){
+				    		$(this).html(i);
+				    	}
+				    },//删除后回调函数
+				    deleteNoId: false,//行对象是否有ID
+				    allDelete:true//是否允许全部删除
+				});
+			}else{
+				alert("请完善联系人和联系方式！");
+			}
+		});	
+		
+		//"使用类别"默认值
+		$("#form_useType").find("[value='" + ${(useType)!''} + "']").attr("selected", "selected");
+		//业主来源change
+		$("#parentSource").change(function(){ 
+			$("#childSource").empty();//每次重新选择父类时清空一下子类
+			$("#childSource").append("<option value=''>请选择</option>");
+			var parentId = $("#parentSource option:selected").val();
+			$.ajax({
+				url: "${CTX}/houseManage/getSourcesByParentId.do",
+				data:{
+					parentId:parentId
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					var html = "";
+					if(data.length>0){
+						for(var i=0;i<data.length;i++){
+							html += "<option value='"+data[i].id+"'>"+data[i].source+"</option>";
+						}
+					}
+					$("#childSource").append(html);
+				}
+			});
+		});
+		
+		//具体地址模糊查询
+	    $("#addrDetail").autocomplete({
+			source : function(request, response) {
+				$.ajax({
+					url : "${CTX}/houseManage/getAddrDetailB.do",
+					dataType : "json",
+					type : 'post',
+					data : {
+						matchStr : request.term
+					},
+					success : function(data) {
+						var array = [];
+						for (var i = 0; i < data.length; i++) {
+							if(data[i].premisesName!=""){
+								var temp = {
+									value : data[i].addrDetail,//详细地址
+									premisesId : data[i].premisesId,//楼盘ID
+									premisesName : data[i].premisesName//楼盘名称
+								};
+								array.push(temp);
+							}
+						}
+						response(array);
+					}
+				});
+			},
+			select : function(event, ui) {
+				$("#addrDetail").val(ui.item.value);
+				$("#preId").val(ui.item.premisesId);
+				$("#premisesName").val(ui.item.premisesName);
+				event.preventDefault();
+				//查询临近栋座
+				$("#closeBuilding").empty();
+				$("#closeBuilding").append("<option value=''>请选择</option>");
+				$.ajax({
+					url : "${CTX}/houseManage/getBuildingsList.do",
+					dataType : "json",
+					type : 'post',
+					data : {
+						premisesId : ui.item.premisesId
+					},
+					success : function(data) {
+						var html = "";
+						if(data.length>0){
+							for(var i = 0;i<data.length;i++){
+								html+="<option value='"+data[i].id+"'>"+data[i].buildingName+"</option>"
+							}
+						}
+						$("#closeBuilding").append(html);
+					}
+				});
+			}
+		});
+	    $("#addrDetail").blur(function(){
+	    	var addrDetail = $("#addrDetail").val();
+	    	if(addrDetail==""){
+	    		$("#preId").val("");
+	    	}
+	    });
+	    
+	    //车位号模糊查询
+	    $("#parkNum").autocomplete({
+			source : function(request, response) {
+				var premisesId = $("#preId").val();
+				if(premisesId==""){
+					alert("请选择具体地址！");
+				}else{
+					$.ajax({
+						url : "${CTX}/houseManage/getCarPortByMatch.do",
+						dataType : "json",
+						type : 'post',
+						data : {
+							matchStr : request.term,
+							premisesId : premisesId,
+							type : $("#carPortType option:selected").val(),//车位/车库
+							floor : $("#carPortFloor option:selected").val()//地上/地下
+						},
+						success : function(data) {
+							var array = [];
+							for (var i = 0; i < data.length; i++) {
+								var temp = {
+									value : data[i].parkNum,
+									carPortId : data[i].id//车位ID
+								};
+								array.push(temp);
+							}
+							response(array);
+						}
+					});
+				}
+			},
+			select : function(event, ui) {
+				$("#parkNum").val(ui.item.value);
+				$("#carPortId").val(ui.item.carPortId);
+				event.preventDefault();
+				aihome.isContactHouseSale();
+			}
+		});
+	    
+	  //时间控件
+		$('.5i5jdate').datepicker({
+		    //todayBtn: "linked",//今天按钮
+		    clearBtn: true,//清空按钮
+		    language: "zh-CN",//语言
+		    autoclose: true,//自动关闭
+		    todayHighlight: true,//今天高亮
+		    format: "yyyy-mm-dd",//日期格式，可以不写，直接使用默认的
+		});
+	    $(".checkNum").keyup(function() {
+			var value = $(this).val();
+			var integerResult = "";
+			var decimalResult = "";
+			var integerSize = $(this).attr("format").split(".")[0];
+			var decimalSize = 0;
+			// 小数存在标识
+			var decimalExist = 0;
+			if($(this).attr("format").split(".").length > 1) {
+				decimalSize = $(this).attr("format").split(".")[1];
+				integerSize = integerSize - decimalSize;
+			}
+			if(value.indexOf(".") == -1 || decimalSize == 0) {
+				// 未输入小数点
+				integerResult = value.replace(/\D/g, "");
+				if(integerResult != "") {
+					integerResult = parseInt(integerResult).toString();
+				}
+				if(integerResult.length > integerSize) {
+					integerResult = integerResult.substring(0, integerSize);
+				}
+			} else {
+				// 已输入小数点
+				var splitValue = value.split(".");
+				// 整数部分
+				integerResult = splitValue[0].replace(/\D/g, "");
+				if(integerResult.length > integerSize) {
+					integerResult = integerResult.substring(0, integerSize);
+				}
+				// 小数部分
+				for (var i = 1; i < splitValue.length; i++) {
+					decimalResult += splitValue[i].replace(/\D/g, "");
+				}
+				if(decimalResult.length > decimalSize) {
+					decimalResult = decimalResult.substring(0, decimalSize)
+				}
+				decimalExist = 1;
+			}
+			if(decimalExist == 0) {
+				$(this).val(integerResult);
+			} else {
+				$(this).val(integerResult + "." + decimalResult);
+			}
+			// 数字输入标准 End
+		});
+	    
+	    //修改-数据初始化
+	    //车位类型
+		var carPortType = "${(houseSaleResult.carPortType)!''}";
+		if(carPortType!=""){
+			$("#carPortType").find("[value='"+carPortType+"']").attr("selected", "selected");
+		}
+		//楼层
+		var carPortFloor = "${(houseSaleResult.carPortFloor)!''}";
+		if(carPortFloor!=""){
+			$("#carPortFloor").find("[value='"+carPortFloor+"']").attr("selected", "selected");
+		}
+		//产权性质
+		var carPropertyRightType ="${(houseSaleResult.carPropertyRightType)!''}";
+		if(carPropertyRightType!=""){
+			$("#carPropertyRightType").find("[value='"+carPropertyRightType+"']").attr("selected", "selected");
+		}
+		//使用现状
+		var useStatus = "${(houseSaleResult.status)!''}";
+		if(useStatus!=""){
+			$("#useStatus").find("[value='"+useStatus+"']").attr("selected", "selected");
+		}
+		//房源等级
+		var houseLevel = "${(houseSaleResult.houseLevel)!''}";
+		if(houseLevel!=""){
+			$("#houseLevel").find("[value='"+houseLevel+"']").attr("selected", "selected");
+		}
+		//房源标签
+		var tags = "${(houseSaleResult.tags)!''}";
+		if(tags!=""){
+			var tagsArray = tags.split(",");
+			$(tagsArray).each(function(i){
+				$("[class^='tags'][value='"+tagsArray[i]+"']").prop("checked", "checked");
+			});
+		}
+		//临近栋座
+		var premisesId = "${(houseSaleResult.premisesId)!''}";
+		if(premisesId!=""){
+			aihome.getCloseBuilding();
+			var closeBuilding = "${(houseSaleResult.closeBuildingId)!''}";
+			if(closeBuilding!=""){
+				$("#closeBuilding").find("[value='"+closeBuilding+"']").attr("selected", "selected");
+			}
+		}
+		//业主来源
+		var source1 = "${(houseSaleResult.source1)!''}";
+		if(source1!=""){
+			aihome.getChildrenSource(source1);
+			$("#parentSource").find("[value='"+source1+"']").attr("selected", "selected");//业主来源1
+			var source2 = "${(houseSaleResult.source2)!''}";//业主来源2
+			if(source2!=""){
+				$("#childSource").find("[value='"+source2+"']").attr("selected", "selected");
+			}
+		}
+		
+	    
+	});
+</script>
+
+

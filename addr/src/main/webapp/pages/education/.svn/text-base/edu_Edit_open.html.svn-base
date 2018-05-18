@@ -1,0 +1,526 @@
+<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+	<div id="element_id">
+			<div class="form-horizontal row my-inputs">
+			  	<div class="col-md-12 col-sm-6">
+					<div class=" form-xs form-group row" id="cloneTarget">
+						<label for="userName" class="col-xs-3 control-label" value="">类型：</label>
+						<div class="col-xs-8">
+							<input name="eduType" type="radio" value="1" checked eduName="幼儿园" />幼儿园
+							<input name="eduType" type="radio" value="2" eduName="小学" />小学
+							<input name="eduType" type="radio" value="3" eduName="中学" />中学
+							<input name="eduType" type="radio" value="4" eduName="大学" />大学
+							<input name="eduType" type="radio" value="5" eduName="图书馆" />图书馆
+							<input name="eduType" type="radio" value="6" eduName="培训机构" />培训机构
+							<input name="eduType" type="radio" value="7" eduName="少年宫" />少年宫
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 col-sm-6">
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-xs-3 control-label" value="">名称：</label>
+						<div class="col-xs-4">
+						<input id="eduNameH" value="${(eduInfo.eduName)!''}" hidden></input>
+							<input id="eduName" class="province input-xs form-control"  vRequired="true"   placeholder="输入名称：" value="${(eduInfo.eduName)!''}" ></input>
+						</div>
+					</div>	
+	           	</div>
+				<div class="col-md-12 col-sm-12 blueTags" id="counterpartsSchoolLable" hidden>
+					<div class=" form-xs form-group row">
+						<label for="roleName" class="col-xs-2 control-label"  style="margin:0;border:0 ;padding: 0px;"></label>
+						<div class="col-xs-8 ">
+							<div id="eduLabel" class="tags" style="margin: 0; border: 0;">
+								<#if (getEduAllInfoList.counterpartsPrimaryArry)??>
+								<#list (getEduAllInfoList.counterpartsPrimaryArry) as item>
+								<span class=tag >${item!}<button type="button" class="close" onclick="closeSpan($(this))">×</button></span>
+								<input type="hidden" name="counterpartsNameStr" value="${item!}"/>
+								<input type="hidden" name="counterpartsType" value="${(getEduAllInfoList.counterpartstype)!}"/>
+								</#list>
+								</#if>
+								<#if (getEduAllInfoList.counterpartsMiddleArry)??>
+								<#list (getEduAllInfoList.counterpartsMiddleArry) as item>
+								<span class=tag >${item!}<button type="button" class="close" onclick="closeSpan($(this))">×</button></span>
+								<input type="hidden" name="counterpartsNameStr" value="${item!}"/>
+								<input type="hidden" name="counterpartsType" value="${(getEduAllInfoList.counterpartstype)!}"/>
+								</#list>
+								</#if>
+							</div>
+						</div>
+						<label for="roleName" class="col-xs-2 control-label"  style="margin:0;border:0 ;padding: 0px;"></label>
+					</div>	
+				</div>
+	            <div class="col-md-12 col-sm-6" id="counterpartsSchool" hidden>
+		           	<div class="form-xs form-group row">
+						<label class="col-xs-3 control-label" id="counterpartsName">对口中学:</label>
+						<div class="col-xs-6">
+							<div>
+								<input id="edu" class="form-control input-xs" vRequired="true"  type="text">
+							</div>
+						</div>
+						<div class="col-xs-3">
+							<div>
+								<a id="eduLink" style="color: blue;">添加对口中学</a>
+							</div>
+						</div>
+					 </div>
+				</div>
+	           	<div class="col-md-12 col-sm-6">
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-xs-3 control-label" value="">地址：</label>
+						<div class="col-xs-6">
+			              	<input type="hidden" id="roadId" value ="${(eduInfo.roadId)!''}" />
+			              	<input class=" province input-xs form-control selectInput searchKey " vRequired="true"  type="text" id="addrDetail" placeholder="输入地址：" value="${(eduInfo.addrDetail)! ''}">
+							<input type="hidden" id="oldAddrDetail" name="oldAreaId" value="${(eduInfo.addrDetail)! ''}" />
+							<input type="hidden" id="oldRoadId" name="oldRoadId" value="${(eduInfo.roadId)!''}" />
+			          </div>
+					</div>	
+	           	</div>
+	           	<div class="col-md-12 col-sm-6">
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-xs-3 control-label" value="">电话：</label>
+							<div class="col-xs-4">
+							 	<input id="phone" class="form-control input-xs" maxlength="15" placeholder="输入电话：" value="${(eduInfo.eduPhone)! ''}" />
+							</div>
+					</div>	
+	           	</div>
+	           
+	           	<div class="col-md-12 col-sm-6">
+					<div class=" form-xs form-group row" id="enterConditionDiv">
+						<label for="userName" class="col-xs-3 control-label" value="">入学条件：</label>
+						<div class="col-xs-6">
+							<textarea id="enterCondition" cols="50" rows="4" name="textareaName" type="textarea" value="">${(eduInfo.enterCondition)! ''}</textarea>
+						</div>
+					</div>
+				</div>
+				 <div class="col-md-12 col-sm-6">
+					<div class=" form-xs form-group row" id="enrollScopeDiv">
+						<label for="userName" class="col-xs-3 control-label" value="">招生范围：</label>
+						<div class="col-xs-6">
+							<textarea id="enrollScope" cols="50" rows="4" name="textareaName" type="textarea" value="">${(eduInfo.enrollScope)! ''}</textarea>
+						</div>
+					</div>
+				</div>
+				 <div class="col-md-12 col-sm-6">
+					<div class=" form-xs form-group row" id="cloneTarget">
+						<label for="userName" class="col-xs-3 control-label" value="">介绍：</label>
+						<div class="col-xs-6">
+							<textarea id="eduIntroduce" cols="50" rows="4" name="textareaName" type="textarea" value="">${(eduInfo.eduIntroduce)! ''}</textarea>
+						</div>
+					</div>
+				</div>
+				 <div class="col-md-12 col-sm-6">
+						<!--上传图片  -->
+				<form id="form" enctype="multipart/form-data">
+					<a href="javascript:void(0);"style="position: relative;overflow: hidden;display: block;width: 55px;float: right;height: 20px;color:#0196ff;">
+						<input onchange="picUpload();" name="pic" type="file" style="position: absolute;top: -6px;left: -74px;opacity: 0;border: 0;width: 340px;height: 70px!important;line-height: 70px!important; cursor: pointer;">上传图片
+					</a>
+				</form>
+				</div>
+				<div id="picUploaded" class="col-md-12 col-sm-12">
+				<#list (eduImg.aroundEduImgList)! as item>
+				<div class="col-lg-3" style="width: 100px; height:100px; padding: 5px;">
+					<a href="javascript:void(0);" onclick="closeImg(this);">
+						<span class="hasClose">X</span>
+					</a>
+					<img class="img" style="width: 100%; height: 100%;" src="${IMAGE_URL}${item.folderName!}/${item.fileName!}@100w_100h"  data-folder="${item.folderName!''}" data-file="${item.fileName!''}" />
+				</div>
+				</#list>
+				</div>
+				<div class="col-md-12 col-sm-6">
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-xs-3 control-label" value="">中心点：</label>
+						<div class="col-xs-9">
+			              	<#if eduInfo??>
+					   		<input  id="coordinate" style="width:200px;" value="${eduInfo.lng!},${eduInfo.lat!}"  lng="${(eduInfo.lng)!}" lat="${(eduInfo.lat)!}"/>
+                        	<#else>
+                        	<input  id="coordinate" value="" style="width:200px;"/>
+                        	</#if> 
+			          </div>
+					</div>
+	           	</div>
+				 <div class="col-md-12 col-sm-6">
+					<div class=" form-xs form-group row" id="cloneTarget">
+						<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+						<div class="col-md-12 col-sm-12"  >
+							<div id="allmap" class="col-xs-12 "  style="height:400px;"></div>
+				           	</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<input type="hidden" id="imgEmpty" value="${(eduImg.allStr)!}"/>
+<input type="hidden" id="folderName" value=""/>
+<input type="hidden" id="fileName" value=""/>
+<input  id="radioVal"  type="hidden" value="${(eduInfo.eduType)!''}"/>
+<input type="hidden" id="condition" value=""/>
+<input type="hidden" id="eduId" value="${eduId!''}"/>
+<script type="text/javascript">
+	$("#Form").validationEngine('attach', {promptPosition: 'bottomLeft'});
+	var map = new BMap.Map("allmap",{minZoom:11,maxZoom:15});
+	var lng = $("#coordinate").attr("lng") == null ? 120.153576 : $("#coordinate").attr("lng");
+	var lat = $("#coordinate").attr("lat") == null ? 30.287459 : $("#coordinate").attr("lat");
+	var eduName = $("#eduName").val() == null ? "" : $("#eduName").val();
+	var point = new BMap.Point(lng, lat);
+	var local = new BMap.LocalSearch(map, {
+		renderOptions:{map: map}
+	});
+	local.search(eduName);
+	map.centerAndZoom(point, 15);
+	map.enableScrollWheelZoom();
+	var marker = new BMap.Marker(point);  // 创建标注
+	map.addOverlay(marker);// 将标注添加到地图中
+	map.enableScrollWheelZoom();
+	map.addEventListener("click", showInfo);
+	$(":radio[name='eduType'][value='" + $("#radioVal").val() + "']").prop("checked", "checked");//修改默认选中框
+	if($("#radioVal").val()==2||$("#radioVal").val()==3){
+		$("#counterpartsSchoolLable").show();
+		$("#counterpartsSchool").show();
+		if($("#radioVal").val()==3){
+			$("#counterpartsName").text("对口小学:");
+			$("#eduLink").text("添加对口小学");
+		}else{
+			$("#counterpartsName").text("对口中学:");
+			$("#eduLink").text("添加对口中学");
+		}
+	}
+	if($("#radioVal").val()==5||$("#radioVal").val()==6||$("#radioVal").val()==7){
+		$("#enterConditionDiv").hide();
+		$("#enrollScopeDiv").hide();
+	}else{
+		$("#enterConditionDiv").show();
+		$("#enrollScopeDiv").show();
+	}
+	function showInfo(e){
+	   $("#coordinate").val(e.point.lng+","+e.point.lat);
+	    map.clearOverlays();
+		point = new BMap.Point(e.point.lng,e.point.lat);
+		map.centerAndZoom(point, 15);
+		marker = new BMap.Marker(point);  // 创建标注
+		map.addOverlay(marker);               // 将标注添加到地图中
+		//marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+	};
+
+	
+	//名字验证
+	$("#eduName").blur(function(){
+		if($("#eduName").val()!=$("#eduNameH").val()){
+			map.clearOverlays();
+			eduName = $("#eduName").val();
+			newlocal = new BMap.LocalSearch(map, {
+				renderOptions:{map: map,autoViewport:true}
+			});
+			newlocal.search(eduName);
+			var myGeo = new BMap.Geocoder();
+			myGeo.getPoint(eduName, function(pointe){
+				if (pointe) {
+					map.centerAndZoom(pointe, 16);
+					map.addOverlay(new BMap.Marker(pointe));
+					$("#coordinate").val(pointe.lng+","+pointe.lat);
+				}
+			}, "杭州市");
+			verifyNum();
+		}
+		
+	});
+	$("#phone").blur(function(){
+		if($(this).val()!=""){
+			if(!/^0\d{2,3}-\d{7,8}(-\d{1,6})?$|(^1[3|4|5|7|8][0-9]{9}$)/.test($("#phone").val())){
+				alert("请输入正确的手机号码或电话号码\n\n例如:13916752109或0411-36140722");
+				return false ; 
+			}
+		}
+	});
+	function verifyNum(){
+		var result = false;
+		var checkType = $('input[name="eduType"]:checked').val();
+	  	if($("#eduName").val()!=""){
+  			$.post("${CTX}/edu/verifyEduName.do",
+  					{"eduName" : $("#eduName").val(),
+  					 "eduType":checkType
+  					 },
+		  			function(data) {
+  						if (data == 2) {
+  							alert("该类型下教育设施名字已存在！");
+  		   				}else if(data == 1){
+  		   					result = true;//验证成功
+  		   				}else{
+  		   					alert("服务异常!")
+  		   				}
+		  			},"json");
+		}
+		if(!result){
+			return result;
+		}
+	};
+	function closeImg(obj){
+		$(obj).parent().remove();
+	};
+	//确认按钮Btn
+    function ensureBtn(num){
+    	if($("#eduName").val()==""||$("#addrDetail").val()==""||$("#coordinate").val()==""){
+    		alert("教育名称、地址、地图经纬度为必填项，请注意填写！");
+    		return false ; 
+    	}
+    	if($("#phone").val()!=""){
+    		if(!/^0\d{2,3}-\d{7,8}(-\d{1,6})?$|(^1[3|4|5|7|8][0-9]{9}$)/.test($("#phone").val())){
+    			alert("请输入正确的手机号码或电话号码\n\n例如:13916752109或0411-3614072");
+    			return false ; 
+    		}
+    	}
+		var checkType = $('input[name="eduType"]:checked').val();
+		
+		var result = false;
+		if(num==1){
+			if($("#eduName").val()!=""){
+				 	$.ajax({
+			   	       type: "post",
+			   	       url: "${CTX}/edu/verifyEduName.do", 
+			   	       async:false,
+			   	       dataType:'json',
+			   	       data: {"eduName" : $("#eduName").val(),
+							 "eduType":checkType
+						 	},
+			   	       success: function(data){
+			   	    	if (data == 2) {
+								alert("该类型下教育设施名字已存在！");
+			   				}else if(data == 1){
+			   					result = true;//验证成功
+			   				}else{
+			   					alert("服务异常!")
+			   				}
+			   	       },
+			   	 	});
+			}
+		  	if(!result){
+				return result;
+			}
+		}else{
+			if($("#eduName").val()!=""){
+				if($("#eduName").val()!=$("#eduNameH").val()){
+				 	$.ajax({
+			   	       type: "post",
+			   	       url: "${CTX}/edu/verifyEduName.do", 
+			   	       async:false,
+			   	       dataType:'json',
+			   	       data: {"eduName" : $("#eduName").val(),
+							 "eduType":checkType
+						 	},
+			   	       success: function(data){
+			   	    	if (data == 2) {
+								alert("该类型下教育设施名字已存在！");
+			   				}else if(data == 1){
+			   					result = true;//验证成功
+			   				}else{
+			   					alert("服务异常!")
+			   				}
+			   	       },
+			   	 	});
+				}else{
+					result =  true;
+				}
+			}
+		  	if(!result){
+				return result;
+			}
+		}
+	  	var counterpartsName="";
+		$("input[name='counterpartsNameStr']").each(function(){
+			counterpartsName += $(this).val()+",";
+		});
+		if(checkType==2||checkType==3){
+			if(counterpartsName==""){
+				alert("对口学校为必填项请注意填写！");
+				return false ; 
+			}
+		}
+		var counterpartsPrimary="";//对口小学
+		var counterpartsMiddle="";//对口中学
+	  	if(checkType==2){
+	  		counterpartsMiddle=counterpartsName;
+	  	}else if(checkType==3){
+	  		counterpartsPrimary=counterpartsName;
+	  	}
+    	var folderNames = "";
+    	var fileNames = "";
+    	$("#picUploaded").children().each(function(){
+    		folderNames+=$(this).find(".img").attr("data-folder")+",";
+    		fileNames+=$(this).find(".img").attr("data-file")+",";
+		});
+    	var coordinate = $("#coordinate").val();
+    	var arrays = coordinate.split(",");
+    	lng = arrays[0];
+    	lat = arrays[1];
+    	var imgEmpty = $("#imgEmpty").val();
+       	 $.ajax({
+     	       type: "post",
+     	       url: "${CTX}/edu/editEdu.do", 
+     	       async:false,
+     	       dataType:'json',
+     	       data: {"eduName":$("#eduName").val(),
+     	    	   	  "roadId":$("#roadId").val(),
+     	    	   	  "roadNum":$("#roadNum").val(),
+     	    	      "eduPhone":$("#phone").val(),
+     	    	      "lng":lng,
+     	    	      "lat":lat,
+     	    	      "enterCondition":$("#enterCondition").val(),
+     	    	      "enrollScope":$("#enrollScope").val(),
+     	    	      "eduIntroduce":$("#eduIntroduce").val(),
+     	    	      "num":num,
+     	    	      "eduId":$("#eduId").val(),
+     	    	      "folderNames":folderNames,
+     	    	      "fileNames":fileNames,
+     	    	      "counterpartsPrimary":counterpartsPrimary,
+     	    	      "counterpartsMiddle":counterpartsMiddle,
+     	    	      "imgEmpty":imgEmpty,
+     	              "eduType":$('input[name="eduType"]:checked').val()},
+     	       success: function(data){
+     	    	  if(data == 1){
+		    		   alert("操作成功");
+		    	   }else{
+		    		   alert("操作失败");
+		    	   }
+     	       },
+     	 });
+       	 return true;
+     }
+	//地址库信息
+	$("#addrDetail").autocomplete({
+		source : function(request, response){
+			$.ajax({
+				url : "${CTX}/premisesManage/getAddrDetail.do",
+				dataType : "json",
+				type : 'post',
+				data : {
+					eduId : $("#eduId").val(),
+					matchStr : request.term.replace(/\s/g, "")
+				},
+				success : function(data) {
+					var array = new Array(data.length);
+					var start = 0;
+					if($("#oldAreaId").val() != "") {
+						var temp0 = {
+							key : $("#oldRoadId").val(),
+							value : $("#oldAddrDetail").val()
+						};
+						array[0] = temp0;
+						start = 1;
+					}
+					for (var i = 0; i < data.length; i++) {
+						var temp = {
+							key : data[i].ROADID,
+							value : data[i].ADDRDETAIL
+						};
+						array[i+start] = temp;
+					}
+					response(array);
+				}
+			});
+		},
+		select : function(event, ui) {
+			$("#roadId").val(ui.item.key);
+			$("#addrDetail").val(ui.item.value);
+			event.preventDefault();
+		}
+	});
+	function picUpload(){
+		var formData = new FormData($("#form")[0]);
+		$.ajax({
+	        	url :"${UPLOAD_URL}/save.do",
+	 	        type: "POST",
+	            data : formData,  
+	  	        dataType:"JSON",
+	            async : false,
+	            processData : false,
+	            contentType : false,
+		        success: function (data) {
+		        	var img = '<div class="col-lg-3" style="width: 100px; height:100px; padding: 5px;">';
+		        	img+='<a href="javascript:void(0);" onclick="closeImg(this);"><span class="hasClose">X</span></a>';
+		        	img+='<img class="img" style="width: 100%; height: 100%;" src="${IMAGE_URL}'+ data.folderName +'/' + data.fileName + '@100w_100h" data-folder="' + data.folderName + '" data-file="' + data.fileName + '"/></div>'
+		        	$("#picUploaded").append(img);
+		        }, 
+		        error: function (data) {
+		        	alert("上传失败"); 
+		        }  
+		    }); 
+	}
+	$(":radio").change(function(){
+		var checkTypeStr = $('input[name="eduType"]:checked').attr("eduName");
+		var checkType = $('input[name="eduType"]:checked').val();//当前选中按钮的值
+		local = new BMap.LocalSearch(map, {
+			renderOptions:{map: map, autoViewport:true}
+		});
+		local.searchNearby(checkTypeStr, "杭州市");
+		var counterpartsType = $("input[name='counterpartsType']").val();//返回来的值  1对口小学 2 对口中学
+		if(counterpartsType==undefined){
+			if(checkType==2||checkType==3){
+				$("#counterpartsSchoolLable").show();
+				$("#counterpartsSchool").show();
+				if(checkType==3){
+					$("#counterpartsName").text("对口小学:");
+					$("#eduLink").text("添加对口小学");
+				}else{
+					$("#counterpartsName").text("对口中学:");
+					$("#eduLink").text("添加对口中学");
+				}
+			}else{
+				$("#counterpartsSchoolLable").hide();
+				$("#counterpartsSchool").hide();
+				if(checkType==5||checkType==6||checkType==7){
+					$("#enterConditionDiv").hide();
+					$("#enrollScopeDiv").hide();
+				}else{
+					$("#enterConditionDiv").show();
+					$("#enrollScopeDiv").show();
+				}
+			}
+		}else{
+			if(counterpartsType==1&&checkType==3){//点击中学
+				$("#counterpartsSchoolLable").show();
+				$("#counterpartsName").text("对口小学:");
+				$("#eduLink").text("添加对口小学");
+			}else{
+				$("#counterpartsSchoolLable").hide();
+			}
+			if(counterpartsType==2&&checkType==2){//点击小学
+				$("#counterpartsSchoolLable").show();
+				$("#counterpartsName").text("对口中学:");
+				$("#eduLink").text("添加对口中学");
+			}else{
+				$("#counterpartsSchoolLable").hide();
+			}
+			if(checkType!=2&&checkType!=3){
+				$("#counterpartsSchoolLable").hide();
+				$("#counterpartsSchool").hide();
+				if(checkType==5||checkType==6||checkType==7){
+					$("#enterConditionDiv").hide();
+					$("#enrollScopeDiv").hide();
+				}else{
+					$("#enterConditionDiv").show();
+					$("#enrollScopeDiv").show();
+				}
+			}
+		}
+	
+	});
+	$("#eduLink").click(function (){
+		var eduName = "";
+		if($("#edu").val() == ""){
+			alert("请填写对口学校后点击此按钮");
+			return;
+		}else{
+			eduName = $("#edu").val();
+		}
+		$("#edu").val("");
+		$("#eduLabel").append("<span class=\"tag\"   eduName=\"eduName\" >" + eduName + "<button type=\"button\" class=\"close\" onclick=\"closeSpan($(this));\">×</button></span>"+
+							"<input type=\"hidden\" name=\"counterpartsNameStr\"  value=\""+eduName+"\" class=\"\"/>");
+	});
+	/* 关闭SPAN按钮 */
+	function closeSpan(obj) {
+		obj.parent().next().remove();
+		obj.parent().remove();
+	}
+</script>
+
+

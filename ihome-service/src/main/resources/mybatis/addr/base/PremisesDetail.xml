@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="premisesDetail">
+
+	<!-- 根据楼盘id获得销售指南 -->
+	<select id="getSalesGuide" parameterType="map" resultType="PremisesDetailModel">
+		SELECT
+			ID AS id,
+			PREMISES_ID AS premisesId,
+			CUSTOMER_STANDARD AS
+			customerStandard,
+			LINK_WAYS AS linkWays,
+			PROMOTION_ADVICE AS
+			promotionAdvice,
+			OTHER_WAYS AS otherWays
+			FROM
+			PREMISES_SALES_GUIDE
+			WHERE
+			PREMISES_ID=#{id}
+
+	</select>
+
+	<!-- 根据id更新销售指南 -->
+	<update id="savePremisesGuide" parameterType="map">
+		UPDATE
+			PREMISES_SALES_GUIDE
+			SET
+			CUSTOMER_STANDARD = #{customerStandard},
+			LINK_WAYS = #{linkWays},
+			PROMOTION_ADVICE = #{promotionAdvice},
+			OTHER_WAYS = #{otherWays}
+			WHERE
+			PREMISES_ID = #{premisesId}
+	</update>
+	
+	<!-- 保存销售指南 -->
+	<insert id="insertPremisesGuide" parameterType="map">
+		INSERT
+		 	INTO PREMISES_SALES_GUIDE 
+			(ID,PREMISES_ID)
+			VALUES(
+				PREMISES_SALES_GUIDE_SEQ.NEXTVAL,
+				#{id}
+			)
+	</insert>
+
+	<!-- 分页查询下载资料 -->
+	<select id="getFileListPage" parameterType="map" resultType="FileDownloadModel">
+		SELECT
+			ID AS id,
+			FILE_NAME AS fileName,
+			UPLOAD_DATE AS uploadDate,
+			UPLOAD_PERSON AS uploadPerson,
+			FLODERNAME AS folderName,
+			FILENAMELONG AS
+			fileNameLong,
+			PREMISES_ID AS premisesId
+			FROM
+			PREMISES_FILE_DOWNLOAD
+			WHERE
+			PREMISES_ID=#{premisesId}
+			ORDER BY
+			UPLOAD_DATE DESC
+	</select>
+
+	<!-- 保存上传的文件 -->
+	<insert id="saveUploadFile" parameterType="map">
+		INSERT INTO PREMISES_FILE_DOWNLOAD (ID,FILE_NAME,FLODERNAME,FILENAMELONG,UPLOAD_DATE,UPLOAD_PERSON,PREMISES_ID)
+		select PREMISES_FILE_DOWNLOAD_SEQ.NEXTVAL,a.*,sysdate,#{uploadPerson},#{premisesId} from (
+	    <foreach collection="dataStr" item="item" index="index" separator="UNION ALL" >
+	    	SELECT 
+	         #{item.fileName},#{item.folderName},#{item.fileNameLong}
+	        FROM DUAL
+	    </foreach>)a
+	</insert>
+
+	<!-- 批量删除下载资料 -->
+	<delete id="deleteFiles" parameterType="map">
+		DELETE 
+			FROM
+			PREMISES_FILE_DOWNLOAD
+			WHERE
+			id IN (${rowIdsStr})
+	</delete>
+	
+	<!-- 查询下载资料 -->
+	<select id="getDownloadFiles" parameterType="map" resultType="FileDownloadModel">
+		SELECT
+			ID AS id,
+			FILE_NAME AS fileName,
+			UPLOAD_DATE AS uploadDate,
+			UPLOAD_PERSON AS uploadPerson,
+			FLODERNAME AS folderName,
+			FILENAMELONG AS
+			fileNameLong,
+			PREMISES_ID AS premisesId
+			FROM
+			PREMISES_FILE_DOWNLOAD
+			WHERE
+			ID IN(${rowIdsStr})
+	</select>
+
+</mapper>

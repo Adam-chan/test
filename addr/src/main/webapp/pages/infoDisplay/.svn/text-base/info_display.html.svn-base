@@ -1,0 +1,199 @@
+
+<div class="tableContent" >
+	<div style="width:850px;">
+		<div class="row">
+			<div class="col-xs-6">
+				<div id="info_display_main" style="width:400px;"></div>
+			</div>
+			<div class="col-xs-6">
+				<div id="name" class="col-xs-12" style="font-size:16px;height:46px; line-height:46px;">
+					<strong>楼盘名称 : </strong>
+					<span class="premisesName" title="${(info.name)!''}">${(info.name)!''}</span>
+				</div>
+				<div id="communityNam e" class="col-xs-12" style="font-size:16px;height:46px;background-color:#d9ebec; line-height:46px; ">
+					<strong>街道社区: </strong>
+					<span class="subdistrictName" title="${(info.subdistrictName)!''}${(info.communityName)!''}">${(info.subdistrictName)!''}${(info.communityName)!''}</span>
+				</div>
+				<div id="" class="col-xs-12" style="font-size:16px;height:46px; line-height:46px;"><strong>商圈 : </strong>
+					<#if (info.busiAreaParentName)?exists>
+						${(info.busiAreaParentName)!''}-${(info.busiAreaName)!''}
+					<#else>
+						${(info.busiAreaName)!''}
+					</#if>
+				</div>
+				<div id="" class="col-xs-12" style="font-size:16px;height:46px; background-color:#d9ebec;line-height:46px;">
+				    <div class="col-xs-11" >
+					    <strong>详细地址 : </strong>
+					    <span class ="addrDetail" title="${(info.addrDetail)!''}">${(info.addrDetail)!''}</span>
+				    </div>
+					<div class="col-xs-1" >
+				    	<a class="iconfont" href="#addr/infoDisplay/aroundMap.do?id=${premisesId!''}" style="color:#00BBFF;">&#xe60e;</a>
+				    </div>
+				</div>
+				<div id="" class="col-xs-12" style="font-size:16px;height:46px;line-height:46px;"><strong>开发商名称 : </strong>缺省数据</div>
+				<div id="" class="col-xs-12" style="font-size:16px;height:46px;background-color:#d9ebec; line-height:46px;" ><strong>物业类别 : </strong>${(info.housingTypeStr)!''}</div>
+			</div>
+			<hr/>
+			<div class="col-xs-12" style="font-size:14px;height:35px;line-height:35px;color:#0A8AC7;"><strong>基本信息</strong></div>
+			
+			<div id="" class="col-xs-3" style="font-size:14px;height:35px; line-height:35px;background-color:#d9ebec; "><strong>开盘时间 :</strong>${(info.salesStartDateFormat)!''}</div>
+			<div id="" class="col-xs-3" style="font-size:14px;height:35px;line-height:35px;background-color:#d9ebec; "><strong>土地使用年限 : </strong> ${(info.landUsageTerm)!''}年</div>
+			<div id="" class="col-xs-3" style="font-size:14px;height:35px;line-height:35px;background-color:#d9ebec; "><strong>开盘价格 :</strong>${(info.startingAtPrice)!''}元/平</div>
+			<div id="" class="col-xs-3" style="font-size:14px;height:35px;line-height:35px;background-color:#d9ebec; "><strong>房屋用途 :</strong>${(info.housingPurposesStr)!''}</div>
+			
+			<div id="" class="col-xs-3" style="font-size:14px;height:35px;line-height:35px;"><strong>占地面积 :</strong>${(info.areaCovered)!''}㎡</div>
+			<div class="col-xs-3" style="font-size:14px;height:35px;line-height:35px;"><strong>建筑面积 :</strong>${(info.overallFloorage)!''}㎡</div>
+			<div class="col-xs-3" style="font-size:14px;height:35px;line-height:35px;">
+				<strong>物业公司名称 :</strong>
+				<span class="property" title="${(info.propertyManagementCompany)!''}">
+				${(info.propertyManagementCompany)!''}</span>
+			</div>
+			<div id="" class="col-xs-3" style="font-size:14px;height:35px;line-height:35px;"><strong>物业费 :</strong>${(info.propertyFee)!''}元/月/平</div>
+			
+			<div id="" class="col-xs-6" style="font-size:14px;height:35px;line-height:35px;background-color:#d9ebec;"><strong>建筑结构 : </strong>${(info.buildingStructureStr)!''}</div>
+			<div id="" class="col-xs-6" style="font-size:14px;height:35px;line-height:35px;background-color:#d9ebec;">
+				<strong>教育设施 : </strong>
+				<span class="education" title="${(info.eduIds)!''}">${(info.eduIds)!''}</span>
+			</div>
+			
+			
+			<div id="" class="col-xs-12" style="font-size:14px;height:35px;line-height:35px;">
+				<strong>公交站点 : </strong>
+				<span class="bus" title="${(info.busStation)!''}">${(info.busStation)!''}</span>
+			</div>
+			
+			<div id="" class="col-xs-12" style="font-size:14px;height:35px;line-height:35px;background-color:#d9ebec;">
+				<strong>地铁站点 : </strong>
+				<span class="subwayStation" title="${(info.subwayStation)!''}">${(info.subwayStation)!''}</span>
+			</div>
+			
+			<div id="" class="col-xs-12" style="font-size:14px;height:35px;line-height:35px;"><strong>所属大区 : </strong>缺省数据</div>
+			
+			<div class="col-xs-12" style="font-size:16px;height:30px;line-height:30px;background-color:#d9ebec; "><strong>项目概况</strong></div>
+			
+			<div class="col-xs-12">
+				<div class="col-xs-2" style="height:25px;width:72px;margin-top: 30px;padding-left:0px;"><strong>小区简介 :</strong></div>
+				<div class="col-xs-10" style="padding-left:0px;">
+				    <textarea style="height:70px;width:790px;"readonly="readonly">${(info.premisesProfile)!''}</textarea>
+				</div>
+			</div>
+			
+			<div class="col-xs-12" style="font-size:16px;height:30px;line-height:30px;background-color:#d9ebec; "><strong>周边信息</strong></div>
+			<#if info.type !=1>
+			<div class="col-xs-12" >
+				<div class="col-xs-2" style="height:25px;width:72px;margin-top: 30px;padding-left:0px;"><strong>配套设施:</strong></div>
+				<div class="col-xs-10" style="padding-left:0px;">
+					<textarea style="height:70px;width:790px;"readonly="readonly">${(info.supportingFacilities)!''}</textarea>
+				</div>
+			</div>
+			</#if>
+			<div class="col-xs-12">
+				<div class="col-xs-2" style="height:25px;width:72px;margin-top: 30px;padding-left:0px;"><strong>农贸市场 :</strong></div>
+				<div class="col-xs-10" style="padding-left:0px;">
+					<textarea style="height:70px;width:790px;"readonly="readonly">${(info.farmProductMarket)!''}</textarea>
+				</div>
+				
+			</div>
+			<div class="col-xs-12">
+				<div class="col-xs-2" style="height:25px;width:72px;margin-top: 30px;padding-left:0px;"><strong>商场超市 :</strong></div>
+				<div class="col-xs-10" style="padding-left:0px;">
+					<textarea style="height:70px;width:790px;"readonly="readonly">${(info.supermarket)!''}</textarea>
+				</div>
+			</div>
+			<div class="col-xs-12">
+				<div class="col-xs-2" style="height:25px;width:72px;margin-top: 30px;padding-left:0px;"><strong>餐饮娱乐 :</strong></div>
+				<div class="col-xs-10" style="padding-left:0px;">
+					<textarea style="height:70px;width:790px;"readonly="readonly">${(info.entertainment)!''}</textarea>
+				</div>
+			</div>
+			<div class="col-xs-12">
+				<div class="col-xs-2" style="height:25px;width:72px;margin-top: 10px;padding-left:0px;"><strong>银行、公园、医院 :</strong></div>
+				<div class="col-xs-10" style="padding-left:0px;">
+					<textarea style="height:70px;width:790px;"readonly="readonly">${(info.bankParkHospital)!''}</textarea>
+				</div>
+			</div>
+			<div class="col-xs-12">
+				<div class="col-xs-2" style="height:25px;width:72px;margin-top: 30px;padding-left:0px;"><strong>备注 :</strong></div>
+				<div class="col-xs-10" style="padding-left:0px;">
+					<textarea style="height:70px;width:790px;"readonly="readonly">${(info.remark)!''}</textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<style type="text/css">  
+	span.education{  
+	    width:340px;
+	    white-space: nowrap;  
+	    overflow: hidden;  
+	    text-overflow: ellipsis;
+	    display:block;
+	    float: right; 
+	    clear: both; 
+	} 
+	span.addrDetail{  
+	    width:250px;
+	    white-space: nowrap;  
+	    overflow: hidden;  
+	    text-overflow: ellipsis;
+	    display:block;
+	    float: right;
+	    clear: both;  
+	} 
+	span.bus{  
+	    width:770px;
+	    white-space: nowrap;  
+	    overflow: hidden;  
+	    text-overflow: ellipsis;
+	    display:block;
+	    float: right;
+	    clear: both;  
+	} 
+	span.subwayStation{  
+	    width:770px;
+	    white-space: nowrap;  
+	    overflow: hidden;  
+	    text-overflow: ellipsis;
+	    display:block;
+	    float: right; 
+	    clear: both; 
+	} 
+	span.premisesName{
+		width:300px;
+	    white-space: nowrap;  
+	    overflow: hidden;  
+	    text-overflow: ellipsis;
+	    display:block;
+	    float: right;
+	    clear: both;  
+	}
+	span.subdistrictName{
+		width:300px;
+	    white-space: nowrap;  
+	    overflow: hidden;  
+	    text-overflow: ellipsis;
+	    display:block;
+	    float: right;
+	    clear: both;  
+	}
+	span.property{
+		width:100px;
+	    white-space: nowrap;  
+	    overflow: hidden;  
+	    text-overflow: ellipsis;
+	    display:block;
+	    float: right;
+	    clear: both; 
+	}
+</style> 
+<script type="text/javaScript">
+$("#info_display_main").showCommodity({
+	basePath:"${IMAGE_URL}",
+	imgs:${infoImgList},
+	bigSuffix:"@!aihome",
+	smallSuffix:"@50w_50h"
+	
+});
+</script>

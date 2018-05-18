@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="road">
+
+	<!-- 新增道路 -->
+	<insert id="insertRoad" parameterType="map">  
+       INSERT INTO AREA_ROAD (id, name) VALUES (AREA_ROAD_SEQ.NEXTVAL, #{roadName})
+    </insert>
+	
+	<!-- 分页查询道路 -->
+   	<select id="queryRoadListPage" parameterType="map" resultType="roadModel">
+		SELECT
+			id,
+			name as roadName
+		FROM
+			AREA_ROAD 
+		WHERE
+			1 = 1
+			<if test="id != null  and id !=''"> 
+		    	and id = #{id}
+		    </if>
+		ORDER BY
+			id desc
+   	</select>
+   	
+   		<!-- 分页查询道路号 -->
+   	<select id="queryRoadNumListPage" parameterType="map" resultType="roadNumModel">
+		SELECT
+			a.id,
+			a.AREA_ID as areaId,
+			a.NUM as roadNum,
+			a.UNITE_ID as uniteId,
+			a.STATUS,
+			a.ROAD_ID as roadId,
+			b.name as name,
+			c.name as roadName
+		FROM AREA_ROAD_NUM a
+			left join BASE_AREA b on a.AREA_ID = b.id
+			left join AREA_ROAD c on a.ROAD_ID = c.id
+		<where>
+			<if test="roadName != null  and roadName !=''"> 
+		    	c.name = #{roadName}
+		    </if>
+		    <if test="areaName != null  and areaName !=''"> 
+		     	and c.name = #{areaName}
+		    </if>
+		     <if test="areaId != null  and areaId !=''"> 
+		     	and a.AREA_ID = #{areaId}
+		    </if>
+		</where>
+			<if test ="sidx == '' or sord == ''">
+	        	order by a.id desc
+    		</if>
+	        <if test ="sidx != '' and sidx != 'NUM' and sord != ''">
+				order by a.${sidx} ${sord}
+    		</if>
+	        <if test ="sidx == 'NUM'">
+				order by c.name ${sord},a.${sidx} ${sord}
+    		</if>
+   	</select>
+   	
+   	 	<!-- 查询日志表忽略道路号 -->
+	<select id="getRoadLogInfo" resultType="roadLogModel">
+		SELECT
+			ID,
+			IGNORE_NUM as ignoreNum
+		FROM
+			AREA_ROAD_NUM_LOG
+		WHERE	STATUS = 1
+			AND ROAD_ID = #{roadId} and START_NUM &lt;= #{roadNum} and  #{roadNum} &lt;= END_NUM
+   	</select>
+   	 		<!-- 分页查询道路日志 -->
+   	<select id="queryRoadLogListPage" parameterType="map" resultType="roadLogModel">
+		SELECT
+			a.id,
+			a.ROAD_ID as roadId,
+			a.START_NUM as startNum,
+			a.END_NUM as endNum,
+			a.CREAT_TYPE as creatType,
+			a.STATUS as status,
+			a.IGNORE_NUM as ignoreNum,
+			a.OPERATOR as operator,
+			a.OPER_TIME as operTime,
+			a.AREA_ID as areaId,
+			c.name as areaName,
+			b.name as roadName
+		FROM AREA_ROAD_NUM_LOG a
+			 left join AREA_ROAD b on a.ROAD_ID = b.id
+			 left join BASE_AREA c on a.AREA_ID = c.id 
+		<where>
+			<if test="roadName != null  and roadName !=''"> 
+		    	b.name = #{roadName}
+		    </if>
+		    <if test="areaName != null  and areaName !=''"> 
+		     	and c.name = #{areaName}
+		    </if>
+		      <if test="areaId != null  and areaId !=''"> 
+		     	and c.id = #{areaId}
+		    </if>
+		</where>
+		ORDER BY a.id DESC
+   	</select>
+   	<!-- 根据id查询道路 -->
+   	<select id="getRoadById" parameterType="map" resultType="roadModel">
+		SELECT
+			id,
+			name as roadName
+		FROM
+			AREA_ROAD 
+		WHERE
+			id=#{id}
+   	</select>
+   	<!-- 查询所有道路信息 -->
+   	<select id="getRoadList" resultType="roadModel">
+		SELECT
+			id,
+			name as roadName
+		FROM
+			AREA_ROAD 
+		ORDER BY id 
+   	</select>
+   	
+   	<!-- 根据id更新道路信息 -->
+   	<update id="updateRoad" parameterType="map">             
+	     UPDATE AREA_ROAD 
+	      	<set>
+				<if test="roadName != null and roadName != ''">
+					 name = #{roadName}
+				</if>
+	      	</set>
+	     WHERE id=#{id}
+	</update> 
+	  
+	<!-- 批量删除道路信息 -->
+	<delete id="deleteRoads" parameterType="map">
+	    DELETE FROM AREA_ROAD WHERE id IN (${rowIds})
+	</delete>
+	
+	<!-- 查询杭州市所有区 -->
+	<select id="getAreasList" resultType="baseAreaModel">
+		SELECT
+			id,
+			name 
+		FROM
+			BASE_AREA
+		WHERE
+			PID='934'
+		ORDER BY id 
+   	</select>
+   	
+   	<!-- 保存道路和行政区的关联关系 -->
+   	<insert id="insertRoadAreaContact" parameterType="map" useGeneratedKeys="false">  
+	   	insert into AREA_ROAD_NUM (id, AREA_ID, ROAD_ID) 
+	    	select AREA_ROAD_NUM_SEQ.NEXTVAL,a.* from (
+	    <foreach collection="areaIds" item="item" index="index" separator="UNION ALL" >
+	    	SELECT 
+	         #{item},#{roadId}
+	        FROM DUAL
+	    </foreach>)a
+    </insert>
+  <!-- 模糊查询道路信息 -->
+	<select id="getRoadNumByMatch" resultType="roadModel">
+		SELECT
+			id,
+			NAME as roadName
+		FROM
+			AREA_ROAD 
+		<where>  
+			<if test="roadId != null  and roadId !=''"> 
+		     	id = #{roadId}
+		    </if>
+			<if test="matchStr != null  and matchStr !=''"> 
+		     	and INSTR(NAME, #{matchStr}) > 0
+		    </if>
+		</where>
+		ORDER BY id
+   	</select>
+   	
+   	  	<!-- 根据id更新道路号信息 -->
+   	<update id="updateRoadNum" parameterType="map">             
+	     UPDATE AREA_ROAD_NUM
+	      	<set>
+				<if test="roadNumStatus != null and roadNumStatus != ''">
+					 status = #{roadNumStatus}
+				</if>
+	      	</set>
+	     WHERE UNITE_ID=#{id}
+	</update>
+		  	<!-- 根据id更新道路日志信息 -->
+   	<update id="updateRoadLog" parameterType="map">             
+	     UPDATE AREA_ROAD_NUM_LOG  
+	      	<set>
+				<if test="roadLogStatus != null and roadLogStatus != ''">
+					 status = #{roadLogStatus},
+				</if>
+				<if test="ignoreNum != null and ignoreNum != ''">
+					 IGNORE_NUM = #{ignoreNum},
+				</if>
+				<if test="operTime != null and operTime != ''">
+					 OPER_TIME = #{operTime},
+				</if>
+				<if test="operator != null and operator != ''">
+					 OPERATOR = #{operator},
+				</if>
+				<if test="operatorId != null and operatorId != ''">
+					 OPERATOR_ID = #{operatorId},
+				</if>
+				<if test="operatorOrgCode != null and operatorOrgCode != ''">
+					 OPERATOR_ORG_CODE = #{operatorOrgCode}
+				</if>
+	      	</set>
+      	<where>
+	     	<if test="id != null  and id !=''"> 
+		     	id=#{id}
+		    </if>
+		    <if test="roadId != null  and roadId !=''">
+		        or ROAD_ID=#{roadId}
+		    </if>
+	    </where>
+	</update> 
+			  	<!-- 根据id更新道路日志信息 -->
+   	<update id="updateRoadLogNew" parameterType="map">             
+	     UPDATE AREA_ROAD_NUM_LOG  
+	      	<set>
+				<if test="ignoreNum != null and ignoreNum != ''">
+					 IGNORE_NUM = #{ignoreNum},
+				</if>
+				<if test="operTime != null and operTime != ''">
+					 OPER_TIME = #{operTime},
+				</if>
+				<if test="operator != null and operator != ''">
+					 OPERATOR = #{operator},
+				</if>
+				<if test="operatorId != null and operatorId != ''">
+					 OPERATOR_ID = #{operatorId},
+				</if>
+				<if test="operatorOrgCode != null and operatorOrgCode != ''">
+					 OPERATOR_ORG_CODE = #{operatorOrgCode}
+				</if>
+	      	</set>
+      	where status = 1
+	     	<if test="id != null  and id !=''"> 
+		      	and id=#{id}
+		    </if>
+	</update>   
+	<!-- 道路撒号验证 第一次 -->
+	<select id="getRoadNumCount" resultType="roadLogModel">
+		select count(0) as numbers from AREA_ROAD_NUM_LOG  
+		where status = 1  and (
+			<if test="startNum != null  and startNum !=''"> 
+		     	 #{startNum} between start_num and end_num
+		    </if>
+		    <if test="endNum != null  and endNum !=''">
+		     	or #{endNum} between start_num and end_num
+		    </if>
+		    )
+			<if test="showStatus != 1 "> 
+		     	and creat_type in(${showStatus},1)
+		    </if>
+		    <if test="roadId != null  and roadId !=''"> 
+		     	and ROAD_ID = #{roadId}
+		    </if>
+   	</select>
+   	
+   		<!-- 道路撒号验证 第二次 -->
+	<select id="getRoadNumInclude" resultType="roadLogModel">
+		select
+			start_num as startNum,
+			end_num as endNum  
+		from AREA_ROAD_NUM_LOG  
+		where status = 1  
+	    <if test="roadId != null  and roadId !=''"> 
+	     	and ROAD_ID = #{roadId}
+	    </if>
+   	</select>
+   	
+   			<!-- 查询日志使用中条数 -->
+	<select id="getRoadLogCount" resultType="roadLogModel">
+		select
+			count(0) as count
+		from AREA_ROAD_NUM_LOG  
+		where status = 1  
+	    <if test="roadId != null  and roadId !=''"> 
+	     	and ROAD_ID in(${roadId})
+	    </if>
+	    <if test="rowIds != null  and rowIds !=''"> 
+	     	and AREA_ID in (${rowIds})
+	    </if>
+   	</select>
+   	
+   	  <!-- 添加道路撒号 -->
+   	<insert id="insertRoadNum" parameterType="map" useGeneratedKeys="false">  
+	   	INSERT INTO AREA_ROAD_NUM (id,AREA_ID,NUM,STATUS,ROAD_ID,UNITE_ID) 
+	    	SELECT AREA_ROAD_NUM_SEQ.NEXTVAL,a.* from (
+	    <foreach collection="activate" item="item" index="index" separator="UNION ALL" >
+	    	SELECT 
+	         #{areaId},#{item},#{status},#{roadId},#{roadId}||lpad(#{item},5,'0')
+	        FROM DUAL
+	    </foreach>)a
+    </insert>
+      <!-- 添加道路日志记录 -->
+   	<insert id="insertRoadLog" parameterType="map" >  
+	   	INSERT INTO AREA_ROAD_NUM_LOG (
+	   			id,ROAD_ID,START_NUM,
+			   	END_NUM,CREAT_TYPE,STATUS,IGNORE_NUM,
+			   	OPERATOR,OPER_TIME,	AREA_ID,OPERATOR_ID,OPERATOR_ORG_CODE
+				) 
+	   	values(
+	   			AREA_ROAD_NUM_LOG_SEQ.NEXTVAL,#{roadId},#{startNum},
+		   		#{endNum},#{creatNumType},#{status},
+		   		#{ignore},#{operator},#{operTime},#{areaId},#{operatorId},#{operatorOrgCode}
+			  )
+    </insert>
+    
+    <!-- 批量删除道路号 -->
+	<delete id="deleteRoadNum" parameterType="map">
+	    DELETE FROM AREA_ROAD_NUM WHERE ROAD_ID in(${roadId})
+	</delete>
+	
+	<!-- 模糊查询道路信息 -->
+	<select id="getRoadListByMatch" resultType="roadModel">
+		SELECT
+			id,
+			NAME AS roadName
+		FROM
+			AREA_ROAD 
+		WHERE
+			1=1
+			<if test="matchStr != null  and matchStr !=''"> 
+		    	AND INSTR(NAME, #{matchStr}) > 0
+		    </if>
+		ORDER BY id 
+   	</select>
+   	
+   	<!-- 查询道路名称是否存在 -->
+   	<select id="getRoadByNameIs" parameterType="map" resultType="java.lang.Integer">
+		SELECT
+			count(0)
+		FROM
+			AREA_ROAD
+		WHERE
+			1=1
+			<if test="roadName != null  and roadName !=''"> 
+		    	AND name = #{roadName}
+		    </if>
+		    <if test="roadId != null and roadId !=''">
+		    	AND id &lt;&gt; #{roadId}
+		    </if>
+   	</select>
+	
+</mapper>

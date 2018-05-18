@@ -1,0 +1,686 @@
+<form action="" id="addHouseForm">
+	<div class="row" id="addHouse">
+		<div class="col-sm-12 my-group" enterforbtn="confirm-role">
+			<div id="element_id">
+				<div class="col-sm-12" id="unitHead">
+					<div class="form-sm form-group row">
+						<label class="col-sm-2 control-label">楼盘名称：</label>
+						<div class="col-sm-2"><span>${restoreRoomNames.premisesName!}</span></div>
+						<label class="col-sm-2 control-label">栋座分组：</label>
+						<div class="col-sm-2"><span>${restoreRoomNames.gName!}</span></div>
+						<label class="col-sm-2 control-label">栋座：</label>
+						<div class="col-sm-2"><span>${restoreRoomNames.bName!}</span></div>
+						<input id="buildingId" hidden="hidden" value="${restoreRoomNames.buildingId!}">
+						<input id="groupId" hidden="hidden" value="${restoreRoomNames.groupId!}">
+						<input id="premisesId" hidden="hidden" value="${restoreRoomNames.premisesId!}">
+					</div>
+				</div>
+				
+				<div class="col-sm-12">
+					<div class="form-sm form-group row">
+						<label class="col-sm-2 control-label">增加类型：</label>
+						<div class="col-sm-4" id="addTypeRadio">
+							<input type="radio" name="addType" id="single" value="single">单个增加
+							<span style="width:50px;">&nbsp;&nbsp;</span>
+							<input type="radio" name="addType" id="batch" value="batch">批量新增
+						</div>
+					</div>
+				</div>
+				
+				<div id="singleAdd" style="display: none;">
+					<div class="col-sm-12">
+						<div class="form-sm form-group row">
+							<label class="col-sm-2 control-label">单元号：</label>
+							<div class="col-sm-3">
+								<select id="singleUnits" name="singleUnitsNm" class=" input-xs form-control">
+									<#list unitCodeList as item>
+									<option id="${item.id!}" value="${item.code!}">${item.code!}</option>
+									</#list>
+								</select>
+							</div>
+							<div class="col-sm-1">
+								<a style="text-decoration: none;" id="singleUnitAdd"><i style="color:#FF5151">十</i></a>
+								<span style="width:50px;">&nbsp;</span>
+								<a style="text-decoration: none;" id="singleUnitSub"><i style="color: #9D9D9D">一</i></a>
+							</div>
+							<label class="col-sm-2 control-label">楼层：</label>
+							<div class="col-sm-3">
+								<input id="floorNum" name="floorNumNm" class="form-control input-xs" type="text" readonly>
+								<input id="minFloor" hidden="hidden">
+								<input id="maxFloor" hidden="hidden">
+							</div>
+							<div class="col-sm-1">
+								<a style="text-decoration: none;" id="singleFloorAdd"><i style="color:#FF5151">十</i></a>
+								<span style="width:50px;">&nbsp;</span>
+								<a style="text-decoration: none;" id="singleFloorSub"><i style="color: #9D9D9D">一</i></a>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-sm-12">
+						<div class="form-sm form-group row">
+							<label class="col-sm-2 control-label">房间号：</label>
+							<div class="col-sm-4">
+								<select id="singleRoomNum" name="singleRoomNumNm" class=" input-xs form-control">
+								</select>
+							</div>
+							<label class="col-sm-2 control-label">房屋用途：</label>
+							<div class="col-sm-4">
+								<select id="singlePurpose" name="singlePurposeNm" class=" input-xs form-control">
+									<option id="layerOption" value="1">住宅</option>
+									<option id="layerOption" value="3">写字楼</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-sm-12">
+						<div class="form-sm form-group row">
+							<label class="col-sm-2 control-label">户型：</label>
+							<input id="singleBedroom" name="singleBedroomNm" class="input-xs" type="text">室 
+							<input id="singleLivingRoom" name="singleLivingRoomNm" class="input-xs" type="text">厅
+							<input id="singleToilet" name="singleToiletNm" class="input-xs" type="text">卫
+							<input id="singleKitchen" name="singleKitchenNm" class="input-xs" type="text">厨
+						</div>
+					</div>
+					
+					<div class="col-sm-12">
+						<div class="form-sm form-group row">
+							<label class="col-sm-2 control-label">朝向：</label>
+							<div class="col-sm-4">
+								<select id="singleOrientations" name="singleOrientationsNm" class=" input-xs form-control">
+									<option id="layerOption" value="南">南</option>
+									<option id="layerOption" value="东">东</option>
+									<option id="layerOption" value="西">西</option>
+									<option id="layerOption" value="北">北</option>
+								</select>
+							</div>
+							<label class="col-sm-2 control-label">装修情况：</label>
+							<div class="col-sm-4">
+								<select id="singleDecoration" name="singleDecorationNm" class=" input-xs form-control">
+									<option id="layerOption" value="">请选择装修状态</option>
+									<option id="layerOption" value="1">精装</option>
+									<option id="layerOption" value="2">已装修</option>
+									<option id="layerOption" value="3">未装修</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-sm-12">
+						<div class="form-sm form-group row">
+							<label class="col-sm-2 control-label">建筑面积（㎡）：</label>
+							<div class="col-sm-4">
+								<input id="singleBuildingArea" name="singleBuildingAreaNm" class="form-control input-xs" type="text">
+							</div>
+							<label class="col-sm-2 control-label">使用面积（㎡）：</label>
+							<div class="col-sm-4">
+								<input id="singleUseArea" name="singleUseAreaNm" class="form-control input-xs" type="text">
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-sm-12">
+						<div class="form-sm form-group row">
+							<label class="col-sm-2 control-label">土地使用年限：</label>
+							<div class="col-sm-4">
+								<select id="singleYears" name="singleYearsNm" class=" input-xs form-control">
+									<option id="layerOption" value="1">70年</option>
+								</select>
+							</div>
+							<label class="col-sm-2 control-label">房屋性质：</label>
+							<div class="col-sm-4">
+								<select id="singleNature" name="singleNatureNm"  class=" input-xs form-control" >
+									<option id="layerOption" value="">请选择</option>
+									<option id="layerOption" value="1">已购公房</option>
+									<option id="layerOption" value="2">商品房</option>
+									<option id="layerOption" value="3">空置房</option>
+									<option id="layerOption" value="4">使用权房</option>
+									<option id="layerOption" value="5">经济适用房</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-sm-12">
+						<div class="form-sm form-group row">
+							<label class="col-sm-2 control-label">业主姓名：</label>
+							<div class="col-sm-4">
+								<input id="singleOwnersName" name="singleOwnersNameNm" class="form-control input-xs" type="text">
+							</div>
+							<label class="col-sm-2 control-label">业主电话：</label>
+							<div class="col-sm-4">
+								<div class="input-group">
+									<input id="singleOwnerPhone" name="singleOwnerPhoneNm" class="form-control input-xs"  type="text">
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div id="batchAdd" style="display: none;">
+					<div class="col-sm-12">
+						<div class="form-sm form-group row">
+							<label class="col-sm-2 control-label">单元号：</label>
+							<div class="col-sm-3">
+								<select id="batchUnits" name="batchUnitsNm" class=" input-xs form-control">
+									<#list unitCodeList as item>
+									<option id="${item.id!}" value="${item.id!}">${item.code!}</option>
+									</#list>
+								</select>
+							</div>
+							<div class="col-sm-1">
+								<a style="text-decoration: none;" id="batchUnitAdd"><i style="color:#FF5151">十</i></a>
+								<span style="width:50px;">&nbsp;</span>
+								<a style="text-decoration: none;" id="batchUnitSub"><i style="color: #9D9D9D">一</i></a>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-sm-12">
+						<div class="form-sm form-group row">
+							<label class="col-sm-2 control-label">起始楼层：</label>
+							<div class="col-sm-4">
+								<input id="initialFloor" name="initialFloorNm" class="form-control input-xs" type="text" readonly="readonly">
+								<input id="upFloorsId" name="upFloors" hidden="hidden">
+							</div>
+							<label class="col-sm-2 control-label">终止楼层：</label>
+							<div class="col-sm-4">
+								<input id="endFloor" name="endFloorNm" class="form-control input-xs" type="text">
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-sm-12">
+						<div class="form-sm form-group row">
+							<label class="col-sm-2 control-label">梯户数：</label>
+							<div id="flats" class="col-sm-4">
+								<span></span>
+							</div>
+							<label class="col-sm-2 control-label">房屋用途：</label>
+							<div class="col-sm-4">
+								<select id="batchPurpose" name="batchPurposeNm" class=" input-xs form-control">
+									<option id="layerOption" value="1">住宅</option>
+									<option id="layerOption" value="3">写字楼</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-sm-12">
+						<div class="form-sm form-group row">
+							<label class="col-sm-2 control-label">土地使用年限：</label>
+							<div class="col-sm-4">
+								<select id="batchYears" name="batchYearsNm" class=" input-xs form-control">
+									<option id="layerOption" value="1">70年</option>
+								</select>
+							</div>
+							<label class="col-sm-2 control-label">房屋性质：</label>
+							<div class="col-sm-4">
+								<select id="batchNature" name="batchNatureNm" class=" input-xs form-control" >
+									<option id="layerOption" value="">请选择</option>
+									<option id="layerOption" value="1">已购公房</option>
+									<option id="layerOption" value="2">商品房</option>
+									<option id="layerOption" value="3">空置房</option>
+									<option id="layerOption" value="4">使用权房</option>
+									<option id="layerOption" value="5">经济适用房</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<input id="generativeRule" hidden="hidden">
+					<input id="flats" hidden="hidden">
+					<input id="numStart" hidden="hidden">
+					<input id="numEnd" hidden="hidden">
+					<input id="roomPrefix" hidden="hidden">
+					<input id="roomSuffix" hidden="hidden">
+					<input id="unitPrefix" hidden="hidden" value="${buildingInfo.unitPre!}">
+					<input id="unitSuffix" hidden="hidden" value="${buildingInfo.unitSuf!}">
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<script type="text/javascript">
+	//增加类型
+	aihome.addType=function(){
+		var radioVal = $("#addTypeRadio input[name='addType']:checked").val();
+		if(radioVal == "single"){
+			$("#batchAdd").hide();
+			$("#singleAdd").show();
+			var unitId = $("#singleAdd select[id='singleUnits'] option:selected").attr("id");
+			aihome.getFloor(unitId,"single");
+		}else if(radioVal == "batch"){
+			$("#singleAdd").hide();
+			$("#batchAdd").show();
+			var unitId = $("#batchAdd select[id='batchUnits'] option:selected").attr("id");
+			aihome.getFloor(unitId,"batch");
+		}
+	}
+	//获取单元楼层
+	aihome.getFloor=function(unitId,addType){
+		$.ajax({
+			type : "POST",
+			url : "${CTX}/baseHouse/getUnitsInfo.do",
+			dataType : "json",
+			data : {
+				"unitId" : unitId
+			},
+			success:function(data){
+				if(addType == "single"){
+					$("#singleAdd input[id='floorNum']").attr("value",(data[0].upFloors+data[0].floors-1));
+					$("#singleAdd input[id='minFloor']").attr("value",data[0].upFloors);
+					$("#singleAdd input[id='maxFloor']").attr("value",(data[0].upFloors+data[0].floors-1));
+					aihome.roomsMatchFloor(unitId,$("#singleAdd input[id='floorNum']").val());
+				}else if(addType == "batch"){
+					var ladders = data[0].ladders == undefined?"":data[0].ladders+"梯";
+					$("#batchAdd div[id='flats']").find("span").text(ladders+data[0].flats+"户");
+					$("#batchAdd input[id='initialFloor']").attr("value",(data[0].upFloors+data[0].floors));
+					$("#batchAdd input[id='upFloorsId']").attr("value",data[0].upFloors);
+					$("#batchAdd input[id='generativeRule']").attr("value",data[0].generative_rule);
+					$("#batchAdd input[id='flats']").attr("value",data[0].flats);
+					$("#batchAdd input[id='numStart']").attr("value",data[0].numStart);
+					$("#batchAdd input[id='numEnd']").attr("value",data[0].numEnd);
+					$("#batchAdd input[id='roomPrefix']").attr("value",data[0].prefix);
+					$("#batchAdd input[id='roomSuffix']").attr("value",data[0].suffix);
+				}
+			}
+		})
+	}
+	//获取该楼层下可增加房间
+	aihome.roomsMatchFloor=function(unitId,floorNum){
+		$.ajax({
+			type : "POST",
+			url : "${CTX}/baseHouse/getRoomsMatchFloor.do",
+			dataType : "json",
+			data : {
+				"unitId" : unitId,
+				"floorNum" : floorNum
+			},
+			success:function(data){
+				$("#singleAdd select[id='singleRoomNum']").empty();
+				for(var i = 0 ; i< data.length ; i++){
+					if(data[i].status == 2){
+						$("#singleAdd select[id='singleRoomNum']").append("<option value=\""+data[i].id+"\">"+data[i].houseName+"</option>");
+					}
+				}
+				if($("#singleAdd select[id='singleRoomNum']").find("option").length == 0){
+					$("#singleAdd select[id='singleRoomNum']").append("<option value=\""+"\">单元该层无可增加房间</option>");
+				}
+			}
+		})
+	}
+	//校验
+	aihome.validateAddRoom=function(){
+		var isMobile = /^0\d{2,3}-\d{7,8}(-\d{1,6})?$|(^(13[0-9]|15[0|3|6|7|8|9]|18[8|9])\d{8}$)/;  
+		 $.validator.addMethod("phoneNumValidate",function(value,element,params){
+				return this.optional(element) || isMobile.test(value);
+			},"电话号码格式不正确");
+		 return $("#addHouseForm").validate({
+				onfocusout: function(element) { $(element).valid(); },  
+				rules:{
+				},
+				messages:{
+					singleBedroomNm:{
+						required:"室不能为空",
+						number:"室必须为数字",
+					},singleLivingRoomNm:{
+						number:"厅必须为数字",
+					},singleToiletNm:{
+						number:"卫必须为数字",
+					},singleKitchenNm:{
+						number:"厨必须为数字",
+					},singleBuildingAreaNm:{
+						number:"建筑面积必须为数字",
+					},singleUseAreaNm:{
+						number:"使用面积必须为数字",
+					},singleDecorationNm:{
+						required:"装修情况为必选项",
+					},singleNatureNm:{
+						required:"房屋性质为必选项",
+					}
+				},
+		        errorPlacement: function(error, element){
+		            error.appendTo(element.parent());
+		        }
+			}); 
+	}
+	//保存新增房间
+	aihome.confirmHouse=function(){
+		if(!aihome.validateAddRoom().form()) {
+			alert("添加失败！");
+			return type;
+		}
+		var oForm = $("#addHouseForm");
+		var addHouseForm = oForm.serialize();
+		var addType = $("#addTypeRadio input[name='addType']:checked").val();//增加类型
+		if(addType == "single"){
+			$.ajax({
+				type : "POST",
+				url : "${CTX}/baseHouse/singleRestoreRoom.do",
+				dataType : "json",
+				data : addHouseForm,
+				success:function(data){
+					if(data>0){
+					}else{
+						alert("添加失败");
+					}
+				}
+			})
+		}else if(addType == "batch"){
+			var flats = parseInt($("#batchAdd input[id='flats']").val());//户数
+			var initialFloor = parseInt($("#batchAdd input[id='initialFloor']").val());//起始楼层
+			var endFloor = parseInt($("#batchAdd input[id='endFloor']").val());//终止楼层
+			var generativeRule = $("#batchAdd input[id='generativeRule']").val();//规则
+			var batchUnits = $("#batchAdd select[id='batchUnits'] option:selected").text();//单元号
+			var numStart = parseInt($("#batchAdd input[id='numStart']").val());//区间开始
+			var numEnd = $("#batchAdd input[id='numEnd']").val();//区间结束
+			var unitPre = $("#batchAdd input[id='unitPrefix']").val();//单元前缀
+			var unitSuf = $("#batchAdd input[id='unitSuffix']").val();//单元后缀
+			var roomPre = $("#batchAdd input[id='roomPrefix']").val();//房间前缀
+			var roomSuf = $("#batchAdd input[id='roomSuffix']").val();//房间后缀
+			var batchPurpose = $("#batchAdd select[id='batchPurpose'] option:selected").val();//房屋用途
+			var batchYears = $("#batchAdd select[id='batchYears'] option:selected").val();//土地使用年限
+			var batchNature = $("#batchAdd select[id='batchNature'] option:selected").val();//房屋性质
+			var buildingId = $("#unitHead input[id='buildingId']").val();//楼栋Id
+			var groupId = $("#unitHead input[id='groupId']").val();//分组Id
+			var premisesId = $("#unitHead input[id='premisesId']").val();//楼盘Id
+			var unitId = $("#batchAdd select[id='batchUnits'] option:selected").attr("id");//单元Id
+			var laddersFlats = $("#batchAdd div[id='flats'] span").text();//梯户数
+			var batchYears = $("#batchAdd select[id='batchYears']").val();//土地使用年限
+			var batchNature = $("#batchAdd select[id='batchNature']").val();//房屋性质
+			var batchPurpose = $("#batchAdd select[id='batchPurpose']").val();//房屋用途
+			var roomsList = aihome.batchHouses(flats,initialFloor,endFloor,generativeRule,batchUnits,numStart,numEnd,unitPre,unitSuf,
+					roomPre,roomSuf,batchPurpose,batchYears,batchNature,buildingId,groupId,premisesId,unitId);
+				if(unitId != undefined && unitId != ""){
+					if(generativeRule.toString().indexOf("1") > -1){
+						houseNumEnd = numEnd;
+					}else if(generativeRule.toString().indexOf("2") > -1){//单元排序
+						houseNumEnd = numStart+(endFloor-initialFloor+1)*flats-1
+					}
+					$.ajax({
+						type : "POST",
+						url : "${CTX}/baseHouse/batchRestoreRoom.do",
+						dataType : "json",
+						data : {
+							"id":unitId,
+							"upFloors":$("#batchAdd input[id='upFloorsId']").val(),
+							"endFloor":endFloor,
+							"roomsList":roomsList,
+							"flats":flats,
+							"numEnd":houseNumEnd
+						},
+						success:function(data){
+							if(data>0){
+							}else{
+								alert("添加失败");
+							}
+						}
+					})
+				}else if(unitId == undefined){
+					var houseNumEnd = 0;
+					if(generativeRule.toString().indexOf("1") > -1){
+						houseNumEnd = numEnd;
+					}else if(generativeRule.toString().indexOf("2") > -1){//单元排序
+						houseNumEnd = numStart+(endFloor-initialFloor+1)*flats-1
+					}
+					$.ajax({
+						type : "POST",
+						url : "${CTX}/baseHouse/batchRestoreRoom.do",
+						dataType : "json",
+						data : {
+							"id":"insert",
+							"buildingId":buildingId,
+							"code":batchUnits,
+							"prefix":roomPre,
+							"suffix":roomSuf,
+							"roomTotal":(endFloor-initialFloor+1)*flats,
+							"ladders":laddersFlats.substring(0,laddersFlats.indexOf("梯")),
+							"flats":flats,
+							"floors":endFloor-initialFloor+1,
+							"upFloors":initialFloor,
+							"numStart":numStart,
+							"numEnd":houseNumEnd,
+							"generativeRule":generativeRule,
+							"status":1,
+							"premisesId":premisesId,
+							"buildingGroupId":groupId,
+							"landLimit":batchYears,
+							"houseNature":batchNature,
+							"purpose":batchPurpose,
+							"roomsList":roomsList
+						},
+						success:function(data){
+							if(data>0){
+							}else{
+								alert("添加失败");
+							}
+						}
+					})
+				}
+			
+			
+		}
+		
+	}
+	//批量新增的房间信息
+	aihome.batchHouses=function(flats,initialFloor,endFloor,generativeRule,batchUnits,numStart,numEnd,unitPre,unitSuf,
+			roomPre,roomSuf,batchPurpose,batchYears,batchNature,buildingId,groupId,premisesId,unitId){
+		var roomsList = "[";
+		if(generativeRule.toString().indexOf("1") > -1){//单层排序
+			var fjArr = new Array();//房间区间数组
+			for (var f = numStart; f <= numEnd; f++) {
+				fjArr.push([ f ]);
+			}
+			for(var i = parseInt(initialFloor) ; i <= parseInt(endFloor) ; i++){
+				for(var j = 0 ; j < flats ; j++){
+					var floorNum ="";//楼层
+					var con ="";//-连接
+					var roomNum=fjArr[j];//房间号
+					var unitName = unitPre+batchUnits+unitSuf;
+					//获取生成规则
+					if(generativeRule.toString().indexOf("5") > -1){//加楼层
+						floorNum=i;
+					}
+					if(generativeRule.toString().indexOf("3") > -1 && floorNum!=""){//楼层0补位
+						floorNum = this.cover(floorNum, endFloor.toString().length);
+					}
+					if(generativeRule.toString().indexOf("4") > -1){//房间0补位
+						roomNum = aihome.cover(roomNum, numEnd.toString().length);
+					}
+					if(generativeRule.toString().indexOf("6") > -1){//加-连接
+						con="-";
+					}
+					var houseNumber = roomPre + floorNum + con + roomNum + roomSuf;
+					roomsList += "{\"houseName\":\""+houseNumber+"\",\"num\":"+i+",\"status\":"+1+",\"unitCode\":\""+
+					batchUnits+"\",\"buildingId\":"+buildingId+",\"groupId\":\""+groupId+"\",\"premisesId\":"+premisesId+
+					",\"purpose\":"+batchPurpose+",\"houseNature\":\""+batchNature+"\",\"landLimit\":"+batchYears+",\"unitId\":"+unitId+"},";
+ 				}
+			}
+		}else if(generativeRule.toString().indexOf("2") > -1){//单元排序
+			var fjArr = new Array();//房间区间二维数组
+			var batchNumStart = 0;
+			if(unitId != "" && unitId != undefined && unitId != null){
+				batchNumStart = parseInt(numEnd)+1;
+			}else{
+				batchNumStart = parseInt(numStart);
+			}
+			//f:楼层
+			for (var f = 0; f < (parseInt(endFloor)-parseInt(initialFloor)+1); f++) {
+				fjArr[f] = new Array();
+				//l：根据楼层生成的房间号
+				for (var l = 0; l < parseInt(flats); l++) {
+					//每个单元格对应的房间号
+					fjArr[f][l] = f * parseInt(flats) + (parseInt(batchNumStart)) + l;
+				}
+			}
+			for(var i = parseInt(initialFloor) ; i <= parseInt(endFloor) ; i++){
+				for(var j = 0 ; j < flats ; j++){
+					var floorNum ="";//楼层
+					var con ="";//-连接
+					var roomNum=fjArr[(i - parseInt(initialFloor))][j];//房间号
+					var unitName = unitPre+batchUnits+unitSuf;
+					//获取生成规则
+					if(generativeRule.toString().indexOf("5") > -1){//加楼层
+						floorNum=i;
+					}
+					if(generativeRule.toString().indexOf("3") > -1 && floorNum!=""){//楼层0补位
+						floorNum = this.cover(floorNum, endFloor.toString().length);
+					}
+					if(generativeRule.toString().indexOf("4") > -1){//房间0补位
+						alert(numEnd)
+						roomNum = aihome.cover(roomNum, numEnd.toString().length);
+						alert(roomNum)
+					}
+					if(generativeRule.toString().indexOf("6") > -1){//加-连接
+						con="-";
+					}
+					var houseNumber = roomPre + floorNum + con + roomNum + roomSuf;
+					roomsList += "{\"houseName\":\""+houseNumber+"\",\"num\":"+i+",\"status\":"+1+",\"unitCode\":\""+
+						batchUnits+"\",\"buildingId\":"+buildingId+",\"groupId\":\""+groupId+"\",\"premisesId\":"+premisesId+
+						",\"purpose\":"+batchPurpose+",\"houseNature\":\""+batchNature+"\",\"landLimit\":"+batchYears+",\"unitId\":"+unitId+"},";
+				}
+			}
+		}
+		roomsList = roomsList.substring(0, roomsList.length - 1);
+		roomsList += "]";
+		return roomsList;
+	}
+	aihome.addFlag = true;
+	//加
+	aihome.addition=function(property,increasingType){
+		var floorNum = parseInt($("#singleAdd input[id='floorNum']").val());//楼层数
+		var singleUnitNum = $("#singleAdd select[id='singleUnits'] option:selected").index();//单个选中索引
+		var batchUnitNum = $("#batchAdd select[id='batchUnits'] option:selected").index();//批量选中索引
+		var batchUnitCode = $("#batchAdd select[id='batchUnits'] option:selected").text();//批量选中索引
+		var floorMax = parseInt($("#singleAdd input[id='maxFloor']").val());//最大楼层
+		var singleUnitMax = parseInt($("#singleAdd select[id='singleUnits']").find("option:last").index());//单个最大索引
+		var batchUnitMax = parseInt($("#batchAdd select[id='batchUnits']").find("option:last").index());//批量最大索引
+		if(property == "floor" && floorNum < floorMax && increasingType == "single"){
+			$("#singleAdd input[id='floorNum']").attr("value",(parseInt($("#singleAdd input[id='floorNum']").val())+1));
+			var unitId = $("#singleAdd select[id='singleUnits'] option:selected" ).attr("id");
+			aihome.roomsMatchFloor(unitId,$("#singleAdd input[id='floorNum']").val());
+		}else if(property == "unit" && singleUnitNum < floorMax && increasingType == "single"){
+			var changeUnitNum = $("#singleAdd select[id='singleUnits'] option").get(singleUnitNum+1).value;
+			$("#singleAdd select[id='singleUnits']").val(changeUnitNum);
+			var unitId = $("#singleAdd select[id='singleUnits'] option:selected").attr("id");
+			aihome.roomsMatchFloor(unitId,$("#singleAdd input[id='floorNum']").val());
+		}else if(property == "unit" && batchUnitNum < batchUnitMax && increasingType == "batch"){
+			var changeUnitNum = $("#batchAdd select[id='batchUnits'] option").get(batchUnitNum+1).value;
+			$("#batchAdd select[id='batchUnits']").val(changeUnitNum);
+			var unitId = $("#batchAdd select[id='batchUnits'] option:selected").attr("id");
+			if(changeUnitNum != ""){
+				aihome.getFloor(unitId,"batch");
+			}
+		}
+		if(property == "unit" && batchUnitNum+1 == batchUnitMax && increasingType == "batch" && aihome.addFlag == true){
+			if(isNaN(batchUnitCode)){
+				var changeUnitNum = $("#batchAdd select[id='batchUnits'] option").get(batchUnitNum+1).text;
+				var laddersFlats = $("#batchAdd div[id='flats']").text;
+				$("#batchAdd select[id='batchUnits']").append("<option value=\"\">"+aihome.charArr[aihome.charArr.indexOf(changeUnitNum)+1]+"</option>");
+				aihome.addFlag = false;
+			}else{
+				var changeUnitNum = $("#batchAdd select[id='batchUnits'] option").get(batchUnitNum+1).text;
+				var laddersFlats = $("#batchAdd div[id='flats']").text;
+				$("#batchAdd select[id='batchUnits']").append("<option value=\"\">"+(parseInt(changeUnitNum)+1)+"</option>");
+				aihome.addFlag = false;
+			}
+		}
+		if($("#batchAdd select[id='batchUnits'] option:selected").val()==""){
+			$("#batchAdd input[id='initialFloor']").removeAttr("readonly");
+		}else{
+			$("#batchAdd input[id='initialFloor']").attr("readonly","readonly");
+		}
+	}
+	//减
+	aihome.subtraction=function(property,increasingType){
+		var floorNum = parseInt($("#singleAdd input[id='floorNum']").val());//楼层
+		var singleUnitNum = $("#singleAdd select[id='singleUnits'] option:selected").index();//选中索引
+		var batchUnitNum = $("#batchAdd select[id='batchUnits'] option:selected").index();//选中索引
+		var floorMin = parseInt($("#singleAdd input[id='minFloor']").val());//最小楼层
+		var singleUnitMin = parseInt($("#singleAdd select[id='singleUnits']").find("option:first").index());//最小单元索引
+		var batchUnitMin = parseInt($("#batchAdd select[id='batchUnits']").find("option:first").index());//最小单元索引
+		if(property == "floor" && floorNum > floorMin && increasingType == "single"){
+			$("#singleAdd input[id='floorNum']").attr("value",(parseInt($("#singleAdd input[id='floorNum']").val())-1));
+			var unitId = $("#singleAdd select[id='singleUnits'] option:selected").attr("id");
+			aihome.roomsMatchFloor(unitId,$("#singleAdd input[id='floorNum']").val());
+		}else if(property == "unit" && singleUnitNum > singleUnitMin && increasingType == "single"){
+			var changeUnitNum = $("#singleAdd select[id='singleUnits'] option").get(singleUnitNum-1).value;
+			$("#singleAdd select[id='singleUnits']").val(changeUnitNum);
+			var unitId = $("#singleAdd select[id='singleUnits'] option:selected").attr("id");
+			aihome.roomsMatchFloor(unitId,$("#singleAdd input[id='floorNum']").val());
+		}else if(property == "unit" && batchUnitNum > batchUnitMin && increasingType == "batch"){
+			var changeUnitNum = $("#batchAdd select[id='batchUnits'] option").get(batchUnitNum-1).value;
+			$("#batchAdd select[id='batchUnits']").val(changeUnitNum);
+			var unitId = $("#batchAdd select[id='batchUnits'] option:selected").attr("id");
+			aihome.getFloor(unitId,"batch");
+		}
+		
+		if($("#batchAdd select[id='batchUnits'] option:selected").val()==""){
+			$("#batchAdd input[id='initialFloor']").removeAttr("readonly");
+		}else{
+			$("#batchAdd input[id='initialFloor']").attr("readonly","readonly");
+		}
+	}
+		
+	
+	$(function(){
+		$("#singleAdd input[id='singleBedroom']").attr("required","true");//室 
+		$("#singleAdd input[id='singleBedroom']").attr("number","true");//室 
+		$("#singleAdd input[id='singleToilet']").attr("number","true");//卫
+		$("#singleAdd input[id='singleLivingRoom']").attr("number","true");//厅 
+		$("#singleAdd input[id='singleKitchen']").attr("number","true");//厨 
+		$("#singleAdd input[id='singleOwnerPhone']").attr("phoneNumValidate","true");//业主电话
+		$("#singleAdd input[id='singleBuildingArea']").attr("number","true");//建筑面积
+		$("#singleAdd input[id='singleUseArea']").attr("number","true");//使用面积
+		$("#singleAdd select[id='singleDecoration']").attr("required","true");
+		$("#singleAdd select[id='singleNature']").attr("required","true");
+		$("#addTypeRadio").find("input[name='addType']").click(function(){
+			aihome.addType();
+		});
+		//单元下拉框改变时事件
+		$("#singleAdd select[id='singleUnits']").change(function(){
+			var unitId = $(this).find("option[value='"+$(this).val()+"']").attr("id");
+			aihome.getFloor(unitId,"single");
+		});
+		//房间值改变时事件
+		$("#batchAdd select[id='batchUnits']").change(function(){
+			var unitId = $(this).find("option[value='"+$(this).val()+"']").attr("id");
+			aihome.getFloor(unitId,"batch");
+		});
+		//楼层+
+		$("#singleAdd a[id='singleFloorAdd']").click(function(){
+			aihome.addition("floor","single");
+		});
+		//楼层-
+		$("#singleAdd a[id='singleFloorSub']").click(function(){
+			aihome.subtraction("floor","single");
+		});
+		//批量楼层+
+		$("#singleAdd a[id='batchFloorAdd']").click(function(){
+			aihome.addition("floor","batch");
+		});
+		//批量楼层-
+		$("#singleAdd a[id='batchFloorAdd']").click(function(){
+			aihome.subtraction("floor","batch");
+		});
+		//单个增加 单元号-
+		$("#singleAdd a[id='singleUnitSub']").click(function(){
+			aihome.subtraction("unit","single");
+		});
+		//单个增加 单元号+
+		$("#singleAdd a[id='singleUnitAdd']").click(function(){
+			aihome.addition("unit","single");
+		});
+		//批量新增 单元号-
+		$("#batchAdd a[id='batchUnitSub']").click(function(){
+			aihome.subtraction("unit","batch");
+		});
+		//批量新增 单元号+
+		$("#batchAdd a[id='batchUnitAdd']").click(function(){
+			aihome.addition("unit","batch");
+		});
+	})
+
+</script>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="houseCollect">
+
+	<!-- 分页查询房源收藏记录 -->
+	<select id="getHouseCollectListForPage" parameterType="map" resultType="HouseCollectModel">
+		SELECT 
+		    hc.id,
+		    hc.house_info_id AS houseInfoId,
+		    info.code AS houseCode,
+		    info.demand_type AS demandType,
+		    sale.house_info_id AS saleInfoId,
+		    sale.house_level AS houseLevel,
+		    sale.sell_price AS sellPrice,
+		    sale.unit_price AS unitPrice,
+		    lease.house_info_id AS leaseInfoId,
+		    lease.lease_price AS leasePrice,
+		    vh.bp_id AS premisesId,
+			vh.bp_name AS premisesName,  
+		    info.operate_user_id AS operatorId,
+		    info.operate_user AS operator,
+		    info.divide_user_id AS divideUserId,
+		    info.divide_user AS divideUser,
+		    info.divide_org AS divideOrg,
+		    info.divide_qu AS divideQu,
+		    CASE WHEN lease.id IS  NULL THEN sale.use_type ELSE lease.use_type END useType,
+		    CASE WHEN lease.id IS  NULL THEN sale.rooms ELSE lease.rooms END rooms,
+		    CASE WHEN lease.id IS  NULL THEN sale.office ELSE lease.office END office,
+		    CASE WHEN lease.id IS  NULL THEN sale.kitchen ELSE lease.kitchen END kitchen,
+		    CASE WHEN lease.id IS  NULL THEN sale.wc ELSE lease.wc END wc,
+		    CASE WHEN (vh.bh_num IS NOT NULL AND vh.bu_floors IS NOT NULL) THEN vh.bh_num || '/' || vh.bu_floors ELSE '' END floor,
+		    CASE WHEN lease.id IS  NULL THEN sale.covered_area ELSE lease.covered_area END coveredArea,
+		    CASE WHEN lease.id IS NULL THEN sale.chao_xiang ELSE lease.chao_xiang END chaoXiang,
+		    CASE WHEN lease.id IS NULL THEN sale.create_time ELSE lease.create_time END createTime,
+		    <!-- 独：限时速度 --> 
+		   (
+		      SELECT
+		        count(0)
+		      FROM
+		        manage_time_limit_express mtl
+		      WHERE
+		        mtl.house_info_id = info.id
+		        AND mtl.status in (1,2)
+		    ) AS timeLimitCount,
+		    <!-- 实勘 -->  
+		    (
+		        SELECT
+		        count(0)
+		      FROM
+		        manage_prospect_info mpi
+		        LEFT JOIN manage_prospect_image image ON image.prospect_id = mpi.id
+		        WHERE
+		          mpi.house_info_id = info.id
+		    ) AS prospectCount,
+		    <!-- 钥匙 -->	 
+		    (
+		      SELECT
+		        count(0)
+		      FROM
+		        manage_key_info k
+		      WHERE
+		        k.house_info_id = info.id
+		      AND k.status = 1
+		    ) AS keyCount,
+			<!-- 看房次数 -->		    
+		    (
+		      SELECT
+		        count(0)
+		      FROM
+		        customer_promise p
+		      WHERE
+		        p.take_type = 1
+		      AND p.house_info_id = info.id
+		    ) AS watchHouseCount
+		from house_collect hc
+		LEFT JOIN house_info info ON info.id = hc.house_info_id
+		LEFT JOIN house_sale sale ON sale.house_info_id = hc.house_info_id
+		LEFT JOIN house_lease lease ON lease.house_info_id = hc.house_info_id
+		LEFT JOIN view_house vh ON vh.bh_id = info.room_id
+			ORDER BY hc.create_time DESC
+	</select>
+    <!-- 取消收藏 sy -->
+	<delete id="deleteCollectByIds" parameterType="map">
+        DELETE FROM house_collect WHERE id IN (${collectIds})
+	</delete>
+</mapper>

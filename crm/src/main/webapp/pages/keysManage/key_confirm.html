@@ -1,0 +1,129 @@
+<div class="row">
+	<div class="col-xs-12 my-group">
+		<div id="keyConfirm" class="form-horizontal row">
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">钥匙编号：</label>
+					<div class="col-xs-8">
+						<#if confirmObj.keyCode??>
+						<span id="keyNumber">${confirmObj.keyCode!}</span>
+						<span id="keyId" hidden="hidden">${confirmObj.keyId!}</span>
+						</#if>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">房源编号：</label>
+					<div class="col-xs-8">
+						<#if confirmObj.houseCode??>
+						<span id="houseNumber">${confirmObj.houseCode!}</span>
+						</#if>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">收钥匙区：</label>
+					<div class="col-xs-8">
+						<#if confirmObj.colelectZone??>
+						<span id="backKeyArea">${confirmObj.colelectZone!}</span>
+						</#if>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">收钥匙组：</label>
+					<div class="col-xs-8">
+						<#if confirmObj.colelectOrg??>
+						<span id="backKeyGroup">${confirmObj.colelectOrg!}</span>
+						</#if>	
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12 col-sm-12">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-2 control-label">收钥匙人：</label>
+					<div class="col-xs-4">
+						<#if confirmObj.colelectUser??>
+						<span id="backKeyPerson">${confirmObj.colelectUser!}</span>
+						</#if>
+					</div>
+				</div>
+			</div>			
+			<div class="col-md-12 col-sm-12">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-2 control-label">收钥匙时间：</label>
+					<div class="col-xs-4">
+						<#if confirmObj.createTime??>
+						<span id="backKeyPerson">${confirmObj.createTime!}</span>
+						</#if>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12 col-sm-12">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-2 control-label">存放实体店：</label>
+					<div class="col-xs-8">
+						<#if confirmObj.depositStoreId??>
+						<input id="storeName" class="form-control input-xs" value="${confirmObj.depositStoreId!}"/>
+						<input id="storeId" style="display: none;">
+						</#if>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12 col-sm-12">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-2 control-label">实体店电话：</label>
+					<div class="col-xs-8">
+						<input id="storeTel" class="form-control input-xs"/>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12 col-sm-12">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-2 control-label">确认人：</label>
+					<div class="col-xs-4">
+						<#if confirmObj.user??>
+						<span id="confirmPerson">${confirmObj.user!}</span>
+						</#if>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	/* 借钥匙人模糊匹配*/
+	$("#keyConfirm input[id='stroeName']").autocomplete({
+		source : function(request, response) {
+			$.ajax({
+				url : "${CTX}/keysManage/getStoreList.do",
+				dataType : "json",
+				type : 'post',
+				data : {
+					matchStr : request.term
+				},
+				success : function(data) {
+					var array = new Array(data.length);
+					for (var i = 0; i < data.length; i++) {
+						var temp = {
+							key : data[i].id,
+							value : data[i].name,
+						};
+						array[i] = temp;
+					}
+					response(array);
+				}
+			});
+		},
+		select : function(event, ui) {
+			$("#keyConfirm input[id='storeName']").val(ui.item.key);
+			$("#keyConfirm input[id='storeId']").val(ui.item.value);
+			event.preventDefault();
+		}
+	});
+})
+</script>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="addressBaseManage">
+    	<!-- 标准地址库分页楼盘列表 -->
+	<select id="getAddrBaseManagePage" parameterType="map"  resultType="addressBaseManageModel">
+			select 
+				bp.name as bpName,
+				ba.name as areaName,
+				asb.name as subName,
+				ac.name as commName,
+				ar.name || ru.NUM || '号' as roadDetail
+				<if test="hierarchy == null or hierarchy == ''or hierarchy == 1">
+	    			,ba.MERGER_NAME || asb.name || ac.name||bp.name||ar.name || ru.NUM || '号' as addrDetail
+	    		</if>
+	    		<if test="hierarchy == 2">
+	    			,ba.MERGER_NAME || asb.name || ac.name ||bp.name ||ar.name || ru.NUM || '号'||bg.GROUP_NAME as addrDetail
+	    			,bg.GROUP_NAME as bgGroupName
+	    		</if>
+				<if test="hierarchy == 3 ">
+	    			,ba.MERGER_NAME || asb.name ||ac.name ||bp.name ||ar.name || ru.NUM || '号'||bg.GROUP_NAME ||bu.BUILDING_NAME as addrDetail
+	    			,bg.GROUP_NAME as bgGroupName
+	    			,bu.BUILDING_NAME as bbBuildingName
+	    		</if>
+				<if test="hierarchy == 4 ">
+	    			,ba.MERGER_NAME || asb.name || ac.name ||bp.name ||ar.name || ru.NUM || '号'||bg.GROUP_NAME ||bu.BUILDING_NAME ||bu.UNIT_PRE||un.CODE||bu.UNIT_SUF as addrDetail
+	    			,bu.UNIT_PRE||un.CODE||bu.UNIT_SUF  as buCode
+	    			,bg.GROUP_NAME as bgGroupName
+	    			,bu.BUILDING_NAME as bbBuildingName
+	    		</if>
+				<if test="hierarchy == 5 ">
+	    			,ba.MERGER_NAME || asb.name || ac.name ||bp.name ||ar.name || ru.NUM || '号'||bg.GROUP_NAME ||bu.BUILDING_NAME ||bu.UNIT_PRE||un.CODE||bu.UNIT_SUF||bh.HOUSE_NAME as addrDetail
+	    			,bh.HOUSE_NAME as bhHouseName
+	    			,bh.id as houseId
+	    			,bh.PROPRIETOR as name
+	    			,bh.ID_CARD as idCard
+	    			,bh.CONTACT_PHONE as contactType
+	    			,bh.STATUS as status 
+	    			,bh.ZZDZ_DETAIL as zzdzDetail
+	    			,bu.UNIT_PRE||un.CODE||bu.UNIT_SUF  as buCode
+	    			,bg.GROUP_NAME as bgGroupName
+	    			,bu.BUILDING_NAME as bbBuildingName
+	    		</if>
+			from base_premises bp
+				left join AREA_ROAD_NUM ru on ru.UNITE_ID = bp.road_id
+				left join AREA_ROAD ar on ar.id = ru.road_id
+				left join BASE_AREA ba on ba.id = ru.AREA_ID
+				left join AREA_SUBDISTRICT asb on asb.id = bp.SUBDISTRICT_ID
+        		left join AREA_COMMUNITY ac on ac.id = bp.COMMUNITY_ID
+			<if test="hierarchy == 2">
+				left join BUILDING_GROUP  bg on bp.id = bg.PREMISES_ID
+			</if>
+			<if test="hierarchy == 3">
+				left join BASE_BUILDING bu on bp.id = bu.PREMISES_ID
+				left join BUILDING_GROUP  bg on bu.BUILDING_GROUP_ID = bg.id
+			</if>
+			<if test="hierarchy == 4">
+				left join BASE_BUILDING bu on bp.id = bu.PREMISES_ID
+				left join BUILDING_UNITS un on bu.id = un.BUILDING_ID
+				left join BUILDING_GROUP  bg on bu.BUILDING_GROUP_ID = bg.id
+			</if>
+			<if test="hierarchy == 5">
+				left join BASE_BUILDING bu on bp.id = bu.PREMISES_ID
+				left join BUILDING_UNITS un on bu.id = un.BUILDING_ID
+				left join BASE_HOUSE bh  on bh.UNIT_ID = un.id
+				left join BUILDING_GROUP  bg on bu.BUILDING_GROUP_ID = bg.id
+			</if>
+			where bp.FLAG = 1
+				<if test="premisesId != null and premisesId != ''">
+					and	bp.id = #{premisesId}
+				</if>
+				<if test="areaId != null and areaId != ''">
+					and ba.id = #{areaId}
+				</if>
+				<if test="aasId != null and aasId != ''">
+					and asb.id = #{aasId}
+				</if>
+				<if test="acId != null and acId != ''">
+					and ac.id = #{acId}
+				</if>
+				<if test="status != null and status != ''">
+					and bh.status = #{status}
+				</if>
+				<if test="hierarchy == 3 ">
+					and bu.BUILDING_NAME is not null
+				</if>
+				<if test="hierarchy == 4 " >
+					and un.CODE is not null
+				</if>
+				<if test="hierarchy == 5 " >
+					and un.CODE is not null
+					and bh.HOUSE_NAME is not null
+				</if>
+			<if test="hierarchy == 1 or hierarchy == null or hierarchy == ''">
+    			order by bp.id desc
+	    	</if>
+	    	<if test="hierarchy == 2">
+    			order by bg.id 
+	    	</if>
+			<if test="hierarchy == 3">
+    			order by bg.id,bu.sort,CASE WHEN ascii(bu.building_code) BETWEEN 48 AND 57 THEN TO_NUMBER(bu.building_code) ELSE ascii(bu.building_code) END 
+	    	</if>
+	    	<if test="hierarchy == 4">
+    			order by bg.id,bu.BUILDING_NAME,un.CODE
+	    	</if>
+	    	<if test="hierarchy == 5">
+    			order by bg.id,bu.BUILDING_NAME,un.CODE,bh.num,bh.id asc 
+	    	</if>
+	 </select>
+	 	   	<!-- 楼盘分组Id-List -->
+	<select id="getAddrGroupIdList" parameterType="map"  resultType="addressBaseManageModel">
+			select id 
+			from BUILDING_GROUP
+			where PREMISES_ID =#{premisesId} 
+	</select>
+	   		<!-- 楼栋Id-List -->
+	<select id="getAddrBudldingIdList" parameterType="map"  resultType="addressBaseManageModel">
+		  	select BUILDING_GROUP_ID as Id
+				from BASE_BUILDING 
+			where PREMISES_ID =#{premisesId} and BUILDING_GROUP_ID is not null group by BUILDING_GROUP_ID
+	 </select>
+	  	  <!-- 模糊查询楼盘 -->
+	<select id="getAddrkeyWordByMatch" resultType="basePremisesModel">
+			select bp.name,bp.id from base_premises bp 
+		where ROWNUM &lt; 15 and  bp.FLAG = 1
+			<if test="matchStr != null  and matchStr !=''">
+		     	and	INSTR(bp.name, #{matchStr}) > 0
+		    </if>
+   	</select>
+   		   <!-- 更新街道信息 -->
+  <update id="updateHouseStatus" parameterType="map">
+    update BASE_HOUSE
+    <set >
+      <if test="status!= null and status != ''">
+        STATUS = #{status}
+      </if>
+    </set>
+    <where>
+       <if test="houseId != null and houseId != ''">
+        	 id in (${houseId})
+       </if>
+    </where>
+  </update>
+</mapper>

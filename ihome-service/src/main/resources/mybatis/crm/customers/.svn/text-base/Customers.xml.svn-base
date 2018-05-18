@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="customers">
+
+	<!-- 分页查询联系人信息 -->
+	<select id="getCustomerManagePage" parameterType="map"
+		resultType="CustomerManageModel">
+		SELECT 
+		   c.id as id,
+	       TELL || USER_NAME as isSameCustomer,
+	       nvl(counts.count,0) as demandNum,
+	       USER_NAME as userName,
+	       USER_CODE as userCode,
+	       IS_STAFF as isStaff,
+	       USER_TYPE as userType,
+	       CENSUS_REGISTER as censusRegister,
+	       ID_CODE as idCode,
+	       ENTRY_DATE as entryDate,
+	       ENTRY_PERSON as entryPerson,
+	       cb.id as blackListId,
+	       UPDATE_DATE as updateDate
+  		FROM CUSTOMERS c
+  		left join CUSTOMER_DEMAND cd
+	    	on cd.CUSTOMER_ID = c.ID
+	    left join customer_blacklist cb
+      	on cb.customer_id= c.id
+	  	left join 
+	  	(SELECT count(cd.ID) 
+	  			as count, cd.customer_id as customerID
+               FROM CUSTOMERS c, CUSTOMER_DEMAND cd
+              where cd.CUSTOMER_ID = c.ID
+              group by cd.CUSTOMER_ID) counts
+    	on counts.customerID = c.ID
+    	
+		where STATUS = 1
+			<if test="userType != null and userType != ''">
+				AND USER_TYPE = #{userType}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND USER_NAME = #{userName}
+			</if>
+			<if test="userCode != null and userCode != ''">
+				AND USER_CODE = #{userCode}
+			</if>
+			<if test="censusRegister != null and censusRegister != ''">
+				AND CENSUS_REGISTER = #{censusRegister}
+			</if>
+			<if test="isDemand != null and isDemand != '' and isDemand== 1">
+				AND counts.count &gt; 0
+			</if>
+			<if test="isDemand != null and isDemand != '' and isDemand== 2">
+				AND nvl(counts.count,0) =0
+			</if>
+			<if test="entryPerson != null and entryPerson != ''">
+				AND ENTRY_PERSON = #{entryPerson}
+			</if>
+			<if test="tell != null and tell != ''">
+				AND TELL = #{tell}
+			</if>
+			<if test="idCode != null and idCode != ''">
+				AND ID_CODE = #{idCode}
+			</if>
+			<if test="entryDateStart != null and entryDateStart != ''">
+				AND ENTRY_DATE &gt;= to_date(#{entryDateStart},'yyyy-mm-dd ')
+			</if>
+			<if test="entryDateEnd != null and entryDateEnd != ''">
+				AND ENTRY_DATE  &lt;= to_date(#{entryDateEnd},'yyyy-mm-dd ')
+			</if>
+			<if test="updateDateStart != null and updateDateStart != ''">
+				AND UPDATE_DATE &gt;= to_date(#{updateDateStart},'yyyy-mm-dd ')
+			</if>
+			<if test="updateDateEnd != null and updateDateEnd != ''">
+				AND UPDATE_DATE  &lt;= to_date(#{updateDateEnd},'yyyy-mm-dd ')
+			</if>
+			<if test="blackList == 'true' ">
+				AND c.ID in (
+					SELECT
+						 b.CUSTOMER_ID
+					     from
+					     CUSTOMER_BLACKLIST b
+					     where
+					     c.ID=b.CUSTOMER_ID
+				)
+			</if>
+		group by 
+			  TELL || USER_NAME,
+			  counts.count,
+	          c.id,
+	          TELL,
+	          USER_NAME,
+	          USER_CODE,
+	          IS_STAFF,
+	          USER_TYPE,
+	          CENSUS_REGISTER,
+	          ID_CODE,
+	          ENTRY_DATE,
+	          ENTRY_PERSON,
+	          UPDATE_DATE,
+	          cb.id
+		ORDER BY id 
+	</select>
+
+	<!-- 根据联系人编码得到联系人详细信息 -->
+	<select id="getCustomerByUserCode" parameterType="map"
+		resultType="CustomerManageModel">
+		SELECT
+		ID as id,
+		TELL as tell,
+		USER_NAME as userName,
+		IS_STAFF as isStaff
+		,
+		USER_TYPE as userType,
+		SPARE_TELL as spareTell ,
+		SEX as sex ,
+		ID_TYPE as
+		idType ,
+		ID_CODE as idCode,
+		COUNTRY as country ,
+		CENSUS_REGISTER as
+		censusRegister ,
+		PUB_FUNDS_BLANCE as pubFundsBlance ,
+		PUB_FUNDS_MONTH as
+		pubFundsMonth ,
+		BUY_EXPERIENCE as buyExperience ,
+		LOAN_RECORD as
+		loanRecord ,
+		KAI_SHOU as kaiShou ,
+		VIEW_HOME as viewHome ,
+		PRESENT_ADDRESS as presentAddress ,
+		CENSUS_REGISTER_ADDRESS as
+		censusRegisterAddress,
+		COMPANY as company ,
+		COMPANY_ADDRESS as
+		companyAddress ,
+		IS_DEMAND as isDemand,
+		STATUS as status,
+		CUSTOMER_LEVEL
+		as customerLevel,
+		ENTRY_PERSON as entryPerson,
+		USER_CODE as userCode,
+		ENTRY_DATE as entryDate,
+		UPDATE_DATE as updateDate,
+		USER_AGE as userAge,
+		REMARK as remark
+		FROM CUSTOMERS
+		where STATUS = 1
+		<if test="userCode !=null and userCode !='' ">
+			AND USER_CODE=#{userCode}
+		</if>
+	</select>
+	<!-- 新增联系人 -->
+	<insert id="addCustomer" parameterType="map">
+		INSERT INTO
+		CUSTOMERS
+		(
+		ID,
+		<if test="tell != null and tell != ''">
+			TELL,
+		</if>
+		<if test="userName != null and userName != ''">
+			USER_NAME,
+		</if>
+		<if test="userCode != null and userCode != ''"><!-- ??? -->
+			USER_CODE,
+		</if>
+		<if test="isStaff != null and isStaff != ''">
+			IS_STAFF,
+		</if>
+		<if test="userType != null and userType != ''">
+			USER_TYPE,
+		</if>
+		<if test="spareTell != null and spareTell != ''">
+			SPARE_TELL,
+		</if>
+		<if test="sex != null and sex != ''">
+			SEX,
+		</if>
+		<if test="idType != null and idType != ''">
+			ID_TYPE,
+		</if>
+		<if test="idCode != null and idCode != ''">
+			ID_CODE,
+		</if>
+		<if test="country != null and country != ''">
+			COUNTRY,
+		</if>
+		<if test="censusRegister != null and censusRegister != ''">
+			CENSUS_REGISTER,
+		</if>
+		<if test="pubFundsBlance != null and pubFundsBlance != ''">
+			PUB_FUNDS_BLANCE,
+		</if>
+		<if test="pubFundsMonth != null and pubFundsMonth != ''">
+			PUB_FUNDS_MONTH,
+		</if>
+		<if test="buyExperience != null and buyExperience != ''">
+			BUY_EXPERIENCE,
+		</if>
+		<if test="loanRecord != null and loanRecord != ''">
+			LOAN_RECORD,
+		</if>
+		<if test="kaiShou != null and kaiShou != ''">
+			KAI_SHOU,
+		</if>
+		<if test="viewHome != null and viewHome != ''">
+			VIEW_HOME,
+		</if>
+		<if test="presentAddress != null and presentAddress != ''">
+			PRESENT_ADDRESS,
+		</if>
+		<if test="censusRegisterAddress != null and censusRegisterAddress != ''">
+			CENSUS_REGISTER_ADDRESS,
+		</if>
+		<if test="company != null and company != ''">
+			COMPANY,
+		</if>
+		<if test="companyAddress != null and companyAddress != ''">
+			COMPANY_ADDRESS,
+		</if>
+		<if test="customerLevel != null and customerLevel != ''">
+			CUSTOMER_LEVEL,
+		</if>
+		<if test="entryPerson != null and entryPerson != ''">
+			ENTRY_PERSON,
+		</if>
+		<if test="updateDate != null and updateDate != ''">
+			UPDATE_DATE,
+		</if>
+		<if test="userAge != null and userAge != ''">
+			USER_AGE,
+		</if>
+		<if test="remark != null and remark != ''">
+			REMARK,
+		</if>
+		<if test="isDemand != null and isDemand != ''">
+			IS_DEMAND,
+		</if>
+		ENTRY_DATE,
+		STATUS
+		)
+		VALUES
+		(
+		CUSTOMERS_SEQ.NEXTVAL,
+		<if test="tell != null and tell != ''">
+			#{tell},
+		</if>
+		<if test="userName != null and userName != ''">
+			#{userName},
+		</if>
+		<if test="userCode != null and userCode != ''"><!-- ??? -->
+			#{userCode},
+		</if>
+		<if test="isStaff != null and isStaff != ''">
+			#{isStaff},
+		</if>
+		<if test="userType != null and userType != ''">
+			#{userType},
+		</if>
+		<if test="spareTell != null and spareTell != ''">
+			#{spareTell},
+		</if>
+		<if test="sex != null and sex != ''">
+			#{sex},
+		</if>
+		<if test="idType != null and idType != ''">
+			#{idType},
+		</if>
+		<if test="idCode != null and idCode != ''">
+			#{idCode},
+		</if>
+		<if test="country != null and country != ''">
+			#{country},
+		</if>
+		<if test="censusRegister != null and censusRegister != ''">
+			#{censusRegister},
+		</if>
+		<if test="pubFundsBlance != null and pubFundsBlance != ''">
+			#{pubFundsBlance},
+		</if>
+		<if test="pubFundsMonth != null and pubFundsMonth != ''">
+			#{pubFundsMonth},
+		</if>
+		<if test="buyExperience != null and buyExperience != ''">
+			#{buyExperience},
+		</if>
+		<if test="loanRecord != null and loanRecord != ''">
+			#{loanRecord},
+		</if>
+		<if test="kaiShou != null and kaiShou != ''">
+			#{kaiShou},
+		</if>
+		<if test="viewHome != null and viewHome != ''">
+			#{viewHome},
+		</if>
+		<if test="presentAddress != null and presentAddress != ''">
+			#{presentAddress},
+		</if>
+		<if test="censusRegisterAddress != null and censusRegisterAddress != ''">
+			#{censusRegisterAddress},
+		</if>
+		<if test="company != null and company != ''">
+			#{company},
+		</if>
+		<if test="companyAddress != null and companyAddress != ''">
+			#{companyAddress},
+		</if>
+		<if test="customerLevel != null and customerLevel != ''">
+			#{customerLevel},
+		</if>
+		<if test="entryPerson != null and entryPerson != ''">
+			#{entryPerson},
+		</if>
+		<if test="updateDate != null and updateDate != ''">
+			TO_DATE(#{updateDate},'YYYY-MM-DD HH24:MI:SS'),
+		</if>
+		<if test="userAge != null and userAge != ''">
+			#{userAge},
+		</if>
+		<if test="remark != null and remark != ''">
+			#{remark},
+		</if>
+		<if test="isDemand != null and isDemand != ''">
+			#{isDemand},
+		</if>
+		sysdate,
+		1
+		)
+	</insert>
+
+	<!-- 根据联系人Id得到联系人详细信息 -->
+	<select id="getCustomerById" parameterType="map" resultType="CustomerManageModel">
+		SELECT
+		ID as id,
+		TELL as tell,
+		USER_NAME as userName,
+		IS_STAFF as isStaff
+		,
+		USER_TYPE as userType,
+		SPARE_TELL as spareTell ,
+		SEX as sex ,
+		ID_TYPE as
+		idType ,
+		ID_CODE as idCode,
+		COUNTRY as country ,
+		CENSUS_REGISTER as
+		censusRegister ,
+		PUB_FUNDS_BLANCE as pubFundsBlance ,
+		PUB_FUNDS_MONTH as
+		pubFundsMonth ,
+		BUY_EXPERIENCE as buyExperience ,
+		LOAN_RECORD as
+		loanRecord ,
+		KAI_SHOU as kaiShou ,
+		VIEW_HOME as viewHome ,
+		PRESENT_ADDRESS as presentAddress ,
+		CENSUS_REGISTER_ADDRESS as
+		censusRegisterAddress,
+		COMPANY as company ,
+		COMPANY_ADDRESS as
+		companyAddress ,
+		IS_DEMAND as isDemand,
+		STATUS as status,
+		CUSTOMER_LEVEL
+		as customerLevel,
+		ENTRY_PERSON as entryPerson,
+		USER_CODE as userCode,
+		ENTRY_DATE as entryDate,
+		UPDATE_DATE as updateDate,
+		USER_AGE as userAge,
+		REMARK as remark
+		FROM CUSTOMERS
+		WHERE STATUS = 1
+		AND ID=#{id}
+	</select>
+
+	<!-- 更新联系人信息 -->
+	<update id="updateCustomer" parameterType="map">
+		UPDATE
+		CUSTOMERS
+		<set>
+			<if test="tell != null and tell != ''">
+				TELL = #{tell},
+			</if>
+			<if test="userName != null and userName != ''">
+				USER_NAME = #{userName},
+			</if>
+			<if test="isStaff != null and isStaff != ''">
+				IS_STAFF = #{isStaff},
+			</if>
+			<if test="userType != null and userType != ''">
+				USER_TYPE = #{userType},
+			</if>
+			<if test="spareTell != null and spareTell != ''">
+				SPARE_TELL = #{spareTell},
+			</if>
+			<if test="sex != null and sex != ''">
+				SEX = #{sex},
+			</if>
+			<if test="idType != null and idType != ''">
+				ID_TYPE = #{idType},
+			</if>
+			<if test="idCode != null and idCode != ''">
+				ID_CODE = #{idCode},
+			</if>
+			<if test="country != null and country != ''">
+				COUNTRY = #{country},
+			</if>
+			<if test="censusRegister != null and censusRegister != ''">
+				CENSUS_REGISTER = #{censusRegister},
+			</if>
+			<if test="pubFundsBlance != null and pubFundsBlance != ''">
+				PUB_FUNDS_BLANCE = #{pubFundsBlance},
+			</if>
+			<if test="pubFundsMonth != null and pubFundsMonth != ''">
+				PUB_FUNDS_MONTH = #{pubFundsMonth},
+			</if>
+			<if test="buyExperience != null and buyExperience != ''">
+				BUY_EXPERIENCE = #{buyExperience},
+			</if>
+			<if test="loanRecord != null and loanRecord != ''">
+				LOAN_RECORD = #{loanRecord},
+			</if>
+			<if test="kaiShou != null and kaiShou != ''">
+				KAI_SHOU = #{kaiShou},
+			</if>
+			<if test="viewHome != null and viewHome != ''">
+				VIEW_HOME = #{viewHome},
+			</if>
+			<if test="presentAddress != null and presentAddress != ''">
+				PRESENT_ADDRESS = #{presentAddress},
+			</if>
+			<if test="censusRegisterAddress != null and censusRegisterAddress != ''">
+				CENSUS_REGISTER_ADDRESS = #{censusRegisterAddress},
+			</if>
+			<if test="company != null and company != ''">
+				COMPANY = #{company},
+			</if>
+			<if test="companyAddress != null and companyAddress != ''">
+				COMPANY_ADDRESS = #{companyAddress},
+			</if>
+			<if test="isDemand != null and isDemand != ''">
+				IS_DEMAND = #{isDemand},
+			</if>
+			<if test="customerLevel != null and userName != ''">
+				CUSTOMER_LEVEL = #{customerLevel},
+			</if>
+			<if test="entryPerson != null and entryPerson != ''">
+				ENTRY_PERSON = #{entryPerson},
+			</if>
+			<if test="userCode != null and userCode != ''">
+				USER_CODE = #{userCode},
+			</if>
+			<if test="entryDate != null and entryDate != ''">
+				ENTRY_DATE = #{entryDate},
+			</if>
+			<if test="userAge != null and userAge != ''">
+				USER_AGE = #{userAge},
+			</if>
+			<if test="remark != null and remark != ''">
+				REMARK = #{remark},
+			</if>
+			UPDATE_DATE = sysdate
+		</set>
+		WHERE
+		ID=#{id}
+	</update>
+
+	<!-- 模糊查询联系人名称 -->
+	<select id="getUserName" resultType="CustomerManageModel">
+		SELECT
+		ID AS id,
+		USER_NAME AS userName
+		FROM
+		CUSTOMERS
+		WHERE
+		1=1
+		<if test="matchStr != null  and matchStr !=''">
+			AND INSTR(USER_NAME, #{matchStr}) > 0
+		</if>
+		ORDER BY
+		ID
+	</select>
+		
+	<!-- 根据联系人Tell得到联系人详细信息 -->
+	<select id="getCustomerByTell" parameterType="map"
+		resultType="CustomerManageModel">
+		SELECT
+			ID as id,
+			TELL as tell,
+			USER_NAME as userName,
+			IS_STAFF as isStaff ,
+			USER_TYPE as userType,
+			SPARE_TELL as spareTell ,
+			SEX as sex ,
+			ID_TYPE as idType ,
+			ID_CODE as idCode,
+			COUNTRY as country ,
+			CENSUS_REGISTER as censusRegister ,
+			PUB_FUNDS_BLANCE as pubFundsBlance ,
+			PUB_FUNDS_MONTH as pubFundsMonth ,
+			BUY_EXPERIENCE as buyExperience ,
+			LOAN_RECORD as loanRecord ,
+			KAI_SHOU as kaiShou ,
+			VIEW_HOME as viewHome ,
+			PRESENT_ADDRESS as presentAddress ,
+			CENSUS_REGISTER_ADDRESS as censusRegisterAddress,
+			COMPANY as company ,
+			COMPANY_ADDRESS as companyAddress ,
+			IS_DEMAND as isDemand,
+			STATUS as status,
+			CUSTOMER_LEVEL as customerLevel,
+			ENTRY_PERSON as entryPerson,
+			USER_CODE as userCode,
+			ENTRY_DATE as entryDate,
+			UPDATE_DATE as updateDate,
+			USER_AGE as userAge,
+			REMARK as remark
+		FROM 
+			CUSTOMERS
+		WHERE STATUS = 1
+			AND TELL = #{tell} 
+	</select>
+	
+	<!-- 查询联系人是否已被拉黑 -->
+	<select id="queryBlackListById" resultType="Integer" parameterType="map">
+		SELECT
+		count(ID) as count
+		FROM
+		CUSTOMER_BLACKLIST 
+		WHERE
+		CUSTOMER_ID=#{rowIds}
+	</select>
+	
+	<!-- 保存联系人黑名单 -->
+	<insert id="saveBlackList" parameterType="map">
+		INSERT 
+			INTO CUSTOMER_BLACKLIST
+			(ID,CUSTOMER_ID,REMARK,OPERATE_USER,OPERATE_USER_ID,CREATE_TIME)
+			VALUES(
+			CUSTOMER_BLACKLIST_SEQ.NEXTVAL,#{customerId},#{remark},#{operateUser},#{operateUserId},sysdate
+			)
+	</insert>
+		
+	<!-- 查询刚插入的联系人ID -->
+	<select id="getLastInsertCustomerId" resultType="Integer" parameterType="map">
+		SELECT 
+			MAX(ID) AS lastId
+		FROM 
+			CUSTOMERS
+	</select>
+	
+	<!-- 根据客户ID查询该客户有多少条未完成的客源 -->
+	<select id="getCustSourceCountById" resultType="map" parameterType="map">
+		SELECT 
+			count(cd.ID) as count,
+		    cd.CUSTOMER_ID as customerId
+		  FROM 
+		  	CUSTOMER_DEMAND cd
+		  left join CUSTOMERS c
+		  	on cd.CUSTOMER_ID = c.ID
+		  group by 
+		  	cd.CUSTOMER_ID
+	</select>
+	
+	<!-- 分页查询客源信息 -->
+	<select id="getdemandsPage" parameterType="map"
+		resultType="CustomerSourceModel">
+		SELECT c.ID                as id,
+	           c.CUSTOMER_ID       as customerId,
+	           DEMAND_CODE         as demandCode,
+	           c.DEMAND_STATUS     as demandStatus,
+	           c.DEMAND_TYPE       as demandType,
+	           c.PROPERTY_TYPE     as propertyType,
+	           DEMAND_REGION_IDS   as demandRegionIds,
+	           DEMAND_REGION       as demandRegion,
+	           DEMAND_PREMISES_IDS as demandPremisesIds,
+	           DEMAND_PREMISES     as demandPremises,
+	           TAKE_LOOK_TIME      as takeLookTime,
+	           c.CREATE_TIME       as createTime,
+	           c.OPERATE_TIME      as operateTime,
+	           c.OPERATE_USER      as operateUser,
+	           c.org_name          as orgName,
+	           c.REMARK            as remark
+	     FROM CUSTOMER_DEMAND c
+	     left join CUSTOMERS cd
+	           on c.CUSTOMER_ID = cd.ID
+	     WHERE
+	     	  1=1
+	     	<if test="id != null  and id !=''">
+			AND c.CUSTOMER_ID = #{id}
+			</if>        
+	</select>		
+	
+</mapper>

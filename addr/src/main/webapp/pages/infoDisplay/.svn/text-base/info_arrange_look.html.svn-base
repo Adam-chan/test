@@ -1,0 +1,320 @@
+<div class="row">
+<div class="col-sm-12 col-md-12 col-lg-12" >
+<!-- 			约带看管理 开始				-->
+<form action="" id="search">
+	<table id="table1" class="table table-striped table-bordered">
+		<tr>
+			<td>约/带看管理</td>
+		</tr>
+		<tr>
+			<td>
+				<div class="container-fuild">
+					<div class="row">
+						<div class="col-sm-6 col-md-6 col-lg-6">
+							<div class="row">
+								<div class="col-sm-3 col-md-3 col-lg-3">
+									<select id="timeType" name="asd" class="province input-xs searchKey" style="width: 80px">
+										<option value="1">录入时间</option>
+										<option value ="2">约看时间</option>
+									</select>
+								</div>
+								<div class="col-md-2 col-sm-6">
+									<div class=" form-xs form-group row">
+										<div class="col-xs-10">
+											<select id="selectTimeRange" class="input-xs searchKey form-control">
+												<option  value="10" select="selected">请选择时间段</option>
+												<option  value="1">近一天</option>
+												<option  value="2">近两天</option>
+												<option  value="3">近三天</option>
+												<option  value="4">近一周</option>
+												<option  value="5">近一月</option>
+											</select>
+										</div>
+									</div>
+        						</div>
+								<div class="col-sm-6 col-md-6 col-lg-6">
+									<div class="form-xs form-group row">
+									<label class="col-xs-3 control-label">时间段：</label>
+									<div class="col-xs-7">
+										<div class="col-xs-12">
+											<div class="input-daterange input-group 5i5jdate">
+												<input id="salesStartDate" name="salesStartDate" type="text" class="form-control input-xs searchKey" placeholder="开始时间" value="${salesStartDate!}">
+												<span class="input-group-addon addon-xs">～</span>
+												<input id="salesEndDate" name="salesEndDate" type="text" class="form-control input-xs searchKey" placeholder="结束时间" value="${salesEndDate!}">
+											</div>
+										</div>
+									</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-sm-6 col-md-6 col-lg-6">
+							<div class="row">
+								<div class="col-sm-2 col-md-2 col-lg-2  ">
+									<select id="clientCodeOrName" class="province input-xs searchKey">
+										<option value="1">客户编号</option>
+										<option value="2">客户姓名</option>
+									</select>
+								</div>
+								<div class="col-sm-8 col-md-8 col-lg-8">
+									<input id="clientInfo" class="searchKey" type="text" style="width: 150px"/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div class="container-fuild">
+					<div class="row">
+						<div class=" col-lg-6 col-md-6 col-sm-6">
+               				<div class=" form-xs form-group row" id="inputHidden"  >
+			                	<label for="addClass" class="col-md-1 control-label">楼盘名称：</label>
+			                    <div class="col-xs-8">
+			                    	<input type="hidden" id="keyWordName" name="keyWordName" value ="" />
+			                    	<input class="col-md-12 selectInput searchKey" style="height:51px;width:449px"  type="text" id="keyWord" placeholder="输入楼盘名称：" value="">
+			                    </div>
+			                    <input id="virtualId" value="" type="hidden"></input>
+		                	</div>
+	            		</div>
+						<div class="col-md-4 col-sm-4">
+							<div class=" form-xs form-group row">
+							<label for="addClass" class="col-md-2 control-label">约看状态：</label>
+								<div class="col-xs-8">
+									<select id="ledStatus" class="searchKey input-xs form-control">
+											<option value="10">全部</option>
+											<option value="1">新建</option>
+											<option value="2">已取消</option>
+											<option value="3">已带看</option>
+									</select>
+								</div>
+							</div>
+       					</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div class="container-fuild">
+					<div class="row">
+						<div class="col-sm-6 col-md-6 col-lg-6">
+							<div class="row">
+								<div class="col-sm-6 col-md-6 col-lg-6">
+									<div class="col-sm-3 col-md-3 col-lg-3 control-label" >
+										所属组：
+									</div>
+									<div class="col-sm-9 col-md-9 col-lg-9">
+										<select  id="affiliation" class="province input-xs searchKey" style="width: 180px">
+											<option value="1">A组</option>
+											<option value="2">B组</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-6 col-md-6 col-lg-6">
+									<div class="col-sm-3 col-md-3 col-lg-3 control-label">
+										经纪人:
+									</div>
+									<div class="col-sm-9 col-md-9 col-lg-9">
+										<select  id="broker" class="province input-xs searchKey" style="width: 100px">
+											<option >张海燕</option>
+											<option >李泉</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>
+</div>
+     <div class="col-md-12">
+			<div class="col-xs-12 my-grid " style="z-index: 1;">
+				<!-- PAGE CONTENT BEGINS -->
+				<table id="arrangeLook_jqGrid">
+				
+				</table>
+				<div id="jqGridPager"></div>
+				<!-- PAGE CONTENT ENDS -->
+			</div>
+     </div>
+</div> 
+<script type="text/javascript">
+$(function (){
+	init_jqGrid();
+	 /* 查询 */
+	$("#P_INFO_QUERY").unbind("").click(function(){
+		var param = getSearchParam();
+		console.log(param)
+		var url="${CTX}/infoDisplay/getPremisesParrLookListPage.do?"+param;
+		$("#arrangeLook_jqGrid").setGridParam({url:url,page:1}).trigger('reloadGrid');
+	});
+	$("#selectTimeRange").change(function (){
+		$("#salesStartDate").val("");
+		$("#salesEndDate").val("");
+    });
+});
+/* 分页 */
+function init_jqGrid(){
+	$("#arrangeLook_jqGrid").jqGrid({
+		 url: '${CTX}/infoDisplay/getPremisesParrLookListPage.do', 
+         datatype: "json",
+         colModel:[
+			 { label: '约带看人', name: 'broker',index:'name',sortable : true,width: 30,align:'center'},
+			 
+             {label: '客户',name:'clientId',index:'eduName',width:'15%',sortable:false,align:"center",formatter:function(rowName, options, rowObject){
+            	    return "<a href='javascript:void(0);' onclick=\"lookUpEdu('"+rowObject.id+"')\" style='text-decoration:underline;color:blue'>"+rowName+"</a>";
+            	   }},
+      	   	 {label: '楼盘名称',name:'premisesName',index:'eduName',width:'15%',sortable:false,align:"center",formatter:function(rowName, options, rowObject){
+          	    return "<a href='javascript:void(0);' onclick=\"lookUpEdu('"+rowObject.id+"')\" style='text-decoration:underline;color:blue'>"+rowName+"</a>";
+          	   }},
+             { label: '录入时间', name: 'creatTimeStr',index:'name',sortable : true,width: 30,align:'center'},
+             { label: '约看时间', name: 'arrangeTimeStr',index:'name',sortable : true,width: 30,align:'center' },
+             { label: '带看时间', name: 'ledTimeStr',index:'name',sortable : true,width: 40,align:'center' },
+             { label: '状态', name: 'ledStatusStr',index:'name',sortable : true,width: 30}
+               ],
+         multiselect: true,
+         multiboxonly: true,
+         onSelectRow: function (rowId, status, e) {
+         	 rowDataNames = [];
+             var rowIds = $("#arrangeLook_jqGrid").jqGrid('getGridParam', 'selarrrow');
+             $(rowIds).each(function(i,rowId){
+                 rowDataNames.push($("#arrangeLook_jqGrid").jqGrid('getRowData',rowId));
+             });
+         },
+         viewrecords: true,
+         autowidth:true,
+         height: $(window).height()-300,
+         rowNum:30,
+	     rowList:[10,20,30,50,100],
+         pager: "#jqGridPager",
+     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+    });
+}
+/* 模糊搜索楼盘名称*/
+$("#keyWord").autocomplete({
+	source : function(request, response) {
+		$.ajax({
+			url : "${CTX}/infoDisplay/getPremisesNameByMatch.do",
+			dataType : "json",
+			type : 'post',
+			data : {
+				matchStr : request.term
+			},
+			success : function(data) {
+				var array = new Array(data.length);
+				for (var i = 0; i < data.length; i++) {
+					var temp = {
+						key : data[i].id,
+						value : data[i].name
+					};
+					array[i] = temp;
+				}
+				response(array);
+			}
+		});
+	},
+	select : function(event, ui) {
+		$("#keyWordName").val(ui.item.key);
+		$("#keyWord").val(ui.item.value);
+		event.preventDefault();
+	}
+});
+//
+function lookUpEdu(eduId){
+	oaDialogOpen("lookUpEdu",//对话框ID，必填，且不能与当前页面的ID重复
+		      {url:"${CTX}/edu/lookUpEduIndex.do?eduId="+eduId,
+		      title:"查看详细信息",//弹框的title
+		      closeOnEscpe:true,//是否通过escpe关闭弹框
+		      closeBtn:true,//是否显示关闭按钮
+		      width:650,//弹框的宽度
+		      height:850,
+		      buttons:{
+		    	  "确定" : function() {
+		    		    $(this).dialog("close");
+		    	  },
+		          "取消" : function() {
+		             	$(this).dialog("close");
+		          }
+		      },
+		      openCall:function(){
+		      },//弹框打开后的回调函数
+		      closeCall:function(){
+		    	  $("#Edu_jqGrid").trigger("reloadGrid");
+		      }//弹框关闭后的回调函数
+		  })
+}
+/* 新增或修改 */
+function editEdu(num){
+	var title = "";
+	if(num==2){//修改
+		var rowId = $("#Edu_jqGrid").jqGrid('getGridParam','selarrrow');
+		var rowData = $("#Edu_jqGrid").jqGrid('getRowData',rowId);
+		var selCount=rowId.length;
+		if (selCount==0){
+			alert("没有选中的记录！");
+			return;
+		}else if(selCount>1){
+			alert("请选单条修改！");
+			return;
+		}
+		 title= "修改教育设施";
+	}else if(num==1){
+		 title= "新增教育设施";
+	}
+	oaDialogOpen("editEdu",//对话框ID，必填，且不能与当前页面的ID重复
+		      {url:"${CTX}/edu/editEduIndex.do?eduId="+rowId,
+		      title:title,//弹框的title
+		      closeOnEscpe:true,//是否通过escpe关闭弹框
+		      closeBtn:true,//是否显示关闭按钮
+		      width:650,//弹框的宽度
+		      height:850,
+		      buttons:{
+		    	  "确定" : function() {
+		    		  if(ensureBtn(num)){
+		    			  $(this).dialog("close");
+		    		  }
+		    	  },
+		          "取消" : function() {
+		             	$(this).dialog("close");
+		          }
+		      },
+		      openCall:function(){
+		      },//弹框打开后的回调函数
+		      closeCall:function(){
+		    	  $("#Edu_jqGrid").trigger("reloadGrid");
+		      }//弹框关闭后的回调函数
+		  })
+};
+/* 删除*/
+function deteleEdu(){
+	var rowIds = $("#arrangeLook_jqGrid").jqGrid('getGridParam','selarrrow');
+	var selCount=rowIds.length;
+	if (selCount==0){
+		alert("没有选中的记录！");
+		return;
+	}else if(selCount>1){
+		alert("请选单条修改！");
+		return;
+	}
+	if (confirm("确认删除？")) {
+		$.ajax({
+			url :"${CTX}/infoDisplay/updateArrangeLookStatus.do",
+			dataType : "json",
+			data : {
+				"eduId" : rowIds
+			},
+			success : function(data) {
+				$("#Edu_jqGrid").trigger('reloadGrid');
+				alert("删除成功！");
+			}
+		});
+	}
+};
+</script>

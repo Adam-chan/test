@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="manageProspectInfo" >
+  
+  <sql id="Base_Column_List" >
+    ID as id, HOUSE_INFO_ID as houseInfoId, HOUSE_CODE as houseCode,
+    HOUSE_TYPE as houseType, HOUSE_AREA as houseArea,
+    PROSPECT_USER as prospectUser, PROSPECT_USER_ID as prospectUserId, 
+    CREATE_TIME as createTime, STATUS as status, EXAMINE_USER as examineUser, 
+    EXAMINE_USER_ID as examineUserId, EXAMINE_ORG as examineOrg,
+    EXAMINE_ORG_CODE as examineOrgCode,PROSPECT_ORG as prospectOrg, 
+    PROSPECT_AREA as prospectArea, ALLOT_PERSON_ID as allotPersonId, 
+    ALLOT_STATUS as allotStatus, REMARK as remark, 
+    ALLOT_TIME as allotTime, ALLOT_PERSON as allotPerson, 
+    PROSPECT_AREA_CODE as prospectAreaCode, PROSPECT_ORG_CODE as prospectOrgCode, 
+    EXAMINE_TIME as examineTime ,OPERATE_TIME as operateTime
+  </sql>
+  <select id="getManageProspectInfo" resultType="manageProspectInfoModel" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from MANAGE_PROSPECT_INFO
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  
+	<!-- 查询实勘信息 -->
+	<select id="getManageProspectInfoByHouseInfoId" resultType="manageProspectInfoModel" parameterType="map" >
+	  select 
+	  <include refid="Base_Column_List" />
+	  from MANAGE_PROSPECT_INFO
+	  where HOUSE_INFO_ID = #{houseInfoId,jdbcType=DECIMAL}
+	  and CREATE_TIME = (select max(CREATE_TIME) from MANAGE_PROSPECT_INFO where HOUSE_INFO_ID = #{houseInfoId,jdbcType=DECIMAL})
+	</select>
+	
+  <delete id="deleteById" parameterType="map" >
+    delete from MANAGE_PROSPECT_INFO
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  
+	<!-- 保存实勘信息 -->
+	<insert id="saveProspectInfo" parameterType="map" >
+	  insert into MANAGE_PROSPECT_INFO (ID, HOUSE_INFO_ID, HOUSE_CODE, 
+	    HOUSE_TYPE, HOUSE_AREA, PROSPECT_USER, 
+	    PROSPECT_USER_ID, CREATE_TIME, STATUS, 
+	    EXAMINE_USER, EXAMINE_USER_ID, EXAMINE_ORG, 
+	    EXAMINE_ORG_CODE, PROSPECT_ORG, PROSPECT_AREA, 
+	    ALLOT_PERSON_ID, ALLOT_STATUS, REMARK, 
+	    ALLOT_TIME, ALLOT_PERSON, PROSPECT_AREA_CODE, 
+	    PROSPECT_ORG_CODE, EXAMINE_TIME)
+	  values (MANAGE_PROSPECT_INFO_SEQ.NEXTVAL, #{houseInfoId,jdbcType=DECIMAL}, #{houseCode,jdbcType=VARCHAR}, 
+	    #{houseType,jdbcType=VARCHAR}, #{houseArea,jdbcType=DECIMAL}, #{prospectUser,jdbcType=VARCHAR}, 
+	    #{prospectUserId,jdbcType=VARCHAR}, sysdate, 1,  
+	    #{examineUser,jdbcType=VARCHAR}, #{examineUserId,jdbcType=VARCHAR}, #{examineOrg,jdbcType=VARCHAR}, 
+	    #{examineOrgCode,jdbcType=VARCHAR}, #{prospectOrg,jdbcType=VARCHAR}, #{prospectArea,jdbcType=VARCHAR}, 
+	    #{allotPersonId,jdbcType=DECIMAL}, #{allotStatus,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
+	    #{allotTime,jdbcType=DATE}, #{allotPerson,jdbcType=VARCHAR}, #{prospectAreaCode,jdbcType=VARCHAR}, 
+	    #{prospectOrgCode,jdbcType=VARCHAR}, #{examineTime,jdbcType=DATE})
+	</insert>
+  		
+	<!-- 查询刚插入的实勘ID -->
+	<select id="getLastInsertProspectId" resultType="Integer" parameterType="map">
+		SELECT 
+			MAX(ID) AS lastId
+		FROM 
+			MANAGE_PROSPECT_INFO
+	</select>
+	
+  <insert id="insertSelective" parameterType="map" >
+    insert into MANAGE_PROSPECT_INFO
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        ID,
+      <if test="houseInfoId != null" >
+        HOUSE_INFO_ID,
+      </if>
+      <if test="houseCode != null" >
+        HOUSE_CODE,
+      </if>
+      <if test="houseType != null" >
+        HOUSE_TYPE,
+      </if>
+      <if test="houseArea != null" >
+        HOUSE_AREA,
+      </if>
+      <if test="prospectUser != null" >
+        PROSPECT_USER,
+      </if>
+      <if test="prospectUserId != null" >
+        PROSPECT_USER_ID,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="examineUser != null" >
+        EXAMINE_USER,
+      </if>
+      <if test="examineUserId != null" >
+        EXAMINE_USER_ID,
+      </if>
+      <if test="examineOrg != null" >
+        EXAMINE_ORG,
+      </if>
+      <if test="examineOrgCode != null" >
+        EXAMINE_ORG_CODE,
+      </if>
+      <if test="prospectOrg != null" >
+        PROSPECT_ORG,
+      </if>
+      <if test="prospectArea != null" >
+        PROSPECT_AREA,
+      </if>
+      <if test="allotPersonId != null" >
+        ALLOT_PERSON_ID,
+      </if>
+      <if test="allotStatus != null" >
+        ALLOT_STATUS,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="allotTime != null" >
+        ALLOT_TIME,
+      </if>
+      <if test="allotPerson != null" >
+        ALLOT_PERSON,
+      </if>
+      <if test="prospectAreaCode != null" >
+        PROSPECT_AREA_CODE,
+      </if>
+      <if test="prospectOrgCode != null" >
+        PROSPECT_ORG_CODE,
+      </if>
+      <if test="examineTime != null" >
+        EXAMINE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+     	 MANAGE_PROSPECT_INFO_SEQ.NEXTVAL,
+      <if test="houseInfoId != null" >
+        #{houseInfoId,jdbcType=DECIMAL},
+      </if>
+      <if test="houseCode != null" >
+        #{houseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="houseType != null" >
+        #{houseType,jdbcType=VARCHAR},
+      </if>
+      <if test="houseArea != null" >
+        #{houseArea,jdbcType=DECIMAL},
+      </if>
+      <if test="prospectUser != null" >
+        #{prospectUser,jdbcType=VARCHAR},
+      </if>
+      <if test="prospectUserId != null" >
+        #{prospectUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="examineUser != null" >
+        #{examineUser,jdbcType=VARCHAR},
+      </if>
+      <if test="examineUserId != null" >
+        #{examineUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="examineOrg != null" >
+        #{examineOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="examineOrgCode != null" >
+        #{examineOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prospectOrg != null" >
+        #{prospectOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="prospectArea != null" >
+        #{prospectArea,jdbcType=VARCHAR},
+      </if>
+      <if test="allotPersonId != null" >
+        #{allotPersonId,jdbcType=DECIMAL},
+      </if>
+      <if test="allotStatus != null" >
+        #{allotStatus,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="allotTime != null" >
+        #{allotTime,jdbcType=DATE},
+      </if>
+      <if test="allotPerson != null" >
+        #{allotPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="prospectAreaCode != null" >
+        #{prospectAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prospectOrgCode != null" >
+        #{prospectOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="examineTime != null" >
+        #{examineTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 提交审核 -->
+  <update id="submitProspect" parameterType="map" >
+    update MANAGE_PROSPECT_INFO
+    set STATUS = 2
+    where ID = #{prospectId,jdbcType=DECIMAL}
+  </update>
+  
+  <update id="update" parameterType="map" >
+    update MANAGE_PROSPECT_INFO
+    set HOUSE_INFO_ID = #{houseInfoId,jdbcType=DECIMAL},
+      HOUSE_CODE = #{houseCode,jdbcType=VARCHAR},
+      HOUSE_TYPE = #{houseType,jdbcType=VARCHAR},
+      HOUSE_AREA = #{houseArea,jdbcType=DECIMAL},
+      PROSPECT_USER = #{prospectUser,jdbcType=VARCHAR},
+      PROSPECT_USER_ID = #{prospectUserId,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=DATE},
+      STATUS = #{status,jdbcType=DECIMAL},
+      EXAMINE_USER = #{examineUser,jdbcType=VARCHAR},
+      EXAMINE_USER_ID = #{examineUserId,jdbcType=VARCHAR},
+      EXAMINE_ORG = #{examineOrg,jdbcType=VARCHAR},
+      EXAMINE_ORG_CODE = #{examineOrgCode,jdbcType=VARCHAR},
+      PROSPECT_ORG = #{prospectOrg,jdbcType=VARCHAR},
+      PROSPECT_AREA = #{prospectArea,jdbcType=VARCHAR},
+      ALLOT_PERSON_ID = #{allotPersonId,jdbcType=DECIMAL},
+      ALLOT_STATUS = #{allotStatus,jdbcType=DECIMAL},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      ALLOT_TIME = #{allotTime,jdbcType=DATE},
+      ALLOT_PERSON = #{allotPerson,jdbcType=VARCHAR},
+      PROSPECT_AREA_CODE = #{prospectAreaCode,jdbcType=VARCHAR},
+      PROSPECT_ORG_CODE = #{prospectOrgCode,jdbcType=VARCHAR},
+      EXAMINE_TIME = #{examineTime,jdbcType=DATE}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateSelective" parameterType="map" >
+    update MANAGE_PROSPECT_INFO
+    <set >
+      <if test="houseInfoId != null" >
+        HOUSE_INFO_ID = #{houseInfoId,jdbcType=DECIMAL},
+      </if>
+      <if test="houseCode != null" >
+        HOUSE_CODE = #{houseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="houseType != null" >
+        HOUSE_TYPE = #{houseType,jdbcType=VARCHAR},
+      </if>
+      <if test="houseArea != null" >
+        HOUSE_AREA = #{houseArea,jdbcType=DECIMAL},
+      </if>
+      <if test="prospectUser != null" >
+        PROSPECT_USER = #{prospectUser,jdbcType=VARCHAR},
+      </if>
+      <if test="prospectUserId != null" >
+        PROSPECT_USER_ID = #{prospectUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="examineUser != null" >
+        EXAMINE_USER = #{examineUser,jdbcType=VARCHAR},
+      </if>
+      <if test="examineUserId != null" >
+        EXAMINE_USER_ID = #{examineUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="examineOrg != null" >
+        EXAMINE_ORG = #{examineOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="examineOrgCode != null" >
+        EXAMINE_ORG_CODE = #{examineOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prospectOrg != null" >
+        PROSPECT_ORG = #{prospectOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="prospectArea != null" >
+        PROSPECT_AREA = #{prospectArea,jdbcType=VARCHAR},
+      </if>
+      <if test="allotPersonId != null" >
+        ALLOT_PERSON_ID = #{allotPersonId,jdbcType=DECIMAL},
+      </if>
+      <if test="allotStatus != null" >
+        ALLOT_STATUS = #{allotStatus,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="allotTime != null" >
+        ALLOT_TIME = #{allotTime,jdbcType=DATE},
+      </if>
+      <if test="allotPerson != null" >
+        ALLOT_PERSON = #{allotPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="prospectAreaCode != null" >
+        PROSPECT_AREA_CODE = #{prospectAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="prospectOrgCode != null" >
+        PROSPECT_ORG_CODE = #{prospectOrgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="examineTime != null" >
+        EXAMINE_TIME = #{examineTime,jdbcType=DATE},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <!-- 实勘审核列表 -->
+   <select id="getManageProspectInfoPage" resultType="manageProspectInfoModel" parameterType="map" >
+	    SELECT 
+	       a.id as id,
+	       a.house_code as houseCode,
+	       a.house_info_id as houseInfoId,
+	       a.prospect_area as prospectArea,
+	       a.prospect_org as prospectOrg,
+	       a.prospect_user as prospectUser,
+	       a.create_time as createTime,
+	       a.examine_user as examineUser,
+	       a.examine_time as examineTime,
+	       a.allot_person as allotPerson,
+	       a.allot_status as allotStatus,
+	       a.allot_time as allotTime,
+	       a.remark as remark,
+	       CASE WHEN c.id IS NULL THEN
+	           (case when  d.rooms is null  then 0  else d.rooms end) ||'室'||
+	           (case when d.office  is null  then 0  else d.rooms end)||'厅'||
+	           (case when d.wc  is null  then 0  else d.wc end)||'卫'||
+	           (case when d.KITCHEN  is null  then 0  else d.KITCHEN end)||'厨'
+	       ELSE 
+	          (case when c.rooms is null  then 0  else c.rooms end) ||'室'||
+	          (case when c.office  is null  then 0  else c.rooms end)||'厅'||
+	          (case when c.wc  is null  then 0  else c.wc end)||'卫'||
+	          (case when c.KITCHEN  is null  then 0  else c.KITCHEN end)||'厨'
+	      END 
+	      	as houseType,
+	      CASE WHEN c.id IS NULL THEN 
+	        d.Use_Type
+	      ELSE   
+	        c.use_type 
+	      END 
+	      	as useType,
+	      CASE WHEN c.id IS NULL THEN 
+	        d.USED_AREA
+	      ELSE   
+	        c.USED_AREA 
+	      END 
+	      as houseArea,
+	      f.name as premisesName,
+	      b.demand_type as demandType
+	  from manage_prospect_info a
+	  LEFT JOIN house_info b
+	    ON a.house_info_id = b.id
+	  LEFT JOIN house_lease c
+	    ON c.house_info_id = b.id
+	  left join house_sale d
+	    ON d.house_info_id = b.id
+	  LEFT JOIN base_house e
+	    ON e.id = b.room_id
+	  LEFT JOIN base_premises f
+	    ON f.id =  e.premises_id
+	  <where>
+	  		<if test="houseCode !=null and houseCode !=''">
+	  			a.house_code = #{houseCode}
+	  		</if>
+	  		<if test="premisesId !=null and premisesId !=''">
+	  			and f.id = #{premisesId}
+	  		</if>
+	  		<if test="houseInfoId !=null and houseInfoId !=''">
+	  			and  b.id = #{houseInfoId}
+	  		</if>
+	  		<if test="premisesName !=null and premisesName !=''">
+	  			 and f.name = #{premisesName}
+	  		</if>
+	  		<if test="useType !=null and useType !=''">
+	  			 and d.use_type = #{useType} or c.use_type = #{useType}
+	  		</if>
+	  		<if test="demandType !=null and demandType !=''">
+	  			 and b.demand_type = #{demandType}
+	  		</if>
+	  		<if test="demandType !=null and demandType !=''">
+	  			 and b.demand_type = #{demandType}
+	  		</if>
+	  		<if test="createTimeStart !=null and createTimeStart !=''">
+	  			 and a.create_time &gt;= #{createTimeStart}
+	  		</if>
+	  		<if test="createTimeEnd !=null and createTimeEnd !=''">
+	  			 and a.create_time &lt;= #{createTimeEnd}
+	  		</if>
+	  		<if test="allotTimeStart !=null and allotTimeStart !=''">
+	  			 and a.allot_time &gt;= #{allotTimeStart}
+	  		</if>
+	  		<if test="allotTimeEnd !=null and allotTimeEnd !=''">
+	  			 and a.allot_time &lt;= #{allotTimeEnd}
+	  		</if>
+	  		<if test="examineTimeStart !=null and examineTimeStart !=''">
+	  			 and a.examine_time &gt;= #{examineTimeStart}
+	  		</if>
+	  		<if test="examineTimeEnd !=null and examineTimeEnd !=''">
+	  			 and a.examine_time &lt;= #{allotTimeEnd}
+	  		</if>
+	  		<if test="allotStatus !=null and allotStatus !=''">
+	  			 and a.allot_status &lt;= #{allotStatus}
+	  		</if>
+	  </where>
+  </select>
+  	<!-- 房源编号模糊查询  -->
+  <select id="getVagueSelect" resultType="manageProspectInfoModel" parameterType="map" >
+		SELECT 
+      	 a.id as id,
+         a.house_code as houseCode,
+         a.house_info_id as houseInfoId,
+         a.prospect_area as prospectArea,
+         a.prospect_org as prospectOrg,
+         a.prospect_user as prospectUser,
+         a.create_time as createTime,
+         a.examine_user as examineUser,
+         a.examine_time as examineTime,
+         a.allot_person as allotPerson,
+         a.allot_status as allotStatus,
+         a.allot_time as allotTime,
+         e.premises as premisesName,
+         e.premises_id as premisesId,
+         a.create_time as create_time,
+         a.prospect_user as prospectUser,
+         a.status as status,
+         ( case when  e.building is not null then e.building || '栋'  else null  end ) ||
+         ( case when  e.units is not null then e.units || '单元'  else null  end ) ||
+         ( case when  e.room is not null then  e.room || '房间'  else null  end ) as fullHouseName ,
+         CASE WHEN c.id IS NULL THEN 
+          c.CREATE_TIME
+        ELSE   
+          d.CREATE_TIME 
+        END as houseInfoCreateTime,
+         e.building as buildingName,
+         e.room as houseName
+      from manage_prospect_info a
+      LEFT JOIN house_info b
+        ON a.house_info_id = b.id
+      LEFT JOIN house_lease c
+        ON c.house_info_id = b.id
+      left join house_sale d
+        ON d.house_info_id = b.id
+      LEFT JOIN base_house_addr e
+        ON e.room_id = b.room_id
+	  <where>
+	  		<if test="houseCode !=null and houseCode !=''">
+	  			 instr(a.house_code , #{houseCode})>0
+	  		</if>
+	  		<if test="premisesName !=null and premisesName !=''">
+	  			 instr(f.name , #{premisesName})>0
+	  		</if>
+	  		<if test="id !=null and id !=''">
+	  			 a.id =#{id}
+	  		</if>
+	  </where>
+  </select>
+  	  <!-- 更新实勘归属人 LB-->
+  <update id="updateProspectInfo" parameterType="map" >
+    update MANAGE_PROSPECT_INFO
+    <set >
+       <if test="divideId != null" >
+        PROSPECT_USER_ID = #{divideId},
+      </if>
+       <if test="divideId != null" >
+        PROSPECT_USER = #{divideUser},
+      </if>
+        <if test="divideOrg != null" >
+        PROSPECT_ORG = #{divideOrg},
+      </if>
+        <if test="divideQu != null" >
+       PROSPECT_AREA = #{divideQu},
+      </if>
+       <if test="divideOrgCode != null" >
+       PROSPECT_ORG_CODE= #{divideOrgCode},
+      </if>
+        OPERATE_TIME = SYSDATE,
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

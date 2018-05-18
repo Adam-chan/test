@@ -1,0 +1,364 @@
+<div class="tableContent" >
+ 	<div class="row">
+ 		<div class="col-md-2 col-sm-2 col-xs-2">
+           <div class=" form-xs form-group row ">
+	          <label for="addClass" class="col-md-4 col-sm-4 col-xs-4 control-label">地址区：</label>
+	          <div class="col-md-8 col-sm-8 col-xs-8">
+	           	<select  class="area input-xs form-control searchKey" id="areaId">
+					<option value="" selected="selected">请选择区</option>
+					<#list provinceList as item>
+						<option value="${item.id!}">${item.name!}</option>
+					</#list>
+				</select>
+	          </div>
+	        </div>
+	    </div>
+	    <div class="col-md-2 col-sm-2 col-xs-2">
+           <div class=" form-xs form-group row ">
+	          <div class="col-md-6 col-sm-6 col-xs-6">
+	           	<select  class=" input-xs form-control searchKey" id="aasId">
+					<option value="" selected="selected">请选择街道</option>
+				</select>
+	          </div>
+	          <div class="col-md-6 col-sm-6 col-xs-6">
+	           	<select  class=" input-xs form-control searchKey" id="acId">
+					<option value="" selected="selected">请选择社区</option>
+				</select>
+	          </div>
+	        </div>
+	    </div>
+	    <div class="col-md-2 col-sm-2">
+           <div class="form-xs form-group row">
+	          <div class="col-md-8 col-sm-8 col-xs-8">
+	          	<input class="col-md-8 col-sm-8 col-xs-8 selectInput searchKey " type="text" id="premisesId"  hidden>
+               	<input class="col-md-8 col-sm-8 col-xs-8 selectInput searchKey " type="text" id="keyWord" placeholder="楼盘名称" value="">
+	          </div>
+	        </div>
+	    </div>
+	    <div class="col-md-3 col-sm-3 col-xs-3">
+			<div class=" form-xs form-group row" id="cloneTarget">
+				<label for="userName" class="col-xs-3 control-label" value="">层级显示：</label>
+					<div class="radio-inline input-xs">
+						<label>
+							<input id="hierarchyType" name="hierarchyType" checked type="radio" class="ace" value="1">
+							<span class="lbl">楼盘</span>
+						</label>
+					</div>
+					<div class="radio-inline input-xs">
+						<label>
+							<input  name="hierarchyType" type="radio" class="ace" value="2">
+							<span class="lbl">楼栋分组</span>
+						</label>
+					</div>
+					<div class="radio-inline input-xs">
+						<label>
+							<input  name="hierarchyType" type="radio" class="ace" value="3">
+							<span class="lbl">栋座</span>
+						</label>
+					</div>
+					<div class="radio-inline input-xs">
+						<label>
+							<input  name="hierarchyType" type="radio" class="ace" value="4">
+							<span class="lbl">单元</span>
+						</label>
+					</div>
+					<div class="radio-inline input-xs">
+						<label>
+							<input  name="hierarchyType" type="radio" class="ace" value="5">
+							<span class="lbl">房间</span>
+						</label>
+					</div>
+			</div>
+		</div>
+	    <div class="col-md-2 col-sm-2 col-xs-2" hidden id="houserStatus">
+           <div class=" form-xs form-group row ">
+	          <label for="addClass" class="col-md-4 col-sm-4 col-xs-4 control-label">状态：</label>
+	          <div class="col-md-8 col-sm-8 col-xs-8">
+	           	<select  class="area input-xs form-control searchKey" id="status">
+					<option value="" selected="selected">全部</option>
+					<option value="1" >启用</option>
+					<option value="2" >禁用</option>
+				</select>
+	          </div>
+	        </div>
+	    </div>
+	    <div class="col-xs-12 addrChange">
+		    <table id="standardAddrBase_jqGrid">
+				
+			</table>
+			<div id="jqGridPager"></div>
+    	</div>
+  </div> 
+</div>
+<input type=hidden id="tableType1" value="${type!}" ></input>   
+<script type="text/javascript">
+var aihome ={
+	/* 下拉得到数据 */
+	getPullDown : function(val,objId,type){
+		var url="";
+		if(type==1){
+			url="${CTX}/area/getSubdistrictList.do";//街道下拉数据
+		}else{
+			url="${CTX}/area/getCommunityList.do";//社区下拉数据
+		}
+		 $.ajax({
+		       type: "post",
+		       url:url, 
+		       async:false,
+		       dataType:'json',
+		       data: {"baseAreaId":val},//上级地区ID
+		       success: function(data){
+		    	   aihome.changeAddress(data,objId);
+		       }
+		 });
+	},
+	/* 下拉onchange事件触发后对请求回的数据进行编辑格式 */
+	changeAddress : function(data,objId){	
+		$("#"+objId).children().first().siblings().remove();
+		var str = "";
+		for(var i=0;i<data.length;i++){
+			var areaName = data[i].name;
+			var areaId = data[i].id
+		  	var areaShow = $("#"+objId);
+			str = '<option value="'+areaId+'">'+areaName+'</option>';
+			areaShow.append(str); //onchange事件后追加下一级下拉框中的数据
+		}
+	},
+	//分页方法
+	init_jqGrid : function() {
+		$("#standardAddrBase_jqGrid").jqGrid({
+		 	url: '${CTX}/addrBaseManage/getStandardAddrBasePage.do',
+	        datatype: "json",
+	        colModel: [
+				{ label: '区', name: 'areaName',index:'areaName',sortable : true,width: 15 },
+				{ label: '街道', name: 'subName',index:'subName',sortable : true,width: 15,
+					 formatter:function(rowName, options, rowObject){
+	            	     if(rowName == undefined){
+	            	    	 return "<span>----</span>"
+	            	     }else{
+	            	    	 return rowName;
+	            	     }
+		             }
+				},
+				{ label: '社区', name: 'commName',index:'commName',sortable : true,width: 15 ,
+					 formatter:function(rowName, options, rowObject){
+	            	     if(rowName == undefined){
+	            	    	 return "<span>----</span>"
+	            	     }else{
+	            	    	 return rowName;
+	            	     }
+		             }
+				},
+				{ label: '道路', name: 'roadDetail',index:'roadDetail',sortable : true,width: 20 },
+	            { label: '楼盘', name: 'bpName',index:'bpName',sortable : true,width: 20 },
+	            { label: '楼栋分组', name: 'bgGroupName',index:'bgGroupName',sortable : true,width: 20,
+	            	 formatter:function(rowName, options, rowObject){
+	            	     if(rowName == undefined){
+	            	    	 return "<span>----</span>"
+	            	     }else{
+	            	    	 return rowName;
+	            	     }
+		             }	
+	            },
+	            { label: '栋座', name: 'bbBuildingName',index:'bbBuildingName',sortable : true,width: 20,
+	            	 formatter:function(rowName, options, rowObject){
+	            	     if(rowName == undefined){
+	            	    	 return "<span>----</span>"
+	            	     }else{
+	            	    	 return rowName;
+	            	     }
+		             }	
+	            },
+	            { label: '单元', name: 'buCode',index:'buCode',sortable : true,width:10,
+	            	 formatter:function(rowName, options, rowObject){
+	            	     if(rowName == undefined){
+	            	    	 return "<span>----</span>"
+	            	     }else{
+	            	    	 return rowName;
+	            	     }
+		             }	
+	            },
+	            { label: '房间', name: 'bhHouseName',index:'bhHouseName',sortable : true,width: 10,
+	            	 formatter:function(rowName, options, rowObject){
+	            	     if(rowName == undefined){
+	            	    	 return "<span>----</span>"
+	            	     }else{
+	            	    	 return rowName;
+	            	     }
+		             }	
+	            },
+	            { label: '全地址', name: 'addrDetail',index:'addrDetail',sortable : true,width: 60},
+	            { label: '证载地址', name: 'zzdzDetail',index:'zzdzDetail',width: 20 ,
+					 formatter:function(rowName, options, rowObject){
+	            	     if(rowName == undefined){
+	            	    	 return "<span>----</span>"
+	            	     }else{
+	            	    	 return rowName;
+	            	     }
+		             }	
+				 },
+	            { label: '房间状态', name: 'status',index:'status',width: 20 ,
+					 formatter:function(rowName, options, rowObject){
+	            	     if(rowName == 1){
+	            	    	 return "<span>启动</span>"
+	            	     }else if(rowName == 2){
+	            	    	 return "<span>禁用</span>"
+	            	     }else{
+	            	    	 return "<span>----</span>"
+	            	     }
+		             }	
+				 },
+				{ label: '房间Id', name: 'houseId',index:'houseId',sortable : true,width: 10,key:true,hidden:true},
+	            { label: '业主姓名', name: 'name',index:'name',sortable : true,width: 20 ,
+					 formatter:function(rowName, options, rowObject){
+	            	     if(rowName == undefined){
+	            	    	 return "<span>----</span>"
+	            	     }else{
+	            	    	 return rowName;
+	            	     }
+		             }
+				},
+	            { label: '业主电话', name: 'contactType',index:'contactType',sortable : true,width: 20,
+					 formatter:function(rowName, options, rowObject){
+	            	     if(rowName == undefined){
+	            	    	 return "<span>----</span>"
+	            	     }else{
+	            	    	 return rowName;
+	            	     }
+		             }
+				},
+			   { label: '业主身份证', name: 'idCard',index:'idCard',sortable : true,width: 20 ,
+					 formatter:function(rowName, options, rowObject){
+	            	     if(rowName == undefined){
+	            	    	 return "<span>----</span>"
+	            	     }else{
+	            	    	 return rowName;
+	            	     }
+		             }
+				},
+	        ],
+	        autowidth:true,
+	        multiselect: true,
+	        height: $(window).height()-300,
+	        rowNum:30, 
+	     	rowList:[10,20,30,50,100],
+	        pager: "#jqGridPager",
+	    	jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+	   });
+	},
+	/* 更改状态*/
+	updateHouse : function(type){
+		rowId = $("#standardAddrBase_jqGrid").jqGrid('getGridParam','selarrrow');
+		var rowData = $("#standardAddrBase_jqGrid").jqGrid('getRowData',rowId);
+		var selCount=rowId.length;
+		if (selCount==0){
+			alert("没有选中的记录！");
+			return;
+		}
+		if(type==1){
+			if(rowData.status=="<span>启动</span>"){
+				alert("房间当前状态为启动,请点击禁用!")
+				return;
+			}
+		}else{
+			if(rowData.status=="<span>禁用</span>"){
+				alert("房间当前状态为禁用,请点击启动!")
+				return;
+			}
+		}
+			$.ajax({
+				url : "${CTX}/addrBaseManage/updateAddrUseStatus.do",
+				dataType : "json",
+				data : {
+					houseId : rowId.join(","),//多条数据时，不连接 只会传一条数据
+					status:type
+				},
+				success : function(data) {
+					if(data!=0){
+						$("#standardAddrBase_jqGrid").trigger('reloadGrid');
+						alert("操作成功！");
+					}else{
+						alert("操作失败！");
+					}
+				}
+			});
+	}
+};
+
+$(function (){
+	aihome.init_jqGrid();
+	$("#areaId").change(function (){
+		aihome.getPullDown($(this).val(),"aasId",1);
+		$("#acId").children().first().siblings().remove();
+   });
+	$("#aasId").change(function (){
+		aihome.getPullDown($(this).val(),"acId",2);
+   });
+	 $("#addrBase_Use").hide();
+	 $("#addrBase_enUse").hide();
+	$(":input[name='hierarchyType']").change(function (){
+		if($(this).val()==1){
+			$("#keyWord").val("");
+			$("#premisesId").val("");
+		}
+		 if($(this).val()!=5){
+			 $("#houserStatus").hide();
+			 $("#addrBase_Use").hide();
+			 $("#addrBase_enUse").hide();
+		 }else{
+			 $("#houserStatus").show();
+			 $("#addrBase_Use").show();
+			 $("#addrBase_enUse").show();
+		 }
+   });
+	 /* 条件查询 */
+	$("#addrBase_query").unbind().click(function(){
+		var hierarchyType = $('input[name="hierarchyType"]:checked').val();
+		if(hierarchyType!=1&&$("#keyWord").val()==""){
+			alert("请输入楼盘名称!");
+			$("#keyWord").val("");
+			$("#premisesId").val("");
+		 	$("#houserStatus").hide();
+		 	$("#addrBase_Use").hide();
+		 	$("#addrBase_enUse").hide();
+			$(":radio[name='hierarchyType'][value='1']").prop("checked", "checked");
+			return false;
+		}
+		if($("#keyWord").val()==""){
+			$("#premisesId").val("");
+		}
+		var param = getSearchParam()+"&hierarchy="+hierarchyType;
+		var url="${CTX}/addrBaseManage/getStandardAddrBasePage.do?"+param;
+		$("#standardAddrBase_jqGrid").setGridParam({url:url,page:1}).trigger('reloadGrid');
+	});
+});
+/* 模糊搜索*/
+$("#keyWord").autocomplete({
+	source : function(request, response) {
+		$.ajax({
+			url : "${CTX}/addrBaseManage/getAddrKeyWordMatch.do",
+			dataType : "json",
+			type : 'post',
+			data : {
+				matchStr : request.term
+			},
+			success : function(data) {
+				var array = new Array(data.length);
+				for (var i = 0; i < data.length; i++) {
+					var temp = {
+						key : data[i].id,
+						value : data[i].name
+					};
+					array[i] = temp;
+				}
+				response(array);
+			}
+		});
+	},
+	select : function(event, ui) {
+		$("#premisesId").val(ui.item.key);
+		$("#keyWord").val(ui.item.value);
+		event.preventDefault();
+	}
+});
+</script> 

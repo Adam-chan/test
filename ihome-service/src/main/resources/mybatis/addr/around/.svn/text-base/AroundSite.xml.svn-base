@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="aroundSite">
+
+	<!-- 新增站点 -->
+	<insert id="insertSite" useGeneratedKeys="true" keyProperty="id" parameterType="map">  
+		<selectKey resultType="java.lang.Integer"  keyProperty="id">
+			SELECT AROUND_SITE_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO AROUND_SITE (
+			id,
+			SITE_NAME,
+			TRAFFIC_TYPE,
+			ASSIST_SIGN,
+			CLOSE_SITE
+		)
+		VALUES(
+			AROUND_SITE_SEQ.NEXTVAL,
+			#{siteName,jdbcType=VARCHAR},
+			#{trafficType,jdbcType=DECIMAL},
+			#{assistSign,jdbcType=VARCHAR},
+			#{closeSite,jdbcType=VARCHAR}
+		)
+    </insert>
+
+	<!-- 分页查询站点 -->
+   	<select id="getSiteListForPage" parameterType="map" resultType="aroundSiteModel">
+		SELECT
+			id,
+			SITE_NAME AS siteName,
+			TRAFFIC_TYPE AS trafficType,
+			ASSIST_SIGN AS assistSign,
+			CLOSE_SITE AS closeSite,
+			(
+				SELECT
+					wm_concat (l.line_name)
+				FROM
+					around_site s
+				LEFT JOIN around_site_line sl ON sl.site_id = s.id
+				LEFT JOIN around_line l ON l.id = sl.line_id
+				WHERE
+					s.id = site.id
+			) AS LINES
+		FROM
+			AROUND_SITE site
+		WHERE
+		    1=1
+	    	AND TRAFFIC_TYPE = #{trafficType}
+			<if test="siteId != null and siteId !=''"> 
+		    	AND id = #{siteId}
+		    </if>
+			<if test="lineId != null and lineId !=''"> 
+		    	AND site.id IN (
+					SELECT
+						sl.site_id
+					FROM
+						around_site_line sl
+					LEFT JOIN around_line l ON l.id = sl.line_id
+					WHERE
+						l.id = #{lineId}
+				)
+		    </if>
+		    <if test="lineName != null and lineName !=''"> 
+		    	AND site.id IN (
+					SELECT
+						sl.site_id
+					FROM
+						around_site_line sl
+					LEFT JOIN around_line l ON l.id = sl.line_id
+					WHERE
+						l.line_name = #{lineName}
+				)
+		    </if>
+		ORDER BY
+			site.id DESC
+   	</select>
+   	
+   	<!-- 根据id查询站点 -->
+   	<select id="getSiteById" parameterType="map" resultType="aroundSiteModel">
+		SELECT
+			id,
+			SITE_NAME AS siteName,
+			TRAFFIC_TYPE AS trafficType,
+			ASSIST_SIGN AS assistSign,
+			CLOSE_SITE AS closeSite
+		FROM
+			AROUND_SITE 
+		WHERE
+			id=#{id}
+   	</select>
+   	
+   	<!-- 查询所有站点信息 -->
+   	<select id="getSiteList" resultType="aroundSiteModel">
+		SELECT
+			id,
+			SITE_NAME AS siteName,
+			TRAFFIC_TYPE AS trafficType,
+			ASSIST_SIGN AS assistSign,
+			CLOSE_SITE AS closeSite
+		FROM
+			AROUND_SITE 
+		ORDER BY 
+			id 
+   	</select>
+   	
+   	<!-- 查询站点名称是否存在 -->
+   	<select id="getSiteByNameIs" parameterType="map" resultType="java.lang.Integer">
+		SELECT
+			count(0)
+		FROM
+			AROUND_SITE
+		WHERE
+			1=1
+			<if test="siteName != null  and siteName !=''"> 
+		    	AND SITE_NAME = #{siteName}
+		    </if>
+		    <if test="trafficType != null and trafficType !=''"> 
+		    	AND TRAFFIC_TYPE = #{trafficType}
+		    </if> 
+		    <if test="siteId != null and siteId !=''">
+		    	AND id &lt;&gt; #{siteId}
+		    </if>
+   	</select>
+   	
+   	<!-- 根据id更新站点信息 -->
+   	<update id="updateSiteById" parameterType="map">             
+	     UPDATE AROUND_SITE 
+	      	<set>
+				<if test="siteName != null and siteName != ''">
+					 SITE_NAME = #{siteName}
+				</if>
+				<if test="assistSign != null">
+					 ,ASSIST_SIGN = #{assistSign,jdbcType=VARCHAR}
+				</if>
+				<if test="trafficType != null and trafficType != ''">
+					 ,TRAFFIC_TYPE = #{trafficType}
+				</if>
+				<if test="closeSite != null">
+					 ,CLOSE_SITE = #{closeSite,jdbcType=VARCHAR}
+				</if>
+	      	</set>
+	     WHERE id=#{id}
+	</update> 
+	
+	<!-- 根据id删除站点信息 -->
+	<delete id="deleteSiteById" parameterType="map" >
+	     DELETE FROM AROUND_SITE WHERE id=#{id}
+	</delete>
+	
+	<!-- 模糊查询站点信息 -->
+	<select id="getSiteListByMatch" resultType="aroundSiteModel">
+		SELECT
+			id,
+			SITE_NAME AS siteName,
+			TRAFFIC_TYPE AS trafficType,
+			ASSIST_SIGN AS assistSign,
+			CLOSE_SITE AS closeSite
+		FROM
+			AROUND_SITE 
+		WHERE
+			1=1
+			<if test="matchStr != null  and matchStr !=''"> 
+		    	AND INSTR(SITE_NAME, #{matchStr}) > 0
+		    </if>
+		    AND TRAFFIC_TYPE=#{trafficType}
+		ORDER BY id 
+   	</select>
+   	
+   	<!-- 批量删除站点信息 -->
+	<delete id="deleteSites" parameterType="map">
+	    DELETE FROM AROUND_SITE WHERE id IN (${rowIds})
+	</delete>
+   
+    <!-- 保存站点和线路的关联关系 -->
+   	<insert id="insertSiteLineContact" parameterType="map" useGeneratedKeys="false">  
+	   	INSERT INTO AROUND_SITE_LINE (id, SITE_ID, LINE_ID) 
+	    	SELECT AROUND_SITE_LINE_SEQ.NEXTVAL,a.* from (
+	    <foreach collection="lineIds" item="item" index="index" separator="UNION ALL" >
+	    	SELECT 
+	         #{siteId},#{item}
+	        FROM DUAL
+	    </foreach>)a
+    </insert>
+    
+	<!-- 根据站点id查询所有关联线路的关联表数据 -->
+	<select id="getSiteLineListBySiteId" resultType="aroundSiteLineModel">
+		SELECT
+			sl.id,
+			sl.line_id AS lineId
+		FROM
+			around_site s
+		LEFT JOIN around_site_line sl ON sl.site_id = s.id
+		WHERE
+			s.id = #{siteId}
+	</select>
+	
+	<!-- 批量删除站点线路关联关系 -->
+	<delete id="deleteSiteLines" parameterType="map">
+	    DELETE FROM AROUND_SITE_LINE WHERE id IN (${ids})
+	</delete>
+	
+	<!-- 根据站点id批量查询站点和关联的线路 -->
+	<select id="getSiteLineBySiteIds" resultType="aroundSiteModel">
+		SELECT 
+		  DISTINCT(s.id),
+			s.site_name AS siteName,
+			(
+				SELECT
+					wm_concat (l.line_name)
+				FROM
+					around_site site
+				LEFT JOIN around_site_line sl ON sl.site_id = site.id
+				LEFT JOIN around_line l ON l.id = sl.line_id
+				WHERE
+					s.id = site.id
+			) AS LINES
+		FROM
+			around_site s
+		LEFT JOIN around_site_line sl ON sl.site_id = s.id
+		LEFT JOIN around_line l ON l.id = sl.line_id
+		WHERE
+			s.id IN (${siteIds})
+		AND s.traffic_type = #{trafficType}
+		ORDER BY
+			s.id
+   	</select>
+</mapper>

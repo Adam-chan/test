@@ -1,0 +1,74 @@
+<form id="commentForm">
+	<div class="row">
+		<div class="col-md-1 col-sm-1 col-xs-1 "></div>
+		<div class="col-md-10 col-sm-10 col-xs-10 ">
+			<textarea id="discuss" name="discuss" rows="4" cols="140" placeholder="在这里填写评论......" ></textarea>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-9 col-sm-9 col-xs-9 "></div>
+		<div class="col-md-2 col-sm-2 col-xs-2 ">
+			<button style="margin-top: 8%;margin-left: 50%;" id="saveButton" type="button" class="btn btn-sm btn-blue btn_sav" onclick="aihome.saveComment();">发表</button>
+		</div>
+	</div>
+	<input type="hidden" id="houseInfoId" name="houseInfoId" value="1"/>
+</form>
+
+<div id="addComment"></div>
+<script>
+	
+	// 发表评论
+	aihome.saveComment = function (){
+		if($("#discuss").val() == ''){
+			alert("评论不能为空");
+			return;
+		}
+		$.ajax({
+	        type : "POST",
+	        url : '${CTX}/houseManage/saveComment.do',
+	        dataType : 'json',
+	        data : $("#commentForm").serialize(),
+	        dataType : 'json',
+	        error : function(request) {
+	            alert("Error");
+	        },
+	        success : function(data) {
+	        	$("#discuss").val("");
+	        	alert("发表成功");
+	        	aihome.getComment();
+	        }
+	    });
+	}
+	
+	// 获取评论
+	aihome.getComment = function (){
+		$.ajax({
+	        type : "POST",
+	        url : '${CTX}/houseManage/getCommemnt.do',
+	        dataType : 'json',
+	        data : {"houseInfoId" : $("#houseInfoId").val()},
+	        dataType : 'json',
+	        error : function(request) {
+	            alert("Error");
+	        },
+	        success : function(data) {
+				var i = 0;
+				$("#addComment").children("div").remove();
+				while(i < data.length){
+					$("#addComment").append("<div class='row' >");
+					$("#addComment").append("	<div class='col-md-1 col-sm-1 col-xs-1 '></div>");
+					$("#addComment").append("	<div class='col-md-11 col-sm-11 col-xs-11 '><span style='color: blue;margin-top: 30px;'>" + data[i].userName + "</span></div>");
+					$("#addComment").append("</div>");
+					$("#addComment").append("<div class='row' style='margin-top: 30px;'>");
+					$("#addComment").append("	<div class='col-md-1 col-sm-1 col-xs-1 '></div>");
+					$("#addComment").append("	<div class='col-md-10 col-sm-10 col-xs-10 '>" + data[i].discuss + "</div>");
+					$("#addComment").append("</div>");
+					i ++;
+				}
+	        }
+	    });
+	}
+	$(function (){
+		aihome.getComment();
+	});
+</script>

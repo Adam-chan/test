@@ -1,0 +1,310 @@
+<div id="top_tools" class=" btn-group">
+  <button id="follow_query" class="btn btn-sm btn-white confirmBtn">
+    <i class="iconfont">&#xe6e4;</i>
+    <span>查询</span>
+  </button>
+</div>
+
+<div class="row">
+	<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+		<div class="form-horizontal row my-inputs">
+			<div class="row">
+				<div class="col-md-3 col-sm-6">
+					<div class="form-xs form-group row">
+						<label class="col-xs-3 control-label">所属区：</label>
+						<div class="col-xs-8">
+							<select id="quOrg" class="input-xs form-control searchKey">
+								<option value="">请选择</option>
+								<#list quOrgList as item>
+									<option value="${item.orgCode}">${item.name}</option>
+								</#list>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="form-xs form-group row">
+						<label class="col-xs-3 control-label">所属组:</label>
+						<div class="col-xs-8">
+							<select id="zuOrg" class="input-xs form-control searchKey">
+								<option value="">请选择</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="form-xs form-group row">
+						<label class="col-xs-3 control-label">所属人:</label>
+						<div class="col-xs-8">
+							<select id="jingjiren" class="input-xs form-control searchKey">
+								<option value="">请选择</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="form-xs form-group row">
+						<label class="col-xs-3 control-label">跟进方式:</label>
+						<div class="col-xs-8">
+							<select id="followWay" class="input-xs form-control searchKey">
+								<option value="">请选择</option>
+								<#if sysParamMap.GJFS??>
+									<#list sysParamMap.GJFS as item>  
+										<option value="${item.id!''}">${(item.sysHouseDescribe)!''}</option>
+								    </#list>   
+							    </#if>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3 col-sm-6">
+					<div class="form-xs form-group row">
+						<label class="col-xs-3 control-label">跟进日期:</label>
+						<div class="col-xs-8">
+							<div class="input-daterange input-group 5i5jdate">
+								<input id="followTimeS" type="text" class="form-control input-xs searchKey" name="start" placeholder="开始时间">
+								<span class="input-group-addon addon-xs">
+									<i class="fa fa-exchange"></i>
+								</span>
+								<input id="followTimeE" type="text" class="form-control input-xs searchKey" name="end" placeholder="结束时间">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="form-xs form-group row">
+						<label class="col-xs-3 control-label">业务类型:</label>
+						<div class="col-xs-8">
+							<select id="demanType" class="input-xs form-control searchKey">
+								<option value="">请选择</option>
+								<option value="1">买卖</option>
+								<option value="2">租赁</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<div class="form-xs form-group row">
+						<label class="col-xs-3 control-label">房源状态:</label>
+						<div class="col-xs-8">
+							<select id="houseStatus" class="input-xs form-control searchKey">
+								<option value="">请选择</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				 <div class="col-xs-12">
+					<div class="form-xs form-group row" style="left:-2.2%">
+						<label class="col-xs-1 control-label"></label>
+						<div class="col-xs-1 checkbox-inline input-xs">
+							<label>
+								<input type="checkbox" class="checkbox_search ace" value="1">
+								<span class="lbl"> 所属人限时盘</span>
+							</label>
+						</div>
+						<div class="col-xs-1 checkbox-inline input-xs">
+							<label>
+								<input type="checkbox" class="checkbox_search ace" value="2">
+								<span class="lbl"> 所属人未跟进</span>
+							</label>
+						</div>
+						<div class="col-xs-1 checkbox-inline input-xs">
+							<label>
+								<input type="checkbox" class="checkbox_search ace" value="3">
+								<span class="lbl"> 所属人已跟进</span>
+							</label>
+						</div>
+						<div class="col-xs-1 checkbox-inline input-xs">
+							<label>
+								<input type="checkbox" class="checkbox_search ace" value="4">
+								<span class="lbl"> 所属店经理未跟进</span>
+							</label>
+						</div>
+						<div class="col-xs-2 checkbox-inline input-xs">
+							<label>
+								<input type="checkbox" class="checkbox_search ace" value="5">
+								<span class="lbl"> 所属店经理已跟进</span>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="more-input" class="hide">
+	      <i class="iconfont">&#xe60a;</i>
+	    </div>
+	</div>
+	<div class="col-xs-12 my-grid" style="top:100px;">
+    	<table id="follow_jqGrid">
+    	
+    	</table>
+    	<div id="jqGridPager"></div>
+  	</div>
+</div>
+
+<script type="text/javascript">
+
+	$('.page-content-area').ace_ajax('loadScripts', [null, null], function () {});
+	
+	var aihome={
+			
+		init_jqGrid : function(){
+			$("#follow_jqGrid").jqGrid({
+				 url: "${CTX}/houseFollow/getHouseFollowListForPage.do", 
+		         datatype: "json",
+		         colModel: [
+					 { label: 'id', name: 'id',index:'id',hidden:true},
+					 { label: 'houseInfoId', name: 'houseInfoId',index:'houseInfoId',hidden:true},
+		             { label: '房源编号', name: 'houseCode',index:'houseCode',width: 30,
+						 formatter:function(rowName, options, rowObject){
+		            	    return "<a href=\"javascript:aihome.houseDetail('"+rowObject.houseInfoId+"',"+rowObject.demmandType+","+rowObject.useType+");\"  style='text-decoration:none;color:blue'>"+rowName+"</a>";
+		             	 }
+		             },
+		             { label: '业务类型', name: 'demandType',index:'demandType',width: 30,
+		            	 formatter:function(rowName, options, rowObject){
+		            		 var html = "";
+		            		 if(rowName){
+		            			 if(rowName=="1"){
+		            				 html = "买卖";
+		            			 }else if(rowName=="2"){
+		            				 html = "租赁";
+		            			 }
+		            		 }
+		            	    return html;
+		             	 }	 
+		             },
+		             { label: '使用类别', name: 'useType',index:'useType',width: 30 ,
+		            	 formatter:function(rowName, options, rowObject){
+		            		 var html = "";
+		            		 if(rowName){
+		            			 if(rowName=="1"){
+		            				 html = "住宅";
+		            			 }else if(rowName=="2"){
+		            				 html = "商铺";
+		            			 }else if(rowName=="3"){
+		            				 html = "写字楼";
+		            			 }else if(rowName=="4"){
+		            				 html = "车位";
+		            			 }
+		            		 }
+		            	    return html;
+		             	 }	 	 
+		             },
+		             { label: '所属组', name: 'divideOrg',index:'divideOrg',width: 30 },
+		             { label: '所属人', name: 'divideUser',index:'divideUser',width: 30 },
+		             { label: '跟进时间', name: 'followTimeStr',index:'followTimeStr',width: 30 },
+		             { label: '跟进方式', name: 'followWay2',index:'followWay2',width: 30 },
+		             { label: '跟进内容', name: 'followContent',index:'followContent',width: 30 }
+		         ],
+		         multiselect: true,
+		         multiboxonly: true,
+		         viewrecords: true, 
+		         autowidth:true,
+		         height: $(window).height()-300,
+		         rowNum:15, 
+			     rowList:[10,20,30,50,100],
+		         pager: "#jqGridPager",
+		     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+		    });
+		},
+		
+		//查看租赁房源详情页
+		houseDetail : function(houseId,type,num){
+			oaDialogOpen("lookUpHouse",//对话框ID，必填，且不能与当前页面的ID重复
+				 {url:"${CTX}/houseLease/lookUpDetail.do?houseInfoId="+houseId+"&type="+type+"&num="+num,
+				      title:"查看详细信息",//弹框的title
+				      closeOnEscpe:true,//是否通过escpe关闭弹框
+				      closeBtn:true,//是否显示关闭按钮
+				      width: $(window).width()*0.8,//弹框的宽度
+					  height: $(window).height()*0.9,
+				  })
+		},
+		getAddress : function (val, objId) {
+			var _url  = "${CTX}/org/orgList.do";
+			if(objId == "jingjiren"){
+				_url= "${CTX}/org/userList.do";
+			}
+			$.ajax({
+				type : "post",
+				url : _url,
+				async : false,
+				dataType : 'json',
+				async:false,
+				data : {
+					"orgCode" : val
+				},
+				success : function(data) {
+					aihome.changeAddress(data, objId);
+				},
+			});
+		},
+		changeAddress : function(data, objId) {
+			var obj = $("#" + objId);
+			
+			obj.children().first().siblings().remove();
+			var str = "";
+			for (var i = 0; i < data.length; i++) {
+				var orgCode = "";
+				if(objId==="jingjiren"){
+					orgCode = data[i].userId;
+				}else{
+					orgCode = data[i].orgCode;
+				}
+				var name = data[i].name;
+				str = '<option value="'+orgCode+'">'
+						+ name + '</option>';
+				obj.append(str);
+			}
+		}
+	}
+	
+	$(function (){
+		aihome.init_jqGrid();
+		
+		/**查询*/
+		$("#follow_query").click(function(){
+			var searchFlag = "";
+			$(".checkbox_search").each(function(){
+				if($(this).is(":checked")){
+					searchFlag+=$(this).val()+",";
+				}
+			});
+			var param = getSearchParam()+"&searchFlag="+searchFlag;
+	 		$("#follow_jqGrid").setGridParam({url:"${CTX}/houseFollow/getHouseFollowListForPage.do?"+param,page:1}).trigger('reloadGrid');
+		});
+		
+		/**组*/
+		$("#zuOrg").change(function (){
+			var orgCode = $(this).val();
+			//组数据变更，下级全部清空
+			$("#jingjiren").children().first().siblings().remove();
+			aihome.getAddress(orgCode, "jingjiren");
+		});
+		
+		/**区*/
+		$("#quOrg").change(function() {
+			var orgCode = $(this).val();
+			//区数据变更，下级全部清空
+			$("#zuOrg").children().first().siblings().remove();
+			$("#jingjiren").children().first().siblings().remove();
+			aihome.getAddress(orgCode, "zuOrg");
+		}); 
+		
+		$("#demanType").change(function(){
+			$("#houseStatus").children().first().siblings().remove();
+			var html = "";
+			var demanType = $("#demanType").val();
+			if(demanType==1){
+				html += "<option value='1'>待售</option><option value='2'>暂不售</option>";
+			}else if(demanType==2){
+				html += "<option value='1'>待租</option><option value='2'>暂不租</option>";
+			}
+			$("#houseStatus").append(html);
+		});
+	});
+	
+</script>

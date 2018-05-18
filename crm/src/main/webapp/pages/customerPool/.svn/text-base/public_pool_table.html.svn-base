@@ -1,0 +1,433 @@
+<!-- 公客池tab -->
+<div class="tableContent" >
+ 	<div class="row">
+ 		<!-- search row1 S -->
+ 		<div class="col-xs-12">
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">客源编号:</label>
+					<div class="col-xs-8">
+						<input id="demandCode" class="form-control input-xs searchKey">
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">客户电话:</label>
+					<div class="col-xs-8">
+						<input id="tell" class="form-control input-xs searchKey">
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">客户姓名:</label>
+					<div class="col-xs-8">
+						<input id="userName" class="form-control input-xs searchKey">
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">客户状态:</label>
+					<div class="col-xs-8">
+						<select id="demandStatus" class="input-xs form-control searchKey">
+							<option value="">请选择</option>
+							<option value="1">新信息</option>
+							<option value="2">约带看</option>
+							<option value="3">再推荐</option>
+							<option value="4">意向中</option>
+							<option value="5">成交</option>
+							<option value="6">放弃</option>
+							<option value="7">假信息</option>
+							<option value="8">所有有效</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- search row1 E -->
+		<!-- search row2 S -->
+		<div class="col-xs-12">
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">需求类型:</label>
+					<div class="col-xs-8">
+						<select id="propertyType" class="input-xs form-control searchKey">
+							<option value="">请选择</option>
+							<option value="1">住宅</option>
+							<option value="2">商铺</option>
+							<option value="3">写字楼</option>
+							<option value="4">车位</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">面积:</label>
+					<div class="col-xs-4">
+						<input id="buildAreaS" class="form-control input-xs searchKey">
+					</div>
+					<div class="col-xs-4">
+						<input id="buildAreaE" class="form-control input-xs searchKey">
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">价格:</label>
+					<div class="col-xs-4">
+						<input id="affordPriceS" class="form-control input-xs searchKey">
+					</div>
+					<div class="col-xs-4">
+						<input id="affordPriceE" class="form-control input-xs searchKey">
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">朝向:</label>
+					<div class="col-xs-8">
+						<select id="orientation" class="input-xs form-control searchKey">
+							<option value="">请选择</option>
+							<option value="1">东</option>
+							<option value="2">南</option>
+							<option value="3">西</option>
+							<option value="4">北</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- search row2 E -->
+		<!-- search row3 S -->
+		<div class="col-xs-12">
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">登记时间:</label>
+					<div class="col-xs-8">
+						<div class="input-daterange input-group 5i5jdate">
+							<input id="createTimeS" type="text" class="form-control input-xs searchKey" name="start" placeholder="开始时间">
+							<span class="input-group-addon addon-xs">
+								<i class="fa fa-exchange"></i>
+							</span>
+							<input id="createTimeE" type="text" class="form-control input-xs searchKey" name="end" placeholder="结束时间">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">成交时间:</label>
+					<div class="col-xs-8">
+						<div class="input-daterange input-group 5i5jdate">
+							<input id="dealTimeS" type="text" class="form-control input-xs searchKey" name="start" placeholder="开始时间">
+							<span class="input-group-addon addon-xs">
+								<i class="fa fa-exchange"></i>
+							</span>
+							<input id="dealTimeE" type="text" class="form-control input-xs searchKey" name="end" placeholder="结束时间">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">登记人:</label>
+					<div class="col-xs-8">
+						<select id="operateUser" class="input-xs form-control searchKey">
+							<option value="">请选择</option>
+							<#if operaterList?exists>
+								<#list operaterList as operater>
+									<option value="${operater.userId!''}">${operater.name!''}</option>
+								</#list>
+							</#if>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">公客类型:</label>
+					<div class="col-xs-8">
+						<select id="cdType" class="input-xs form-control searchKey">
+							<option value="">请选择</option>
+							<option value="1">区公客</option>
+							<option value="2">组公客</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- search row3 E -->
+		<!-- search row3 S -->
+		<div class="col-xs-12">
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">需求时间:</label>
+					<div class="col-xs-8">
+						<div class="input-daterange input-group 5i5jdate">
+							<input id="checkInTimeS" type="text" class="form-control input-xs searchKey" name="start" placeholder="开始时间">
+							<span class="input-group-addon addon-xs">
+								<i class="fa fa-exchange"></i>
+							</span>
+							<input id="checkInTimeE" type="text" class="form-control input-xs searchKey" name="end" placeholder="结束时间">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">需求区域:</label>
+					<div class="col-xs-8">
+						<input id="demandRegion" class="form-control input-xs">
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">意向小区:</label>
+					<div class="col-xs-8">
+						<input id="demandPremises" class="form-control input-xs">
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">装修:</label>
+					<div class="col-xs-8">
+						<select id="decoration" class="input-xs form-control searchKey">
+							<option value="">请选择</option>
+							<option value="1">毛坯</option>
+							<option value="2">中装</option>
+							<option value="3">精装</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- search row3 E -->
+		<!-- search row4 S -->
+		<div class="col-xs-12">
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">客户评价:</label>
+					<div class="col-xs-8">
+						<select id="custJudge" class="input-xs form-control searchKey">
+							<option value="">请选择</option>
+							<#if sysParamMap.KHPJ??>
+								<#list sysParamMap.KHPJ as item>  
+									<option value="${item.id!''}">${(item.sysHouseDescribe)!''}</option>
+							    </#list>   
+						    </#if>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-xs form-group row">
+					<label class="col-xs-4 control-label">来源:</label>
+					<div class="col-xs-4">
+						<select id="parentSource" class="floor input-xs form-control searchKey" onchange="aihome.getChildrenSource(this);">
+							<option value="">请选择</option>
+							<#if parentSourceList?exists>
+								<#list parentSourceList as source>
+									<option value="${source.id!''}">${source.source!''}</option>
+								</#list>
+							</#if>
+						</select>
+					</div>
+					<div class="col-xs-4">
+						<select id="childSource" class="floor input-xs form-control searchKey" name="childSource">
+							<option value="">请选择</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- search row4 E -->
+	    <div class="col-xs-12">
+		    <table id="public_pool_jqGrid">
+				
+			</table>
+		 	<div id="jqGridPager"></div>
+        </div>
+        <!-- 隐藏域 S -->
+        <input id="demandRegionId" class="searchKey" type="hidden">
+        <input id="demandPremisesId" class="searchKey" type="hidden">
+        <!-- 隐藏域 E -->
+    </div> 
+</div>  
+
+<script type="text/javascript">
+
+	aihome.init_jqGrid = function(){
+		$("#public_pool_jqGrid").jqGrid({
+			 url: "${CTX}/customerPool/getCustomerPoolListForPage.do?poolType=1", 
+	         datatype: "json",
+	         colModel: [
+				 { label: 'id', name: 'id',hidden:true},
+				 { label: 'demandCode', name: 'demandCode',hidden:true},
+				 { label: '客源编号',sortable : false,align : 'center',width:16,
+					 formatter:function(rowName, options, rowObject){
+	            		return "<a href=\"javascript:aihome.showDetails('"+rowObject.id+"');\"  style='text-decoration:none;color:blue'>"+rowObject.demandCode+"</a>";
+		             }	  
+	             },
+	             { label: '需求类型', name: 'demandTypeStr',sortable : false,align : 'center',width:8 },
+	             { label: '等级', name: 'custJudge2',sortable : false,align : 'center',width:8},
+	             { label: '客户姓名', name: 'userName',sortable : false,align : 'center',width:10},
+	             { label: '客户电话', name: 'tell',sortable : false,align : 'center',width:14,
+	            	 formatter:function(rowName, options, rowObject){
+						 return "<a href=\"javascript:void(0);\" style='text-decoration:none;color:blue' demandType='"+rowObject.demandType+"' demandId='"+rowObject.id+"' onclick='aihome.userCheckInfoFun(this);'>查看电话</a>";
+	            	 }		 
+	             },
+	             { label: '意向小区', name: 'demandPremises',sortable : false,align : 'center',width:14},
+	             { label: '面积/m²', name: 'buildArea',sortable : false,align : 'center',width:10 },
+	             { label: '价格', name: 'affordPrice',sortable : false,align : 'center',width:10 },
+	             { label: '客户状态', name: 'demandStatusStr',sortable : false,align : 'center',width:12 },
+	             { label: '跟进时间', name: 'visiteTimeStr',sortable : false,align : 'center',width:12 },
+	             { label: '看房次数', name: 'isPromised',sortable : false,align : 'center' ,width:8},
+	             { label: '看房量', name: 'promisedCount',sortable : false,align : 'center' ,width:8},
+	             { label: '首付', name: 'firstPay',sortable : false,align : 'center',width:10 },
+	             { label: '客户来源', name:'ownerSource',sortable : false,align : 'center',width:14,
+	            	 formatter:function(rowName, options, rowObject){
+	            	     var html = "";
+	            	     if(rowObject.parentSourceStr){
+	            	    	 html+=rowObject.parentSourceStr;
+	            	     }
+	            	     if(rowObject.childSourceStr){
+	            	    	 html+="</br>";
+	            	    	 html+=rowObject.childSourceStr;
+	            	     }
+	            	     return html;
+		             }	  
+	             },
+	             { label: '登记时间', name: 'createTimeStr',sortable : false,align : 'center',width:12 },
+	             { label: '转公客时间', name: 'operateTimeStr',sortable : false,align : 'center',width:12 },
+	             { label: '备注', name: 'remark',width:14}
+	         ],
+	         rownumbers : true,
+	         multiselect: true,
+	         multiboxonly: true,
+	         viewrecords: true, 
+	         autowidth:true,
+	         height: $(window).height()*0.6,
+	         rowNum:30, 
+		     rowList:[10,20,30,50,100],
+	         pager: "#jqGridPager",
+	     	 jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false} 
+	    });
+	}
+	aihome.getChildrenSource = function(element){
+		var parentId = $(element).val();
+		$("#childSource").children().remove();
+		if(parentId==""){
+			$("#childSource").append("<option value=''>请选择</option>");
+		}else{
+			$.ajax({
+				url: "${CTX}/houseLease/getSourcesByParentId.do",
+				data:{
+					parentId:parentId
+				},
+				type:"post",
+				dataType:"json",
+				async:false,
+				success:function(data){
+					var html = "";
+					if(data.length>0){
+						for(var i=0;i<data.length;i++){
+							html += "<option value='"+data[i].id+"'>"+data[i].source+"</option>";
+						}
+					}
+					$("#childSource").append(html);
+				}
+			});
+		}
+	}
+	
+	$(function(){
+		
+		aihome.init_jqGrid();
+		/** 按钮显示隐藏*/
+		$("#pool_claim").show();
+		$("#pool_comment").show();
+		
+		/** 查询 */
+		$("#pool_query").click(function(){
+			var param = getSearchParam();
+			param+="&poolType="+1;
+	 		$("#public_pool_jqGrid").setGridParam({url:"${CTX}/customerPool/getCustomerPoolListForPage.do?"+param,page:1}).trigger('reloadGrid');
+		}); 
+		
+		 /**意向小区-模糊搜索*/
+		$("#demandPremises").autocomplete({
+			source : function(request, response) {
+				$.ajax({
+					url : "${CTX}/houseLease/getPremisesByMatch.do",
+					dataType : "json",
+					type : 'post',
+					data : {
+						matchStr : request.term
+					},
+					success : function(data) {
+						var array = [];
+						for (var i = 0; i < data.length; i++) {
+							var temp = {
+								key : data[i].id,
+								value : data[i].name
+							};
+							array.push(temp);
+						}
+						response(array);
+					}
+				});
+			},
+			select : function(event, ui) {
+				$("#demandPremisesId").val(ui.item.key);
+				$("#demandPremises").val(ui.item.value);
+				event.preventDefault();
+			}
+		});
+		$("#demandPremises").blur(function(){
+			if($("#demandPremises").val()==""){
+				$("#demandPremisesId").val("");
+			}
+		});
+		 
+		/**需求区域-模糊搜索*/
+		$("#demandRegion").autocomplete({
+			source : function(request, response) {
+				$.ajax({
+					url : "${CTX}/customerPool/getBusiAreaByMatch.do",
+					dataType : "json",
+					type : 'post',
+					data : {
+						matchStr : request.term
+					},
+					success : function(data) {
+						var array = [];
+						for (var i = 0; i < data.length; i++) {
+							var temp = {
+								key : data[i].id,
+								value : data[i].busiAreaName
+							};
+							array.push(temp);
+						}
+						response(array);
+					}
+				});
+			},
+			select : function(event, ui) {
+				$("#demandRegionId").val(ui.item.key);
+				$("#demandRegion").val(ui.item.value);
+				event.preventDefault();
+			}
+		});
+		$("#demandRegion").blur(function(){
+			if($("#demandRegion").val()==""){
+				$("#demandRegionId").val("");
+			}
+		});
+		
+	});
+</script> 

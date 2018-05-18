@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="buildingUnits" >
+	<!-- 字段 -->
+  <sql id="Base_Column_List" >
+    ID as id, BUILDING_ID as buildingId, CODE as code, PREFIX as prefix, SUFFIX as suffix , ROOM_TOTAL as roomTotal
+    ,ROOM_IGNORE as roomIgnore, LADDERS as ladders,ELEVATOR as elevator,FLATS as flats, FLOORS as floors,  
+    UP_FLOORS as upFloors, UNDER_FLOORS as underFloors,NUM_START as numStart,NUM_END as numEnd,
+    GENERATIVE_RULE as generativeRule,CREATE_TIME as createTime, UPDATE_TIME as updateTime,LAND_LIMIT as landLimit,
+    BUILDING_TYPE as buildingType,BUILDING_CONST as buildingConst,HOUSE_NATURE as houseNature,PURPOSE as purpose,
+    BUILDING_YEAR as buildingYear,STATUS as status,HIDDEN_STATUS as hiddenStatus,PREMISES_ID as premisesId,
+    BUILDING_GROUP_ID as buildingGroupId
+  </sql>
+  <!--根据id查询单元数据  -->
+  <select id="getBuildingUnits" resultType="buildingUnitsModel" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from BUILDING_UNITS
+    where ID = #{buildingUnitsId}
+  </select>
+  <!--根据楼栋id查询单元数据  -->
+  <select id="getBuildingUnitNum" resultType="java.lang.Integer" parameterType="map" >
+    select 
+    count(0)
+    from BUILDING_UNITS
+    where BUILDING_ID = #{buildingId}
+  </select>
+    <!--根据buildingId查询单元数据  -->
+  <select id="getBuildingUnitInfo" resultType="buildingUnitsModel" parameterType="map" >
+    select 
+    ID as id,CODE as code,PREFIX as prefix,SUFFIX as suffix,ROOM_TOTAL as roomTotal
+    ,ROOM_IGNORE as roomIgnore, LADDERS as ladders,ELEVATOR as elevator,FLATS as flats, FLOORS as floors,  
+    UP_FLOORS as upFloors, UNDER_FLOORS as underFloors,NUM_START as numStart,NUM_END as numEnd,GENERATIVE_RULE as generative_rule
+    from BUILDING_UNITS 
+    <if test="buildingId != null and buildingId !=''" >
+    where BUILDING_ID = #{buildingId}
+    </if>
+    <if test="unitId != null and unitId !=''" >
+    where ID = #{unitId}
+    </if>
+    ORDER BY CASE WHEN ascii(CODE) BETWEEN 48 AND 57 THEN TO_NUMBER(CODE) ELSE ascii(CODE) END
+  </select>
+  <!-- 根据id删除单元数据 -->
+  <delete id="deleteBuildingUnits" parameterType="map" >
+    delete from BUILDING_UNITS
+    where ID IN (${buildingUnitsIds})
+  </delete>
+  <!-- 添加单元信息全 -->
+  <insert id="insert" parameterType="map" >
+    insert into BUILDING_UNITS (
+    	ID, BUILDING_ID, CODE, 
+		PREFIX, SUFFIX, ROOM_TOTAL, 
+		ROOM_IGNORE, LADDERS, ELEVATOR, 
+		FLATS, FLOORS, UP_FLOORS, 
+		UNDER_FLOORS,NUM_START,NUM_END,
+		GENERATIVE_RULE,CREATE_TIME,
+		UPDATE_TIME,
+		LAND_LIMIT,BUILDING_TYPE ,
+		BUILDING_CONST,HOUSE_NATURE,
+		PURPOSE,BUILDING_YEAR,
+		STATUS,HIDDEN_STATUS,
+		PREMISES_ID,BUILDING_GROUP_ID
+		)
+    values (#{id}, #{buildingId}, #{code}, 
+      #{prefix}, #{suffix}, #{roomTotal,}, 
+      #{roomIgnore}, #{ladders}, #{elevator}, 
+      #{flats}, #{floors}, #{upFloors}, 
+      #{underFloors},#{numStart},#{numEnd},
+      #{generativeRule},#{createTime},
+      #{updateTime},
+      #{landLimit},#{buildingType},
+      #{buildingConst},#{houseNature},
+      #{purpose},#{buildingYear},
+      #{status},#{hiddenStatus},
+      #{premisesId},#{buildingGroupId})
+  </insert>
+  <!--有选择添加单元信息  -->
+  <insert id="insertSelective" useGeneratedKeys="true" parameterType="map" >
+  	<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="BudingUnitId">
+		SELECT BUILDING_UNITS_SEQ.NEXTVAL FROM DUAL
+	</selectKey>
+    insert into BUILDING_UNITS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+        ID,
+      <if test="buildingId != null and buildingId !=''" >
+        BUILDING_ID,
+      </if>
+      <if test="code != null and code !=''" >
+        CODE,
+      </if>
+      <if test="prefix != null and prefix !=''" >
+        PREFIX,
+      </if>
+      <if test="suffix != null and suffix !=''" >
+        SUFFIX,
+      </if>
+      <if test="roomTotal != null and roomTotal !=''" >
+        ROOM_TOTAL,
+      </if>
+      <if test="roomIgnore != null and roomIgnore !=''" >
+        ROOM_IGNORE,
+      </if>
+      <if test="ladders != null and ladders !=''" >
+        LADDERS,
+      </if>
+      <if test="elevator != null and elevator !=''" >
+        ELEVATOR,
+      </if>
+      <if test="flats != null and flats !=''" >
+        FLATS,
+      </if>
+      <if test="floors != null and floors !=''" >
+        FLOORS,
+      </if>
+      <if test="upFloors != null and upFloors !=''" >
+        UP_FLOORS,
+      </if>
+      <if test="underFloors != null and underFloors !=''">
+        UNDER_FLOORS,
+      </if>
+       <if test="numStart != null and numStart != ''" >
+        NUM_START,
+      </if>
+      <if test="numEnd != null and numEnd !=''" >
+        NUM_END,
+      </if>
+       <if test="generativeRule != null and generativeRule !=''" >
+        GENERATIVE_RULE,
+      </if>
+        CREATE_TIME,
+        UPDATE_TIME,
+      <if test="premisesId != null and premisesId != '' " >
+        PREMISES_ID,
+      </if>
+      <if test="groupId != null and groupId != '' " >
+        BUILDING_GROUP_ID,
+      </if>
+       <if test="landLimit != null and landLimit != '' " >
+        LAND_LIMIT,
+      </if>
+       <if test="buildingType != null and buildingType != '' " >
+        BUILDING_TYPE,
+      </if>
+       <if test="buildingConst != null and buildingConst != '' " >
+        BUILDING_CONST,
+      </if>
+       <if test="houseNature != null and houseNature != '' " >
+        HOUSE_NATURE,
+      </if>
+       <if test="purpose != null and  purpose != '' " >
+        PURPOSE,
+      </if>
+       <if test="buildingYear != null and buildingYear != '' " >
+        BUILDING_YEAR,
+      </if>
+       <if test="status != null and status != '' " >
+        STATUS,
+      </if>
+       <if test="hiddenStatus != null and hiddenStatus != '' " >
+        HIDDEN_STATUS
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        #{BudingUnitId},
+      <if test="buildingId != null and buildingId != ''" >
+        #{buildingId},
+      </if>
+      <if test="code != null and code != ''" >
+        #{code},
+      </if>
+      <if test="prefix != null and prefix !=''" >
+        #{prefix},
+      </if>
+      <if test="suffix != null and suffix !=''" >
+        #{suffix},
+      </if>
+      <if test="roomTotal != null and roomTotal !=''" >
+        #{roomTotal},
+      </if>
+      <if test="roomIgnore != null and roomIgnore !=''" >
+        #{roomIgnore},
+      </if>
+      <if test="ladders != null and ladders != ''" >
+        #{ladders},
+      </if>
+      <if test="elevator != null and elevator != ''" >
+        #{elevator},
+      </if>
+      <if test="flats != null and flats != ''" >
+        #{flats},
+      </if>
+      <if test="floors != null and floors !=''" >
+        #{floors},
+      </if>
+      <if test="upFloors != null and upFloors != ''" >
+        #{upFloors},
+      </if>
+      <if test="underFloors != null and underFloors != ''">
+        #{underFloors},
+      </if>
+       <if test="numStart != null and numStart !=''" >
+        #{numStart},
+      </if>
+      <if test="numEnd != null and numEnd != ''" >
+        #{numEnd},
+      </if>
+       <if test="generativeRule != null and generativeRule != ''" >
+        #{generativeRule},
+      </if>
+        SYSDATE,
+        SYSDATE,
+      <if test="premisesId != null and premisesId != ''" >
+      	#{premisesId},
+      </if>
+      <if test="groupId != null and groupId != ''" >
+        #{groupId},
+      </if>
+       <if test="landLimit != null and landLimit != '' " >
+        #{landLimit},
+      </if>
+       <if test="buildingType != null and buildingType != '' " >
+        #{buildingType},
+      </if>
+       <if test="buildingConst != null and buildingConst != '' " >
+        #{buildingConst},
+      </if>
+       <if test="houseNature != null and houseNature != '' " >
+        ${houseNature},
+      </if>
+       <if test="purpose != null and purpose !='' "  >
+        #{purpose},
+      </if>
+       <if test="buildingYear != null and buildingYear != '' " >
+        #{buildingYear},
+      </if>
+       <if test="status != null and status != '' " >
+        #{status},
+      </if>
+       <if test="hiddenStatus != null and hiddenStatus != '' " >
+        #{hiddenStatus}
+      </if>
+    </trim>
+  </insert>
+  <!-- 根据id有选择 跟新数据 -->
+  <update id="updateSelective" parameterType="map" >
+    update BUILDING_UNITS
+    <set >
+      <if test="buildingId != null and buildingId !='' " >
+        BUILDING_ID = #{buildingId},
+      </if>
+      <if test="code != null and code != '' " >
+        CODE = #{code},
+      </if>
+      <if test="prefix != null and prefix != '' " >
+        PREFIX = #{prefix},
+      </if>
+      <if test="suffix != null and suffix != '' " >
+        SUFFIX = #{suffix},
+      </if>
+      <if test="roomTotal != null and roomTotal != '' " >
+        ROOM_TOTAL = #{roomTotal},
+      </if>
+      <if test="roomIgnore != null  and roomIgnore != ''" >
+        ROOM_IGNORE = #{roomIgnore},
+      </if>
+      <if test="ladders != null  and ladders != ''" >
+        LADDERS = #{ladders},
+      </if>
+      <if test="elevator != null  and elevator != ''" >
+        ELEVATOR = #{elevator},
+      </if>
+      <if test="flats != null  and flats != ''" >
+        FLATS = #{flats},
+      </if>
+      <if test="floors != null and floors != '' " >
+        FLOORS = #{floors},
+      </if>
+      <if test="upFloors != null and upFloors != ''" >
+        UP_FLOORS = #{upFloors},
+      </if>
+      <if test="underFloors != null and underFloors != ''" >
+        UNDER_FLOORS = #{underFloors},
+      </if>
+       <if test="numStart != null and numStart != ''" >
+        NUM_START = #{numStart},
+      </if>
+      <if test="numEnd != null and numEnd != ''" >
+        NUM_END = #{numEnd},
+      </if>
+      <if test="generativeRule != null and generativeRule != '' " >
+        GENERATIVE_RULE = #{generativeRule},
+      </if>
+        UPDATE_TIME = SYSDATE,
+      <if test="landLimit != null and landLimit != '' " >
+        LAND_LIMIT = #{landLimit},
+      </if>
+      <if test="buildingType != null and buildingType != '' " >
+        BUILDING_TYPE = #{buildingType},
+      </if>
+      <if test="buildingConst != null and buildingConst != '' " >
+        BUILDING_CONST = #{buildingConst},
+      </if>
+      <if test="houseNature != null and houseNature != '' " >
+        HOUSE_NATURE = #{houseNature},
+      </if>
+      <if test="purpose != null and purpose != '' " >
+        PURPOSE = #{purpose},
+      </if>
+      <if test="buildingYear != null and buildingYear != ''" >
+        BUILDING_YEAR = #{buildingYear},
+      </if>
+      <if test="status != null and status != '' " >
+        STATUS = #{STATUS},
+      </if>
+      <if test="hiddenStatus != null and hiddenStatus != '' " >
+        HIDDEN_STATUS = #{hiddenStatus},
+      </if>
+      <if test="premisesId != null and premisesId != '' " >
+        PREMISES_ID = #{premisesId},
+      </if>
+       <if test="GroupId != null and GroupId != '' " >
+        BUILDING_GROUP_ID = #{GroupId}
+      </if>
+    </set>
+    where ID = #{id}
+  </update>
+  
+   <!-- 根据楼栋id跟新分组id -->
+  <update id="updateGroupid" parameterType="map" >
+    update BUILDING_UNITS
+    <set >
+       <if test="groupIdIsNull != null " >
+        BUILDING_GROUP_ID = ${groupIdIsNull}
+      </if>
+    </set>
+    <where>
+    	<if test="buildingId != null and buildingId !=''">
+    		BUILDING_ID = #{buildingId}
+    	</if>
+    	<if test="groupId != null and groupId !=''">
+    		BUILDING_GROUP_ID IN (${groupId})
+    	</if>
+    </where>
+  </update>
+  
+  <!-- 根据id跟新全部数据  -->
+  <update id="update" parameterType="map" >
+    update BUILDING_UNITS
+    set BUILDING_ID = #{buildingId,jdbcType=DECIMAL},
+      CODE = #{code,jdbcType=VARCHAR},
+      PREFIX = #{prefix,jdbcType=VARCHAR},
+      SUFFIX = #{suffix,jdbcType=VARCHAR},
+      ROOM_TOTAL = #{roomTotal,jdbcType=DECIMAL},
+      ROOM_IGNORE = #{roomIgnore,jdbcType=VARCHAR},
+      LADDERS = #{ladders,jdbcType=DECIMAL},
+      ELEVATOR = #{elevator,jdbcType=DECIMAL},
+      FLATS = #{flats,jdbcType=DECIMAL},
+      FLOORS = #{floors,jdbcType=DECIMAL},
+      UP_FLOORS = #{upFloors,jdbcType=DECIMAL},
+      UNDER_FLOORS = #{underFloors,jdbcType=CHAR},
+      NUM_START = #{numStart},
+      NUM_END = #{numEnd},
+      GENERATIVE_RULE = #{generativeRule},
+      CREATE_TIME = #{createTime},
+      UPDATE_TIME = #{updateTime},
+      LAND_LIMIT =  #{landLimit},
+   	  BUILDING_TYPE = #{buildingType},
+   	  BUILDING_CONST = #{buildingConst},
+   	  HOUSE_NATURE = #{houseNature},
+   	  PURPOSE = #{purpose},
+      BUILDING_YEAR = #{buildingYear},
+      STATUS = #{status},
+      HIDDEN_STATUS = #{hiddenStatus},
+      PREMISES_ID = #{premisesId},
+      BUILDING_GROUP_ID = #{buildingGroupId}
+    where buildingUnitsId = #{id,jdbcType=DECIMAL}
+  </update>
+  	<!-- 批量添加单元 -->
+   	<insert id="insertBatch" parameterType="map" useGeneratedKeys="false">  
+	   	insert into BUILDING_UNITS (id,CODE) 
+	    	select BUILDING_UNITS.NEXTVAL,a.* from (
+	    <foreach collection="codes" item="item" index="index" separator="UNION ALL" >
+	    	SELECT 
+	         #{item}
+	        FROM DUAL
+	    </foreach>)a
+    </insert>
+    
+   <!--根据单元id查询单元存在  -->
+  <select id="getUnit" resultType="java.lang.Integer" parameterType="map" >
+    select 
+    count(0)
+    from BUILDING_UNITS
+    where ID = #{id}
+  </select>
+</mapper>

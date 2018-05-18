@@ -1,0 +1,474 @@
+<div id="top_tools" class=" btn-group">
+  <button id="area_query" class="btn btn-sm btn-white" >
+    <i class="iconfont">&#xe6e4;</i>
+    <span>查询</span>
+  </button>
+
+  <button id="add_area" class="btn btn-sm btn-white ladda-button" onclick="editArea(1);">
+    <i class="iconfont">&#xe6e0;</i>
+    <span>新增</span>
+  </button>
+
+ <button id="area_edit" class="btn btn-sm btn-white btn-default" onclick="editArea(2);">
+    <i class="iconfont">&#xe6dd;</i>
+    <span>修改</span>
+  </button>
+  
+  <button id="area_del" class="btn btn-sm btn-white btn-info" onclick="deteleHint();">
+    <i class="iconfont">&#xe6e3;</i>
+    <span>删除</span>
+  </button>
+</div>
+	<div class="row">
+		<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+		 	<div id="element_id">
+				<div class="form-horizontal row my-inputs">
+					<div class="col-md-2 col-sm-6">
+						<div class=" form-xs form-group row">
+							<label for="userName" class="col-xs-4 control-label">省份：</label>
+							<div class="col-xs-8" >
+								<select id="province" disabled  class="province input-xs form-control">
+										<option value="">请选择省</option>
+									<#list provinceList as item>
+										<option value="${item.id!}">${item.name!}</option>
+									</#list>
+								</select>
+							</div>
+						</div>
+		           	</div>
+					<div class="col-md-2 col-sm-6">
+						<div class=" form-xs form-group row">
+							<label for="roleName" class="col-xs-4 control-label">市：</label>
+							<div class="col-xs-8" >
+								<select id="city" disabled class="city input-xs form-control">
+										<option id="cityOption" value="">请选择市</option>
+								</select>
+							</div>
+						</div>
+		           	</div>
+					<div class="col-md-2 col-sm-6">
+						<div class=" form-xs form-group row">
+							<label for="powerName" class="col-xs-4 control-label">区：</label>
+							<div class="col-xs-8">
+								<select id="area" class="area input-xs form-control" >
+									<option id="areaOption" value="" seleect="selected">请选择区</option>
+								</select>
+							</div>
+						</div>
+		           	</div>
+		           	<div class="col-md-2 col-sm-6">
+						<div class=" form-xs form-group row">
+							<label for="powerName" class=" col-xs-4 control-label">街道：</label>
+							<div class=" col-xs-8">
+								<select id="subdistrict" class="area input-xs form-control" onchange="getCommunity(this.value)">
+									<option id="areaOption" value="">请选择街道</option>
+								</select>
+							</div>
+						</div>
+		           	</div>
+		           	<div class="col-md-1 col-sm-6"></div>
+		           	<div class=" col-md-3 col-sm-3">
+		                <div class=" form-xs form-group row" id="inputHidden"  >
+		                	<label for="addClass" class="col-md-4 col-sm-4 col-xs-4 control-label">区域名称：</label>
+		                    <div class="col-md-8 col-sm-8 col-xs-8">
+		                    	<input type="hidden" id="keyWordName" name="keyWordName" value ="" />
+		                    	<input class="col-md-8 col-sm-8 col-xs-8 selectInput" type="text" id="keyWord" placeholder="请输入区名称" value="">
+		                    </div>
+		                    <input id="virtualId" value="" type="hidden"></input>
+		                </div>
+		            </div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 my-grid " >
+			<!-- PAGE CONTENT BEGINS -->
+			<table id="area_jqGrid">
+			
+			</table>
+			<div id="jqGridPager"></div>
+			<!-- PAGE CONTENT ENDS -->
+		</div>
+	</div>
+<input type="hidden" id="hiddenProvinceStr" value=""/>
+<input type="hidden" id="hiddenCityStr" value=""/>
+<input type="hidden" id="hiddenAreaStr" value=""/>
+<input type="hidden" id="hiddenSubdistrictStr" value=""/>
+<input type="hidden" id="hiddenCity" value=""/>
+<input type="hidden" id="hiddenArea" value=""/>
+<input type="hidden" id="hiddenSubdistrict" value=""/>
+<input type="hidden" id="areaLevel" value=""/>
+<script type="text/javascript">
+$('.page-content-area').ace_ajax('loadScripts', [null,null], function () {});
+$(function (){
+	/* 模糊搜索*/
+	$("#keyWord").autocomplete({
+	  	source : function(request, response) {
+	  		$.ajax({
+	  			url : "${CTX}/area/getAreaListByMatch.do",
+	  			dataType : "json",
+	  			type : 'post',
+	  			data : {
+	  				matchStr : request.term,
+	  				different: $("#areaLevel").val(),
+	  				pId: $("#virtualId").val()
+	  			},
+	  			success : function(data) {
+	  				var array = new Array(data.length);
+	  				for (var i = 0; i < data.length; i++) {
+	  					var temp = {
+	  						key : data[i].id,
+	  						value : data[i].name
+	  					};
+	  					array[i] = temp;
+	  				}
+	  				response(array);
+	  			}
+	  		});
+	  	},
+	  	select : function(event, ui) {
+	  		$("#keyWordName").val(ui.item.key);
+	  		$("#keyWord").val(ui.item.value);
+	  		event.preventDefault();
+	  	}
+	  });
+	$("#area").change(function (){
+		$("#add_area").show();
+		$("#area_edit").show();
+		$("#inputHidden").show();
+		$("#areaLevel").val("3");
+		$("#hiddenSubdistrict").val("");
+		$("#keyWord").val("");
+    	$("#hiddenArea").val($(this).val());
+    	$("#hiddenAreaStr").val($("#area  option:selected").text());
+        if($("#area option:selected").text()=="请选择区"){
+        	$("#keyWord").attr("placeholder","请输入区名称");
+        	$("#areaLevel").val("2");
+        	$("#subdistrict").children().first().siblings().remove();
+        	urlType($("#city  option:selected").val(),1);
+        	return false;
+        }else{
+        	$("#keyWord").attr("placeholder","请输入街道名称");
+        	getSubdistrict($(this).val(),"subdistrict");
+        }
+        
+    });
+	$("#city").change(function (){
+		$("#add_area").show();
+		$("#area_edit").show();
+		$("#inputHidden").show();
+		$("#areaLevel").val("2");
+		$("#subdistrict").children().first().siblings().remove();
+		$("#hiddenArea").val("");
+		$("#hiddenSubdistrict").val("");
+		$("#keyWord").val("");
+		getAddress($(this).val(),"area");
+		 if($("#city option:selected").text()=="请选择市"){
+			 $("#keyWord").attr("placeholder","请输入市名称");
+			 $("#areaLevel").val("1");
+			 $("#add_area").hide();
+	        	return false;
+		 }
+		$("#keyWord").attr("placeholder","请输入区名称");
+    	$("#hiddenCity").val($(this).val());
+    	$("#hiddenCityStr").val($("#city  option:selected").text());
+    });
+	$("#province").change(function (){
+		$("#add_area").hide();
+		$("#area_edit").hide();
+		$("#inputHidden").hide();
+		$("#area").children().first().siblings().remove();
+		$("#subdistrict").children().first().siblings().remove();
+		$("#keyWord").val("");
+    	getAddress($(this).val(),"city");
+    	$("#city option").each(function(){
+            if($(this).text()=="杭州市"){ 
+            	$(this).attr("selected",true);
+            	$("#city").trigger("change");
+            }
+        });
+    	$("#hiddenProvinceStr").val($("#province  option:selected").text());
+    });
+	
+	
+	$("#province option").each(function(){
+        if($(this).text()=="浙江省"){
+        	$(this).attr("selected",true);
+        	$("#province").trigger("change");
+        }
+    });
+	
+	 /* 条件查询 */
+	 $("#area_query").click(function(){
+		var param = getSearchParam()
+		var different = $("#areaLevel").val();//判断所选分页是什么等级 区 街道 社区
+		if(different == 3){
+			searchUrl = '${CTX}/area/subdistrictPage.do';//条件查询街道的分页地址
+		}else if(different == 2){
+			searchUrl = '${CTX}/area/areaListPage.do';//条件查询区的分页地址
+		}else{
+			searchUrl = '${CTX}/area/communityPage.do';//条件查询社区的分页地址
+		}
+		$("#area_jqGrid").setGridParam({url:searchUrl,postData:{name: $("#keyWord").val()}}).trigger("reloadGrid");
+	 });
+    areaListInit();
+});
+var searchUrl = "";
+function areaListInit(){
+	 $("#area_jqGrid").jqGrid({
+		height: $(window).height()-203,
+		multiselect: true,
+	    multiboxonly: true,
+	    viewrecords: true,
+	    autowidth:true,
+	    rownumbers:true,
+	    async:false,
+      	url: searchUrl,
+      	postData: {    
+      		 areaId: $("#virtualId").val()
+      	},   
+      	datatype: "json",                
+      	colNames : ['区编码','名称','是否外网显示','备注','排序'],
+      	colModel: [
+          {  name: 'areaCode',index:'areaCode',sortable : false, width: 50,align: "center"},
+          {  name: 'name',index:'name',sortable : false, width: 50},
+          {  name: 'showStatusStr',index:'showStatusStr',sortable : false, width: 50,align: "center"},
+          {  name: 'remark',index:'remark',sortable : false, width: 50},
+          {  name: 'sort',index:'sort',sortable : true, width: 50,align: "center"}
+      	],
+      	gridComplete: function () {},
+      	rowNum:30, 
+	  	rowList:[10,20,30,50,100],
+      	pager: "#jqGridPager",
+  	 	jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false}
+  	});
+}
+/* 省市下拉onchange事件得到--省市区--列表数据 下拉中的数据*/
+function getAddress(val,objId){
+	 $.ajax({
+	       type: "post",
+	       url: "${CTX}/area/getAreaList.do", 
+	       async:false,
+	       dataType:'json',
+	       data: {"eareId":val},
+	       success: function(data){
+	    	   changeAddress(data,objId);
+	       },
+	 });
+	 urlType(val,1);
+}
+/* 区下拉onchange得到--街道--列表数据 下拉中的数据 */
+function getSubdistrict(val,objId){
+	$("#area_edit").show();
+	$("#add_area").show();
+	 $.ajax({
+	       type: "post",
+	       url: "${CTX}/area/getSubdistrictList.do", 
+	       async:false,
+	       dataType:'json',
+	       data: {"baseAreaId":val},//区ID 查询该区下街道集合
+	       success: function(data){
+	    	   changeAddress(data,objId);
+	       }
+	 });
+	 urlType(val,2);//val 是选中的区ID
+}
+/* 改变街道的onchanges事件 */
+function getCommunity(id){
+	$("#hiddenSubdistrictStr").val($("#subdistrict  option:selected").text());
+	$("#areaLevel").val("4");
+	$("#keyWord").val("");
+	$("#hiddenSubdistrict").val(id);
+  	if($("#subdistrict option:selected").text()=="请选择街道"){
+  		$("#keyWord").attr("placeholder","请输入街道名称");
+  		$("#areaLevel").val("3");
+     	urlType($("#area  option:selected").val(),2);
+    }else{
+      $("#keyWord").attr("placeholder","请输入社区名称");
+   	  urlType(id,3)
+    }
+}
+/* 省市级联onchange事件触发后对请求回的数据进行编辑格式 */
+function changeAddress(data,objId){
+	$("#"+objId).children().first().siblings().remove();
+	var str = "";
+	for(var i=0;i<data.length;i++){
+		var areaName = data[i].name;
+		var areaId = data[i].id
+	  	var areaShow = $("#"+objId);
+		str = '<option value="'+areaId+'">'+areaName+'</option>';
+		areaShow.append(str); //onchange事件后追加下一级下拉框中的数据
+	}
+
+}
+/* 根据标识及ID选择不同的分页-url*/
+function urlType(id,num){ //ID是选中上一级的ID 街道分页 ID是区   区分页ID是市
+	$("#virtualId").val(id);
+	if(num == 2){
+		searchUrl = '${CTX}/area/subdistrictPage.do';//街道的分页地址
+	}else if(num == 1){
+		searchUrl = '${CTX}/area/areaListPage.do';//区的分页地址
+	}else if(num == 3){
+		searchUrl = '${CTX}/area/communityPage.do';//社区的分页地址
+	}
+	$("#area_jqGrid").setGridParam({url:searchUrl,postData:{name:$("#keyWord").val(),areaId: $("#virtualId").val()}}).trigger("reloadGrid");
+}
+
+/* 新增和修改 */
+function editArea(num){
+	var cityId = $("#hiddenCity").val();//市ID
+	var areaId = $("#hiddenArea").val();//区ID
+	var subdistrictId = $("#hiddenSubdistrict").val();//街道ID
+	var provinceStr = $("#hiddenProvinceStr").val();
+	var cityStr = $("#hiddenCityStr").val();
+	var subdistrictStr = $("#hiddenSubdistrictStr").val();
+	var AreaStr = $("#hiddenAreaStr").val();
+	var different = $("#areaLevel").val();
+	var unifyId ="";
+	var title = "";
+	var areaAll = provinceStr+" "+cityStr;
+	if(subdistrictId){
+		unifyId = subdistrictId
+		unifyStr = subdistrictStr
+	}else if(areaId){
+		unifyId = areaId
+		unifyStr = AreaStr
+	}else if(cityId){
+		unifyId = cityId
+		unifyStr = cityStr
+	}
+	var rowId ="";
+	if(num==2){//修改
+		rowId = $("#area_jqGrid").jqGrid('getGridParam','selarrrow');
+		var rowData = $("#area_jqGrid").jqGrid('getRowData',rowId);
+		var selCount=rowId.length;
+		if (selCount==0){
+			alert("没有选中的记录！");
+			return;
+		}else if(selCount>1){
+			alert("请选单条修改！");
+			return;
+		}
+		
+		 title="修改区域"
+	}else{
+		 title="新增区域"
+	}
+	oaDialogOpen("addArea",//对话框ID，必填，且不能与当前页面的ID重复
+		      {url:"${CTX}/area/addAreaIndex.do?"+"baseAreaId="+unifyId+"&areaAll="+encodeURI(encodeURI(areaAll))+"&different="+different+"&unifyStr="+encodeURI(encodeURI(unifyStr))+"&rowId="+rowId,//调用页面的url
+		      title:title,//弹框的title
+		      closeOnEscpe:true,//是否通过escpe关闭弹框
+		      closeBtn:true,//是否显示关闭按钮
+		      width:500,//弹框的宽度
+		      height:400,
+		      buttons:{
+		    	  "确定" : function() {
+		    		 if(judgeInput()){//确定前的判定
+		    			$(this).dialog("close");
+		    		 }
+		    	  },
+		          "取消" : function() {
+		             	$(this).dialog("close");
+		          }
+		      },
+		      closeCall:function(){//弹框关闭后的回调函数
+		    	  $("#area_jqGrid").trigger("reloadGrid");//刷新分页
+		    	  if(different==3){   //新增街道时 刷新街道下拉列表
+		    		  getSubdistrict(unifyId,"subdistrict");
+		    	  }else if(different==2){ //新增区时 刷新区下拉列表
+		    		  getAddress(unifyId,"area");
+		    	  }
+		      }
+		  })
+}
+/* 删除前的验证*/
+function deteleHint(){
+	var different = $("#areaLevel").val();
+	var rowIds = $("#area_jqGrid").jqGrid('getGridParam','selarrrow');
+	var selCount=rowIds.length;
+	if (selCount==0){
+		alert("没有选中的记录！");
+		return;
+	}
+	var result = false;
+	var url = "${CTX}/area/deteleHint.do";
+		$.ajax({
+			url : url,
+			dataType : "json",
+			data : {
+				rowIds : rowIds.join(","),//多条数据时，不连接 只会传一条数据
+				different:different
+			},
+			success : function(data) {
+				if(data==4){
+					alert("当前区下存在有效道路号,无法删除!");
+				}
+				if(data==5){
+					alert("当前区下存在有效道商圈,无法删除!");
+				}
+				if(data==6){
+					alert("当前街道已被楼盘引用,无法删除!");
+				}
+				if(data==7){
+					alert("当前社区已被楼盘引用,无法删除!");
+				}
+				if(data==1){
+					if(confirm("所选择的街道下存在社区,是否继续删除操作")){
+						deteleArea(rowIds,different,2)
+						result = true;
+					}
+				}
+				if(data==3){
+					if(confirm("所选择的区下存在街道,是否继续删除操作")){
+						deteleArea(rowIds,different,1)
+						result = true;
+					}
+				}
+				if(data==2){
+					if(selCount!=1){
+						if(confirm("确定删除所有吗？")){
+							deteleArea(rowIds,different)
+							result = true;
+						}
+					}else{
+						if(confirm("确定删除吗？")){
+							deteleArea(rowIds,different)
+							result = true;
+						}
+					}
+				}
+			}
+		});
+	if(!result){
+		return result
+	}
+}
+/* 删除*/
+function deteleArea(rowIds,different,type){
+	var url = "${CTX}/area/deteleArea.do";
+		$.ajax({
+			url : url,
+			dataType : "json",
+			data : {
+				rowIds : rowIds.join(","),//多条数据时，不连接 只会传一条数据
+				different:different,
+				type:type
+			},
+			success : function(data) {
+				if(data==1){//删除成功
+					$("#area_jqGrid").trigger('reloadGrid');
+					  if(different==3){   //新增街道时 刷新街道下拉列表
+			    		  getSubdistrict($("#hiddenArea").val(),"subdistrict");
+			    	  }else if(different==2){ //新增区时 刷新区下拉列表
+			    		  getAddress($("#hiddenCity").val(),"area");
+			    	  }
+					alert("删除成功！");
+				}else{
+					alert("删除失败！");
+				}
+			}
+		});
+}
+</script>
+<style>
+	.ui-jqgrid tr.jqgrow td {text-overflow : ellipsis;}
+</style>

@@ -1,0 +1,316 @@
+<div class="col-sm-12 col-xs-12 my-group">
+	<div class="form-horizontal row ">
+
+		<div class=" row ">
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="name" class="col-xs-4 control-label">楼盘名称：</label>
+					<div class="col-xs-8">
+						<input id="name" class="form-control input-xs"  />
+						<input id="nameId" class="form-control input-xs searchKey"  type="hidden" />	 
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row"></div>
+			</div>
+		</div>
+
+		<div class=" row ">
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">商圈：</label>
+					<div class="col-xs-4">
+						<select id="busiAreaParentIdLayout" onchange="aihome.getBusiAreaLayout();" class="input-xs form-control">
+							<option value=""></option>
+							<#if busiZoningList??>
+							<#list busiZoningList as item>
+								<option value="${item.id!}">${item.busiAreaName!}</option>
+							</#list>
+							</#if>
+						</select>
+					</div>
+					<div class="col-xs-4">
+						<select id="busiAreaIdLayout" class="input-xs form-control">
+							<option value=""></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			</div>
+			<div class=" row ">
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="substrictName" class="col-xs-4 control-label">街道：</label>
+					<div class="col-xs-8">
+						<input id="substrictName" class="form-control input-xs"  />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-5 col-sm-5">
+				<div class="form-xs form-group row">
+					<label for="communityName" class="col-xs-4 control-label">社区：</label>
+					<div class="col-xs-8">
+						<select id="communityName" class="input-xs form-control">
+							<option value=""></option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class=" row ">
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">起价：</label>
+					<div class="col-xs-8">
+						<input id="startingAtPriceStart" class=" input-xs" style="width: 36%;" />--
+						<input id="startingAtPriceEnd" class=" input-xs" style="width: 36%;" />元/m&sup2;
+					</div>
+				</div>
+			</div>
+			<div class="col-md-5 col-sm-5">
+				<div class="form-xs form-group row">
+					<label for="" class="col-xs-4 control-label">均价：</label>
+					<div class="col-xs-8">
+						<input id="averagePriceStart" class=" input-xs" style="width: 36%;" />--
+						<input id="averagePriceEnd" class=" input-xs" style="width: 36%;" />元/m&sup2;
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class=" row ">
+			<div class="col-md-5 col-sm-5">
+				<div class="form-xs form-group row">
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-6">
+				<div class="form-xs form-group row">
+					<div class="col-xs-8">
+					<button  class="btn btn-sm btn-blue"
+						onclick="aihome.queryAddPremises();">
+						 <span>查询</span>
+					</button>
+						<button  class="btn btn-sm btn-blue"
+							onclick="aihome.cleanAddPremises();">
+							 <span>清空</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<table id="addPremisesJqGrid"></table>
+	<div id="addPremisesJqGridPager"></div>
+</div>
+
+
+<script type="text/javascript">
+
+aihome.addPremisesInit = function () {
+	$("#addPremisesJqGrid")
+			.jqGrid(
+					{
+						height : $(window).height() *0.7,
+						multiselect : true,
+						multiboxonly : true,
+						viewrecords : true,
+						rownumbers : true,
+						autowidth : true,
+						autoheight : true,
+						async : false,
+						url : "${CTX}/customerSource/getPremisesPage.do",
+						postData : {
+							demandType :$("#demandType").val(),
+							propertyType :$("#propertyType").val()
+						},
+						datatype : "json",
+						colNames : [ '楼盘名称', '楼盘地址', '起价（万元）','均价（万元）', '建筑商' 
+						             , '楼盘id' , '区域id' , 'auditingStatus' ],
+						colModel : [       
+									{name : 'name',sortable : false,width : 8,align : 'center',
+										formatter:function(rowName, options, rowObject){
+											 var html = "";
+											 if(rowObject.name){
+												 html += "<a style='color: blue;' onclick='aihome.toPremisesDetails(" + rowObject.id + ")'>"+rowObject.name +"</a>";
+											 }
+						            	     return html;
+							             }}, 
+									{name : 'addrDetail',sortable : false,width : 12,align : 'center'}, 
+									{name : 'startingAtPrice',sortable : false,width : 4,align : 'center'}, 
+									{name : 'averagePrice',sortable : false,width : 4,align : 'center'}, 
+									{name : 'builder',sortable : false,width : 4,align : 'center'},
+									{name : 'id',hidden:true},
+									{name : 'areaId',hidden:true},
+									{name : 'auditingStatus',hidden:true}
+									],
+						rowNum : 10,
+						rowList : [ 10, 20, 30, 50, 100 ],
+						pager : "#addPremisesJqGridPager",
+						jsonReader : {
+							root : 'pagerResults',
+							page : 'currentPage',
+							rows : 'rowCount',
+							total : 'pageCount',
+							records : 'totalCount',
+							repeatitems : false
+						}
+					});
+}
+/* 查询 */
+aihome.queryAddPremises = function () {
+	$("#addPremisesJqGrid").setGridParam({
+		postData : {
+			name : $("#name").val(),
+			startingAtPriceStart : $("#startingAtPriceStart").val(),
+			startingAtPriceEnd : $("#startingAtPriceEnd").val(),
+			averagePriceStart : $("#averagePriceStart").val(),
+			averagePriceEnd : $("#averagePriceEnd").val(),
+			busiAreaParentId: $("#busiAreaParentIdLayout").val(),
+			busiAreaId: $("#busiAreaIdLayout").val()
+		}
+	}).trigger("reloadGrid");
+}
+
+/* 清空 */
+aihome.cleanAddPremises = function () {
+	$("#name").val(''),
+	$("#startingAtPriceStart").val(''),
+	$("#startingAtPriceEnd").val(''),
+	$("#averagePriceStart").val(''),
+	$("#averagePriceEnd").val(''),
+	$("#busiAreaParentIdLayout").val(''),
+	$("#busiAreaIdLayout").val('')
+}
+
+/* 保存添加 */
+aihome.saveAddPremises = function () {
+	var rowIds = $("#addPremisesJqGrid").jqGrid('getGridParam','selarrrow');
+	
+	var selCount=rowIds.length;
+	if (selCount==0){
+		alert("没有选中的房源！");
+		return null;
+	}
+	
+	var ObjArray = new Array();
+	for(i = 0;i < selCount;i ++){
+		var id = rowIds[i];
+		var rowData = $("#addPremisesJqGrid").jqGrid('getRowData',id);
+		ObjArray.push(rowData.name+","+rowData.addrDetail +","+rowData.startingAtPrice +","
+				+rowData.averagePrice+","+rowData.id+","+rowData.areaId+","+rowData.auditingStatus);
+	}
+	
+	return ObjArray;
+	
+}
+
+/* 模糊搜索*/
+$("#name").autocomplete({
+	source : function(request, response) {
+		$.ajax({
+			url : "${CTX}/customerSource/getPremisesName.do",
+			dataType : "json",
+			type : 'post',
+			data : {
+				matchStr : request.term
+			},
+			success : function(data) {
+				var array = new Array(data.length);
+				for (var i = 0; i < data.length; i++) {
+					var temp = {
+						key : data[i].id,
+						value : data[i].name
+					};
+					array[i] = temp;
+				}
+				response(array);
+			}
+		});
+	},
+	select : function(event, ui) {
+		$("#id").val(ui.item.key);
+		$("#name").val(ui.item.value);
+		event.preventDefault();
+	}
+});
+
+//商圈联动
+$("#busiAreaParentIdLayout").change(function() {
+	aihome.getBusiAreaLayout($(this).val(), "busiAreaIdLayout");
+});
+
+aihome.getBusiAreaLayout = function(busiAreaParentId, objId) {
+	if(busiAreaParentId != "") {
+		$.ajax({
+			type : "post",
+			url : "${ADDR_CTX}/busiArea/getBusiAreaList.do", 
+			async : false,
+			dataType : "json",
+			data : {"busiAreaParentId" : busiAreaParentId},
+			success : function(data) {
+				aihome.changeOptionLayout(data, objId);
+			},
+		});
+	} else {
+		this.cleanOptionLayout(objId);
+	}
+}
+
+/* 级联改变下拉框内容 */
+aihome.changeOptionLayout = function(data, objId) {
+	this.cleanOptionLayout(objId);
+	var str = "";
+	for(var i=0; i < data.length; i++) {
+		var id = data[i].id
+		var name = data[i].name == undefined ? data[i].busiAreaName : data[i].name;
+		var optionShow = $("[id$='" + objId + "']");
+		str = "<option value=\"" + id + "\">" + name + "</option>";
+		optionShow.append(str);
+	}
+}
+
+/* 清空下拉框内容 */
+aihome.cleanOptionLayout = function(objId) {
+	$("#" + objId).children().first().siblings().remove();
+}
+
+/* 楼盘模糊搜索*/
+$("#name").autocomplete({
+	source : function(request, response) {
+		$.ajax({
+			url : "${ADDR_CTX}/premisesExamine/getPremisesListByMatch.do",
+			dataType : "json",
+			type : 'post',
+			data : {
+				matchStr : request.term
+			},
+			success : function(data) {
+				var array = new Array(data.length);
+				for (var i = 0; i < data.length; i++) {
+					var temp = {
+						key : data[i].id,
+						value : data[i].name
+					};
+					array[i] = temp;
+				}
+				response(array);
+			}
+		});
+	},
+	select : function(event, ui) {
+		$("#nameId").val(ui.item.key);
+		$("#name").val(ui.item.value);
+		event.preventDefault();
+	}
+});
+
+$(function() {
+	aihome.addPremisesInit();
+});
+
+</script>

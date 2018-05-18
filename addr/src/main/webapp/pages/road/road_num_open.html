@@ -1,0 +1,208 @@
+<div class="col-xs-12 my-group" enterforbtn="confirm-role">
+	<div id="element_id">
+	 	<form id="roadNumForm"  >
+			<div class="form-horizontal row my-inputs">
+			  	<div class="col-md-12 col-sm-6">
+					<div class=" form-xs form-group row" id="cloneTarget">
+						<label for="userName" class="col-xs-3 control-label" value="">撒号类型：</label>
+						<div class="col-xs-6">
+							<input name="roadNumType" type="radio" value="1" checked  />连续撒号
+							<input name="roadNumType" type="radio" value="2"/>单号撒号
+							<input name="roadNumType" type="radio" value="3"/>双号撒号
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 col-sm-6">
+					<div class=" form-xs form-group row">
+						<label for="userName" class="col-xs-3 control-label" value="">道路名称：</label>
+						<div class="col-xs-6">
+							<input class="province input-xs form-control" style="color:#f60" value="${road.roadName!}" readonly="true"></input> 
+						</div>
+					</div>	
+	           	</div>
+				<div class="col-md-12 col-sm-6" id="clonePlace">
+					<div class=" form-xs form-group row" id="cloneTarget">
+						<label for="userName" class="col-xs-3 control-label" value="">行政区域：</label>
+						<div class="col-xs-6" >
+						 	<select  class="city input-xs form-control  "  vRequired="true" id="handOutNum">
+								<option value="" selected="selected">请选择区域</option>
+								<#list provinceList as item>
+								<option value="${item.id!}">${item.name!}</option>
+								</#list>
+							</select>
+						</div>
+					</div>
+	           	</div>
+	           	<div class="col-md-12 col-sm-6">
+	           		<div class=" form-xs form-group row" id="cloneTarget">
+						<label for="userName" class="col-xs-3 control-label" value="">起始号：</label>
+						<div class="col-xs-3" >
+							<input id="start_num" class="form-control input-xs"   vRequired="true" maxlength="5" vRequired="true" placeholder="必填项"  style="IME-MODE: disabled; WIDTH: 100px; HEIGHT: 15px" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"  type="text" />
+						</div>
+						<label for="userName" class="col-xs-2 control-label" value="">终止号：</label>
+						<div class="col-xs-3" >
+							<input id="end_num" class="form-control input-xs"   vRequired="true" maxlength="5" vRequired="true" placeholder="必填项"  style="IME-MODE: disabled; WIDTH: 100px; HEIGHT: 15px" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"  type="text" />
+						</div>
+					</div>
+	           	</div>
+				 <div class="col-md-12 col-sm-6">
+					<div class=" form-xs form-group row" id="cloneTarget">
+						<label for="userName" class="col-xs-3 control-label" value="">忽略号段：</label>
+						<div class="col-xs-6 ">
+							<input id="ignore" maxlength="500" style="IME-MODE: disabled; WIDTH: 231px; HEIGHT: 15px" onkeyup="this.value=this.value.replace(/\D/g,',')" onafterpaste="this.value=this.value.replace(/\D/g,',')" maxlength="100" size="100" name="amount" type="text" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<input type="hidden" id="roadId" value="${road.id!}"/>
+<input type="hidden" id="condition" value=""/>
+<script type="text/javascript">
+	$("#roadNumForm").validationEngine('attach',{
+		promptPosition: 'bottomRight',
+      	validationEventTrigger:"blur"
+	});
+	//新增道路撒号Btn
+    function addRoadNum(type){
+    	if($("#handOutNum").val()==""||$("#start_num").val()==""||$("#end_num").val()==""){
+    		alert("请填写未填内容！");
+    		return false;
+    	}
+		var start_num = $("#start_num").val();
+		var end_num = $("#end_num").val();
+		var start_num_int =	parseInt(start_num);
+		var end_num_int = parseInt(end_num);
+		var checkType = $('input[name="roadNumType"]:checked').val();
+	  	if($("#start_num").val()!="" && $("#end_num").val()!=""){
+	  		if( start_num_int > end_num_int){
+	  			alert("起始大于终止号!");
+	  			return false;
+	  		}
+	  		if($("#start_num").val()== $("#end_num").val()){
+	  			alert("起始号与终止号不能相同!");
+	  			return false;
+	  		}
+	  		if(checkType==2){
+	  			if($("#start_num").val() % 2 ==0||$("#end_num").val() % 2 ==0){
+	  				alert("当前撒号规则为单号撒号,请检查输入的起始号和终止号！")
+	  				return false ;
+	  			}
+	  		}else if(checkType==3){
+	  			if($("#start_num").val() % 2 ==1||$("#end_num").val() % 2 ==1){
+	  				alert("当前撒号规则为双号撒号,请检查输入的起始号和终止号！")
+	  				return false;
+	  			}
+	  		}
+	  		if(type==1){
+	  			var result = false;
+		  		 $.ajax({
+		     	       type: "post",
+		     	       url: "${CTX}/road/verifyArodNum.do", 
+		     	       async:false,
+		     	       dataType:'json',
+		     	       data: {"startNum" : $("#start_num").val(),
+		  					 "endNum" :$("#end_num").val(),
+		  					 "showStatus":checkType,
+		  					 "roadId":${road.id!}
+		  					 },
+		     	       success: function(data){
+		     	    	  if (data == 3) {
+								result = true;//验证成功
+			   				}else if(data == 2){
+			   					alert("当前输入号段范围内存在已使用中号段，请查看日志信息重新输入！")
+			   				}else{
+			   					alert("服务异常!")
+			   				}
+		     	       },
+		     	 });
+		  		if(!result){
+		    		return result;
+		    	}
+	  		}
+		}
+		if($("#ignore").val()!=""){
+			var start_num = $("#start_num").val();
+			var end_num = $("#end_num").val();
+			var start_num_int =	parseInt(start_num);
+			var end_num_int = parseInt(end_num);
+			
+			if($("#start_num").val()!="" && $("#end_num").val()!=""){
+		  		if( start_num_int > end_num_int){
+		  			alert("起始大于终止号，忽略号段无法添加！");
+		  			return false;
+		  		}
+			}
+			var ignoreArray=[];
+			if($("#ignore").val()!=""){
+				ignoreArray = $("#ignore").val().split(",");
+			}
+			var p = /[0-9]/;
+			var b = p.test($("#ignore").val());
+			if(b){
+				var maxNum = Math.max.apply(null, ignoreArray);
+				var minNum = Math.min.apply(null, ignoreArray);
+				if($("#start_num").val()!=""){
+					if(minNum < $("#start_num").val()){
+						alert("忽略号段超出最小号段范围！");
+						return false;
+					}
+				}
+				if($("#end_num").val()!=""){
+					if(maxNum > $("#end_num").val()){
+						alert("忽略号段超出最大号段范围！");
+						return false;
+					}
+				}
+				var nary = ignoreArray.sort();
+				for(var i = 0; i < nary.length; i++){
+					if (nary[i] == nary[i+1]){
+				       alert("重复内容：" + nary[i]);
+				       return false ;
+				    }
+					if($('input[name="roadNumType"]:checked').val()==2){
+						if(nary[i]%2==0){
+							alert("当前撒号规为单号撒，忽略号也请添加单号!");
+							return;
+						}
+					}
+					if($('input[name="roadNumType"]:checked').val()==3){
+						if(nary[i]%2==1){
+							alert("当前撒号规为双号撒，忽略号也请添加双号!");
+							return;
+						}
+					}
+				}
+			}else{
+				alert("请输入正确格式！");
+			    return false ;
+			}
+		}
+       	 $.ajax({
+     	       type: "post",
+     	       url: "${CTX}/road/addRoadNum.do", 
+     	       async:false,
+     	       dataType:'json',
+     	       data: {"areaId":$("#handOutNum").val(),
+     	    	   	  "startNum":$("#start_num").val(),
+     	    	      "endNum":$("#end_num").val(),
+     	    	      "ignore":$("#ignore").val(),
+     	    	      "roadId":${road.id!},
+     	    	      "type":type,
+     	    	      "creatNumType":$('input[name="roadNumType"]:checked').val()},
+     	       success: function(data){
+     	    	  if(data == 1){
+		    		   alert("操作成功");
+		    	   }else if(data == 3){
+		    		   alert("当前道路下已撒号段已被楼盘引用,无法重新撒号!");
+		    	   }else{
+		    		   alert("操作失败");
+		    	   }
+     	       },
+     	 });
+       	 return true;
+     }
+</script>
+
+

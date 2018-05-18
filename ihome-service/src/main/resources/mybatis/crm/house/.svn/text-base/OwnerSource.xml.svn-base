@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ownerSource">
+
+	<!-- 业主“来源”的父数据 -->
+   	<select id="getParentSource" resultType="ownerSourceModel">
+   		SELECT
+			id,
+			source
+		FROM
+			owner_source
+		WHERE
+			parent_id IS NULL
+		ORDER BY id
+   	</select>
+   	
+   	<!-- 业主“来源”的子数据 -->
+   	<select id="getSourcesByParentId" parameterType="map" resultType="ownerSourceModel">
+   		SELECT
+			id,
+			parent_id AS parentId,
+			source
+		FROM
+			owner_source
+		WHERE
+			1=1
+		<if test="parentId != null  and parentId !=''"> 
+	    	AND parent_id = #{parentId}
+	    </if> 
+	    ORDER BY id
+   	</select>
+   	
+</mapper>

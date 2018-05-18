@@ -1,0 +1,291 @@
+<div id="top_tools" class=" btn-group">
+	<button id="protect_query" class="btn btn-sm btn-white" >
+		<i class="iconfont">&#xe6e4;</i>
+		<span>查询</span>
+	</button>
+	<button id="protect_cancel" class="btn btn-sm btn-white ladda-button" onclick="aihome.cancel('1');">
+		<i class="iconfont">&#xe6e0;</i>
+		<span>取消保护</span>
+	</button>
+	
+</div>
+<div class="row">
+	<div class="col-xs-12 my-group">
+		<div enterfor=".confirmBtn" class="form-horizontal row my-inputs" style="overflow: hidden; height: 60px;">
+			<form action="" id="protectSearch">
+			<div class="col-lg-2 col-md-4 col-sm-6 ">
+              <div class=" form-xs form-group row">
+                  <label for="tempName" class="col-xs-5 control-label">房源编号：</label>
+                  <div class="col-xs-7">
+                      <input class="form-control input-xs searchKey" name="houseCode" id="houseCode" placeholder="房源编号" type="text">
+                  </div>
+              </div>
+            </div>
+		 	<div class="col-lg-2 col-md-4 col-sm-6">
+                <div class=" form-xs form-group row ">
+                    <label for="type" class="col-xs-5 control-label">楼盘名称：</label>
+                    <div class="col-xs-7">
+                        <input class="form-control input-xs searchKey" name="premisesName" id="premisesName" placeholder="楼盘名称" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class=" form-xs form-group row">
+                    <label for="status" class="col-xs-5 control-label">使用类别：</label>
+                    <div class="col-xs-7">
+                        <select class="form-control input-xs searchKey" id="useType" name="useType">
+                            <option value="">全部</option>
+                            <option value="1">住宅</option>
+							<option value="2">商铺</option>
+							<option value="3">写字楼</option>
+							<option value="4">车位</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class=" form-xs form-group row">
+                    <label for="houseNum" class="col-xs-5 control-label">区域：</label>
+                    <div class="col-xs-7">
+                        <input class="form-control input-xs searchKey" id="areaName" name="areaName" placeholder="区域" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 ">
+                <div class=" form-xs form-group row">
+                    <label for="status" class="col-xs-5 control-label">业务类型：</label>
+                    <div class="col-xs-7">
+                        <select class="form-control input-xs searchKey" id="demandType" name="demandType">
+                            <option value="">全部</option>
+                            <option value="1">买卖</option>
+                            <option value="2">租赁</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class=" form-xs form-group row">
+                    <label for="houseNum" class="col-xs-5 control-label">业主电话：</label>
+                    <div class="col-xs-7">
+                        <input class="form-control input-xs searchKey" name="ownerTell" id="ownerTell" placeholder="适应房数" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 ">
+                <div class=" form-xs form-group row">
+                    <label for="status" class="col-xs-5 control-label">所属区：</label>
+                    <div class="col-xs-7">
+                        <select class="form-control input-xs searchKey" id="quOrg" name="quOrg">
+                            <option value="">全部</option>
+                           <#list quOrgList as item>
+							<option value="${item.orgCode}">${item.name}</option>
+							</#list>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 ">
+                <div class=" form-xs form-group row">
+                    <label for="status" class="col-xs-5 control-label">所属组：</label>
+                    <div class="col-xs-7">
+                        <select class="form-control input-xs searchKey" id="zuOrg" name="zuOrg">
+                            <option value="">全部</option>
+                            <option value="1">买卖</option>
+                            <option value="2">租赁</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6 ">
+                <div class=" form-xs form-group row">
+                    <label for="status" class="col-xs-5 control-label">所属人：</label>
+                    <div class="col-xs-7">
+                        <select class="form-control input-xs searchKey" id="jingjiren" name="jingjiren">
+                            <option value="">全部</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class=" form-xs form-group row">
+                    <label for="houseNum" class="col-xs-5 control-label">保护人：</label>
+                    <div class="col-xs-7">
+                        <input class="form-control input-xs searchKey" id="protectUser" name="protectUser" placeholder="适应房数" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <div class=" form-xs form-group row">
+                    <label for="houseNum" class="col-xs-4 control-label">保护时间：</label>
+                    <div class="col-xs-8">
+            			<div class="input-daterange input-group 5i5jdate">
+	             			<input id="date3" class="form-control input-xs" name="startTime" placeholder="开始时间" type="text">
+	                        <span class="input-group-addon addon-xs" style="width: 15px !important;">
+	                                ~
+	                              </span>
+	              			<input class="form-control input-xs" name="endTime" placeholder="结束时间" type="text">
+            			</div>
+          			</div>
+                </div>
+            </div>
+            </form>
+		</div>
+	</div>
+	<div class="col-xs-12 my-grid" >
+		<table id="protect_jqGrid">
+		
+		</table>
+		<div id="protectGridPager">
+		
+		</div>
+	</div>
+</div>
+	 
+<script type="text/javascript">
+$('.page-content-area').ace_ajax('loadScripts', [null,"../assets/js/bootbox.js"], function () {});
+var aihome ={
+	protectListInit : function (){
+		 $("#protect_jqGrid").jqGrid({
+			height: $(window).height()-203,
+			multiselect: true,
+		    multiboxonly: true,
+		    viewrecords: true,
+		    autowidth:true,
+		    rownumbers:true,
+		    async:false,
+	      	url: "${CTX}/protect/list.do",
+	      	datatype: "json",                
+	      	colNames : ['房源编号','业主姓名','业主电话','业务类型','使用类别','楼盘名称','楼盘地址','所属区','所属组','所属人','保护人','保护时间'],
+	      	colModel: [
+			 	{name: 'houseCode',index:'houseCode',width: 100},
+	            {name: 'owner',index:'owner',width: 100},
+	            {name: 'ownerTell',index:'ownerTell',width: 100,formatter:function (cellvalue, options, rowObject){
+	            	return "<div><a href='javascript:void(0);' seeType='1' demandType='"+rowObject.demandType+"' houseId='"+rowObject.houseInfoId+"' onclick='aihome.userCheckInfoFun(this)'>查看</a></div>";
+	            }},
+	            {name: 'demandTypeStr',index:'houseTypeStr',width: 100},
+	            {name: 'usedTypeStr',index:'usedTypeStr'},
+	            {name: 'premisesName',index:'premisesName'},
+	            {name: 'premisesAddress',index:'premisesAddress',formatter:function (cellvalue, options, rowObject){
+	            	return "<div><a href='javascript:void(0);' seeType='2' demandType='"+rowObject.demandType+"' houseId='"+rowObject.houseInfoId+"' onclick='aihome.userCheckInfoFun(this)'>查看</a></div>";
+	            }},
+	            {name: 'bilityArea',index:'bilityArea'},
+	            {name: 'bilityTeam',index:'bilityTeam'},
+	            {name: 'bilityUser',index:'bilityUser'},
+	            {name: 'protectUser',index:'protectUser'},
+	            {name: 'createTimeStr',index:'createTimeStr'}
+	      	],
+	      	gridComplete: function () {
+				/* var ids = $("#protect_jqGrid").jqGrid("getDataIDs");
+				for (var i = 0; i < ids.length; i++) {
+					var id = ids[i];
+					var rowData = $("#protect_jqGrid").jqGrid('getRowData',id);
+					var modify1 = "<div><a href='javascript:void(0);'>查看</a></div>";
+					var modify2 = "<div><a href='javascript:void(0);'>查看</a></div>";
+					
+					$("#protect_jqGrid").jqGrid("setRowData", id, { 'ownerTell': modify1 });
+					$("#protect_jqGrid").jqGrid("setRowData", id, { 'premisesAddress': modify2 });
+				} */
+			},
+	      	rowNum:30, 
+		  	rowList:[10,20,30,50,100],
+	      	pager: "#protectGridPager",
+	  	 	jsonReader: { root: 'pagerResults', page:'currentPage',rows:'rowCount',total:'pageCount',records:'totalCount',repeatitems: false}
+	  	});
+	},
+	cancel:function (way){
+		var paperId = "";
+		//如果是1则是新增
+		if(way == '2'){
+			paperId = jQuery("#protect_jqGrid").jqGrid('getGridParam', 'selarrrow');
+			var selCount=paperId.length;
+			if(selCount==0){
+				alert("没有选中的记录！");
+				return;
+			}
+			if(selCount >1){
+				alert("每次只能修改一条道路信息，请重新选择！");
+				return;
+			}
+		}
+		this.editInfo(paperId);
+	},
+	changeAddress : function(data, objId) {
+		var obj = $("#" + objId);
+		
+		obj.children().first().siblings().remove();
+		var str = "";
+		for (var i = 0; i < data.length; i++) {
+			var orgCode = "";
+			if(objId==="jingjiren"){
+				orgCode = data[i].userId;
+			}else{
+				orgCode = data[i].orgCode;
+			}
+			var name = data[i].name;
+			str = '<option value="'+orgCode+'">'
+					+ name + '</option>';
+			obj.append(str);
+		}
+	},
+	getAddress : function (val, objId) {
+		var _url  = "${CTX}/org/orgList.do";
+		if(objId == "jingjiren"){
+			_url= "${CTX}/org/userList.do";
+		}
+		$.ajax({
+			type : "post",
+			url : _url,
+			async : false,
+			dataType : 'json',
+			async:false,
+			data : {
+				"orgCode" : val
+			},
+			success : function(data) {
+				
+				aihome.changeAddress(data, objId);
+			},
+		});
+	}
+};
+
+$(function (){
+	/**组*/
+	$("#zuOrg").unbind("").change(function (){
+		var orgCode = $(this).val();
+		//组数据变更，下级全部清空
+		$("#jingjiren").children().first().siblings().remove();
+		aihome.getAddress(orgCode, "jingjiren");
+	});
+	/**
+	 * 区
+	 */
+	$("#quOrg").unbind("").change(function() {
+		var orgCode = $(this).val();
+		//区数据变更，下级全部清空
+		$("#zuOrg").children().first().siblings().remove();
+		$("#jingjiren").children().first().siblings().remove();
+		aihome.getAddress(orgCode, "zuOrg");
+	});
+	 /* 条件查询 */
+	$("#protect_query").unbind("").click(function(){
+		var param = $("#protectSearch").result();
+		$("#protect_jqGrid").setGridParam({postData:param,page:1}).trigger("reloadGrid");
+	});
+	 /**取消保护*/
+	$("#protect_cancel").unbind("").click(function(){
+		if(confirm("是否取消保护")){
+			var projectIds = jQuery("#protect_jqGrid").jqGrid('getGridParam', 'selarrrow');
+			$.post('${CTX}/protect/cancel.do',{protectIds:projectIds.join(",")},function (data){
+				if(data==="1"){
+					alert("取消保护成功");
+				}else {
+					alert("操作失败.请联系管理员");
+				}
+			},'json')
+		}
+	});
+	aihome.protectListInit();
+});
+<#include "../users/users_check.html">
+</script>
